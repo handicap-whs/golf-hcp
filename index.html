@@ -1163,7 +1163,75 @@ async function init(){
   else await mostrarPantallaJugadores();
 }
 
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
+// ── SERVICE WORKER con detección de actualizaciones ──────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('./sw.js');
+
+      // Detectar nueva versión esperando activarse
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            mostrarToastActualizacion(reg);
+          }
+        });
+      });
+
+      // Si ya hay una versión esperando al abrir la app
+      if (reg.waiting) {
+        mostrarToastActualizacion(reg);
+      }
+
+      // Recargar automáticamente tras activar el nuevo SW
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      });
+
+      // Comprobar actualizaciones cada 5 minutos en segundo plano
+      setInterval(() => reg.update(), 5 * 60 * 1000);
+
+    } catch(e) {}
+  });
+}
+
+function mostrarToastActualizacion(reg) {
+  // Crear banner de actualización
+  const existing = document.getElementById('update-banner');
+  if (existing) return;
+
+  const banner = document.createElement('div');
+  banner.id = 'update-banner';
+  banner.style.cssText = `
+    position:fixed;top:0;left:0;right:0;z-index:9999;
+    background:linear-gradient(135deg,#1a3a1a,#2d5a27);
+    border-bottom:2px solid #c9a84c;
+    padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 12px;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    box-shadow:0 4px 20px rgba(0,0,0,.5);
+  `;
+  banner.innerHTML = `
+    <div style="flex:1">
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;margin-bottom:2px">Golf HCP</div>
+      <div style="font-size:12px;color:#f5f0e8">🔄 Nueva versión disponible</div>
+    </div>
+    <button id="btn-update-app" style="
+      background:#c9a84c;color:#1a2f1a;border:none;border-radius:5px;
+      font-family:'DM Mono',monospace;font-size:10px;font-weight:600;
+      letter-spacing:1px;text-transform:uppercase;padding:9px 16px;cursor:pointer;
+      white-space:nowrap;flex-shrink:0;
+    ">Actualizar</button>
+  `;
+  document.body.prepend(banner);
+
+  document.getElementById('btn-update-app').addEventListener('click', () => {
+    if (reg.waiting) {
+      reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+    }
+    banner.innerHTML = '<div style="padding:8px 16px;font-size:11px;color:#7bc67a;text-align:center;width:100%">✓ Actualizando…</div>';
+  });
+}
 
 init();
 </script>
