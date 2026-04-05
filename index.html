@@ -19,7 +19,7 @@
 <style>
 :root{--bg:#1a2f1a;--bg2:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.09);--gold:#c9a84c;--gold2:#e8c96a;--green:#7bc67a;--cream:#f5f0e8;--muted:rgba(255,255,255,0.35);--red:#e05555}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{height:100%;background:var(--bg)}body{min-height:100%;background:var(--bg);color:var(--cream);font-family:'DM Mono',monospace;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:none}
+html,body{height:100%;margin:0;padding:0;background:var(--bg);overflow:hidden}
 
 #splash{position:fixed;inset:0;background:#1a2f1a;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .5s}
 #splash svg{width:90px;height:90px}
@@ -27,11 +27,11 @@ html{height:100%;background:var(--bg)}body{min-height:100%;background:var(--bg);
 #splash-t em{color:#c9a84c;font-style:italic}
 #splash-s{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#7bc67a;opacity:.8}
 #splash.hide{opacity:0;pointer-events:none}
-nav{position:fixed;bottom:0;left:0;right:0;background:#0f1a0f;border-top:1px solid var(--border);display:flex;z-index:9000;padding-bottom:env(safe-area-inset-bottom,0px);-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);-webkit-backface-visibility:hidden;backface-visibility:hidden}
+nav{flex-shrink:0;background:#0f1a0f;border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,0px)}
 nav button{flex:1;background:none;border:none;color:var(--muted);padding:9px 2px 7px;font-size:8px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'DM Mono',monospace;min-height:52px}
 nav button.active{color:var(--gold)}
 nav button svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.page{display:none;padding-top:16px;padding-left:14px;padding-right:14px;padding-bottom:calc(80px + env(safe-area-inset-bottom,0px));max-width:700px;margin:0 auto;width:100%}
+.page{display:none;padding:16px 14px 32px;max-width:700px;margin:0 auto;width:100%}
 .page.active{display:block}
 .logo{text-align:center;margin-bottom:22px}
 .logo-ey{color:var(--gold);font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
@@ -133,7 +133,7 @@ tr:last-child td{border-bottom:none}
 .ps-new input:focus{border-color:var(--gold)}
 .ps-new input::placeholder{color:rgba(255,255,255,.25)}
 .ps-new button{background:var(--gold);color:#1a2f1a;border:none;border-radius:5px;font-family:'DM Mono',monospace;font-size:11px;font-weight:600;letter-spacing:1px;padding:11px 16px;cursor:pointer;white-space:nowrap}
-#active-player-bar{background:rgba(201,168,76,.1);border-bottom:1px solid rgba(201,168,76,.2);padding-top:calc(env(safe-area-inset-top,0px) + 7px);padding-bottom:7px;padding-left:14px;padding-right:14px;display:flex;align-items:center;justify-content:space-between;font-size:10px;position:sticky;top:0;z-index:50}
+#active-player-bar{background:rgba(201,168,76,.1);border-bottom:1px solid rgba(201,168,76,.2);padding-top:calc(env(safe-area-inset-top,0px) + 7px);padding-bottom:7px;padding-left:14px;padding-right:14px;display:flex;align-items:center;justify-content:space-between;font-size:10px;position:sticky;top:0;z-index:50;flex-shrink:0}
 #active-player-bar.hidden{display:none}
 .apb-name{color:var(--gold2);font-family:'Playfair Display',serif;font-size:13px;font-style:italic}
 .apb-change{background:none;border:1px solid rgba(201,168,76,.3);border-radius:4px;color:var(--gold);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;cursor:pointer}
@@ -170,6 +170,10 @@ tr:last-child td{border-bottom:none}
 .auth-error.show{display:block}
 .auth-ok{background:rgba(74,140,63,.12);border:1px solid rgba(123,198,122,.3);border-radius:5px;color:var(--green);font-size:11px;padding:10px 13px;margin-bottom:12px;display:none;line-height:1.5}
 .auth-ok.show{display:block}
+
+/* LAYOUT FIJO iOS — evita que el nav se mueva al hacer scroll */
+#app-wrapper{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;background:var(--bg)}
+#content-wrap{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:none;position:relative}
 @media(max-width:480px){
   .f3{grid-template-columns:1fr 1fr}
   .chcp-box{flex-direction:column}
@@ -179,6 +183,8 @@ tr:last-child td{border-bottom:none}
 </style>
 </head>
 <body>
+<div id="app-wrapper">
+<div id="content-wrap">
 <div id="splash">
   <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
     <rect width="512" height="512" rx="112" fill="#1a2f1a"/>
@@ -539,6 +545,8 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+</div><!-- /content-wrap -->
+
 <!-- NAV -->
 <nav>
   <button class="active" onclick="goTo('antes',this)" id="nav-antes">
@@ -557,6 +565,7 @@ tr:last-child td{border-bottom:none}
     <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>Fórmula
   </button>
 </nav>
+</div><!-- /app-wrapper -->
 
 <script>
 // ── SUPABASE AUTH CLIENT ─────────────────────────────────────────
