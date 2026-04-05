@@ -325,7 +325,7 @@ tr:last-child td{border-bottom:none}
     <div class="chcp-box">
       <div>
         <div class="player-name" id="chcp-name" style="display:none"></div>
-        <div class="chcp-sub">Course HCP</div>
+        <div class="chcp-sub">Campo HCP</div>
         <div class="chcp-num empty" id="chcp-num">—</div>
       </div>
       <div class="chcp-detail" id="chcp-detail">Selecciona un campo para ver los golpes de ventaja.</div>
@@ -559,19 +559,26 @@ function onCampoAntes(){
       $('p-barra').value=primera.color;
       $('p-cr').value=primera.cr;
       $('p-slope').value=primera.slope;
+      calcCHCP();
     }else{
-      // Sin barras — ocultar selector, mostrar aviso
+      // Sin barras — limpiar todo, ocultar selector, mostrar aviso, NO calcular
       $('p-barra').style.display='none';
       if(barraAviso)barraAviso.style.display='block';
-      $('p-cr').value=campo.cr||'';
-      $('p-slope').value=campo.slope||'';
+      $('p-cr').value='';
+      $('p-slope').value='';
+      $('p-par').value='';
+      // Resetear display HCP
+      $('chcp-num').textContent='—';
+      $('chcp-num').className='chcp-num empty';
+      $('chcp-detail').innerHTML='A&ntilde;ade barras de salida a este campo para calcular el Handicap de Campo.';
     }
   }else{
     barraWrap.style.display='none';
     if(barraAviso)barraAviso.style.display='none';
     $('p-cr').value='';$('p-slope').value='';$('p-par').value='';
+    $('chcp-num').textContent='—';$('chcp-num').className='chcp-num empty';
+    $('chcp-detail').innerHTML='Selecciona un campo para ver los golpes de ventaja.';
   }
-  calcCHCP();
 }
 
 function onBarraAntes(){
@@ -1252,8 +1259,17 @@ if ('serviceWorker' in navigator) {
         window.location.reload();
       });
 
-      // Comprobar actualizaciones cada 5 minutos en segundo plano
-      setInterval(() => reg.update(), 5 * 60 * 1000);
+      // Comprobar actualizaciones cada 2 minutos en segundo plano
+      setInterval(async () => {
+        await reg.update();
+        if (reg.waiting) mostrarToastActualizacion(reg);
+      }, 2 * 60 * 1000);
+
+      // Comprobar 3 segundos después de cargar (para detectar update inmediato)
+      setTimeout(async () => {
+        await reg.update();
+        if (reg.waiting) mostrarToastActualizacion(reg);
+      }, 3000);
 
     } catch(e) {}
   });
