@@ -27,7 +27,7 @@ html,body{height:100%;margin:0;padding:0;background:var(--bg);overflow:hidden}
 #splash-t em{color:#c9a84c;font-style:italic}
 #splash-s{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#7bc67a;opacity:.8}
 #splash.hide{opacity:0;pointer-events:none}
-nav{flex-shrink:0;background:#0f1a0f;border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,0px)}
+nav{flex-shrink:0;background:#0f1a0f;border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,0px);width:100%}
 nav button{flex:1;background:none;border:none;color:var(--muted);padding:9px 2px 7px;font-size:8px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'DM Mono',monospace;min-height:52px}
 nav button.active{color:var(--gold)}
 nav button svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -172,8 +172,8 @@ tr:last-child td{border-bottom:none}
 .auth-ok.show{display:block}
 
 /* LAYOUT FIJO iOS — evita que el nav se mueva al hacer scroll */
-#app-wrapper{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;background:var(--bg)}
-#content-wrap{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:none;position:relative}
+#app-wrapper{display:flex;flex-direction:column;height:100%;min-height:0;overflow:hidden;background:var(--bg)}
+#content-wrap{flex:1 1 0;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;position:relative}
 @media(max-width:480px){
   .f3{grid-template-columns:1fr 1fr}
   .chcp-box{flex-direction:column}
