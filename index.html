@@ -275,6 +275,10 @@ tr:last-child td{border-bottom:none}
         <tbody id="edit-tabla-in"></tbody>
       </table>
     </div>
+    <div id="edit-campo-par-total" style="display:none;text-align:center;padding:10px 14px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:5px;font-size:12px;color:var(--cream);margin-bottom:10px">
+      Par total del campo: <strong id="edit-campo-par-num" style="color:var(--gold2);font-size:15px">—</strong>
+    </div>
+    <div id="edit-campo-error" style="display:none;padding:10px 13px;background:rgba(224,85,85,.12);border:1px solid rgba(224,85,85,.3);border-radius:5px;font-size:11px;color:var(--red);margin-bottom:10px"></div>
     <div class="modal-actions">
       <button class="btn" id="btn-guardar-edit-campo" onclick="guardarEditCampo()">Guardar Cambios</button>
       <button class="btn-danger" onclick="cerrarModal('modal-campo')">Cancelar</button>
@@ -296,7 +300,7 @@ tr:last-child td{border-bottom:none}
       <div class="field"><label>Slope Rating</label><input id="edit-r-slope" type="number" inputmode="numeric"></div>
       <div class="field"><label>Tu HCP Index</label><input id="edit-r-hcp" type="number" step="0.1" inputmode="decimal" placeholder="18.4"></div>
       <div class="field"><label>Barra de salida</label>
-        <select id="edit-r-barra">
+        <select id="edit-r-barra" onchange="onEditRondaBarra()">
           <option value="">— Sin especificar —</option>
           <option value="blanca">⬜ Blanca</option>
           <option value="amarilla">🟡 Amarilla</option>
@@ -492,6 +496,10 @@ tr:last-child td{border-bottom:none}
         <tbody id="tabla-in"></tbody>
       </table>
     </div>
+    <div id="nuevo-campo-par-total" style="display:none;text-align:center;padding:10px 14px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:5px;font-size:12px;color:var(--cream);margin-bottom:10px">
+      Par total del campo: <strong id="nuevo-campo-par-num" style="color:var(--gold2);font-size:15px">—</strong>
+    </div>
+    <div id="nuevo-campo-error" style="display:none;padding:10px 13px;background:rgba(224,85,85,.12);border:1px solid rgba(224,85,85,.3);border-radius:5px;font-size:11px;color:var(--red);margin-bottom:10px"></div>
     <button class="btn" id="btn-guardar-campo" onclick="guardarCampo()">Guardar Campo</button>
     <button class="btn-outline" onclick="toggleNuevoCampo()">Cancelar</button>
   </div>
@@ -763,6 +771,37 @@ function onBarraAntes(){
   if(barra){$('p-cr').value=barra.cr;$('p-slope').value=barra.slope;calcCHCP();}
 }
 
+function onEditRondaBarra(){
+  // Al cambiar barra en editar ronda: actualizar CR, Slope y recalcular Stableford
+  const color=$('edit-r-barra').value;
+  const campoId=parseInt($('edit-ronda-campo-id').value)||null;
+  const campo=campoId?campos.find(c=>c.id===campoId):null;
+  const barra=getBarraData(campo,color);
+  if(barra){
+    $('edit-r-cr').value=barra.cr;
+    $('edit-r-slope').value=barra.slope;
+    // Recalcular stableford si hay golpes por hoyo
+    const hcpIdx=parseFloat($('edit-r-hcp').value);
+    const hoyosWrap=$('edit-hoyos-wrap');
+    if(campo&&campo.hoyos?.length===18&&hoyosWrap.style.display!=='none'&&!isNaN(hcpIdx)){
+      const shots=[];let total=0,allFilled=true;
+      for(let i=1;i<=18;i++){
+        const v=parseInt($('edit-gh-'+i)?.value);
+        if(isNaN(v)||v<1){allFilled=false;break;}
+        shots.push(v);total+=v;
+      }
+      if(allFilled){
+        // Usar los nuevos CR/Slope de la barra
+        const campoConBarra={...campo,cr:barra.cr,slope:barra.slope};
+        const stbl=calcStableford(hcpIdx,campoConBarra,shots);
+        $('edit-preview-stbl').textContent=stbl?stbl.total+' pts':'—';
+        $('edit-r-stbl').value=stbl?stbl.total:'';
+        $('edit-r-gross').value=total;
+      }
+    }
+  }
+}
+
 // ── WHS ──────────────────────────────────────────────────────────
 const WHS=[[1,-2],[1,-2],[1,-2],[1,-2],[2,-1],[2,-1],[2,0],[2,0],[3,0],[3,0],[3,0],[4,0],[4,0],[4,0],[5,0],[5,0],[6,0],[6,0],[7,0],[8,0]];
 function calcDiff(gross,cr,slope){return((gross-cr)*113)/slope;}
@@ -939,16 +978,53 @@ function updateTotals(){
 }
 
 // ── GUARDAR CAMPO ────────────────────────────────────────────────
+function calcParTotalNuevo(){
+  let total=0;let count=0;
+  for(let i=1;i<=18;i++){
+    const v=parseInt($('nc-par-'+i)?.value);
+    if(!isNaN(v)&&v>=3&&v<=5){total+=v;count++;}
+  }
+  const wrap=$('nuevo-campo-par-total');
+  if(wrap){
+    if(count>0){
+      wrap.style.display='block';
+      $('nuevo-campo-par-num').textContent=total+(count<18?' ('+count+'/18 hoyos)':'');
+    }else{
+      wrap.style.display='none';
+    }
+  }
+}
+
+function calcParTotalEdit(){
+  let total=0;let count=0;
+  for(let i=1;i<=18;i++){
+    const v=parseInt($('edit-nc-par-'+i)?.value);
+    if(!isNaN(v)&&v>=3&&v<=5){total+=v;count++;}
+  }
+  const wrap=$('edit-campo-par-total');
+  if(wrap){
+    if(count>0){
+      wrap.style.display='block';
+      $('edit-campo-par-num').textContent=total+(count<18?' ('+count+'/18 hoyos)':'');
+    }else{
+      wrap.style.display='none';
+    }
+  }
+}
+
 async function guardarCampo(){
   const nombre=$('nc-nombre').value.trim();
-  if(!nombre){toast('Completa el nombre',true);return;}
-  const hoyos=[];let parTotal=0,valid=true;
+  const errDiv=$('nuevo-campo-error');
+  if(errDiv){errDiv.style.display='none';errDiv.textContent='';}
+  function showErr(msg){if(errDiv){errDiv.textContent=msg;errDiv.style.display='block';errDiv.scrollIntoView({behavior:'smooth',block:'nearest'});}else toast(msg,true);}
+  if(!nombre){showErr('Completa el nombre del campo.');return;}
+  const hoyos=[];let parTotal=0,valid=true,invalidHoyo=0;
   for(let i=1;i<=18;i++){
     const par=parseInt($(`nc-par-${i}`)?.value),indice=parseInt($(`nc-idx-${i}`)?.value);
-    if(isNaN(par)||isNaN(indice)||par<3||par>5||indice<1||indice>18){valid=false;break;}
+    if(isNaN(par)||isNaN(indice)||par<3||par>5||indice<1||indice>18){valid=false;invalidHoyo=i;break;}
     parTotal+=par;hoyos.push({numero:i,par,indice});
   }
-  if(!valid){toast('Revisa par e índice (par 3-5, índice 1-18)',true);return;}
+  if(!valid){showErr('Hoyo '+invalidHoyo+': el par debe ser 3-5 y el índice 1-18.');return;}
   // Recoger barras
   const barrasData=[];
   for(const color of BARRAS){
@@ -956,7 +1032,7 @@ async function guardarCampo(){
     const slope=parseInt(document.getElementById('nc-slope-'+color)?.value);
     if(!isNaN(cr)&&!isNaN(slope)&&cr>0&&slope>0)barrasData.push({color,cr,slope});
   }
-  if(!barrasData.length){toast('Introduce CR y Slope de al menos una barra',true);return;}
+  if(!barrasData.length){showErr('Introduce CR y Slope de al menos una barra de salida.');return;}
   const btn=$('btn-guardar-campo');btn.textContent='Guardando…';btn.disabled=true;
   try{
     // Usar CR/Slope de la primera barra como valores por defecto del campo
@@ -991,7 +1067,7 @@ function buildTablaHoyos(){
     const trPar=document.createElement('tr');let hP=`<td style="font-size:9px;color:var(--muted);padding:4px 6px">Par</td>`;
     const trIdx=document.createElement('tr');let hI=`<td style="font-size:9px;color:var(--muted);padding:4px 6px">Índice</td>`;
     for(let i=1+hi*9;i<=9+hi*9;i++){
-      hP+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="number" id="nc-par-${i}" min="3" max="5" placeholder="4" inputmode="numeric"></td>`;
+      hP+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="number" id="nc-par-${i}" min="3" max="5" placeholder="4" inputmode="numeric" oninput="calcParTotalNuevo()"></td>`;
       hI+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="number" id="nc-idx-${i}" min="1" max="18" placeholder="${i}" inputmode="numeric"></td>`;
     }
     trPar.innerHTML=hP;trIdx.innerHTML=hI;tbody.appendChild(trPar);tbody.appendChild(trIdx);
@@ -1199,24 +1275,30 @@ function abrirEditCampo(id){
     let hI=`<td style="font-size:9px;color:var(--muted);padding:4px 6px">Índice</td>`;
     for(let i=1+hi*9;i<=9+hi*9;i++){
       const h=campo.hoyos?.find(h=>h.numero===i);
-      hP+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="number" id="edit-nc-par-${i}" min="3" max="5" inputmode="numeric" value="${h?h.par:''}"></td>`;
+      hP+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="number" id="edit-nc-par-${i}" min="3" max="5" inputmode="numeric" value="${h?h.par:\'\'}" oninput="calcParTotalEdit()"></td>`;
       hI+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="number" id="edit-nc-idx-${i}" min="1" max="18" inputmode="numeric" value="${h?h.indice:''}"></td>`;
     }
     trP.innerHTML=hP;trI.innerHTML=hI;tbody.appendChild(trP);tbody.appendChild(trI);
   });
+  // Calcular par total inicial
+  setTimeout(()=>calcParTotalEdit(),50);
   $('modal-campo').classList.remove('hidden');
 }
 
 async function guardarEditCampo(){
   const id=parseInt($('edit-campo-id').value);
   const nombre=$('edit-nc-nombre').value.trim();
-  if(!nombre){toast('Completa el nombre',true);return;}
-  const hoyos=[];let parTotal=0,valid=true;
+  const errDivE=$('edit-campo-error');
+  if(errDivE){errDivE.style.display='none';errDivE.textContent='';}
+  function showErrE(msg){if(errDivE){errDivE.textContent=msg;errDivE.style.display='block';}else toast(msg,true);}
+  if(!nombre){showErrE('Completa el nombre del campo.');return;}
+  const hoyos=[];let parTotal=0,valid=true,invalidHoyoE=0;
   for(let i=1;i<=18;i++){
     const par=parseInt($(`edit-nc-par-${i}`)?.value),indice=parseInt($(`edit-nc-idx-${i}`)?.value);
-    if(isNaN(par)||isNaN(indice)||par<3||par>5||indice<1||indice>18){valid=false;break;}
+    if(isNaN(par)||isNaN(indice)||par<3||par>5||indice<1||indice>18){valid=false;invalidHoyoE=i;break;}
     parTotal+=par;hoyos.push({numero:i,par,indice});
   }
+  if(!valid){showErrE('Revisa el hoyo '+invalidHoyoE+': par debe ser 3-5 e índice 1-18.');return;}
   if(!valid){toast('Revisa par e índice',true);return;}
   const barrasEdit=[];
   for(const color of BARRAS){
