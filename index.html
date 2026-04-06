@@ -753,7 +753,7 @@ function onCampoAntes(){
       // Resetear display HCP
       $('chcp-num').textContent='—';
       $('chcp-num').className='chcp-num empty';
-      $('chcp-detail').innerHTML='A&ntilde;ade barras de salida a este campo para calcular el Handicap de Campo.';
+      $('chcp-detail').innerHTML='Añade barras de salida a este campo para calcular el Handicap de Campo.';
     }
   }else{
     barraWrap.style.display='none';
@@ -1275,7 +1275,7 @@ function abrirEditCampo(id){
     let hI=`<td style="font-size:9px;color:var(--muted);padding:4px 6px">Índice</td>`;
     for(let i=1+hi*9;i<=9+hi*9;i++){
       const h=campo.hoyos?.find(h=>h.numero===i);
-      hP+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="number" id="edit-nc-par-${i}" min="3" max="5" inputmode="numeric" value="${h?h.par:\'\'}" oninput="calcParTotalEdit()"></td>`;
+      hP+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="number" id="edit-nc-par-${i}" min="3" max="5" inputmode="numeric" value="${h?h.par:''}" oninput="calcParTotalEdit()"></td>`;
       hI+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="number" id="edit-nc-idx-${i}" min="1" max="18" inputmode="numeric" value="${h?h.indice:''}"></td>`;
     }
     trP.innerHTML=hP;trI.innerHTML=hI;tbody.appendChild(trP);tbody.appendChild(trI);
@@ -1299,7 +1299,6 @@ async function guardarEditCampo(){
     parTotal+=par;hoyos.push({numero:i,par,indice});
   }
   if(!valid){showErrE('Revisa el hoyo '+invalidHoyoE+': par debe ser 3-5 e índice 1-18.');return;}
-  if(!valid){toast('Revisa par e índice',true);return;}
   const barrasEdit=[];
   for(const color of BARRAS){
     const cr=parseFloat(document.getElementById('edit-cr-'+color)?.value);
