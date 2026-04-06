@@ -730,9 +730,11 @@ async function onUserLoggedIn(user){
   $('active-player-bar').classList.remove('hidden');
   $('apb-name').textContent=nombre;
   $('p-name').value=nombre;
-  // Cargar datos
+  // Refrescar token para asegurar JWT válido antes de queries RLS
   try{
     $('r-hcp').textContent='…';
+    // Refrescar sesión para garantizar token válido
+    try { await supabaseClient.auth.refreshSession(); } catch(e) {}
     await loadCampos();
     rounds=await loadRounds();
     renderAll();
@@ -1219,6 +1221,8 @@ function calcCHCP(){
 
 // ── CARGA ────────────────────────────────────────────────────────
 async function loadRounds(){
+  const {data:{session}} = await supabaseClient.auth.getSession();
+  if(!session) throw new Error('Sin sesión activa');
   const {data,error}=await supabaseClient
     .from('rondas')
     .select('*')
@@ -1234,6 +1238,9 @@ async function loadRounds(){
 }
 
 async function loadCampos(){
+  // Asegurar sesión activa antes de queries con RLS
+  const {data:{session}} = await supabaseClient.auth.getSession();
+  if(!session) throw new Error('Sin sesión activa');
   const [{data:cs,error:e1},{data:hs,error:e2},{data:bs,error:e3}] = await Promise.all([
     supabaseClient.from('campos').select('*').order('nombre',{ascending:true}),
     supabaseClient.from('hoyos').select('*').order('numero',{ascending:true}),
