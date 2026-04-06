@@ -1223,9 +1223,12 @@ function calcCHCP(){
 async function loadRounds(){
   const {data:{session}} = await supabaseClient.auth.getSession();
   if(!session) throw new Error('Sin sesión activa');
+  const uid2 = jugadorActivo?.id || session.user?.id;
+  if(!uid2) throw new Error('Sin usuario activo');
   const {data,error}=await supabaseClient
     .from('rondas')
     .select('*')
+    .eq('user_id', uid2)
     .order('created_at',{ascending:true});
   if(error)throw error;
   return data.map(r=>({id:r.id,gross:r.gross,cr:r.cr,slope:r.slope,name:r.nombre_campo,date:r.fecha,diff:r.diferencial,
@@ -1241,10 +1244,12 @@ async function loadCampos(){
   // Asegurar sesión activa antes de queries con RLS
   const {data:{session}} = await supabaseClient.auth.getSession();
   if(!session) throw new Error('Sin sesión activa');
+  const uid = jugadorActivo?.id || session.user?.id;
+  if(!uid) throw new Error('Sin usuario activo');
   const [{data:cs,error:e1},{data:hs,error:e2},{data:bs,error:e3}] = await Promise.all([
-    supabaseClient.from('campos').select('*').order('nombre',{ascending:true}),
-    supabaseClient.from('hoyos').select('*').order('numero',{ascending:true}),
-    supabaseClient.from('barras').select('*').order('color',{ascending:true})
+    supabaseClient.from('campos').select('*').eq('user_id',uid).order('nombre',{ascending:true}),
+    supabaseClient.from('hoyos').select('*').eq('user_id',uid).order('numero',{ascending:true}),
+    supabaseClient.from('barras').select('*').eq('user_id',uid).order('color',{ascending:true})
   ]);
   if(e1)throw e1; if(e2)throw e2; if(e3)throw e3;
   campos=cs.map(c=>({...c,
