@@ -257,7 +257,10 @@ tr:last-child td{border-bottom:none}
     <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:1px">Jugador</div>
     <div class="apb-name" id="apb-name">—</div>
   </div>
-  <button class="apb-change" id="btn-salir">Salir</button>
+  <div style="display:flex;gap:8px">
+    <button class="apb-change" id="btn-cambiar-pass" style="font-size:7px">🔑 Clave</button>
+    <button class="apb-change" id="btn-salir">Salir</button>
+  </div>
 </div>
 
 <!-- MODAL EDITAR CAMPO -->
@@ -296,6 +299,21 @@ tr:last-child td{border-bottom:none}
     <div class="modal-actions">
       <button class="btn" id="btn-guardar-edit-campo" onclick="guardarEditCampo()">Guardar Cambios</button>
       <button class="btn-danger" onclick="cerrarModal('modal-campo')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CAMBIAR CONTRASEÑA -->
+<div class="modal-overlay hidden" id="modal-cambiar-pass">
+  <div class="modal">
+    <div class="modal-title">Cambiar Contraseña</div>
+    <div id="cambiar-pass-error" style="display:none;padding:10px 13px;background:rgba(224,85,85,.12);border:1px solid rgba(224,85,85,.3);border-radius:5px;font-size:11px;color:var(--red);margin-bottom:12px"></div>
+    <div id="cambiar-pass-ok" style="display:none;padding:10px 13px;background:rgba(74,140,63,.12);border:1px solid rgba(123,198,122,.3);border-radius:5px;font-size:11px;color:var(--green);margin-bottom:12px"></div>
+    <div class="field" style="margin-bottom:12px"><label>Nueva contraseña</label><input id="cp-pass1" type="password" autocomplete="new-password" placeholder="mínimo 6 caracteres" style="background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:5px;color:#fff;font-family:'DM Mono',monospace;font-size:16px;padding:12px;width:100%;box-sizing:border-box"></div>
+    <div class="field" style="margin-bottom:16px"><label>Confirmar contraseña</label><input id="cp-pass2" type="password" autocomplete="new-password" placeholder="repite la contraseña" style="background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:5px;color:#fff;font-family:'DM Mono',monospace;font-size:16px;padding:12px;width:100%;box-sizing:border-box"></div>
+    <div class="modal-actions">
+      <button class="btn" id="btn-guardar-pass" onclick="doChangePassword()">Guardar</button>
+      <button class="btn-danger" onclick="cerrarModal('modal-cambiar-pass')">Cancelar</button>
     </div>
   </div>
 </div>
@@ -692,6 +710,27 @@ async function doRegister(){
   }catch(e){
     showAuthError('register-error',e.message||'Error al crear cuenta.');
   }finally{btn.textContent='Crear Cuenta';btn.disabled=false;}
+}
+
+async function doChangePassword(){
+  const pass1=$('cp-pass1').value;
+  const pass2=$('cp-pass2').value;
+  const errDiv=$('cambiar-pass-error');
+  const okDiv=$('cambiar-pass-ok');
+  errDiv.style.display='none';okDiv.style.display='none';
+  if(pass1.length<6){errDiv.textContent='Mínimo 6 caracteres.';errDiv.style.display='block';return;}
+  if(pass1!==pass2){errDiv.textContent='Las contraseñas no coinciden.';errDiv.style.display='block';return;}
+  const btn=$('btn-guardar-pass');btn.textContent='Guardando…';btn.disabled=true;
+  try{
+    const {error}=await supabaseClient.auth.updateUser({password:pass1});
+    if(error)throw error;
+    okDiv.textContent='✓ Contraseña actualizada correctamente.';okDiv.style.display='block';
+    $('cp-pass1').value='';$('cp-pass2').value='';
+    setTimeout(()=>cerrarModal('modal-cambiar-pass'),2000);
+  }catch(e){
+    errDiv.textContent='❌ '+(e.message||'Error al cambiar contraseña.');
+    errDiv.style.display='block';
+  }finally{btn.textContent='Guardar';btn.disabled=false;}
 }
 
 async function doUpdatePassword(){
@@ -1582,14 +1621,27 @@ async function init(){
   const btnSalir = document.getElementById('btn-salir');
   if(btnSalir){
     btnSalir.addEventListener('click', function(e){
-      e.preventDefault();
-      e.stopPropagation();
-      doLogout();
+      e.preventDefault();e.stopPropagation();doLogout();
     }, {passive:false});
-    // Touch events explícitos para iOS
     btnSalir.addEventListener('touchend', function(e){
+      e.preventDefault();doLogout();
+    }, {passive:false});
+  }
+  const btnCambiarPass = document.getElementById('btn-cambiar-pass');
+  if(btnCambiarPass){
+    btnCambiarPass.addEventListener('click', function(e){
       e.preventDefault();
-      doLogout();
+      $('cp-pass1').value='';$('cp-pass2').value='';
+      $('cambiar-pass-error').style.display='none';
+      $('cambiar-pass-ok').style.display='none';
+      $('modal-cambiar-pass').classList.remove('hidden');
+    }, {passive:false});
+    btnCambiarPass.addEventListener('touchend', function(e){
+      e.preventDefault();
+      $('cp-pass1').value='';$('cp-pass2').value='';
+      $('cambiar-pass-error').style.display='none';
+      $('cambiar-pass-ok').style.display='none';
+      $('modal-cambiar-pass').classList.remove('hidden');
     }, {passive:false});
   }
   // Ocultar splash
