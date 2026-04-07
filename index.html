@@ -1566,24 +1566,17 @@ document.addEventListener('click',function(e){
 async function init(){
   $('f-date').value=new Date().toISOString().split('T')[0];
 
-  // Detectar token de recuperación de contraseña en la URL
-  const hash = window.location.hash;
-  const search = window.location.search;
-  console.log('URL hash:', hash);
-  console.log('URL search:', search);
-  console.log('Full URL:', window.location.href);
-  if(hash && hash.includes('type=recovery')){
-    console.log('Recovery token detected in hash');
+  // Detectar token de recuperación en la URL
+  const _hash = window.location.hash || '';
+  const _isRecovery = _hash.includes('type=recovery') || _hash.includes('access_token');
+  if(_isRecovery){
+    // Mostrar pantalla de espera mientras Supabase procesa el token
     showScreen('auth-new-password');
-    history.replaceState(null, '', window.location.pathname);
-    return; // No seguir con init normal
-  }
-  // También verificar en query params (algunos clientes lo mandan así)
-  if(search && search.includes('type=recovery')){
-    console.log('Recovery token detected in search params');
-    showScreen('auth-new-password');
-    history.replaceState(null, '', window.location.pathname);
-    return;
+    if($('new-pass-1'))$('new-pass-1').disabled=true;
+    if($('new-pass-2'))$('new-pass-2').disabled=true;
+    if($('btn-new-pass')){$('btn-new-pass').textContent='Verificando…';$('btn-new-pass').disabled=true;}
+    // Supabase procesará el hash y disparará PASSWORD_RECOVERY via onAuthStateChange
+    // No limpiar la URL todavía — Supabase la necesita
   }
 
   // Botón Salir — addEventListener más fiable que onclick en iOS
@@ -1608,8 +1601,15 @@ async function init(){
   // SIGNED_IN se dispara tras login manual
   supabaseClient.auth.onAuthStateChange(async(event, session)=>{
     if(event==='PASSWORD_RECOVERY'){
-      // Usuario viene del link de recuperación — mostrar formulario nueva contraseña
+      // Token validado — habilitar formulario de nueva contraseña
       showScreen('auth-new-password');
+      if($('new-pass-1'))$('new-pass-1').disabled=false;
+      if($('new-pass-2'))$('new-pass-2').disabled=false;
+      if($('btn-new-pass')){
+        $('btn-new-pass').textContent='Guardar contraseña';
+        $('btn-new-pass').disabled=false;
+      }
+      try{ history.replaceState(null,'',window.location.pathname); }catch(e){}
       return;
     }
     if(event==='INITIAL_SESSION'){
