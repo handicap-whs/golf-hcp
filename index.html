@@ -237,6 +237,20 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+<!-- PANTALLA NUEVA CONTRASEÑA (tras link de email) -->
+<div class="auth-screen hidden" id="auth-new-password">
+  <div class="auth-logo">Golf <em>HCP</em></div>
+  <div class="auth-sub">Calculadora · WHS 2020</div>
+  <div class="auth-box">
+    <div class="auth-title">Nueva Contraseña</div>
+    <div class="auth-error" id="new-pass-error"></div>
+    <div class="auth-ok" id="new-pass-ok"></div>
+    <div class="auth-field"><label>Nueva contraseña</label><input id="new-pass-1" type="password" autocomplete="new-password" placeholder="mínimo 6 caracteres"></div>
+    <div class="auth-field"><label>Confirmar contraseña</label><input id="new-pass-2" type="password" autocomplete="new-password" placeholder="repite la contraseña"></div>
+    <button class="auth-btn" id="btn-new-pass" onclick="doUpdatePassword()">Guardar contraseña</button>
+  </div>
+</div>
+
 <!-- BARRA JUGADOR ACTIVO -->
 <div id="active-player-bar" class="hidden">
   <div>
@@ -620,11 +634,10 @@ let rounds=[],campos=[],jugadorActivo=null; // jugadorActivo = {id, email, nombr
 
 // ── AUTH ─────────────────────────────────────────────────────────
 function showScreen(id){
-  ['auth-login','auth-register','auth-reset'].forEach(s=>{
+  ['auth-login','auth-register','auth-reset','auth-new-password'].forEach(s=>{
     const el=document.getElementById(s);
     if(el)el.classList.toggle('hidden',s!==id);
   });
-  // Limpiar errores al cambiar pantalla
   document.querySelectorAll('.auth-error,.auth-ok').forEach(el=>{el.classList.remove('show');el.textContent='';});
 }
 
@@ -678,6 +691,22 @@ async function doRegister(){
   }catch(e){
     showAuthError('register-error',e.message||'Error al crear cuenta.');
   }finally{btn.textContent='Crear Cuenta';btn.disabled=false;}
+}
+
+async function doUpdatePassword(){
+  const pass1=$('new-pass-1').value;
+  const pass2=$('new-pass-2').value;
+  if(pass1.length<6){showAuthError('new-pass-error','Mínimo 6 caracteres.');return;}
+  if(pass1!==pass2){showAuthError('new-pass-error','Las contraseñas no coinciden.');return;}
+  const btn=$('btn-new-pass');btn.textContent='Guardando…';btn.disabled=true;
+  try{
+    const {error}=await supabaseClient.auth.updateUser({password:pass1});
+    if(error)throw error;
+    showAuthOk('new-pass-ok','✓ Contraseña actualizada. Ya puedes iniciar sesión.');
+    setTimeout(()=>{ supabaseClient.auth.signOut(); showScreen('auth-login'); },2000);
+  }catch(e){
+    showAuthError('new-pass-error',e.message||'Error al actualizar contraseña.');
+  }finally{btn.textContent='Guardar contraseña';btn.disabled=false;}
 }
 
 async function doReset(){
@@ -1556,6 +1585,11 @@ async function init(){
   // INITIAL_SESSION se dispara al arrancar con sesión existente
   // SIGNED_IN se dispara tras login manual
   supabaseClient.auth.onAuthStateChange(async(event, session)=>{
+    if(event==='PASSWORD_RECOVERY'){
+      // Usuario viene del link de recuperación — mostrar formulario nueva contraseña
+      showScreen('auth-new-password');
+      return;
+    }
     if(event==='INITIAL_SESSION'){
       if(session?.user){
         await onUserLoggedIn(session.user);
@@ -1563,6 +1597,9 @@ async function init(){
         showScreen('auth-login');
       }
     }else if(event==='SIGNED_IN'){
+      // No entrar si estamos en pantalla de nueva contraseña
+      const newPassScreen=document.getElementById('auth-new-password');
+      if(newPassScreen&&!newPassScreen.classList.contains('hidden'))return;
       await onUserLoggedIn(session.user);
     }else if(event==='SIGNED_OUT'||event==='USER_DELETED'){
       // Si jugadorActivo ya está null, el doLogout manual ya limpió
