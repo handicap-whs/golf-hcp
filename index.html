@@ -1126,8 +1126,8 @@ function buildTablaHoyos(){
     const trPar=document.createElement('tr');let hP=`<td style="font-size:9px;color:var(--muted);padding:4px 6px">Par</td>`;
     const trIdx=document.createElement('tr');let hI=`<td style="font-size:9px;color:var(--muted);padding:4px 6px">Índice</td>`;
     for(let i=1+hi*9;i<=9+hi*9;i++){
-      hP+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="number" id="nc-par-${i}" min="3" max="5" placeholder="4" inputmode="numeric" oninput="calcParTotalNuevo()"></td>`;
-      hI+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="number" id="nc-idx-${i}" min="1" max="18" placeholder="${i}" inputmode="numeric"></td>`;
+      hP+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="text" inputmode="numeric" id="nc-par-${i}" maxlength="1" placeholder="4" oninput="this.value=this.value.replace(/[^345]/g,'');calcParTotalNuevo();hoyoParInput(parseInt(this.id.split('-').pop()),'nc-')"></td>`;
+      hI+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="text" inputmode="numeric" id="nc-idx-${i}" maxlength="2" placeholder="${i}" oninput="this.value=this.value.replace(/[^0-9]/g,'');hoyoIdxInput(parseInt(this.id.split('-').pop()),'nc-')"></td>`;
     }
     trPar.innerHTML=hP;trIdx.innerHTML=hI;tbody.appendChild(trPar);tbody.appendChild(trIdx);
   });
@@ -1191,6 +1191,19 @@ async function clearAll(){
 
 // ── COURSE HCP ───────────────────────────────────────────────────
 const KEY_PRE='golfhcp_pre_v6';
+
+function hoyoParInput(i,prefix){
+  const el=document.getElementById(prefix+'par-'+i);if(!el)return;
+  const v=el.value.trim();
+  if(v==='3'||v==='4'||v==='5'){const idx=document.getElementById(prefix+'idx-'+i);if(idx){idx.focus();idx.select();}}
+}
+function hoyoIdxInput(i,prefix){
+  const el=document.getElementById(prefix+'idx-'+i);if(!el)return;
+  const v=el.value.trim();const n=parseInt(v);
+  if(!isNaN(n)&&n>=1&&n<=18&&(v.length>=2||(v.length===1&&n>=2&&n<=9))){
+    const next=document.getElementById(prefix+'par-'+(i+1));if(next){next.focus();next.select();}
+  }
+}
 function savePre(){const key=KEY_PRE+'_'+(jugadorActivo?.id||'anon');try{localStorage.setItem(key,JSON.stringify({name:$('p-name').value,hcp:$('p-hcp').value,par:$('p-par').value,cr:$('p-cr').value,slope:$('p-slope').value,campoId:$('p-campo')?.value||'',barra:$('p-barra')?.value||''}));}catch(e){}}
 function loadPre(){const key=KEY_PRE+'_'+(jugadorActivo?.id||'anon');try{const p=JSON.parse(localStorage.getItem(key));if(!p)return;if(p.name)$('p-name').value=p.name;if(p.hcp)$('p-hcp').value=p.hcp;
   // Restaurar campo y barra guardados
@@ -1346,8 +1359,8 @@ function abrirEditCampo(id){
     let hI=`<td style="font-size:9px;color:var(--muted);padding:4px 6px">Índice</td>`;
     for(let i=1+hi*9;i<=9+hi*9;i++){
       const h=campo.hoyos?.find(h=>h.numero===i);
-      hP+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="number" id="edit-nc-par-${i}" min="3" max="5" inputmode="numeric" value="${h?h.par:''}" oninput="calcParTotalEdit()"></td>`;
-      hI+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="number" id="edit-nc-idx-${i}" min="1" max="18" inputmode="numeric" value="${h?h.indice:''}"></td>`;
+      hP+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="text" inputmode="numeric" id="edit-nc-par-${i}" maxlength="1" value="${h?h.par:''}" oninput="this.value=this.value.replace(/[^345]/g,'');calcParTotalEdit();hoyoParInput(parseInt(this.id.split('-').pop()),'edit-nc-')"></td>`;
+      hI+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="text" oninput="this.value=this.value.replace(/[^0-9]/g,'');hoyoIdxInput(parseInt(this.id.split('-').pop()),'edit-nc-')" id="edit-nc-idx-${i}" maxlength="2" oninput="this.value=this.value.replace(/[^0-9]/g,'');hoyoIdxInput(parseInt(this.id.split('-').pop()),'edit-nc-')" value="${h?h.indice:''}"></td>`;
     }
     trP.innerHTML=hP;trI.innerHTML=hI;tbody.appendChild(trP);tbody.appendChild(trI);
   });
@@ -1416,21 +1429,18 @@ async function guardarEditCampo(){
       if(ib)throw new Error('Error barras: '+ib.message);
     }
 
-    // 4. Cerrar modal primero, luego recargar vista
+    // 4. Resetear botón y cerrar modal
+    btn.textContent='Guardar Cambios';
+    btn.disabled=false;
     cerrarModal('modal-campo');
-    // Limpiar y recargar datos completamente
-    campos = [];
-    await loadCampos();
+    // Recargar datos en background
+    campos=[];
+    loadCampos().catch(()=>{});
     toast('✓ Campo actualizado');
   }catch(e){
-    const errMsg = e?.message || e?.code || e?.details || JSON.stringify(e) || 'Error desconocido';
+    const errMsg=e?.message||e?.code||e?.details||JSON.stringify(e)||'Error desconocido';
     showErrE('❌ '+errMsg);
-    console.error('guardarEditCampo error:', JSON.stringify(e), e);
-    // Asegurar que el div es visible aunque esté tapado
-    if(errDivE){
-      errDivE.style.display='block';
-      errDivE.scrollIntoView({behavior:'smooth',block:'center'});
-    }
+    console.error('guardarEditCampo error:',e);
   }finally{
     btn.textContent='Guardar Cambios';
     btn.disabled=false;
