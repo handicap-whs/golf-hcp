@@ -703,8 +703,9 @@ async function doUpdatePassword(){
   try{
     const {error}=await supabaseClient.auth.updateUser({password:pass1});
     if(error)throw error;
+    window._passwordRecoveryMode = false;
     showAuthOk('new-pass-ok','✓ Contraseña actualizada. Ya puedes iniciar sesión.');
-    setTimeout(()=>{ supabaseClient.auth.signOut(); showScreen('auth-login'); },2000);
+    setTimeout(async()=>{ await supabaseClient.auth.signOut(); showScreen('auth-login'); },2000);
   }catch(e){
     showAuthError('new-pass-error',e.message||'Error al actualizar contraseña.');
   }finally{btn.textContent='Guardar contraseña';btn.disabled=false;}
@@ -1570,13 +1571,11 @@ async function init(){
   const _hash = window.location.hash || '';
   const _isRecovery = _hash.includes('type=recovery') || _hash.includes('access_token');
   if(_isRecovery){
-    // Mostrar pantalla de espera mientras Supabase procesa el token
+    window._passwordRecoveryMode = true;
     showScreen('auth-new-password');
     if($('new-pass-1'))$('new-pass-1').disabled=true;
     if($('new-pass-2'))$('new-pass-2').disabled=true;
     if($('btn-new-pass')){$('btn-new-pass').textContent='Verificando…';$('btn-new-pass').disabled=true;}
-    // Supabase procesará el hash y disparará PASSWORD_RECOVERY via onAuthStateChange
-    // No limpiar la URL todavía — Supabase la necesita
   }
 
   // Botón Salir — addEventListener más fiable que onclick en iOS
@@ -1601,7 +1600,7 @@ async function init(){
   // SIGNED_IN se dispara tras login manual
   supabaseClient.auth.onAuthStateChange(async(event, session)=>{
     if(event==='PASSWORD_RECOVERY'){
-      // Token validado — habilitar formulario de nueva contraseña
+      window._passwordRecoveryMode = true;
       showScreen('auth-new-password');
       if($('new-pass-1'))$('new-pass-1').disabled=false;
       if($('new-pass-2'))$('new-pass-2').disabled=false;
@@ -1619,9 +1618,8 @@ async function init(){
         showScreen('auth-login');
       }
     }else if(event==='SIGNED_IN'){
-      // No entrar si estamos en pantalla de nueva contraseña
-      const newPassScreen=document.getElementById('auth-new-password');
-      if(newPassScreen&&!newPassScreen.classList.contains('hidden'))return;
+      // Si estamos en modo recovery, no hacer login normal
+      if(window._passwordRecoveryMode) return;
       await onUserLoggedIn(session.user);
     }else if(event==='SIGNED_OUT'||event==='USER_DELETED'){
       // Si jugadorActivo ya está null, el doLogout manual ya limpió
