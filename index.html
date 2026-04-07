@@ -1473,19 +1473,21 @@ async function guardarEditCampo(){
     const {error:upC}=await supabaseClient.from('campos').update(updateData).eq('id',id);
     if(upC)throw new Error('Error campo: '+upC.message);
 
-    // 2. Hoyos: SIEMPRE borrar primero, luego insertar si hay
-    await supabaseClient.from('hoyos').delete().eq('campo_id',id);
+    // 2. Hoyos: borrar y reinsertar
+    const {error:dh}=await supabaseClient.from('hoyos').delete().eq('campo_id',id).eq('user_id',uid);
+    if(dh)throw new Error('Error borrando hoyos: '+dh.message);
     if(hoyos.length>0){
       const {error:ih}=await supabaseClient.from('hoyos')
         .insert(hoyos.map(hh=>({campo_id:id,numero:hh.numero,par:hh.par,indice:hh.indice,user_id:uid})));
-      if(ih)throw new Error('Error hoyos: '+ih.message);
+      if(ih)throw new Error('Error insertando hoyos: '+ih.message);
     }
 
-    // 3. Barras: SIEMPRE borrar primero, luego insertar si hay
-    await supabaseClient.from('barras').delete().eq('campo_id',id);
+    // 3. Barras: borrar y reinsertar
+    const {error:db}=await supabaseClient.from('barras').delete().eq('campo_id',id).eq('user_id',uid);
+    if(db)throw new Error('Error borrando barras: '+db.message);
     if(barrasEdit.length>0){
       const {error:ib}=await supabaseClient.from('barras').insert(barrasEdit);
-      if(ib)throw new Error('Error barras: '+ib.message);
+      if(ib)throw new Error('Error insertando barras: '+ib.message);
     }
 
     // 4. Resetear botón y cerrar modal
