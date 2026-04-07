@@ -1415,13 +1415,11 @@ async function guardarEditCampo(){
       if(ib)throw new Error('Error barras: '+ib.message);
     }
 
-    // 4. Recargar y actualizar vista
-    await loadCampos();
-    renderCampos();
-    renderSelectorCampos();
-    renderSelectorCamposInicio();
-    if($('p-campo')?.value)onCampoAntes();
+    // 4. Cerrar modal primero, luego recargar vista
     cerrarModal('modal-campo');
+    // Limpiar y recargar datos completamente
+    campos = [];
+    await loadCampos();
     toast('✓ Campo actualizado');
   }catch(e){
     const errMsg = e?.message || e?.code || e?.details || JSON.stringify(e) || 'Error desconocido';
