@@ -1186,8 +1186,8 @@ function buildTablaHoyos(){
     const trPar=document.createElement('tr');let hP=`<td style="font-size:9px;color:var(--muted);padding:4px 6px">Par</td>`;
     const trIdx=document.createElement('tr');let hI=`<td style="font-size:9px;color:var(--muted);padding:4px 6px">Índice</td>`;
     for(let i=1+hi*9;i<=9+hi*9;i++){
-      hP+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="text" inputmode="numeric" id="nc-par-${i}" maxlength="1" placeholder="4" oninput="this.value=this.value.replace(/[^345]/g,'');calcParTotalNuevo();hoyoParInput(parseInt(this.id.split('-').pop()),'nc-')"></td>`;
-      hI+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="text" inputmode="numeric" id="nc-idx-${i}" maxlength="2" placeholder="${i}" oninput="this.value=this.value.replace(/[^0-9]/g,'');hoyoIdxInput(parseInt(this.id.split('-').pop()),'nc-')"></td>`;
+      hP+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="text" inputmode="numeric" id="nc-par-${i}" maxlength="1" inputmode="numeric" placeholder="4" oninput="this.value=this.value.replace(/[^345]/g,'');calcParTotalNuevo();hoyoParInput(parseInt(this.id.split('-').pop()),'nc-')"></td>`;
+      hI+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="text" inputmode="numeric" id="nc-idx-${i}" maxlength="2" inputmode="numeric" placeholder="${i}" oninput="this.value=this.value.replace(/[^0-9]/g,'');hoyoIdxInput(parseInt(this.id.split('-').pop()),'nc-')"></td>`;
     }
     trPar.innerHTML=hP;trIdx.innerHTML=hI;tbody.appendChild(trPar);tbody.appendChild(trIdx);
   });
@@ -1418,8 +1418,8 @@ function abrirEditCampo(id){
     let hI=`<td style="font-size:9px;color:var(--muted);padding:4px 6px">Índice</td>`;
     for(let i=1+hi*9;i<=9+hi*9;i++){
       const h=campo.hoyos?.find(h=>h.numero===i);
-      hP+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="text" inputmode="numeric" id="edit-nc-par-${i}" maxlength="1" value="${h?h.par:''}" oninput="this.value=this.value.replace(/[^345]/g,'');calcParTotalEdit();hoyoParInput(parseInt(this.id.split('-').pop()),'edit-nc-')"></td>`;
-      hI+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="text" oninput="this.value=this.value.replace(/[^0-9]/g,'');hoyoIdxInput(parseInt(this.id.split('-').pop()),'edit-nc-')" id="edit-nc-idx-${i}" maxlength="2" oninput="this.value=this.value.replace(/[^0-9]/g,'');hoyoIdxInput(parseInt(this.id.split('-').pop()),'edit-nc-')" value="${h?h.indice:''}"></td>`;
+      hP+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="text" inputmode="numeric" id="edit-nc-par-${i}" maxlength="1" inputmode="numeric" value="${h?h.par:''}" oninput="this.value=this.value.replace(/[^345]/g,'');calcParTotalEdit();hoyoParInput(parseInt(this.id.split('-').pop()),'edit-nc-')"></td>`;
+      hI+=`<td style="padding:3px"><input class="hoyo-input" style="width:38px" type="text" inputmode="numeric" id="edit-nc-idx-${i}" maxlength="2" inputmode="numeric" value="${h?h.indice:''}" oninput="this.value=this.value.replace(/[^0-9]/g,'');hoyoIdxInput(parseInt(this.id.split('-').pop()),'edit-nc-')"></td>`;
     }
     trP.innerHTML=hP;trI.innerHTML=hI;tbody.appendChild(trP);tbody.appendChild(trI);
   });
