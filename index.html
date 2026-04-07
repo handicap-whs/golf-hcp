@@ -633,7 +633,6 @@ function showAuthOk(id,msg){const el=$(id);if(el){el.textContent=msg;el.classLis
 function hideAuthMsg(id){const el=$(id);if(el)el.classList.remove('show');}
 
 async function doLogin(){
-  if(_loggingOut){toast('Cerrando sesión anterior…',false);return;}
   const email=$('login-email').value.trim();
   const pass=$('login-pass').value;
   if(!email||!pass){showAuthError('login-error','Introduce email y contraseña.');return;}
@@ -694,31 +693,21 @@ async function doReset(){
   }finally{btn.textContent='Enviar enlace';btn.disabled=false;}
 }
 
-let _loggingOut = false;
-async function doLogout(){
-  if(_loggingOut) return;
+function doLogout(){
   if(!confirm('¿Cerrar sesión?')) return;
-  _loggingOut = true;
-  // Limpiar estado local inmediatamente
+  // Limpiar estado local
   jugadorActivo=null;rounds=[];campos=[];
-  try { localStorage.removeItem('golfhcp-last-uid'); } catch(e) {}
-  // Limpiar storage de sesión para evitar sesiones fantasma
-  try { localStorage.removeItem('golfhcp-auth-session'); } catch(e) {}
   renderAll();renderCampos();
   $('active-player-bar').classList.add('hidden');
   limpiarCamposAntes();
   if($('login-email'))$('login-email').value='';
   if($('login-pass'))$('login-pass').value='';
   showScreen('auth-login');
-  // Esperar a que signOut complete antes de permitir nuevo login
-  try { await supabaseClient.auth.signOut({scope:'local'}); } catch(e) {}
-  _loggingOut = false;
+  // signOut en background — onAuthStateChange manejará el resto
+  supabaseClient.auth.signOut().catch(()=>{});
 }
 
-let _loggingIn = false;
 async function onUserLoggedIn(user){
-  if(_loggingIn) return;
-  _loggingIn = true;
   // Guardar uid en localStorage como backup para iOS
   try { localStorage.setItem('golfhcp-last-uid', user.id); } catch(e) {}
   // Obtener nombre del perfil
@@ -744,7 +733,6 @@ async function onUserLoggedIn(user){
     if(!$('p-hcp').value)autorellenarAntes();
     calcCHCP();
   }catch(e){toast('❌ Error al cargar datos',true);}
-  finally { _loggingIn = false; }
 }
 
 // ── BARRAS ───────────────────────────────────────────────────────
@@ -1104,12 +1092,14 @@ async function guardarCampo(){
 async function delCampo(id){
   id=typeof id==='string'?parseInt(id):id;
   if(!confirm('¿Eliminar este campo?'))return;
-  try{const {error:dc}=await supabaseClient.from('campos').delete().eq('id',id);if(dc)throw dc;
+  try{
+    const {error:dc}=await supabaseClient.from('campos').delete().eq('id',id);
+    if(dc)throw dc;
     await loadCampos();
     renderCampos();
     renderSelectorCampos();
-    toast('Campo eliminado');}
-  catch(e){toast('❌ Error al eliminar',true);}
+    toast('Campo eliminado');
+  }catch(e){toast('❌ Error al eliminar',true);}
 }
 
 function toggleNuevoCampo(){
@@ -1179,14 +1169,12 @@ async function addRound(){
 
 async function delRound(id){
   id=typeof id==='string'?parseInt(id):id;
-  try{const {error:dr}=await supabaseClient.from('rondas').delete().eq('id',id);if(dr)throw dr;rounds=rounds.filter(r=>r.id!==id);renderAll();toast('Ronda eliminada');}
-  catch(e){toast('❌ Error al eliminar',true);}
+  try{const {error:dr}=await supabaseClient.from('rondas').delete().eq('id',id);if(dr)throw dr;rounds=rounds.filter(r=>r.id!==id);renderAll();toast('Ronda eliminada');}catch(e){toast('❌ Error al eliminar',true);}
 }
 
 async function clearAll(){
   if(!confirm('¿Borrar todas las rondas?'))return;
-  try{const {error:ca}=await supabaseClient.from('rondas').delete().neq('id',0);if(ca)throw ca;rounds=[];renderAll();toast('Historial borrado');}
-  catch(e){toast('❌ Error al borrar',true);}
+  try{const {error:ca}=await supabaseClient.from('rondas').delete().neq('id',0);if(ca)throw ca;rounds=[];renderAll();toast('Historial borrado');}catch(e){toast('❌ Error al borrar',true);}
 }
 
 // ── COURSE HCP ───────────────────────────────────────────────────
@@ -1577,8 +1565,8 @@ async function init(){
     }else if(event==='SIGNED_IN'){
       await onUserLoggedIn(session.user);
     }else if(event==='SIGNED_OUT'||event==='USER_DELETED'){
-      // Solo mostrar login si no estamos ya haciéndolo manualmente
-      if(!_loggingOut){
+      // Si jugadorActivo ya está null, el doLogout manual ya limpió
+      if(jugadorActivo!==null){
         jugadorActivo=null;rounds=[];campos=[];
         renderAll();renderCampos();
         $('active-player-bar').classList.add('hidden');
