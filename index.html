@@ -813,32 +813,42 @@ async function onLogin(user) {
   state.loading = false;
   const btnL = $('btn-login');
   if (btnL) { btnL.textContent = 'Entrar'; btnL.disabled = false; }
-
-  // Obtener nombre del perfil (con timeout para evitar cuelgue)
+  
+  // Paso 1: nombre
   let nombre = user.user_metadata?.nombre || user.email.split('@')[0];
   try {
     const { data } = await sb.from('profiles').select('nombre').eq('id', user.id).single();
     if (data?.nombre) nombre = data.nombre;
   } catch(e) {}
-
+  
+  // Paso 2: set state
   state.user = { id: user.id, email: user.email, nombre };
-  ['auth-login','auth-register','auth-reset'].forEach(s => {
-    const el = $('auth-' + s); if (el) el.classList.add('hidden');
+  
+  // Paso 3: ocultar auth
+  // Ocultar TODAS las pantallas auth con display directo
+  document.querySelectorAll('.auth-screen').forEach(el => {
+    el.classList.add('hidden');
+    el.style.display = 'none';
   });
+  
+  // Paso 4: mostrar UI
   const pb = $('player-bar');
   const mn = $('main-nav');
-  if (pb) pb.classList.remove('hidden');
-  if (mn) mn.style.display = '';
+  if (pb) { pb.classList.remove('hidden'); pb.style.cssText = 'display:flex!important'; }
+  if (mn) { mn.style.cssText = 'display:flex!important'; }
   if ($('pb-name')) $('pb-name').textContent = nombre;
-  if ($('p-name')) $('p-name').value = nombre;
+  if ($('p-name'))  $('p-name').value = nombre;
+  
+  // Paso 5: cargar datos
   try {
     await loadData();
     loadPre();
     autorellenarInicio();
   } catch(e) {
-    toast('❌ Error al cargar datos: ' + (e.message||''), true);
+    toast('Error datos: ' + (e.message||'?'), true);
   }
 }
+
 
 // ── LOAD DATA ────────────────────────────────────────────────────────────
 async function loadData() {
