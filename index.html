@@ -1692,32 +1692,15 @@ async function init() {
     $('modal-clave').classList.remove('hidden');
   }, {passive:false});
 
-  // Auth state — única fuente de verdad para sesión persistida
+  // Auth state — solo INITIAL_SESSION para recuperar sesión al arrancar
+  // doLogin y doLogout gestionan el resto manualmente
   sb.auth.onAuthStateChange(async (event, session) => {
     if (event === 'INITIAL_SESSION') {
-      if (session?.user) {
-        await onLogin(session.user);
-      } else {
-        showAuth('login');
-      }
-    } else if (event === 'PASSWORD_RECOVERY') {
-      showAuth('reset');
-      toast('Introduce tu nueva contraseña en el perfil.');
-        } else if (event === 'SIGNED_IN') {
-      if (!state.user && session?.user) {
-        await onLogin(session.user);
-      }
-    } else if (event === 'SIGNED_OUT') {
-      // Solo limpiar si no hay un login en curso
-      if (state.user !== null && !state.loading) {
-        state.user = null; state.rounds = []; state.campos = [];
-        renderAll(); renderCampos();
-        $('player-bar').classList.add('hidden');
-        $('main-nav').style.display = 'none';
-        limpiarInicio();
-        showAuth('login');
-      }
+      if (session?.user) await onLogin(session.user);
+      else showAuth('login');
     }
+    // SIGNED_IN, SIGNED_OUT, TOKEN_REFRESHED: ignorados
+    // El flujo manual (doLogin/doLogout) ya gestiona la UI
   });
 
   // Ocultar splash
