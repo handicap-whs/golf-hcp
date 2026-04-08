@@ -786,27 +786,37 @@ function doLogout() {
 
 // ── ONLOGIN: carga datos tras autenticación ───────────────────────────────
 async function onLogin(user) {
-  state.loading = false; // Resetear flag de login
-  // Obtener nombre del perfil
-  let nombre = user.user_metadata?.nombre || user.email.split('@')[0];
+  state.loading = false;
+
+  // 1. PRIMERO: mostrar UI (sin esperar queries)
+  const nombre0 = user.user_metadata?.nombre || user.email.split('@')[0];
+  state.user = { id: user.id, email: user.email, nombre: nombre0 };
+
+  // Ocultar auth screens
+  document.querySelectorAll('.auth-screen').forEach(el => {
+    el.classList.add('hidden');
+    el.style.display = 'none';
+  });
+
+  // Mostrar app
+  const pb = $('player-bar');
+  const mn = $('main-nav');
+  if (pb) { pb.classList.remove('hidden'); pb.style.removeProperty('display'); }
+  if (mn) { mn.style.display = 'flex'; }
+  if ($('btn-login')) { $('btn-login').textContent = 'Entrar'; $('btn-login').disabled = false; }
+  if ($('pb-name')) $('pb-name').textContent = nombre0;
+  if ($('p-name'))  $('p-name').value = nombre0;
+
+  // 2. LUEGO: queries async (no bloquean la UI)
   try {
     const { data } = await sb.from('profiles').select('nombre').eq('id', user.id).single();
-    if (data?.nombre) nombre = data.nombre;
+    if (data?.nombre) {
+      state.user.nombre = data.nombre;
+      if ($('pb-name')) $('pb-name').textContent = data.nombre;
+      if ($('p-name'))  $('p-name').value = data.nombre;
+    }
   } catch(e) {}
 
-  state.user = { id: user.id, email: user.email, nombre };
-
-  // Mostrar UI autenticada
-  ['auth-login','auth-register','auth-reset'].forEach(s => {
-    const el = $('auth-' + s); if (el) el.classList.add('hidden');
-  });
-  $('player-bar').classList.remove('hidden');
-  $('main-nav').style.display = '';
-  $('pb-name').textContent = nombre;
-  $('p-name').value = nombre;
-  $('btn-login').textContent = 'Entrar'; $('btn-login').disabled = false;
-
-  // Cargar datos
   try {
     await loadData();
     loadPre();
