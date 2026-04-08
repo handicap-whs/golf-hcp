@@ -14,8 +14,8 @@
 <style>
 :root{--bg:#1a2f1a;--bg2:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.09);--gold:#c9a84c;--gold2:#e8c96a;--green:#7bc67a;--cream:#f5f0e8;--muted:rgba(255,255,255,0.35);--red:#e05555}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;background:var(--bg);color:var(--cream);font-family:'DM Mono',monospace;overflow-x:hidden}
-body{overflow-y:auto;-webkit-overflow-scrolling:touch}
+html{height:100%;background:var(--bg)}
+body{height:100%;margin:0;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);color:var(--cream);font-family:'DM Mono',monospace}
 
 /* ── SPLASH ── */
 #splash{position:fixed;inset:0;background:#1a2f1a;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .5s}
@@ -52,13 +52,14 @@ body{overflow-y:auto;-webkit-overflow-scrolling:touch}
 .pb-btn{background:none;border:1px solid rgba(201,168,76,.3);border-radius:4px;color:var(--gold);font-family:'DM Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:4px 8px;cursor:pointer}
 
 /* ── NAV ── */
-nav{position:fixed;bottom:0;left:0;right:0;background:#0f1a0f;border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,0px)}
+nav{flex-shrink:0;background:#0f1a0f;border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,0px)}
 nav button{flex:1;background:none;border:none;color:var(--muted);padding:9px 2px 7px;font-size:8px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'DM Mono',monospace;min-height:52px}
 nav button svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 nav button.active{color:var(--gold)}
 nav button.active svg{stroke:var(--gold)}
 
 /* ── PAGES ── */
+#scroll-wrap{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
 .page{display:none;padding:16px 14px calc(80px + env(safe-area-inset-bottom,0px));max-width:700px;margin:0 auto;width:100%}
 .page.active{display:block}
 
@@ -187,7 +188,7 @@ select option{background:#1a2f1a}
 <!-- AUTH: LOGIN -->
 <div class="auth-screen hidden" id="auth-login">
   <div class="auth-logo">Golf <em>HCP</em></div>
-  <div class="auth-sub">Calculadora · WHS 2020</div>
+  <div class="auth-sub">Calculadora · WHS 2020 · v20</div>
   <div class="auth-box">
     <div class="auth-title">Iniciar Sesión</div>
     <div class="auth-msg err" id="login-err"></div>
@@ -231,6 +232,7 @@ select option{background:#1a2f1a}
 </div>
 
 <!-- PLAYER BAR -->
+<div id="scroll-wrap">
 <div id="player-bar" class="hidden">
   <div>
     <div style="font-size:7px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:1px">Jugador</div>
@@ -318,6 +320,7 @@ select option{background:#1a2f1a}
 </div>
 
 <!-- NAV -->
+</div><!-- /scroll-wrap -->
 <nav id="main-nav" style="display:none">
   <button class="active" onclick="goTo('inicio',this)" id="nav-inicio">
     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>Inicio
@@ -1726,7 +1729,7 @@ function goTo(id, btn) {
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
   $('page-' + id).classList.add('active');
   if (btn) btn.classList.add('active');
-  window.scrollTo(0, 0);
+  const sw = document.getElementById('scroll-wrap'); if(sw) sw.scrollTop=0;
   if (id === 'nueva') {
     $('f-date').value = new Date().toISOString().split('T')[0];
     // Pre-rellenar HCP con el calculado
