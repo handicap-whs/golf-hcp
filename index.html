@@ -810,8 +810,7 @@ function doLogout() {
 
 // ── ONLOGIN: carga datos tras autenticación ───────────────────────────────
 async function onLogin(user) {
-  // Diagnóstico temporal — borrar tras confirmar
-  // Resetear estado de loading/botones por si acaso
+  alert('paso1:'+user.email);
   state.loading = false;
   const btnL = $('btn-login');
   if (btnL) { btnL.textContent = 'Entrar'; btnL.disabled = false; }
@@ -824,8 +823,7 @@ async function onLogin(user) {
   } catch(e) {}
 
   state.user = { id: user.id, email: user.email, nombre };
-
-  // Ocultar auth, mostrar UI
+  alert('paso2:pb='+!!$('player-bar')+' mn='+!!$('main-nav'));
   ['auth-login','auth-register','auth-reset'].forEach(s => {
     const el = $('auth-' + s); if (el) el.classList.add('hidden');
   });
@@ -835,16 +833,17 @@ async function onLogin(user) {
   if (mn) mn.style.display = '';
   if ($('pb-name')) $('pb-name').textContent = nombre;
   if ($('p-name')) $('p-name').value = nombre;
-
-  // Cargar datos
+  alert('paso3:UI ok');
   try {
     await loadData();
+    alert('paso4:datos ok');
     loadPre();
     autorellenarInicio();
   } catch(e) {
+    alert('paso4 ERROR:'+e.message);
     toast('❌ Error al cargar datos: ' + (e.message||''), true);
-    // Aunque falle la carga, la UI ya está visible
   }
+  alert('paso5:FIN');
 }
 
 // ── LOAD DATA ────────────────────────────────────────────────────────────
