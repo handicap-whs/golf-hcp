@@ -1,6 +1,6 @@
 // ── Golf HCP · Service Worker ─────────────────────────────────────
 // Cambia este número en CADA despliegue para forzar actualización
-const CACHE_VERSION = 'golf-hcp-v17';
+const CACHE_VERSION = 'golf-hcp-v18';
 
 const LOCAL_ASSETS = ['./', './index.html', './manifest.json'];
 const CDN_ASSETS = [

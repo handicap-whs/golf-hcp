@@ -382,6 +382,21 @@ select option{background:#1a2f1a}
       </div>
       <div class="chcp-detail" id="chcp-detail">Selecciona un campo para calcular.</div>
     </div>
+    <!-- Playing HCP por ajuste de juego -->
+    <div id="php-wrap" style="display:none;margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:10px 4px;text-align:center">
+        <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">100%<br>Informal</div>
+        <div id="php-100" style="font-family:'Playfair Display',serif;font-size:20px;color:#fff">—</div>
+      </div>
+      <div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:6px;padding:10px 4px;text-align:center">
+        <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">95%<br>Medal/Stblf</div>
+        <div id="php-95" style="font-family:'Playfair Display',serif;font-size:20px;color:var(--gold2)">—</div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:10px 4px;text-align:center">
+        <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">85%<br>Four Ball</div>
+        <div id="php-85" style="font-family:'Playfair Display',serif;font-size:20px;color:#fff">—</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -491,7 +506,9 @@ select option{background:#1a2f1a}
       <div class="formula-row"><span class="fk">18 rondas</span><span class="fv">6 mejores · sin ajuste</span></div>
       <div class="formula-row"><span class="fk">19 rondas</span><span class="fv">7 mejores · sin ajuste</span></div>
       <div class="formula-row"><span class="fk">20 rondas</span><span class="fv">8 mejores · sin ajuste</span></div>
-      <div class="formula-row"><span class="fk">× 0.95</span><span class="fv">Factor de reducción final (WHS)</span></div>
+      <div class="formula-row"><span class="fk">100% <span style="color:var(--muted);font-weight:normal">Informal</span></span><span class="fv">Playing HCP = Course HCP</span></div>
+      <div class="formula-row"><span class="fk">95% <span style="color:var(--muted);font-weight:normal">Medal / Stblf</span></span><span class="fv">Playing HCP = Course HCP × 0.95</span></div>
+      <div class="formula-row"><span class="fk">85% <span style="color:var(--muted);font-weight:normal">Four Ball</span></span><span class="fv">Playing HCP = Course HCP × 0.85</span></div>
       <div class="formula-row"><span class="fk">Máximo</span><span class="fv">54.0</span></div>
     </div>
   </div>
@@ -642,14 +659,17 @@ function getCat(h) {
 
 function calcStableford(hcpIndex, campo, shots) {
   if (!campo?.hoyos || campo.hoyos.length < 18) return null;
+  // Ordenar hoyos por número para garantizar correspondencia con shots[]
+  const hoyos = [...campo.hoyos].sort((a, b) => a.numero - b.numero);
   const courseHCP = Math.round(hcpIndex * (campo.slope / 113) + (campo.cr - campo.par_total));
   let total = 0;
+  const byHole = [];
   for (let i = 0; i < 18; i++) {
-    const hoyo = campo.hoyos[i];
+    const hoyo = hoyos[i];
     const s = shots[i];
-    if (!s || isNaN(s)) return null;
+    if (s == null || isNaN(s) || s < 1) { byHole.push(0); continue; }
     const ex1 = courseHCP >= hoyo.indice ? 1 : 0;
-    const ex2 = courseHCP >= hoyo.indice + 18 ? 1 : 0;
+    const ex2 = courseHCP >= (hoyo.indice + 18) ? 1 : 0;
     const neto = s - hoyo.par - (ex1 + ex2);
     let pts = 0;
     if (neto <= -2) pts = 4;
@@ -657,8 +677,9 @@ function calcStableford(hcpIndex, campo, shots) {
     else if (neto === 0) pts = 2;
     else if (neto === 1) pts = 1;
     total += pts;
+    byHole.push(pts);
   }
-  return { total, courseHCP };
+  return { total, courseHCP, byHole };
 }
 
 // ── AUTH ──────────────────────────────────────────────────────────────────
@@ -1039,11 +1060,21 @@ function calcCHCP() {
   det.innerHTML = `HCP ${hcp} × (${slope}/113) + (${cr}−${par}) = <strong style="color:var(--gold2)">${chcp >= 0 ? '+' + chcp : chcp} golpes</strong><div class="target-box">Puntuación objetivo: <strong>${Math.round(target)} golpes</strong></div>`;
   if (name) { pname.textContent = name; pname.style.display = 'block'; }
   else pname.style.display = 'none';
+  // Marcadores playing HCP
+  const phpW = $('php-wrap');
+  if (phpW) {
+    phpW.style.display = 'grid';
+    const fmt = v => (v >= 0 ? '+' : '') + v;
+    $('php-100').textContent = fmt(chcp);
+    $('php-95').textContent  = fmt(Math.round(chcp * 0.95));
+    $('php-85').textContent  = fmt(Math.round(chcp * 0.85));
+  }
 }
 
 function resetCHCP() {
   $('chcp-num').textContent = '—'; $('chcp-num').className = 'chcp-num empty';
   $('chcp-detail').textContent = 'Selecciona un campo para calcular.';
+  const phpWrapE = $('php-wrap'); if (phpWrapE) phpWrapE.style.display = 'none';
   $('chcp-name').style.display = 'none';
 }
 
@@ -1155,12 +1186,26 @@ function buildHoyoInputs(campo) {
     cell.innerHTML = `
       <div class="hoyo-num">${h.numero}<br>
         <span style="color:var(--gold2);font-size:7px">P${h.par}</span><br>
-        <span style="color:var(--muted);font-size:7px">I${h.indice}</span>
+        <span style="color:var(--muted);font-size:7px">${h.indice}</span>
       </div>
+      <div id="gh-dots-${h.numero}" style="height:8px;display:flex;gap:1px;align-items:center;justify-content:center"></div>
       <input class="hoyo-input" type="text" inputmode="numeric" id="gh-${h.numero}"
         maxlength="2" placeholder="—"
         oninput="this.value=this.value.replace(/[^0-9]/g,'');updateTotals();golfShot(this,'${nextId}')">`;
     grid.appendChild(cell);
+  }
+}
+
+function renderHoleDots(prefix, byHole) {
+  for (let i = 0; i < 18; i++) {
+    const pts = byHole ? (byHole[i] || 0) : 0;
+    const el = document.getElementById(prefix + 'dots-' + (i + 1));
+    if (!el) continue;
+    if (pts > 0) {
+      el.innerHTML = Array(pts).fill('<span style="width:4px;height:4px;border-radius:50%;background:var(--gold);display:inline-block"></span>').join('');
+    } else {
+      el.innerHTML = '';
+    }
   }
 }
 
@@ -1179,8 +1224,10 @@ function updateTotals() {
   if (complete && campo && !isNaN(hcp)) {
     const stbl = calcStableford(hcp, campo, shots);
     $('preview-stbl').textContent = stbl ? stbl.total + ' pts' : '—';
+    renderHoleDots('gh-', stbl?.byHole || null);
   } else {
     $('preview-stbl').textContent = '—';
+    renderHoleDots('gh-', null);
   }
 }
 
@@ -1309,8 +1356,9 @@ function buildEditHoyos(campo, existing) {
     cell.innerHTML = `
       <div class="hoyo-num">H${i}<br>
         <span style="color:var(--gold2);font-size:7px">P${h?.par||'?'}</span><br>
-        <span style="color:var(--muted);font-size:7px">I${h?.indice||'?'}</span>
+        <span style="color:var(--muted);font-size:7px">${h?.indice||'?'}</span>
       </div>
+      <div id="edit-dots-${i}" style="height:8px;display:flex;gap:1px;align-items:center;justify-content:center"></div>
       <input class="hoyo-input" type="text" inputmode="numeric" id="edit-gh-${i}"
         maxlength="2" value="${val}"
         oninput="this.value=this.value.replace(/[^0-9]/g,'');recalcEditStbl();golfShot(this,'${nextId}')">`;
@@ -1346,9 +1394,11 @@ function recalcEditStbl() {
   if (complete && !isNaN(hcp)) {
     const stbl = calcStableford(hcp, campo, shots);
     $('edit-stbl-prev').textContent = stbl ? stbl.total + ' pts' : '—';
+    renderHoleDots('edit-', stbl?.byHole || null);
     if (stbl) $('edit-r-stbl').value = stbl.total;
   } else {
     $('edit-stbl-prev').textContent = '—';
+    renderHoleDots('edit-', null);
   }
 }
 
@@ -1694,10 +1744,21 @@ async function init() {
   // Auth state — única fuente de verdad para sesión persistida
   sb.auth.onAuthStateChange(async (event, session) => {
     if (event === 'INITIAL_SESSION') {
-      if (session?.user) {
+      if (session?.user) await onLogin(session.user);
+      else showAuth('login');
+    } else if (event === 'SIGNED_IN') {
+      // Re-login tras expiración de sesión (app en segundo plano mucho tiempo)
+      if (!state.user && session?.user) {
         await onLogin(session.user);
-      } else {
-        showAuth('login');
+      }
+    } else if (event === 'TOKEN_REFRESHED') {
+      // Token renovado — recargar si faltan datos
+      if (state.user && state.rounds.length === 0) {
+        try {
+          await loadCampos();
+          state.rounds = await loadRounds();
+          renderAll();
+        } catch(e) {}
       }
     } else if (event === 'PASSWORD_RECOVERY') {
       showAuth('reset');
