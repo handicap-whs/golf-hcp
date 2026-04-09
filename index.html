@@ -172,6 +172,8 @@ select option{background:#1a2f1a}
 @media(max-width:480px){.f3{grid-template-columns:1fr 1fr}}
 
 .stbl-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gold);margin:0 1px}
+
+.red-dot{display:inline-block;width:4px;height:4px;border-radius:50%;background:#e05555;margin:0 1px}
 </style>
 </head>
 <body>
@@ -273,6 +275,9 @@ select option{background:#1a2f1a}
       <div class="field"><label>Course Rating</label><input id="edit-r-cr" type="number" step="0.1" inputmode="decimal" oninput="autoNext(this,'edit-r-slope',4)"></div>
       <div class="field"><label>Slope Rating</label><input id="edit-r-slope" type="number" inputmode="numeric" oninput="autoNext(this,'edit-r-hcp',3)"></div>
       <div class="field"><label>HCP Index</label><input id="edit-r-hcp" type="number" step="0.1" inputmode="decimal" placeholder="18.4" oninput="recalcEditStbl();autoNext(this,'edit-r-stbl',4)"></div>
+      <div class="field"><label>HCP de Campo</label>
+        <div id="edit-chcp-val" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:10px 12px;font-size:14px;color:var(--gold2);font-family:'Playfair Display',serif">—</div>
+      </div>
       <div class="field"><label>Barra de salida</label>
         <select id="edit-r-barra" onchange="onEditBarra()">
           <option value="">— Sin especificar —</option>
@@ -287,6 +292,10 @@ select option{background:#1a2f1a}
     <div id="edit-hoyos-wrap" style="display:none">
       <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin:10px 0 8px">Golpes por hoyo</div>
       <div style="font-size:10px;color:var(--muted);margin-bottom:6px">Total: <strong id="edit-total" style="color:var(--cream)">—</strong> · Stableford: <strong id="edit-stbl-prev" style="color:var(--gold2)">—</strong></div>
+      <div style="display:flex;gap:14px;margin-top:6px;font-size:9px;color:var(--muted);flex-wrap:wrap">
+        <span><span class="red-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#e05555;margin-right:4px;vertical-align:middle"></span>Golpe de ventaja (HCP campo)</span>
+        <span><span class="stbl-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);margin-right:4px;vertical-align:middle"></span>Punto Stableford</span>
+      </div>
       <div class="hoyo-section"><div class="hoyo-label">Salida 1–9</div><div class="hoyo-grid" id="edit-grid-out"></div></div>
       <div class="hoyo-separator"></div>
       <div class="hoyo-section"><div class="hoyo-label">Vuelta 10–18</div><div class="hoyo-grid" id="edit-grid-in"></div></div>
@@ -428,7 +437,10 @@ select option{background:#1a2f1a}
     <input type="hidden" id="f-par-total">
     <div class="fields f2" style="margin-bottom:12px">
       <div class="field"><label>Fecha</label><input id="f-date" type="date"></div>
-      <div class="field"><label>HCP Index</label><input id="f-hcp-idx" type="number" placeholder="18.4" step="0.1" inputmode="decimal" oninput="autoNext(this,'f-gross',4)"></div>
+      <div class="field"><label>HCP Index</label><input id="f-hcp-idx" type="number" placeholder="18.4" step="0.1" inputmode="decimal" oninput="autoNext(this,'f-gross',4);calcNuevaChcp()"></div>
+    </div>
+    <div id="nueva-chcp-wrap" style="display:none;background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:8px 12px;margin-bottom:12px;font-size:11px;color:var(--cream)">
+      HCP de Campo: <strong id="nueva-chcp-val" style="color:var(--gold2);font-size:13px">—</strong>
     </div>
     <div id="hoyos-wrap" style="display:none;margin-bottom:12px">
       <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px">Golpes por hoyo</div>
@@ -438,6 +450,10 @@ select option{background:#1a2f1a}
       <div style="display:flex;gap:10px;font-size:11px;color:var(--muted);margin-top:8px">
         <span>Total: <strong id="total-golpes" style="color:var(--cream)">—</strong></span>
         <span>Stableford: <strong id="preview-stbl" style="color:var(--gold2)">—</strong></span>
+      </div>
+      <div style="display:flex;gap:14px;margin-top:6px;font-size:9px;color:var(--muted);flex-wrap:wrap">
+        <span><span class="red-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#e05555;margin-right:4px;vertical-align:middle"></span>Golpe de ventaja (HCP campo)</span>
+        <span><span class="stbl-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);margin-right:4px;vertical-align:middle"></span>Punto Stableford</span>
       </div>
     </div>
     <div id="gross-wrap" style="margin-bottom:12px">
@@ -959,7 +975,7 @@ function renderHistory() {
       ? `<span class="stbl-badge">⛳ ${r.stableford}</span>` : '—';
     const usedBadge = used ? '<span class="used-badge">✓</span>' : '';
     return `<tr>
-      <td style="color:var(--muted)">${fmtDate(r.date)}</td>
+      <td style="color:#fff">${fmtDate(r.date)}</td>
       <td>${r.name||'—'}</td>
       <td style="text-align:center">${r.gross}</td>
       <td style="text-align:center">${fmtD(r.diff)}</td>
@@ -1191,7 +1207,7 @@ function onCampoChange() {
     }
     if (campo.hoyos?.length === 18) {
       hW.style.display = 'block'; gW.style.display = 'none';
-      buildHoyoInputs(campo);
+      buildHoyoInputs(campo); calcNuevaChcp();
     } else {
       hW.style.display = 'none'; gW.style.display = 'block';
     }
@@ -1206,7 +1222,7 @@ function onBarraChange() {
   const id = parseInt($('f-campo').value);
   const campo = state.campos.find(c => c.id === id);
   const barra = campo?.barras?.find(b => b.color === $('f-barra').value);
-  if (barra) { $('f-cr').value = barra.cr; $('f-slope').value = barra.slope; }
+  if (barra) { $('f-cr').value = barra.cr; $('f-slope').value = barra.slope; calcNuevaChcp(); }
 }
 
 function buildHoyoInputs(campo) {
@@ -1223,11 +1239,26 @@ function buildHoyoInputs(campo) {
         <span style="color:var(--gold2);font-size:7px">P${h.par}</span><br>
         <span style="color:var(--muted);font-size:7px">${h.indice}</span>
       </div>
-      <div id="gh-dots-${h.numero}" style="height:8px;display:flex;gap:1px;align-items:center;justify-content:center"></div>
+      <div id="gh-rdots-${h.numero}" style="height:6px;display:flex;gap:1px;align-items:center;justify-content:center"></div>
+      <div id="gh-dots-${h.numero}" style="height:6px;display:flex;gap:1px;align-items:center;justify-content:center"></div>
       <input class="hoyo-input" type="text" inputmode="numeric" id="gh-${h.numero}"
         maxlength="2" placeholder="—"
         oninput="this.value=this.value.replace(/[^0-9]/g,'');updateTotals();golfShot(this,'${nextId}')">`;
     grid.appendChild(cell);
+  }
+}
+
+function renderRedDots(prefix, courseHCP, hoyos) {
+  if (!hoyos || courseHCP == null || isNaN(courseHCP)) return;
+  const sorted = [...hoyos].sort((a, b) => a.numero - b.numero);
+  for (let i = 0; i < 18; i++) {
+    const hoyo = sorted[i];
+    if (!hoyo) continue;
+    const id = prefix === 'gh-' ? 'gh-rdots-' + hoyo.numero : 'edit-rdots-' + hoyo.numero;
+    const el = document.getElementById(id);
+    if (!el) continue;
+    const strokes = (courseHCP >= hoyo.indice ? 1 : 0) + (courseHCP >= hoyo.indice + 18 ? 1 : 0);
+    el.innerHTML = strokes > 0 ? Array(strokes).fill('<span class="red-dot"></span>').join('') : '';
   }
 }
 
@@ -1262,6 +1293,23 @@ function updateTotals() {
     $('preview-stbl').textContent = '—';
     renderHoleDots('gh-', null);
   }
+}
+
+function calcNuevaChcp() {
+  const hcp = parseFloat($('f-hcp-idx').value);
+  const cr  = parseFloat($('f-cr').value);
+  const sl  = parseFloat($('f-slope').value);
+  const par = parseFloat($('f-par-total').value);
+  const wrap = $('nueva-chcp-wrap');
+  if (!wrap) return;
+  if (isNaN(hcp) || isNaN(cr) || isNaN(sl)) { wrap.style.display = 'none'; return; }
+  const chcp = Math.round(hcp * (sl / 113) + (isNaN(par) ? 0 : cr - par));
+  $('nueva-chcp-val').textContent = (chcp >= 0 ? '+' : '') + chcp + ' golpes';
+  wrap.style.display = 'block';
+  // Actualizar puntos rojos con nuevo courseHCP
+  const campoId = parseInt($('f-campo').value);
+  const campo = state.campos.find(c => c.id === campoId);
+  if (campo) renderRedDots('gh-', chcp, campo.hoyos);
 }
 
 function cancelarNueva() {
@@ -1370,7 +1418,7 @@ function abrirEditRonda(id) {
   if (campo?.hoyos?.length === 18) {
     hW.style.display = 'block';
     buildEditHoyos(campo, Array.isArray(r.shots) ? r.shots : []);
-    if (r.hcp_idx != null) recalcEditStbl();
+    recalcEditStbl();
   } else {
     hW.style.display = 'none';
   }
@@ -1391,7 +1439,8 @@ function buildEditHoyos(campo, existing) {
         <span style="color:var(--gold2);font-size:7px">P${h?.par||'?'}</span><br>
         <span style="color:var(--muted);font-size:7px">${h?.indice||'?'}</span>
       </div>
-      <div id="edit-dots-${i}" style="height:8px;display:flex;gap:1px;align-items:center;justify-content:center"></div>
+      <div id="edit-rdots-${i}" style="height:6px;display:flex;gap:1px;align-items:center;justify-content:center"></div>
+      <div id="edit-dots-${i}" style="height:6px;display:flex;gap:1px;align-items:center;justify-content:center"></div>
       <input class="hoyo-input" type="text" inputmode="numeric" id="edit-gh-${i}"
         maxlength="2" value="${val}"
         oninput="this.value=this.value.replace(/[^0-9]/g,'');recalcEditStbl();golfShot(this,'${nextId}')">`;
@@ -1413,6 +1462,17 @@ function onEditBarra() {
 function recalcEditStbl() {
   const campoId = parseInt($('edit-r-campo-id').value) || null;
   const campo = campoId ? state.campos.find(c => c.id === campoId) : null;
+  // Actualizar Course HCP mostrado
+  const hcpForChcp = parseFloat($('edit-r-hcp').value);
+  const crForChcp  = parseFloat($('edit-r-cr').value);
+  const slForChcp  = parseFloat($('edit-r-slope').value);
+  const parForChcp = campo?.par_total;
+  const echcpEl = $('edit-chcp-val');
+  if (echcpEl && !isNaN(hcpForChcp) && !isNaN(crForChcp) && !isNaN(slForChcp)) {
+    const chcp = Math.round(hcpForChcp * (slForChcp / 113) + (parForChcp ? crForChcp - parForChcp : 0));
+    echcpEl.textContent = (chcp >= 0 ? '+' : '') + chcp + ' golpes';
+    if (campo) renderRedDots('edit-', chcp, campo.hoyos);
+  }
   if (!campo?.hoyos?.length) return;
   let total = 0, complete = true;
   const shots = [];
