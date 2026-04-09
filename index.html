@@ -658,10 +658,12 @@ function getCat(h) {
   return 'Cat. 6 · Principiante';
 }
 
-function calcStableford(hcpIndex, campo, shots) {
+function calcStableford(hcpIndex, campo, shots, crOverride, slopeOverride) {
   if (!campo?.hoyos || campo.hoyos.length < 18) return null;
   const hoyos = [...campo.hoyos].sort((a, b) => a.numero - b.numero);
-  const courseHCP = Math.round(hcpIndex * (campo.slope / 113) + (campo.cr - campo.par_total));
+  const useCR    = (crOverride    != null && !isNaN(crOverride))    ? crOverride    : campo.cr;
+  const useSlope = (slopeOverride != null && !isNaN(slopeOverride)) ? slopeOverride : campo.slope;
+  const courseHCP = Math.round(hcpIndex * (useSlope / 113) + (useCR - campo.par_total));
   let total = 0;
   const byHole = [];
   for (let i = 0; i < 18; i++) {
@@ -1235,7 +1237,9 @@ function updateTotals() {
   $('total-golpes').textContent = complete ? total : '—';
   const hcp = parseFloat($('f-hcp-idx').value);
   if (complete && campo && !isNaN(hcp)) {
-    const stbl = calcStableford(hcp, campo, shots);
+    const fCR = parseFloat($('f-cr').value);
+    const fSlope = parseFloat($('f-slope').value);
+    const stbl = calcStableford(hcp, campo, shots, fCR, fSlope);
     $('preview-stbl').textContent = stbl ? stbl.total + ' pts' : '—';
     renderHoleDots('gh-', stbl?.byHole || null);
   } else {
@@ -1284,7 +1288,7 @@ async function addRound() {
     }
     if (!allFilled) { toast('Introduce los golpes de todos los hoyos', true); return; }
     if (!isNaN(hcpIdx)) {
-      const stblR = calcStableford(hcpIdx, campo, shots);
+      const stblR = calcStableford(hcpIdx, campo, shots, useCR, useSlope);
       if (stblR) stableford = stblR.total;
     }
   } else {
@@ -1405,7 +1409,9 @@ function recalcEditStbl() {
   if (complete) $('edit-r-gross').value = total;
   const hcp = parseFloat($('edit-r-hcp').value);
   if (complete && !isNaN(hcp)) {
-    const stbl = calcStableford(hcp, campo, shots);
+    const eCR = parseFloat($('edit-r-cr').value);
+    const eSlope = parseFloat($('edit-r-slope').value);
+    const stbl = calcStableford(hcp, campo, shots, eCR, eSlope);
     $('edit-stbl-prev').textContent = stbl ? stbl.total + ' pts' : '—';
     renderHoleDots('edit-', stbl?.byHole || null);
     if (stbl) $('edit-r-stbl').value = stbl.total;
