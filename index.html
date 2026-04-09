@@ -1328,7 +1328,7 @@ function cancelarNueva() {
 }
 
 async function addRound() {
-  // Cerrar teclado si está abierto
+  alert('addRound llamado');
   if (document.activeElement) document.activeElement.blur();
   const campoId  = parseInt($('f-campo').value) || null;
   const campo    = campoId ? state.campos.find(c => c.id === campoId) : null;
