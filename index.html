@@ -1393,7 +1393,8 @@ async function addRound() {
   } catch(e) {
     toast('❌ Error al guardar: ' + (e.message || e), true);
   } finally {
-    btn.textContent = '+ Registrar Ronda'; btn.disabled = false;
+    const b = $('btn-add');
+    if (b) { b.textContent = '+ Registrar Ronda'; b.disabled = false; }
   }
 }
 
@@ -1821,6 +1822,11 @@ async function init() {
   $('f-date').value = new Date().toISOString().split('T')[0];
 
   // Botones de la barra de usuario
+  // btn-add: touchend explícito para iOS
+  const btnAdd = $('btn-add');
+  if (btnAdd) {
+    btnAdd.addEventListener('touchend', e => { e.preventDefault(); addRound(); }, {passive:false});
+  }
   $('btn-salir').addEventListener('click', e => { e.preventDefault(); doLogout(); });
   $('btn-salir').addEventListener('touchend', e => { e.preventDefault(); doLogout(); }, {passive:false});
   $('btn-clave').addEventListener('click', e => {
