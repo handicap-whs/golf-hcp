@@ -460,7 +460,7 @@ select option{background:#1a2f1a}
       <div class="field"><label>Golpes brutos totales</label><input id="f-gross" type="number" placeholder="82" inputmode="numeric"></div>
     </div>
     <div style="display:flex;gap:10px">
-      <button class="btn" id="btn-add" style="flex:2;margin-top:0">+ Registrar Ronda</button>
+      <button class="btn" id="btn-add" onclick="addRound()" style="flex:2;margin-top:0">+ Registrar Ronda</button>
       <button class="btn-outline" onclick="cancelarNueva()" style="flex:1;margin-top:0">Cancelar</button>
     </div>
     <div class="info">Diferencial = (Golpes − CR) × 113 / Slope</div>
@@ -629,9 +629,8 @@ function golfShot(el, nextId) {
     if (nextId) {
       const next = $(nextId);
       if (next) { next.focus(); next.select(); }
-    } else {
-      el.blur(); // Cerrar teclado al terminar último hoyo
     }
+    // En hoyo 18: dejar teclado abierto, el usuario pulsa Registrar cuando esté listo
   }
 }
 
@@ -1329,6 +1328,8 @@ function cancelarNueva() {
 }
 
 async function addRound() {
+  // Cerrar teclado si está abierto
+  if (document.activeElement) document.activeElement.blur();
   const campoId  = parseInt($('f-campo').value) || null;
   const campo    = campoId ? state.campos.find(c => c.id === campoId) : null;
   const cr       = parseFloat($('f-cr').value);
@@ -1829,12 +1830,6 @@ async function init() {
   $('f-date').value = new Date().toISOString().split('T')[0];
 
   // Botones de la barra de usuario
-  // btn-add: usar touchstart para que funcione aunque el teclado esté abierto
-  const btnAdd = $('btn-add');
-  if (btnAdd) {
-    btnAdd.addEventListener('click', () => addRound());
-    btnAdd.addEventListener('touchstart', e => { e.preventDefault(); addRound(); }, {passive:false});
-  }
   $('btn-salir').addEventListener('click', e => { e.preventDefault(); doLogout(); });
   $('btn-salir').addEventListener('touchend', e => { e.preventDefault(); doLogout(); }, {passive:false});
   $('btn-clave').addEventListener('click', e => {
