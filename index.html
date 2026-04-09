@@ -268,26 +268,45 @@ select option{background:#1a2f1a}
     <input type="hidden" id="edit-r-id">
     <input type="hidden" id="edit-r-campo-id">
     <div class="modal-err" id="edit-r-err"></div>
+    <!-- Campos de solo lectura -->
     <div class="fields f2" style="margin-bottom:12px">
-      <div class="field"><label>Campo</label><input id="edit-r-nombre" placeholder="Club de Golf"></div>
-      <div class="field"><label>Fecha</label><input id="edit-r-fecha" type="date"></div>
-      <div class="field"><label>Golpes brutos</label><input id="edit-r-gross" type="number" inputmode="numeric" oninput="autoNext(this,'edit-r-cr',3)"></div>
-      <div class="field"><label>Course Rating</label><input id="edit-r-cr" type="number" step="0.1" inputmode="decimal" oninput="autoNext(this,'edit-r-slope',4)"></div>
-      <div class="field"><label>Slope Rating</label><input id="edit-r-slope" type="number" inputmode="numeric" oninput="autoNext(this,'edit-r-hcp',3)"></div>
-      <div class="field"><label>HCP Index</label><input id="edit-r-hcp" type="number" step="0.1" inputmode="decimal" placeholder="18.4" oninput="recalcEditStbl();autoNext(this,'edit-r-stbl',4)"></div>
+      <div class="field"><label>Campo</label>
+        <div id="edit-r-nombre" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:10px 12px;font-size:14px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+      </div>
+      <div class="field"><label>Fecha</label>
+        <div id="edit-r-fecha-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:10px 12px;font-size:14px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+        <input type="hidden" id="edit-r-fecha">
+      </div>
+      <div class="field"><label>Barra de salida</label>
+        <div id="edit-r-barra-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:10px 12px;font-size:14px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+        <input type="hidden" id="edit-r-barra">
+      </div>
+      <div class="field"><label>Course Rating</label>
+        <div id="edit-r-cr-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:10px 12px;font-size:14px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+        <input type="hidden" id="edit-r-cr">
+      </div>
+      <div class="field"><label>Slope Rating</label>
+        <div id="edit-r-slope-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:10px 12px;font-size:14px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+        <input type="hidden" id="edit-r-slope">
+      </div>
+      <div class="field"><label>Golpes brutos</label>
+        <div id="edit-r-gross-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:10px 12px;font-size:14px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+        <input type="hidden" id="edit-r-gross">
+      </div>
+      <div class="field"><label>Stableford</label>
+        <div id="edit-r-stbl-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:10px 12px;font-size:14px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+        <input type="hidden" id="edit-r-stbl">
+      </div>
+    </div>
+    <!-- Solo editable: HCP Index -->
+    <div class="fields f2" style="margin-bottom:12px">
+      <div class="field"><label>HCP Index</label>
+        <input id="edit-r-hcp" type="number" step="0.1" inputmode="decimal" placeholder="18.4"
+          oninput="recalcEditStbl()">
+      </div>
       <div class="field"><label>HCP de Campo</label>
         <div id="edit-chcp-val" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:10px 12px;font-size:14px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
       </div>
-      <div class="field"><label>Barra de salida</label>
-        <select id="edit-r-barra" onchange="onEditBarra()">
-          <option value="">— Sin especificar —</option>
-          <option value="blanca">⬜ Blanca</option>
-          <option value="amarilla">🟡 Amarilla</option>
-          <option value="azul">🔵 Azul</option>
-          <option value="roja">🔴 Roja</option>
-        </select>
-      </div>
-      <div class="field"><label>Stableford</label><input id="edit-r-stbl" type="number" inputmode="numeric" placeholder="Opcional"></div>
     </div>
     <div id="edit-hoyos-wrap" style="display:none">
       <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin:10px 0 8px">Golpes por hoyo</div>
@@ -1413,14 +1432,25 @@ function abrirEditRonda(id) {
   if (!r) { toast('Ronda no encontrada', true); return; }
   $('edit-r-id').value  = r.id;
   $('edit-r-campo-id').value = r.campo_id || '';
-  $('edit-r-nombre').value   = r.name || '';
+  // Solo lectura — rellenar divs display
+  const _bl = {'blanca':'⬜ Blanca','amarilla':'🟡 Amarilla','azul':'🔵 Azul','roja':'🔴 Roja'};
+  const _setDisp = (id, v) => { const el=$(id); if(el) el.textContent = v||'—'; };
+  _setDisp('edit-r-nombre', r.name);
+  _setDisp('edit-r-cr-disp', r.cr ? r.cr+' CR' : null);
+  _setDisp('edit-r-slope-disp', r.slope ? r.slope+' Slope' : null);
+  _setDisp('edit-r-barra-disp', _bl[r.barra_color] || '— Sin especificar —');
+  _setDisp('edit-r-gross-disp', r.gross ? r.gross+' golpes' : null);
+  _setDisp('edit-r-stbl-disp', r.stableford != null ? r.stableford+' pts' : null);
+  // Fecha formateada
+  const _fdEl = $('edit-r-fecha-disp'); if(_fdEl) _fdEl.textContent = r.date ? (d=>d[2]+'/'+d[1]+'/'+d[0])(r.date.split('-')) : '—';
+  // Hidden inputs para guardar
   $('edit-r-fecha').value    = r.date || '';
   $('edit-r-gross').value    = r.gross || '';
   $('edit-r-cr').value       = r.cr || '';
   $('edit-r-slope').value    = r.slope || '';
-  $('edit-r-hcp').value      = r.hcp_idx != null ? r.hcp_idx : '';
   $('edit-r-barra').value    = r.barra_color || '';
   $('edit-r-stbl').value     = r.stableford != null ? r.stableford : '';
+  $('edit-r-hcp').value      = r.hcp_idx != null ? r.hcp_idx : '';
   $('edit-r-err').classList.remove('show');
 
   const campo = r.campo_id ? state.campos.find(c => c.id === r.campo_id) : null;
@@ -1492,7 +1522,10 @@ function recalcEditStbl() {
     else { total += v; shots.push(v); }
   }
   $('edit-total').textContent = complete ? total : '—';
-  if (complete) $('edit-r-gross').value = total;
+  if (complete) {
+    $('edit-r-gross').value = total;
+    const gd = $('edit-r-gross-disp'); if(gd) gd.textContent = total + ' golpes';
+  }
   const hcp = parseFloat($('edit-r-hcp').value);
   if (complete && !isNaN(hcp)) {
     const eCR = parseFloat($('edit-r-cr').value);
@@ -1500,7 +1533,10 @@ function recalcEditStbl() {
     const stbl = calcStableford(hcp, campo, shots, eCR, eSlope);
     $('edit-stbl-prev').textContent = stbl ? stbl.total + ' pts' : '—';
     renderHoleDots('edit-', stbl?.byHole || null);
-    if (stbl) $('edit-r-stbl').value = stbl.total;
+    if (stbl) {
+      $('edit-r-stbl').value = stbl.total;
+      const sd = $('edit-r-stbl-disp'); if(sd) sd.textContent = stbl.total + ' pts';
+    }
   } else {
     $('edit-stbl-prev').textContent = '—';
     renderHoleDots('edit-', null);
