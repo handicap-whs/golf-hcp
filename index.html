@@ -1544,8 +1544,11 @@ function recalcEditStbl() {
 }
 
 async function guardarEditRonda() {
-  const id     = parseInt($('edit-r-id').value);
-  const nombre = $('edit-r-nombre').value.trim();
+  const id       = parseInt($('edit-r-id').value);
+  // nombre: ahora es un div read-only
+  const nombreEl = $('edit-r-nombre');
+  const nombreFinal = (nombreEl?.textContent||'').replace('—','').trim() || 'Campo sin nombre';
+  // datos desde hidden inputs
   const fecha  = $('edit-r-fecha').value;
   const gross  = parseFloat($('edit-r-gross').value);
   const cr     = parseFloat($('edit-r-cr').value);
@@ -1555,11 +1558,7 @@ async function guardarEditRonda() {
   const barra  = $('edit-r-barra').value || null;
   const err    = $('edit-r-err');
   err.classList.remove('show');
-
   const showErr = msg => { err.textContent = msg; err.classList.add('show'); };
-  // nombre ahora es un div read-only — leer textContent
-  const nombreFinal = ($('edit-r-nombre')?.textContent || nombre || '').trim().replace('—','').trim();
-  if (!nombreFinal) { showErr('Sin nombre de campo.'); return; }
   if (isNaN(gross)||gross<40||gross>220) { showErr('Golpes no válidos.'); return; }
 
   // Shots desde los inputs de hoyos (si existen)
@@ -1594,7 +1593,7 @@ async function guardarEditRonda() {
     const idx = state.rounds.findIndex(r => r.id === id);
     if (idx !== -1) {
       state.rounds[idx] = {
-        ...state.rounds[idx], gross, cr, slope, name: nombre, date: fecha,
+        ...state.rounds[idx], gross, cr, slope, name: nombreFinal, date: fecha,
         diff, stableford: isNaN(stbl) ? null : stbl,
         hcp_idx: isNaN(hcpIdx) ? null : hcpIdx,
         shots, barra_color: barra
