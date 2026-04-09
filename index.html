@@ -460,7 +460,7 @@ select option{background:#1a2f1a}
       <div class="field"><label>Golpes brutos totales</label><input id="f-gross" type="number" placeholder="82" inputmode="numeric"></div>
     </div>
     <div style="display:flex;gap:10px">
-      <button class="btn" id="btn-add" onclick="addRound()" style="flex:2;margin-top:0">+ Registrar Ronda</button>
+      <button class="btn" id="btn-add" type="button" style="flex:2;margin-top:0">+ Registrar Ronda</button>
       <button class="btn-outline" onclick="cancelarNueva()" style="flex:1;margin-top:0">Cancelar</button>
     </div>
     <div class="info">Diferencial = (Golpes − CR) × 113 / Slope</div>
@@ -1328,7 +1328,6 @@ function cancelarNueva() {
 }
 
 async function addRound() {
-  alert('addRound llamado');
   if (document.activeElement) document.activeElement.blur();
   const campoId  = parseInt($('f-campo').value) || null;
   const campo    = campoId ? state.campos.find(c => c.id === campoId) : null;
@@ -1830,6 +1829,19 @@ async function init() {
   $('f-date').value = new Date().toISOString().split('T')[0];
 
   // Botones de la barra de usuario
+  // btn-add: múltiples handlers para máxima compatibilidad iOS
+  (function() {
+    const b = $('btn-add');
+    if (!b) return;
+    b.addEventListener('click', function() { addRound(); });
+    b.addEventListener('touchend', function(e) {
+      if (this._touchMoved) return;
+      e.preventDefault();
+      addRound();
+    }, {passive:false});
+    b.addEventListener('touchstart', function() { this._touchMoved = false; }, {passive:true});
+    b.addEventListener('touchmove', function() { this._touchMoved = true; }, {passive:true});
+  })();
   $('btn-salir').addEventListener('click', e => { e.preventDefault(); doLogout(); });
   $('btn-salir').addEventListener('touchend', e => { e.preventDefault(); doLogout(); }, {passive:false});
   $('btn-clave').addEventListener('click', e => {
