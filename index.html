@@ -1886,9 +1886,15 @@ function goTo(id, btn) {
   window.scrollTo(0, 0);
   if (id === 'nueva') {
     $('f-date').value = new Date().toISOString().split('T')[0];
-    // Pre-rellenar HCP con el calculado
-    const res = getHCP(state.rounds);
-    if (res) $('f-hcp-idx').value = res.hcp.toFixed(1);
+    // Importar HCP Index desde Inicio (p-hcp) — tiene prioridad sobre el calculado
+    const pHcp = $('p-hcp')?.value;
+    if (pHcp) {
+      $('f-hcp-idx').value = pHcp;
+    } else {
+      const res = getHCP(state.rounds);
+      if (res) $('f-hcp-idx').value = res.hcp.toFixed(1);
+    }
+    calcNuevaChcp();
   }
 }
 
