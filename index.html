@@ -48,7 +48,7 @@ body{overflow-y:auto;-webkit-overflow-scrolling:touch}
 /* ── PLAYER BAR ── */
 #player-bar{background:#0f1a0f;border-bottom:1px solid rgba(201,168,76,.3);padding:calc(env(safe-area-inset-top,0px) + 7px) 14px 7px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
 #player-bar.hidden{display:none}
-.pb-name{color:var(--gold2);font-family:'Playfair Display',serif;font-size:13px;font-style:italic}
+.pb-name{color:var(--gold2);font-family:'Playfair Display',serif;font-size:16px;font-style:italic}
 .pb-btn{background:none;border:1px solid rgba(201,168,76,.3);border-radius:4px;color:var(--gold);font-family:'DM Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:4px 8px;cursor:pointer}
 
 /* ── NAV ── */
@@ -103,8 +103,8 @@ select option{background:#1a2f1a}
 
 /* ── RESULT ── */
 .result{background:linear-gradient(135deg,rgba(201,168,76,.13),rgba(74,140,63,.07));border:1px solid rgba(201,168,76,.28);border-radius:8px;padding:22px 16px;text-align:center;margin-bottom:16px}
-.r-hcp{font-family:'Playfair Display',serif;font-size:clamp(54px,16vw,80px);font-weight:900;color:#fff;line-height:1}
-.r-sub{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.r-hcp{font-family:'DM Mono',monospace;font-size:clamp(54px,16vw,80px);font-weight:500;color:#fff;line-height:1}
+.r-sub{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:4px}
 .r-cat{font-size:11px;color:var(--green);margin-top:6px;letter-spacing:1px}
 .r-stats{display:none;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
 .r-stat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center}
@@ -113,11 +113,11 @@ select option{background:#1a2f1a}
 
 /* ── CHCP ── */
 .chcp-box{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:16px;text-align:center;margin-top:12px}
-.chcp-num{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:#fff}
+.chcp-num{font-family:'DM Mono',monospace;font-size:48px;font-weight:500;color:#fff}
 .chcp-num.empty{color:var(--muted);font-size:32px}
 .chcp-sub{font-size:7px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 .chcp-detail{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5}
-.player-name{font-family:'Playfair Display',serif;font-size:15px;color:var(--gold2);margin-bottom:6px}
+.player-name{font-family:'Playfair Display',serif;font-size:19px;color:var(--gold2);margin-bottom:6px}
 .target-box{margin-top:10px;padding:10px 12px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:5px;font-size:11px;color:var(--cream)}
 
 /* ── HISTORY ── */
@@ -379,7 +379,7 @@ select option{background:#1a2f1a}
     </div>
   </div>
   <div class="card">
-    <div class="card-title">Handicap de Campo</div>
+    <div class="card-title" style="font-size:11px">Handicap de Campo</div>
     <div class="field" style="margin-bottom:14px">
       <label>Campo</label>
       <select id="p-campo" onchange="onCampoAntes()">
@@ -407,7 +407,7 @@ select option{background:#1a2f1a}
     <div class="chcp-box">
       <div>
         <div class="player-name" id="chcp-name" style="display:none"></div>
-        <div class="chcp-sub">Campo HCP</div>
+        <div class="chcp-sub">HCP Campo</div>
         <div class="chcp-num empty" id="chcp-num">—</div>
       </div>
       <div class="chcp-detail" id="chcp-detail">Selecciona un campo para calcular.</div>
@@ -417,9 +417,9 @@ select option{background:#1a2f1a}
         <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">100%<br>Informal</div>
         <div id="php-100" style="font-family:'Playfair Display',serif;font-size:20px;color:#fff">—</div>
       </div>
-      <div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:6px;padding:10px 4px;text-align:center">
-        <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">95%<br>Medal/Stblf</div>
-        <div id="php-95" style="font-family:'Playfair Display',serif;font-size:20px;color:var(--gold2)">—</div>
+      <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:10px 4px;text-align:center">
+        <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">95%<br>Medal/Stblf</div>
+        <div id="php-95" style="font-family:'Playfair Display',serif;font-size:20px;color:#fff">—</div>
       </div>
       <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:10px 4px;text-align:center">
         <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">85%<br>Four Ball</div>
