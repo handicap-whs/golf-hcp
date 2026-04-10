@@ -48,7 +48,7 @@ body{overflow-y:auto;-webkit-overflow-scrolling:touch}
 /* ── PLAYER BAR ── */
 #player-bar{background:#0f1a0f;border-bottom:1px solid rgba(201,168,76,.3);padding:calc(env(safe-area-inset-top,0px) + 7px) 14px 7px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
 #player-bar.hidden{display:none}
-.pb-name{color:var(--gold2);font-family:'Playfair Display',serif;font-size:16px;font-style:italic}
+.pb-name{color:var(--gold2);font-family:'Playfair Display',serif;font-size:20px;font-style:italic}
 .pb-btn{background:none;border:1px solid rgba(201,168,76,.3);border-radius:4px;color:var(--gold);font-family:'DM Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:4px 8px;cursor:pointer}
 
 /* ── NAV ── */
@@ -237,8 +237,10 @@ select option{background:#1a2f1a}
 <!-- PLAYER BAR -->
 <div id="player-bar" class="hidden">
   <div>
-    <div style="font-size:7px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:1px">Jugador</div>
-    <div class="pb-name" id="pb-name">—</div>
+    <div style="display:flex;align-items:baseline;gap:6px">
+      <span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">Jugador:</span>
+      <div class="pb-name" id="pb-name">—</div>
+    </div>
   </div>
   <div style="display:flex;gap:6px">
     <button class="pb-btn" id="btn-clave">🔑 Clave</button>
