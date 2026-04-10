@@ -1352,13 +1352,13 @@ function calcNuevaChcp() {
   const chcp = Math.round(hcp * (sl / 113) + (isNaN(par) ? 0 : cr - par));
   const fmt = parseInt($('nueva-fmt')?.value || '100');
   const playing = Math.round(chcp * fmt / 100);
-  const fmt_label = fmt < 100 ? ` (${fmt}%: ${playing >= 0 ? '+' : ''}${playing})` : '';
-  $('nueva-chcp-val').textContent = (chcp >= 0 ? '+' : '') + chcp + fmt_label;
+  // Mostrar solo formato % y el playing HCP resultante
+  $('nueva-chcp-val').textContent = fmt + '% → ' + (playing >= 0 ? '+' : '') + playing;
   wrap.style.display = 'block';
-  // Actualizar puntos rojos con nuevo courseHCP
+  // Aplicar PLAYING HCP (con ajuste de formato) a los puntos rojos por hoyo
   const campoId = parseInt($('f-campo').value);
   const campo = state.campos.find(c => c.id === campoId);
-  if (campo) renderRedDots('gh-', chcp, campo.hoyos);
+  if (campo) renderRedDots('gh-', playing, campo.hoyos);
 }
 
 function cancelarNueva() {
