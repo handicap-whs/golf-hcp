@@ -304,8 +304,19 @@ select option{background:#1a2f1a}
         <input id="edit-r-hcp" type="number" step="0.1" inputmode="decimal" placeholder="18.4"
           oninput="recalcEditStbl()">
       </div>
+      <div class="field">
+        <label>Formato de juego</label>
+        <select id="edit-fmt" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:8px 10px;font-size:11px;color:var(--gold2);font-family:'DM Mono',monospace;width:100%;outline:none;-webkit-appearance:none" onchange="recalcEditStbl()">
+          <option value="100">100% — Informal</option>
+          <option value="95">95% — Medal / Stblf</option>
+          <option value="85">85% — Four Ball</option>
+        </select>
+      </div>
       <div class="field"><label>HCP de Campo</label>
         <div id="edit-chcp-val" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:10px 12px;font-size:14px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+      </div>
+      <div class="field"><label>Playing HCP</label>
+        <div id="edit-playing-val" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:10px 12px;font-size:14px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
       </div>
     </div>
     <div id="edit-hoyos-wrap" style="display:none">
@@ -458,8 +469,21 @@ select option{background:#1a2f1a}
       <div class="field"><label>Fecha</label><input id="f-date" type="date"></div>
       <div class="field"><label>HCP Index</label><input id="f-hcp-idx" type="number" placeholder="18.4" step="0.1" inputmode="decimal" oninput="autoNext(this,'f-gross',4);calcNuevaChcp()"></div>
     </div>
-    <div id="nueva-chcp-wrap" style="display:none;background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:8px 12px;margin-bottom:12px;font-size:11px;color:var(--cream)">
-      HCP de Campo: <strong id="nueva-chcp-val" style="color:var(--gold2);font-size:13px">—</strong>
+    <div id="nueva-chcp-wrap" style="display:none;margin-bottom:12px">
+      <div class="fields f2">
+        <div class="field">
+          <label>Formato de juego</label>
+          <select id="nueva-fmt" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:8px 10px;font-size:11px;color:var(--gold2);font-family:'DM Mono',monospace;width:100%;outline:none;-webkit-appearance:none" onchange="calcNuevaChcp()">
+            <option value="100">100% — Informal</option>
+            <option value="95">95% — Medal / Stblf</option>
+            <option value="85">85% — Four Ball</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>HCP de Campo</label>
+          <div id="nueva-chcp-val" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:10px 12px;font-size:14px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+        </div>
+      </div>
     </div>
     <div id="hoyos-wrap" style="display:none;margin-bottom:12px">
       <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px">Golpes por hoyo</div>
@@ -1326,7 +1350,10 @@ function calcNuevaChcp() {
   if (!wrap) return;
   if (isNaN(hcp) || isNaN(cr) || isNaN(sl)) { wrap.style.display = 'none'; return; }
   const chcp = Math.round(hcp * (sl / 113) + (isNaN(par) ? 0 : cr - par));
-  $('nueva-chcp-val').textContent = (chcp >= 0 ? '+' : '') + chcp + ' golpes';
+  const fmt = parseInt($('nueva-fmt')?.value || '100');
+  const playing = Math.round(chcp * fmt / 100);
+  const fmt_label = fmt < 100 ? ` (${fmt}%: ${playing >= 0 ? '+' : ''}${playing})` : '';
+  $('nueva-chcp-val').textContent = (chcp >= 0 ? '+' : '') + chcp + fmt_label;
   wrap.style.display = 'block';
   // Actualizar puntos rojos con nuevo courseHCP
   const campoId = parseInt($('f-campo').value);
@@ -1508,9 +1535,13 @@ function recalcEditStbl() {
   const slForChcp  = parseFloat($('edit-r-slope').value);
   const parForChcp = campo?.par_total;
   const echcpEl = $('edit-chcp-val');
+  const eplEl   = $('edit-playing-val');
   if (echcpEl && !isNaN(hcpForChcp) && !isNaN(crForChcp) && !isNaN(slForChcp)) {
     const chcp = Math.round(hcpForChcp * (slForChcp / 113) + (parForChcp ? crForChcp - parForChcp : 0));
-    echcpEl.textContent = (chcp >= 0 ? '+' : '') + chcp + ' golpes';
+    const fmt  = parseInt($('edit-fmt')?.value || '100');
+    const playing = Math.round(chcp * fmt / 100);
+    echcpEl.textContent = (chcp >= 0 ? '+' : '') + chcp;
+    if (eplEl) eplEl.textContent = (playing >= 0 ? '+' : '') + playing;
     if (campo) renderRedDots('edit-', chcp, campo.hoyos);
   }
   if (!campo?.hoyos?.length) return;
