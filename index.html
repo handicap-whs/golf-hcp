@@ -103,7 +103,7 @@ select option{background:#1a2f1a}
 
 /* ── RESULT ── */
 .result{background:linear-gradient(135deg,rgba(201,168,76,.13),rgba(74,140,63,.07));border:1px solid rgba(201,168,76,.28);border-radius:8px;padding:22px 16px;text-align:center;margin-bottom:16px}
-.r-hcp{font-family:'DM Mono',monospace;font-size:clamp(52px,15vw,78px);font-weight:500;color:#fff;line-height:1}
+.r-hcp{font-family:'DM Mono',monospace;font-size:clamp(46px,13vw,70px);font-weight:500;color:#fff;line-height:1}
 .r-sub{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:4px}
 .r-cat{font-size:11px;color:var(--green);margin-top:6px;letter-spacing:1px}
 .r-stats{display:none;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
@@ -961,7 +961,7 @@ function fmtD(d) { return (d >= 0 ? '+' : '') + d.toFixed(1); }
 
 function renderResult() {
   const res = getHCP(state.rounds);
-  $('r-hcp').textContent = res ? res.hcp.toFixed(1) : '—';
+  $('r-hcp').textContent = res ? res.hcp.toFixed(1).replace('.',',') : '—';
   $('r-cat').textContent = res ? getCat(res.hcp) : 'Añade rondas para calcular';
   $('r-stats').style.display = res ? 'grid' : 'none';
   if (res) {
