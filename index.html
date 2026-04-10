@@ -102,23 +102,23 @@ select option{background:#1a2f1a}
 .modal-err.show{display:block}
 
 /* ── RESULT ── */
-.result{background:linear-gradient(135deg,rgba(201,168,76,.13),rgba(74,140,63,.07));border:1px solid rgba(201,168,76,.28);border-radius:8px;padding:22px 16px;text-align:center;margin-bottom:16px}
+.result{background:linear-gradient(135deg,rgba(201,168,76,.13),rgba(74,140,63,.07));border:1px solid rgba(201,168,76,.28);border-radius:8px;padding:10px 12px;text-align:center;margin-bottom:10px}
 .r-hcp{font-family:'DM Mono',monospace;font-size:clamp(40px,11vw,62px);font-weight:500;color:#fff;line-height:1}
-.r-sub{font-size:19px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:4px}
-.r-cat{font-size:11px;color:var(--green);margin-top:6px;letter-spacing:1px}
-.r-stats{display:none;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.r-sub{font-size:19px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.r-cat{font-size:11px;color:var(--green);margin-top:2px;letter-spacing:1px}
+.r-stats{display:none;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
 .r-stat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center}
 .r-stat-n{font-size:18px;font-weight:600;color:var(--cream)}
 .r-stat-l{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:2px}
 
 /* ── CHCP ── */
-.chcp-box{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:16px;text-align:center;margin-top:12px}
-.chcp-num{font-family:'DM Mono',monospace;font-size:48px;font-weight:500;color:#fff}
+.chcp-box{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:8px 10px;text-align:center;margin-top:6px}
+.chcp-num{font-family:'DM Mono',monospace;font-size:48px;font-weight:500;color:#fff;line-height:1}
 .chcp-num.empty{color:var(--muted);font-size:32px}
-.chcp-sub{font-size:19px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.chcp-sub{font-size:19px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
 .chcp-detail{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5}
 .player-name{font-family:'Playfair Display',serif;font-size:19px;color:var(--gold2);margin-bottom:6px}
-.target-box{margin-top:10px;padding:10px 12px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:5px;font-size:11px;color:var(--cream)}
+.target-box{margin-top:6px;padding:6px 10px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:5px;font-size:11px;color:var(--cream)}
 
 /* ── HISTORY ── */
 .hist-table{width:100%;border-collapse:collapse;font-size:10px}
@@ -387,13 +387,13 @@ select option{background:#1a2f1a}
   </div>
   <div class="card">
     <div class="card-title" style="font-size:11px">Handicap de Campo</div>
-    <div class="field" style="margin-bottom:14px">
+    <div class="field" style="margin-bottom:8px">
       <label>Campo</label>
       <select id="p-campo" onchange="onCampoAntes()">
         <option value="">— Selecciona un campo —</option>
       </select>
     </div>
-    <div id="p-barra-wrap" style="display:none;margin-bottom:14px">
+    <div id="p-barra-wrap" style="display:none;margin-bottom:8px">
       <div class="field" style="gap:3px">
         <label>Barra de salida</label>
         <select id="p-barra" onchange="onBarraAntes()">
@@ -407,7 +407,7 @@ select option{background:#1a2f1a}
       <div class="field" style="gap:3px"><label>HCP Index</label><input id="p-hcp" type="number" placeholder="18.4" step="0.1" inputmode="decimal" oninput="calcCHCP()"></div>
       <div class="field" style="gap:3px"><label>Par campo</label><input id="p-par" type="number" placeholder="72" inputmode="numeric" min="54" max="74" oninput="const v=parseInt(this.value);if(this.value!==''&&(isNaN(v)||v<54||v>74)){this.classList.add('err');}else{this.classList.remove('err');}calcCHCP()" onblur="const v=parseInt(this.value);if(!isNaN(v)&&(v<54||v>74)){this.value='';this.classList.remove('err');}"></div>
     </div>
-    <div class="fields f2" style="margin-top:12px">
+    <div class="fields f2" style="margin-top:6px;margin-bottom:6px;gap:6px">
       <div class="field" style="gap:3px"><label>Course Rating</label><input id="p-cr" type="number" placeholder="71.5" step="0.1" inputmode="decimal" oninput="calcCHCP()"></div>
       <div class="field" style="gap:3px"><label>Slope Rating</label><input id="p-slope" type="number" placeholder="125" inputmode="numeric" oninput="calcCHCP()"></div>
     </div>
@@ -419,17 +419,17 @@ select option{background:#1a2f1a}
       </div>
       <div class="chcp-detail" id="chcp-detail">Selecciona un campo para calcular.</div>
     </div>
-    <div id="php-wrap" style="display:none;margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-      <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:10px 4px;text-align:center">
-        <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">100%<br>Informal</div>
+    <div id="php-wrap" style="display:none;margin-top:6px;display:grid;grid-template-columns:repeat(3,1fr);gap:5px">
+      <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:5px;padding:5px 4px;text-align:center">
+        <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:2px">100%<br>Informal</div>
         <div id="php-100" style="font-family:'DM Mono',monospace;font-size:20px;color:#fff">—</div>
       </div>
-      <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:10px 4px;text-align:center">
-        <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">95%<br>Medal/Stblf</div>
+      <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:5px;padding:5px 4px;text-align:center">
+        <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:2px">95%<br>Medal/Stblf</div>
         <div id="php-95" style="font-family:'DM Mono',monospace;font-size:20px;color:#fff">—</div>
       </div>
-      <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:10px 4px;text-align:center">
-        <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">85%<br>Four Ball</div>
+      <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:5px;padding:5px 4px;text-align:center">
+        <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:2px">85%<br>Four Ball</div>
         <div id="php-85" style="font-family:'DM Mono',monospace;font-size:20px;color:#fff">—</div>
       </div>
     </div>
