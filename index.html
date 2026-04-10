@@ -48,7 +48,7 @@ body{overflow-y:auto;-webkit-overflow-scrolling:touch}
 /* ── PLAYER BAR ── */
 #player-bar{background:#0f1a0f;border-bottom:1px solid rgba(201,168,76,.3);padding:calc(env(safe-area-inset-top,0px) + 7px) 14px 7px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
 #player-bar.hidden{display:none}
-.pb-name{color:var(--gold2);font-family:'Playfair Display',serif;font-size:20px;font-style:italic}
+.pb-name{color:var(--gold2);font-family:'DM Mono',monospace;font-size:20px;font-style:normal}
 .pb-btn{background:none;border:1px solid rgba(201,168,76,.3);border-radius:4px;color:var(--gold);font-family:'DM Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:4px 8px;cursor:pointer}
 
 /* ── NAV ── */
@@ -258,7 +258,7 @@ select option{background:#1a2f1a}
     <div class="field" style="margin-bottom:16px"><label style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--green)">Confirmar</label><input id="clave-2" type="password" placeholder="repite la contraseña"></div>
     <div class="modal-actions">
       <button class="btn" style="margin-top:0" id="btn-guardar-clave" onclick="doChangePassword()">Guardar</button>
-      <button class="btn-danger" style="margin-top:0" onclick="cerrarModal('modal-clave')">Cancelar</button>
+      <button class="btn-danger" style="margin-top:0" onclick="if(confirm('¿Cancelar cambio de contraseña?'))cerrarModal('modal-clave')">Cancelar</button>
     </div>
   </div>
 </div>
@@ -330,7 +330,7 @@ select option{background:#1a2f1a}
     </div>
     <div class="modal-actions">
       <button class="btn" style="margin-top:0" id="btn-guardar-ronda" onclick="guardarEditRonda()">Guardar</button>
-      <button class="btn-danger" style="margin-top:0" onclick="cerrarModal('modal-ronda')">Cancelar</button>
+      <button class="btn-danger" style="margin-top:0" onclick="if(confirm('¿Cancelar edición de ronda? Los cambios no se guardarán.'))cerrarModal('modal-ronda')">Cancelar</button>
     </div>
   </div>
 </div>
@@ -351,7 +351,7 @@ select option{background:#1a2f1a}
     <div id="edit-hoyos-campo"></div>
     <div class="modal-actions">
       <button class="btn" style="margin-top:0" id="btn-guardar-campo" onclick="guardarEditCampo()">Guardar</button>
-      <button class="btn-danger" style="margin-top:0" onclick="cerrarModal('modal-campo')">Cancelar</button>
+      <button class="btn-danger" style="margin-top:0" onclick="if(confirm('¿Cancelar edición del campo? Los cambios no se guardarán.'))cerrarModal('modal-campo')">Cancelar</button>
     </div>
   </div>
 </div>
@@ -371,7 +371,7 @@ select option{background:#1a2f1a}
     <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Campos
   </button>
   <button onclick="goTo('formula',this)" id="nav-formula">
-    <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>Fórmula
+    <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>Info
   </button>
 </nav>
 
@@ -502,7 +502,7 @@ select option{background:#1a2f1a}
     </div>
     <div style="display:flex;gap:10px">
       <button class="btn" id="btn-add" type="button" style="flex:2;margin-top:0">+ Registrar Ronda</button>
-      <button class="btn-danger" onclick="cancelarNueva()" style="flex:1;margin-top:0">Cancelar</button>
+      <button class="btn-danger" onclick="if(confirm('¿Cancelar nueva ronda? Los datos introducidos se perderán.'))cancelarNueva()" style="flex:1;margin-top:0">Cancelar</button>
     </div>
     <div class="info">Diferencial = (Golpes − CR) × 113 / Slope</div>
   </div>
@@ -541,15 +541,15 @@ select option{background:#1a2f1a}
       <div id="nc-hoyos-wrap"></div>
       <div class="modal-err" id="nc-err" style="margin-top:12px"></div>
       <button class="btn" id="btn-guardar-nc" onclick="guardarNuevoCampo()">Guardar Campo</button>
-      <button class="btn-outline" onclick="toggleNuevoCampo()">Cancelar</button>
+      <button class="btn-outline" onclick="if(confirm('¿Cancelar nuevo campo? Los datos introducidos se perderán.'))toggleNuevoCampo()">Cancelar</button>
     </div>
   </div>
 </div>
 
 <!-- PAGE: FÓRMULA -->
 <div class="page" id="page-formula">
-  <div class="card">
-    <div class="card-title">Fórmula WHS 2020</div>
+  <div class="card" style="margin-bottom:8px">
+    <div class="card-title" style="margin-bottom:6px">Fórmula WHS 2020</div>
     <div class="formula-grid">
       <div class="formula-row"><span class="fk">Diferencial</span><span class="fv">(Golpes − CR) × 113 / Slope</span></div>
       <div class="formula-row"><span class="fk">HCP Index</span><span class="fv">Promedio mejores diferenciales × 0.95</span></div>
@@ -570,8 +570,8 @@ select option{background:#1a2f1a}
       <div class="formula-row"><span class="fk">Máximo</span><span class="fv">54.0</span></div>
     </div>
   </div>
-  <div class="card">
-    <div class="card-title">Stableford</div>
+  <div class="card" style="margin-bottom:8px">
+    <div class="card-title" style="margin-bottom:6px">Stableford</div>
     <div class="formula-grid">
       <div class="formula-row"><span class="fk">Eagle o mejor</span><span class="fv">4 puntos</span></div>
       <div class="formula-row"><span class="fk">Birdie</span><span class="fv">3 puntos</span></div>
@@ -580,25 +580,25 @@ select option{background:#1a2f1a}
       <div class="formula-row"><span class="fk">Doble bogey +</span><span class="fv">0 puntos</span></div>
     </div>
   </div>
-  <div class="card">
-    <div class="card-title">Barras de Salida</div>
+  <div class="card" style="margin-bottom:8px">
+    <div class="card-title" style="margin-bottom:6px">Barras de Salida</div>
     <div class="formula-grid">
-      <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:11px">
+      <div style="display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px">
         <span class="barra-dot" style="background:#e8e8e8;flex-shrink:0"></span>
         <span style="color:var(--cream);min-width:62px;font-size:10px;letter-spacing:.5px">Blanca</span>
         <span style="color:var(--cream)">Profesionales y caballeros de hándicap bajo</span>
       </div>
-      <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:11px">
+      <div style="display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px">
         <span class="barra-dot" style="background:#f5c518;flex-shrink:0"></span>
         <span style="color:var(--cream);min-width:62px;font-size:10px;letter-spacing:.5px">Amarilla</span>
         <span style="color:var(--cream)">Caballeros aficionados, nivel medio y general</span>
       </div>
-      <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:11px">
+      <div style="display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px">
         <span class="barra-dot" style="background:#3b82f6;flex-shrink:0"></span>
         <span style="color:var(--cream);min-width:62px;font-size:10px;letter-spacing:.5px">Azul</span>
         <span style="color:var(--cream)">Profesionales femeninos, juniors o seniors</span>
       </div>
-      <div style="display:flex;align-items:center;gap:10px;padding:9px 0;font-size:11px">
+      <div style="display:flex;align-items:center;gap:10px;padding:5px 0;font-size:11px">
         <span class="barra-dot" style="background:#e05555;flex-shrink:0"></span>
         <span style="color:var(--cream);min-width:62px;font-size:10px;letter-spacing:.5px">Roja</span>
         <span style="color:var(--cream)">Damas, principiantes y niños</span>
