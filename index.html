@@ -398,7 +398,7 @@ select option{background:#1a2f1a}
     <div class="fields f3">
       <div class="field"><label>Jugador</label><input id="p-name" placeholder="Tu nombre" oninput="calcCHCP()"></div>
       <div class="field"><label>HCP Index</label><input id="p-hcp" type="number" placeholder="18.4" step="0.1" inputmode="decimal" oninput="calcCHCP()"></div>
-      <div class="field"><label>Par campo</label><input id="p-par" type="number" placeholder="72" inputmode="numeric" oninput="calcCHCP()"></div>
+      <div class="field"><label>Par campo</label><input id="p-par" type="number" placeholder="72" inputmode="numeric" min="54" max="74" oninput="this.value=this.value===''?'':(Math.min(74,Math.max(54,parseInt(this.value)||54)));calcCHCP()"></div>
     </div>
     <div class="fields f2" style="margin-top:12px">
       <div class="field"><label>Course Rating</label><input id="p-cr" type="number" placeholder="71.5" step="0.1" inputmode="decimal" oninput="calcCHCP()"></div>
