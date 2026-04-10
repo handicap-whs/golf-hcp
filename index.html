@@ -301,16 +301,12 @@ select option{background:#1a2f1a}
     <!-- Solo editable: HCP Index -->
     <div class="fields f2" style="margin-bottom:12px">
       <div class="field"><label>HCP Index</label>
-        <input id="edit-r-hcp" type="number" step="0.1" inputmode="decimal" placeholder="18.4"
-          oninput="recalcEditStbl()">
+        <input id="edit-r-hcp" type="number" step="0.1" inputmode="decimal" placeholder="18.4" style="background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:5px;color:#fff;font-family:'DM Mono',monospace;font-size:14px;padding:10px 12px;width:100%;-webkit-appearance:none;outline:none" oninput="recalcEditStbl()">
       </div>
       <div class="field">
         <label>Formato de juego</label>
-        <select id="edit-fmt" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:8px 10px;font-size:11px;color:var(--gold2);font-family:'DM Mono',monospace;width:100%;outline:none;-webkit-appearance:none" onchange="recalcEditStbl()">
-          <option value="100">100% — Informal</option>
-          <option value="95">95% — Medal / Stblf</option>
-          <option value="85">85% — Four Ball</option>
-        </select>
+        <div id="edit-fmt-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:10px 12px;font-size:14px;color:var(--gold2);font-family:'DM Mono',monospace">100% — Informal</div>
+        <input type="hidden" id="edit-fmt" value="100">
       </div>
       <div class="field"><label>HCP de Campo</label>
         <div id="edit-chcp-val" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:10px 12px;font-size:14px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
@@ -467,13 +463,13 @@ select option{background:#1a2f1a}
     <input type="hidden" id="f-par-total">
     <div class="fields f2" style="margin-bottom:12px">
       <div class="field"><label>Fecha</label><input id="f-date" type="date"></div>
-      <div class="field"><label>HCP Index</label><input id="f-hcp-idx" type="number" placeholder="18.4" step="0.1" inputmode="decimal" oninput="autoNext(this,'f-gross',4);calcNuevaChcp()"></div>
+      <div class="field"><label>HCP Index</label><input id="f-hcp-idx" type="number" placeholder="18.4" step="0.1" inputmode="decimal" style="background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:5px;color:#fff;font-family:'DM Mono',monospace;font-size:14px;padding:10px 12px;width:100%;-webkit-appearance:none;outline:none" oninput="autoNext(this,'f-gross',4);calcNuevaChcp()"></div>
     </div>
     <div id="nueva-chcp-wrap" style="display:none;margin-bottom:12px">
       <div class="fields f2">
         <div class="field">
           <label>Formato de juego</label>
-          <select id="nueva-fmt" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:8px 10px;font-size:11px;color:var(--gold2);font-family:'DM Mono',monospace;width:100%;outline:none;-webkit-appearance:none" onchange="calcNuevaChcp()">
+          <select id="nueva-fmt" style="background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:5px;color:#fff;font-family:'DM Mono',monospace;font-size:14px;padding:10px 12px;width:100%;-webkit-appearance:none;outline:none" onchange="calcNuevaChcp()">
             <option value="100">100% — Informal</option>
             <option value="95">95% — Medal / Stblf</option>
             <option value="85">85% — Four Ball</option>
@@ -953,7 +949,8 @@ async function loadData() {
     stableford: r.stableford, campo_id: r.campo_id,
     hcp_idx: r.hcp_idx != null ? Number(r.hcp_idx) : null,
     shots: r.shots ? (typeof r.shots === 'string' ? JSON.parse(r.shots) : r.shots) : null,
-    barra_color: r.barra_color || null
+    barra_color: r.barra_color || null,
+    juego_fmt: r.juego_fmt || 100
   }));
 
   const hoyosData  = hc.data || [];
@@ -1430,7 +1427,8 @@ async function addRound() {
       stableford, campo_id: campoId,
       hcp_idx: isNaN(hcpIdx) ? null : hcpIdx,
       shots: shots ? JSON.stringify(shots) : null,
-      barra_color: barraColor
+      barra_color: barraColor,
+      juego_fmt: parseInt($('nueva-fmt')?.value || '100')
     };
     const { data, error } = await sb.from('rondas').insert(body).select();
     if (error) throw error;
@@ -1439,7 +1437,8 @@ async function addRound() {
       id: r.id, gross, cr: usedCR, slope: usedSlope, name, date, diff,
       stableford, campo_id: campoId,
       hcp_idx: isNaN(hcpIdx) ? null : hcpIdx,
-      shots, barra_color: barraColor
+      shots, barra_color: barraColor,
+      juego_fmt: parseInt($('nueva-fmt')?.value || '100')
     });
     cancelarNueva();
     renderAll();
@@ -1471,6 +1470,12 @@ function abrirEditRonda(id) {
   // Fecha formateada
   const _fdEl = $('edit-r-fecha-disp'); if(_fdEl) _fdEl.textContent = r.date ? (d=>d[2]+'/'+d[1]+'/'+d[0])(r.date.split('-')) : '—';
   // Hidden inputs para guardar
+  // Formato de juego (solo lectura)
+  const _fmtLabels = {'100':'100% — Informal','95':'95% — Medal / Stblf','85':'85% — Four Ball'};
+  const _fmtVal = String(r.juego_fmt || 100);
+  $('edit-fmt').value = _fmtVal;
+  const _fmtDisp = $('edit-fmt-disp');
+  if (_fmtDisp) _fmtDisp.textContent = _fmtLabels[_fmtVal] || '100% — Informal';
   $('edit-r-fecha').value    = r.date || '';
   $('edit-r-gross').value    = r.gross || '';
   $('edit-r-cr').value       = r.cr || '';
