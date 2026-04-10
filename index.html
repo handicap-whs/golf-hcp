@@ -1131,7 +1131,7 @@ function calcCHCP() {
   const totalGolpes = par + chcp;
   num.textContent = chcp >= 0 ? '+' + chcp : chcp;
   num.className = 'chcp-num';
-  det.innerHTML = `HCP ${hcp} × (${slope}/113) + (${cr}−${par}) = <strong style="color:var(--gold2)">${chcp >= 0 ? '+' + chcp : chcp} golpes</strong><div class="target-box">Total Golpes: <strong style="font-size:15px">${totalGolpes}</strong></div>`;
+  det.innerHTML = `HCP ${hcp} × (${slope}/113) + (${cr}−${par}) = <strong style="color:var(--gold2)">${chcp >= 0 ? '+' + chcp : chcp} golpes</strong><div class="target-box">TOTAL GOLPES: <strong style="font-size:19px">${totalGolpes}</strong></div>`;
   if (name) { pname.textContent = name; pname.style.display = 'block'; }
   else pname.style.display = 'none';
   // Playing HCP markers
