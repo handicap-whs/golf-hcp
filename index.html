@@ -439,7 +439,7 @@ select option{background:#1a2f1a}
 <!-- PAGE: NUEVA RONDA -->
 <div class="page" id="page-nueva">
   <div class="card">
-    <div class="card-title">Nueva Ronda</div>
+    <div class="card-title" style="margin-bottom:10px">Nueva Ronda</div>
     <div class="field" style="margin-bottom:12px">
       <label>Campo</label>
       <select id="f-campo" onchange="onCampoChange()">
@@ -447,7 +447,7 @@ select option{background:#1a2f1a}
       </select>
     </div>
     <div id="barra-selector" style="display:none;margin-bottom:12px">
-      <div class="field">
+      <div class="field" style="gap:3px">
         <label>Barra de salida</label>
         <select id="f-barra" onchange="onBarraChange()">
           <option value="">— Selecciona barra —</option>
@@ -455,19 +455,19 @@ select option{background:#1a2f1a}
       </div>
     </div>
     <div id="manual-fields">
-      <div class="fields f2" style="margin-bottom:12px">
-        <div class="field"><label>Course Rating</label><input id="f-cr" type="number" placeholder="71.5" step="0.1" inputmode="decimal" oninput="autoNext(this,'f-slope',4)"></div>
-        <div class="field"><label>Slope Rating</label><input id="f-slope" type="number" placeholder="125" inputmode="numeric" oninput="autoNext(this,'f-hcp-idx',3)"></div>
+      <div class="fields f2" style="margin-bottom:6px;gap:6px">
+        <div class="field" style="gap:3px"><label>Course Rating</label><input id="f-cr" type="number" placeholder="71.5" step="0.1" inputmode="decimal" oninput="autoNext(this,'f-slope',4)"></div>
+        <div class="field" style="gap:3px"><label>Slope Rating</label><input id="f-slope" type="number" placeholder="125" inputmode="numeric" oninput="autoNext(this,'f-hcp-idx',3)"></div>
       </div>
     </div>
     <input type="hidden" id="f-par-total">
-    <div class="fields f2" style="margin-bottom:12px">
-      <div class="field"><label>Fecha</label><input id="f-date" type="date"></div>
-      <div class="field"><label>HCP Index</label><input id="f-hcp-idx" type="number" placeholder="18.4" step="0.1" inputmode="decimal" style="background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:4px;color:#fff;font-family:'DM Mono',monospace;font-size:13px;padding:5px 8px;width:100%;-webkit-appearance:none;outline:none" oninput="autoNext(this,'f-gross',4);calcNuevaChcp()"></div>
+    <div class="fields f2" style="margin-bottom:6px;gap:6px">
+      <div class="field" style="gap:3px"><label>Fecha</label><input id="f-date" type="date"></div>
+      <div class="field" style="gap:3px"><label>HCP Index</label><input id="f-hcp-idx" type="number" placeholder="18.4" step="0.1" inputmode="decimal" style="background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:4px;color:#fff;font-family:'DM Mono',monospace;font-size:13px;padding:5px 8px;width:100%;-webkit-appearance:none;outline:none" oninput="autoNext(this,'f-gross',4);calcNuevaChcp()"></div>
     </div>
     <div id="nueva-chcp-wrap" style="display:none;margin-bottom:12px">
-      <div class="fields f2">
-        <div class="field">
+      <div class="fields f2" style="margin-bottom:6px;gap:6px">
+        <div class="field" style="gap:3px">
           <label>Formato de juego</label>
           <select id="nueva-fmt" style="background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:4px;color:#fff;font-family:'DM Mono',monospace;font-size:13px;padding:5px 8px;width:100%;-webkit-appearance:none;outline:none" onchange="calcNuevaChcp()">
             <option value="100">100% — Informal</option>
@@ -475,7 +475,7 @@ select option{background:#1a2f1a}
             <option value="85">85% — Four Ball</option>
           </select>
         </div>
-        <div class="field">
+        <div class="field" style="gap:3px">
           <label>HCP de Campo</label>
           <div id="nueva-chcp-val" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
         </div>
@@ -496,11 +496,11 @@ select option{background:#1a2f1a}
       </div>
     </div>
     <div id="gross-wrap" style="margin-bottom:12px">
-      <div class="field"><label>Golpes brutos totales</label><input id="f-gross" type="number" placeholder="82" inputmode="numeric"></div>
+      <div class="field" style="gap:3px"><label>Golpes brutos totales</label><input id="f-gross" type="number" placeholder="82" inputmode="numeric"></div>
     </div>
     <div style="display:flex;gap:10px">
       <button class="btn" id="btn-add" type="button" style="flex:2;margin-top:0">+ Registrar Ronda</button>
-      <button class="btn-outline" onclick="cancelarNueva()" style="flex:1;margin-top:0">Cancelar</button>
+      <button class="btn-danger" onclick="cancelarNueva()" style="flex:1;margin-top:0">Cancelar</button>
     </div>
     <div class="info">Diferencial = (Golpes − CR) × 113 / Slope</div>
   </div>
