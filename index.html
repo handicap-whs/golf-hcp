@@ -1128,10 +1128,10 @@ function calcCHCP() {
     resetCHCP(); return;
   }
   const chcp = Math.round(hcp * (slope / 113) + (cr - par));
-  const target = par - hcp;
+  const totalGolpes = par + chcp;
   num.textContent = chcp >= 0 ? '+' + chcp : chcp;
   num.className = 'chcp-num';
-  det.innerHTML = `HCP ${hcp} × (${slope}/113) + (${cr}−${par}) = <strong style="color:var(--gold2)">${chcp >= 0 ? '+' + chcp : chcp} golpes</strong><div class="target-box">Puntuación objetivo: <strong>${Math.round(target)} golpes</strong></div>`;
+  det.innerHTML = `HCP ${hcp} × (${slope}/113) + (${cr}−${par}) = <strong style="color:var(--gold2)">${chcp >= 0 ? '+' + chcp : chcp} golpes</strong><div class="target-box">Total Golpes: <strong style="font-size:15px">${totalGolpes}</strong></div>`;
   if (name) { pname.textContent = name; pname.style.display = 'block'; }
   else pname.style.display = 'none';
   // Playing HCP markers
