@@ -1791,7 +1791,20 @@ async function guardarNuevoCampo() {
     return;
   }
   const barras = getBarrasFromEditor('nc-');
-  if (!barras.length) { showErr('Introduce CR y Slope de al menos una barra.'); return; }
+  // Exigir al menos amarilla O roja con CR y Slope completos
+  const hasAmarilla = barras.some(b => b.color === 'amarilla');
+  const hasRoja     = barras.some(b => b.color === 'roja');
+  if (!hasAmarilla && !hasRoja) {
+    showErr('⚠️ Introduce CR y Slope de la barra Amarilla o Roja como mínimo.');
+    // Resaltar campos vacíos de amarilla y roja
+    ['amarilla','roja'].forEach(color => {
+      const crEl    = $('nc-cr-'+color);
+      const slopeEl = $('nc-slope-'+color);
+      if (crEl    && (!crEl.value    || isNaN(parseFloat(crEl.value))))    crEl.classList.add('err');
+      if (slopeEl && (!slopeEl.value || isNaN(parseInt(slopeEl.value))))   slopeEl.classList.add('err');
+    });
+    return;
+  }
 
   const btn = $('btn-guardar-nc');
   btn.textContent = 'Guardando…'; btn.disabled = true;
