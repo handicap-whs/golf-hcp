@@ -547,7 +547,7 @@ select option{background:#1a2f1a}
       <div id="nc-hoyos-wrap"></div>
       <div class="modal-err" id="nc-err" style="margin-top:12px"></div>
       <button class="btn" id="btn-guardar-nc" onclick="guardarNuevoCampo()">Guardar Campo</button>
-      <button class="btn-outline" onclick="if(confirm('¿Cancelar nuevo campo? Los datos introducidos se perderán.'))toggleNuevoCampo()">Cancelar</button>
+      <button class="btn-danger" onclick="if(confirm('¿Cancelar nuevo campo? Los datos introducidos se perderán.'))toggleNuevoCampo()">Cancelar</button>
     </div>
   </div>
 </div>
@@ -1780,6 +1780,16 @@ async function guardarNuevoCampo() {
 
   const { hoyos, parTotal, error: hErr } = getHoyosFromEditor('nc-');
   if (hErr) { showErr(hErr); return; }
+  if (hoyos.length < 18) {
+    showErr('⚠️ Completa los 18 hoyos con par e índice antes de guardar.');
+    // Resaltar hoyos vacíos
+    for (let i = 1; i <= 18; i++) {
+      const pEl = $('nc-par-'+i), iEl = $('nc-idx-'+i);
+      if (pEl && (!pEl.value || isNaN(parseInt(pEl.value)))) pEl.classList.add('err');
+      if (iEl && (!iEl.value || isNaN(parseInt(iEl.value)))) iEl.classList.add('err');
+    }
+    return;
+  }
   const barras = getBarrasFromEditor('nc-');
   if (!barras.length) { showErr('Introduce CR y Slope de al menos una barra.'); return; }
 
