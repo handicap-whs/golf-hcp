@@ -122,8 +122,8 @@ select option{background:#1a2f1a}
 
 /* ── HISTORY ── */
 .hist-table{width:100%;border-collapse:collapse;font-size:10px}
-.hist-table th{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:4px 6px;text-align:left;border-bottom:1px solid var(--border)}
-.hist-table td{padding:7px 6px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--cream);vertical-align:middle}
+.hist-table th{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:3px 5px;text-align:left;border-bottom:1px solid var(--border)}
+.hist-table td{padding:3px 5px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--cream);vertical-align:middle}
 .hist-table tr:last-child td{border-bottom:none}
 .used-badge{background:rgba(123,198,122,.15);border:1px solid rgba(123,198,122,.3);color:var(--green);font-size:7px;padding:2px 5px;border-radius:10px}
 .stbl-badge{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--gold2);font-size:7px;letter-spacing:1px;padding:2px 6px;border-radius:20px;white-space:nowrap}
@@ -1017,7 +1017,9 @@ function renderHistory() {
     const sorted = [...state.rounds].sort((a, b) => a.diff - b.diff);
     sorted.slice(0, res.numBest).forEach(r => usedSet.add(r.id));
   }
-  const rows = [...state.rounds].reverse().map(r => {
+  const totalRounds = state.rounds.length;
+  const rows = [...state.rounds].reverse().map((r, idx) => {
+    const rowNum = totalRounds - idx;
     const used = usedSet.has(r.id);
     const barraDot = r.barra_color
       ? `<span class="barra-dot" style="background:${BARRA_COLORS[r.barra_color]}"></span>`
@@ -1026,6 +1028,7 @@ function renderHistory() {
       ? `<span class="stbl-badge">⛳ ${r.stableford}</span>` : '—';
     const usedBadge = used ? '<span class="used-badge">✓</span>' : '';
     return `<tr>
+      <td style="color:rgba(255,255,255,.25);font-size:9px;text-align:right;padding-right:4px">${rowNum}</td>
       <td style="color:#fff">${fmtDate(r.date)}</td>
       <td>${r.name||'—'}</td>
       <td style="text-align:center">${r.gross}</td>
@@ -1043,12 +1046,12 @@ function renderHistory() {
   }).join('');
   c.innerHTML = `<div style="overflow-x:auto"><table class="hist-table">
     <thead><tr>
-      <th>Fecha</th><th>Campo</th><th>Golpes</th><th>Dif.</th>
+      <th></th><th>Fecha</th><th>Campo</th><th>Golpes</th><th>Dif.</th>
       <th>Barra</th><th>Stbl.</th><th>HCP✓</th><th></th>
     </tr></thead>
     <tbody>${rows}</tbody>
   </table></div>
-  <div style="margin-top:10px;font-size:9px;color:var(--muted);text-align:center">HCP✓ = diferencial usado en el cálculo</div>`;
+  <div style="margin-top:8px;font-size:9px;color:var(--muted);text-align:center"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:4px;vertical-align:middle"></span>HCP✓ = diferencial usado en el cálculo</div>`;
 }
 
 function renderCampos() {
@@ -1160,7 +1163,7 @@ function calcCHCP() {
   const totalGolpes = par + chcp;
   num.textContent = chcp >= 0 ? '+' + chcp : chcp;
   num.className = 'chcp-num';
-  det.innerHTML = `HCP ${hcp} × (${slope}/113) + (${cr}−${par}) = <strong style="color:var(--gold2)">${chcp >= 0 ? '+' + chcp : chcp} golpes</strong><div class="target-box" style="font-size:21px;line-height:1.2">TOTAL GOLPES: <strong style="font-size:21px">${totalGolpes}</strong></div>`;
+  det.innerHTML = `HCP ${hcp} × (${slope}/113) + (${cr}−${par}) = <strong style="color:var(--gold2)">${chcp >= 0 ? '+' + chcp : chcp} golpes</strong><div class="target-box" style="font-size:21px;line-height:1.2;color:var(--gold)">TOTAL GOLPES: <strong style="font-size:21px;color:var(--gold2)">${totalGolpes}</strong></div>`;
   if (name) { pname.textContent = name; pname.style.display = 'block'; }
   else pname.style.display = 'none';
   // Playing HCP markers
