@@ -14,8 +14,8 @@
 <style>
 :root{--bg:#1a2f1a;--bg2:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.09);--gold:#c9a84c;--gold2:#e8c96a;--green:#7bc67a;--cream:#f5f0e8;--muted:rgba(255,255,255,0.35);--red:#e05555}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{background:var(--bg)}
-body{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);color:var(--cream);font-family:'DM Mono',monospace;display:flex;flex-direction:column;overflow:hidden}
+html,body{background:var(--bg);color:var(--cream);font-family:'DM Mono',monospace;overflow-x:hidden}
+body{overflow-y:auto;-webkit-overflow-scrolling:touch}
 
 /* ── SPLASH ── */
 #splash{position:fixed;inset:0;background:#1a2f1a;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .5s}
@@ -46,20 +46,20 @@ body{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);color:var
 .auth-msg.show{display:block}
 
 /* ── PLAYER BAR ── */
-#player-bar{background:#0f1a0f;border-bottom:1px solid rgba(201,168,76,.3);padding:calc(env(safe-area-inset-top,0px) + 7px) 14px 7px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:50}
+#player-bar{background:#0f1a0f;border-bottom:1px solid rgba(201,168,76,.3);padding:calc(env(safe-area-inset-top,0px) + 7px) 14px 7px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
 #player-bar.hidden{display:none}
 .pb-name{color:var(--gold2);font-family:'DM Mono',monospace;font-size:20px;font-style:normal}
 .pb-btn{background:none;border:1px solid rgba(201,168,76,.3);border-radius:4px;color:var(--gold);font-family:'DM Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:4px 8px;cursor:pointer}
 
 /* ── NAV ── */
-nav{flex-shrink:0;background:#0f1a0f;border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,0px)}
+nav{position:fixed;bottom:0;left:0;right:0;background:#0f1a0f;border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,0px)}
 nav button{flex:1;background:none;border:none;color:var(--muted);padding:9px 2px 7px;font-size:8px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'DM Mono',monospace;min-height:52px}
 nav button svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 nav button.active{color:var(--gold)}
 nav button.active svg{stroke:var(--gold)}
 
 /* ── PAGES ── */
-.page{display:none;padding:16px 14px 24px;max-width:700px;margin:0 auto;width:100%}
+.page{display:none;padding:16px 14px calc(70px + env(safe-area-inset-bottom,0px));max-width:700px;margin:0 auto;width:100%}
 .page.active{display:block}
 
 /* ── CARDS ── */
@@ -182,7 +182,6 @@ select option{background:#1a2f1a}
 #page-formula .formula-row:last-child{border-bottom:none}
 
 
-#scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:none}
 </style>
 </head>
 <body>
@@ -617,9 +616,7 @@ select option{background:#1a2f1a}
     <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>Info
   </button>
 </nav>
-<div id="scroll-area">
 
-</div>
 <script>
 // ═══════════════════════════════════════════════════════════════════════
 // GOLF HCP — Calculadora WHS 2020
@@ -1929,7 +1926,7 @@ function goTo(id, btn) {
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
   $('page-' + id).classList.add('active');
   if (btn) btn.classList.add('active');
-  const sw = document.getElementById('scroll-area'); if(sw) sw.scrollTop=0;
+  window.scrollTo(0,0);
   if (id === 'nueva') {
     $('f-date').value = new Date().toISOString().split('T')[0];
     // Importar HCP Index desde Inicio (p-hcp) — tiene prioridad sobre el calculado
