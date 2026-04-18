@@ -971,7 +971,8 @@ async function onLogin(user) {
     loadPre();
     autorellenarInicio();
   } catch(e) {
-    toast('❌ Error al cargar datos', true);
+    toast('❌ Error: ' + (e.message || JSON.stringify(e)), true);
+    console.error('onLogin error:', e);
   }
 }
 
