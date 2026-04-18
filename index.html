@@ -2030,6 +2030,14 @@ function goTo(id, btn) {
     }
   }
   if (id === 'nueva') {
+    // Avisar si no hay campos creados
+    if (state.user && !state.campos.length) {
+      setTimeout(() => {
+        if (confirm('No tienes campos creados.\n\n¿Ir a Campos para crear uno?')) {
+          goTo('campos', $('nav-campos'));
+        }
+      }, 300);
+    }
     $('f-date').value = new Date().toISOString().split('T')[0];
     // Importar HCP Index desde Inicio (p-hcp) — tiene prioridad sobre el calculado
     const pHcp = $('p-hcp')?.value;
