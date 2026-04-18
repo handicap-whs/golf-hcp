@@ -1171,7 +1171,7 @@ function calcCHCP() {
   const totalGolpes = par + chcp;
   num.textContent = chcp >= 0 ? '+' + chcp : chcp;
   num.className = 'chcp-num';
-  det.innerHTML = `HCP ${hcp} × (${slope}/113) + (${cr}−${par}) = <strong style="color:var(--gold2)">${chcp >= 0 ? '+' + chcp : chcp} golpes</strong><div class="target-box" style="font-size:21px;line-height:1.2;color:var(--gold)">TOTAL GOLPES: <strong style="font-size:21px;color:var(--gold2)">${totalGolpes}</strong></div>`;
+  det.innerHTML = `HCP ${hcp} × (${slope}/113) + (${cr}−${par}) = <strong style="color:var(--gold2)">${chcp >= 0 ? '+' + chcp : chcp} golpes</strong><div class="target-box" style="font-size:21px;line-height:1.2;color:var(--gold)">TOTAL GOLPES: <span style="font-size:21px;color:var(--gold2)">${totalGolpes}</span></div>`;
   if (name) { pname.textContent = name; pname.style.display = 'block'; }
   else pname.style.display = 'none';
   // Playing HCP markers
@@ -1912,7 +1912,8 @@ async function guardarEditCampo() {
 }
 
 async function delCampo(id) {
-  if (!confirm('¿Eliminar este campo y sus hoyos y barras?')) return;
+  const campoNombre = state.campos.find(c => c.id === id)?.nombre || 'este campo';
+  if (!confirm(`¿Eliminar campo "${campoNombre}" y todos sus hoyos y barras?`)) return;
   const uid = state.user?.id;
   try {
     await sb.from('hoyos').delete().eq('campo_id', id).eq('user_id', uid);
