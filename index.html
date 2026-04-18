@@ -412,14 +412,27 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
       <div id="p-barra-aviso">⚠️ Este campo no tiene barras definidas.<br><span style="color:var(--muted)">Ve a <strong style="color:var(--cream)">Campos → ✏ Editar</strong> para añadir barras con su CR y Slope.</span></div>
     </div>
-    <div class="fields f3" style="margin-bottom:6px;gap:6px">
-
-      <div class="field" style="gap:3px"><label>HCP Index</label><input id="p-hcp" type="number" placeholder="18.4" step="0.1" inputmode="decimal" oninput="calcCHCP()"></div>
-      <div class="field" style="gap:3px"><label>Par campo</label><input id="p-par" type="number" placeholder="72" inputmode="numeric" min="54" max="74" oninput="const v=parseInt(this.value);if(this.value!==''&&(isNaN(v)||v<54||v>74)){this.classList.add('err');}else{this.classList.remove('err');}calcCHCP()" onblur="const v=parseInt(this.value);if(!isNaN(v)&&(v<54||v>74)){this.value='';this.classList.remove('err');}"></div>
-    </div>
-    <div class="fields f2" style="margin-top:6px;margin-bottom:6px;gap:6px">
-      <div class="field" style="gap:3px"><label>Course Rating</label><input id="p-cr" type="number" placeholder="71.5" step="0.1" inputmode="decimal" oninput="calcCHCP()"></div>
-      <div class="field" style="gap:3px"><label>Slope Rating</label><input id="p-slope" type="number" placeholder="125" inputmode="numeric" oninput="calcCHCP()"></div>
+    <div class="fields f2" style="margin-bottom:6px;gap:6px">
+      <div class="field" style="gap:3px">
+        <label>HCP Jugador</label>
+        <input id="p-hcp" type="number" placeholder="18.4" step="0.1" inputmode="decimal"
+          style="background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:4px;color:#fff;font-family:'DM Mono',monospace;font-size:13px;padding:5px 8px;width:100%;-webkit-appearance:none;outline:none" oninput="calcCHCP()">
+      </div>
+      <div class="field" style="gap:3px">
+        <label>Par campo</label>
+        <div id="p-par-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+        <input type="hidden" id="p-par">
+      </div>
+      <div class="field" style="gap:3px">
+        <label>Course Rating</label>
+        <div id="p-cr-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+        <input type="hidden" id="p-cr">
+      </div>
+      <div class="field" style="gap:3px">
+        <label>Slope Rating</label>
+        <div id="p-slope-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+        <input type="hidden" id="p-slope">
+      </div>
     </div>
     <div class="chcp-box" style="margin-top:8px">
       <div>
@@ -1126,6 +1139,12 @@ function renderSelectorCampos() {
 
 // ── INICIO / COURSE HCP ───────────────────────────────────────────────────
 function onCampoAntes() {
+  if (!state.campos.length) {
+    if (confirm('No tienes campos creados.\n\n¿Ir a Campos para crear uno?')) {
+      goTo('campos', $('nav-campos'));
+    }
+    return;
+  }
   const id = parseInt($('p-campo').value);
   const campo = state.campos.find(c => c.id === id);
   const wrap = $('p-barra-wrap');
@@ -1158,8 +1177,10 @@ function onBarraAntes() {
   const campo = state.campos.find(c => c.id === id);
   const barra = campo?.barras?.find(b => b.color === $('p-barra').value);
   if (barra) {
-    $('p-cr').value = barra.cr;
-    $('p-slope').value = barra.slope;
+    setVal('p-cr', barra.cr); setVal('p-slope', barra.slope);
+    const crEl = $('p-cr-disp'), slEl = $('p-slope-disp');
+    if (crEl) crEl.textContent = barra.cr + ' CR';
+    if (slEl) slEl.textContent = barra.slope + ' Slope';
     calcCHCP();
   }
 }
@@ -1215,6 +1236,7 @@ function limpiarInicio() {
   $('p-hcp').value = '';
   $('p-par').value = ''; $('p-cr').value = ''; $('p-slope').value = '';
   if ($('p-campo')) $('p-campo').value = '';
+  ['p-par-disp','p-cr-disp','p-slope-disp'].forEach(id => { const el=$(id); if(el) el.textContent='—'; });
   if ($('p-barra')) { $('p-barra').value = ''; $('p-barra').style.display = ''; }
   if ($('p-barra-wrap')) $('p-barra-wrap').style.display = 'none';
   if ($('p-barra-aviso')) $('p-barra-aviso').style.display = 'none';
