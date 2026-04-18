@@ -210,11 +210,11 @@ nav.nav-hidden{transform:translateY(100%)}
 #nav-dropdown .dd-danger{color:var(--red)}
 
 .hist-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
-.hist-table .col-num{position:sticky;left:0;background:#1a2f1a;z-index:2;min-width:24px}
-.hist-table .col-fecha{position:sticky;left:24px;background:#1a2f1a;z-index:2;min-width:68px;white-space:nowrap}
-.hist-table .col-campo{position:sticky;left:92px;background:#1a2f1a;z-index:2;min-width:130px;max-width:130px}
-.hist-table .col-campo-hdr{position:sticky;left:92px;background:#1a2f1a;z-index:2;min-width:130px}
-.hist-table thead .col-num,.hist-table thead .col-fecha,.hist-table thead .col-campo-hdr{background:#0f1a0f}
+.hist-table .col-num{position:sticky;left:0;background:var(--bg2);z-index:2;min-width:24px}
+.hist-table .col-fecha{position:sticky;left:24px;background:var(--bg2);z-index:2;min-width:68px;white-space:nowrap}
+.hist-table .col-campo{position:sticky;left:92px;background:var(--bg2);z-index:2;min-width:100px;max-width:100px}
+.hist-table .col-campo-hdr{position:sticky;left:92px;background:var(--bg2);z-index:2;min-width:100px}
+
 
 </style>
 </head>
@@ -374,7 +374,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <div class="modal-title">Editar Campo</div>
     <input type="hidden" id="edit-c-id">
     <div class="modal-err" id="edit-c-err"></div>
-    <div class="field" style="margin-bottom:14px"><label>Nombre del campo</label><input id="edit-c-nombre" placeholder="Club de Golf"></div>
+    <div class="field" style="margin-bottom:14px"><label>Nombre del campo <span style="color:var(--muted);font-weight:normal;text-transform:none;letter-spacing:0">(máx. 15 caracteres)</span></label><input id="edit-c-nombre" placeholder="CLUB DE GOLF" maxlength="15" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></div>
     <div class="section-title">Barras de Salida</div>
     <div id="edit-barras-wrap"></div>
     <div class="section-title">Par e Índice por Hoyo</div>
@@ -560,7 +560,7 @@ nav.nav-hidden{transform:translateY(100%)}
   <div id="nuevo-campo-wrap" style="display:none">
     <div class="card">
       <div class="card-title">Nuevo Campo</div>
-      <div class="field" style="margin-bottom:14px"><label>Nombre del campo</label><input id="nc-nombre" placeholder="Club de Golf"></div>
+      <div class="field" style="margin-bottom:14px"><label>Nombre del campo <span style="color:var(--muted);font-weight:normal;text-transform:none;letter-spacing:0">(máx. 15 caracteres)</span></label><input id="nc-nombre" placeholder="CLUB DE GOLF" maxlength="15" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></div>
       <div class="section-title">Barras de Salida</div>
       <div id="nc-barras-wrap"></div>
       <div class="section-title">Par e Índice por Hoyo</div>
@@ -1869,7 +1869,7 @@ function getBarrasFromEditor(prefix) {
 }
 
 async function guardarNuevoCampo() {
-  const nombre = $('nc-nombre').value.trim();
+  const nombre = $('nc-nombre').value.trim().toUpperCase();
   const uid    = state.user?.id;
   const errEl  = $('nc-err');
   errEl.classList.remove('show');
@@ -1949,7 +1949,7 @@ function abrirEditCampo(id) {
 
 async function guardarEditCampo() {
   const id     = parseInt($('edit-c-id').value);
-  const nombre = $('edit-c-nombre').value.trim();
+  const nombre = $('edit-c-nombre').value.trim().toUpperCase();
   const uid    = state.user?.id;
   const errEl  = $('edit-c-err');
   errEl.classList.remove('show');
