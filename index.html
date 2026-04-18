@@ -910,7 +910,7 @@ async function doChangePassword() {
 }
 
 function doLogout() {
-  if (!confirm('¿Cerrar sesión?')) return;
+  if (!confirm('⚠️ ¿SALIR DE LA APLICACIÓN?\n\nSe cerrará tu sesión.')) return;
   state.user = null; state.rounds = []; state.campos = [];
   renderAll(); renderCampos(); renderSelectorCampos();
   $('player-bar').classList.add('hidden');
