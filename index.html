@@ -47,7 +47,7 @@ body{overflow-y:auto;-webkit-overflow-scrolling:touch}
 
 /* ── PLAYER BAR ── */
 #player-bar{background:#0f1a0f;border-bottom:1px solid rgba(201,168,76,.3);padding:calc(env(safe-area-inset-top,0px) + 7px) 14px 7px;display:flex;align-items:center;justify-content:center;position:fixed;top:0;left:0;right:0;z-index:50}
-#player-bar.hidden{display:none}
+#player-bar{display:none!important}
 .pb-name{color:var(--gold2);font-family:'DM Mono',monospace;font-size:20px;font-style:normal}
 .pb-btn{background:none;border:1px solid rgba(201,168,76,.3);border-radius:4px;color:var(--gold);font-family:'DM Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:4px 8px;cursor:pointer}
 
@@ -185,7 +185,6 @@ select option{background:#1a2f1a}
 
 nav.nav-hidden{transform:translateY(100%)}
 
-body{padding-top:calc(44px + env(safe-area-inset-top,0px))}
 
 /* Símbolos de resultado por hoyo */
 .score-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:32px;height:32px;margin:0 auto}
@@ -414,7 +413,7 @@ body{padding-top:calc(44px + env(safe-area-inset-top,0px))}
       <div id="p-barra-aviso">⚠️ Este campo no tiene barras definidas.<br><span style="color:var(--muted)">Ve a <strong style="color:var(--cream)">Campos → ✏ Editar</strong> para añadir barras con su CR y Slope.</span></div>
     </div>
     <div class="fields f3" style="margin-bottom:6px;gap:6px">
-      <div class="field" style="gap:3px"><label>Jugador</label><input id="p-name" placeholder="Tu nombre" oninput="calcCHCP()"></div>
+
       <div class="field" style="gap:3px"><label>HCP Index</label><input id="p-hcp" type="number" placeholder="18.4" step="0.1" inputmode="decimal" oninput="calcCHCP()"></div>
       <div class="field" style="gap:3px"><label>Par campo</label><input id="p-par" type="number" placeholder="72" inputmode="numeric" min="54" max="74" oninput="const v=parseInt(this.value);if(this.value!==''&&(isNaN(v)||v<54||v>74)){this.classList.add('err');}else{this.classList.remove('err');}calcCHCP()" onblur="const v=parseInt(this.value);if(!isNaN(v)&&(v<54||v>74)){this.value='';this.classList.remove('err');}"></div>
     </div>
@@ -633,16 +632,9 @@ body{padding-top:calc(44px + env(safe-area-inset-top,0px))}
   <button onclick="goTo('formula',this)" id="nav-formula">
     <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>Info
   </button>
-  <div id="nav-menu-wrap">
-    <button id="nav-menu-btn" onclick="toggleNavMenu()">
-      <svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
-      ···
-    </button>
-    <div id="nav-dropdown">
-      <button id="dd-clave" type="button">🔑 Cambiar clave</button>
-      <button id="dd-salir" class="dd-danger" type="button">⏏ Salir</button>
-    </div>
-  </div>
+  <button id="btn-salir-nav" type="button">
+    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Salir
+  </button>
 </nav>
 
 <script>
@@ -2084,12 +2076,10 @@ async function init() {
   (function() {
     const addTap = (id, fn) => {
       const el = $(id); if (!el) return;
-      el.addEventListener('touchend', e => { e.preventDefault(); e.stopPropagation(); fn(); }, {passive:false});
-      el.addEventListener('click', e => { e.stopPropagation(); fn(); });
+      el.addEventListener('touchend', e => { e.preventDefault(); fn(); }, {passive:false});
+      el.addEventListener('click', () => fn());
     };
-    addTap('nav-menu-btn', toggleNavMenu);
-    addTap('dd-clave', openClave);
-    addTap('dd-salir', doLogoutFromMenu);
+    addTap('btn-salir-nav', doLogout);
   })();
 
   // btn-add: múltiples handlers para máxima compatibilidad iOS
