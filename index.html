@@ -283,19 +283,7 @@ nav.nav-hidden{transform:translateY(100%)}
 </div>
 
 <!-- MODAL: CAMBIAR CONTRASEÑA -->
-<div class="modal-overlay hidden" id="modal-clave">
-  <div class="modal">
-    <div class="modal-title">Cambiar Contraseña</div>
-    <div class="modal-err" id="clave-err"></div>
-    <div class="auth-msg ok" id="clave-ok" style="margin-bottom:12px"></div>
-    <div class="field" style="margin-bottom:12px"><label style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--green)">Nueva contraseña</label><input id="clave-1" type="password" placeholder="mínimo 6 caracteres"></div>
-    <div class="field" style="margin-bottom:16px"><label style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--green)">Confirmar</label><input id="clave-2" type="password" placeholder="repite la contraseña"></div>
-    <div class="modal-actions">
-      <button class="btn" style="margin-top:0" id="btn-guardar-clave" onclick="doChangePassword()">Guardar</button>
-      <button class="btn-danger" style="margin-top:0" onclick="if(confirm('¿Cancelar cambio de contraseña?'))cerrarModal('modal-clave')">Cancelar</button>
-    </div>
-  </div>
-</div>
+
 
 <!-- MODAL: EDITAR RONDA -->
 <div class="modal-overlay hidden" id="modal-ronda">
@@ -473,7 +461,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.23.06</div>
+  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.23.07</div>
 </div>
 
 <!-- PAGE: NUEVA RONDA -->
@@ -985,28 +973,6 @@ async function doReset() {
   }
 }
 
-async function doChangePassword() {
-  const p1 = $('clave-1').value;
-  const p2 = $('clave-2').value;
-  const err = $('clave-err');
-  const ok  = $('clave-ok');
-  err.classList.remove('show'); ok.classList.remove('show');
-  if (p1.length < 6) { err.textContent = 'Mínimo 6 caracteres.'; err.classList.add('show'); return; }
-  if (p1 !== p2)     { err.textContent = 'Las contraseñas no coinciden.'; err.classList.add('show'); return; }
-  const btn = $('btn-guardar-clave');
-  btn.textContent = 'Guardando…'; btn.disabled = true;
-  try {
-    const { error } = await sb.auth.updateUser({ password: p1 });
-    if (error) throw error;
-    ok.textContent = '✓ Contraseña actualizada.'; ok.classList.add('show');
-    $('clave-1').value = ''; $('clave-2').value = '';
-    setTimeout(() => cerrarModal('modal-clave'), 2000);
-  } catch(e) {
-    err.textContent = '❌ ' + (e.message || 'Error.'); err.classList.add('show');
-  } finally {
-    btn.textContent = 'Guardar'; btn.disabled = false;
-  }
-}
 
 function doLogout() {
   if (!confirm('⚠️ ¿SALIR DE LA APLICACIÓN?\n\nSe cerrará tu sesión.')) return;
@@ -1773,7 +1739,8 @@ function abrirEditRonda(id) {
 
     buildEditHoyos(campo, existingShots, editNumHoyos, editVuelta);
     // Aplicar símbolos y dots a los inputs ya rellenos
-    setTimeout(() => {
+    // Usar doble rAF para asegurar que el DOM está listo
+    requestAnimationFrame(() => requestAnimationFrame(() => {
       const startHoyo = (editNumHoyos === 9 && editVuelta === 2) ? 10 : 1;
       if (existingShots.length > 0) {
         renderScoreSymbols('edit-', campo.hoyos, existingShots, startHoyo);
@@ -1784,7 +1751,7 @@ function abrirEditRonda(id) {
         }
       }
       recalcEditStbl();
-    }, 50);
+    }));
   } else {
     hW.style.display = 'none';
   }
@@ -2322,14 +2289,7 @@ function toggleNavMenu() {
 }
 function closeNavMenu() {
   $('nav-dropdown')?.classList.remove('open');
-}
-function openClave() {
-  closeNavMenu();
-  $('clave-1').value = ''; $('clave-2').value = '';
-  $('clave-err').classList.remove('show'); $('clave-ok').classList.remove('show');
-  $('modal-clave').classList.remove('hidden');
-}
-function doLogoutFromMenu() {
+}function doLogoutFromMenu() {
   closeNavMenu();
   doLogout();
 }
@@ -2361,8 +2321,6 @@ async function init() {
     b.addEventListener('touchstart', function() { this._touchMoved = false; }, {passive:true});
     b.addEventListener('touchmove', function() { this._touchMoved = true; }, {passive:true});
   })();
-  // btn-salir movido al menú ··· del nav
-  // btn-clave movido al menú ··· del nav
 
   // Auth state — solo INITIAL_SESSION para recuperar sesión al arrancar
   // doLogin y doLogout gestionan el resto manualmente
