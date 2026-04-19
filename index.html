@@ -344,6 +344,15 @@ nav.nav-hidden{transform:translateY(100%)}
         <div id="edit-fmt-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--gold2);font-family:'DM Mono',monospace">100% — Informal</div>
         <input type="hidden" id="edit-fmt" value="100">
       </div>
+      <div class="field" style="gap:3px">
+        <label>Hoyos</label>
+        <div id="edit-r-num-hoyos-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--gold2);font-family:'DM Mono',monospace">18 hoyos</div>
+        <input type="hidden" id="edit-r-num-hoyos" value="18">
+      </div>
+      <div class="field" id="edit-vuelta-wrap" style="gap:3px;display:none">
+        <label>Vuelta</label>
+        <div id="edit-r-vuelta-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+      </div>
       <div class="field" style="gap:3px"><label>HCP de Campo</label>
         <div id="edit-chcp-val" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
       </div>
@@ -466,7 +475,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.23.05</div>
+  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.23.06</div>
 </div>
 
 <!-- PAGE: NUEVA RONDA -->
@@ -1733,10 +1742,24 @@ function abrirEditRonda(id) {
   $('edit-r-err').classList.remove('show');
 
   const campo = r.campo_id ? state.campos.find(c => c.id === r.campo_id) : null;
+  const editNumHoyos = r.num_hoyos || 18;
+  const editVuelta   = r.vuelta || 1;
+  // Mostrar Hoyos y Vuelta en modal
+  const nHDisp = $('edit-r-num-hoyos-disp');
+  if (nHDisp) nHDisp.textContent = editNumHoyos === 9
+    ? (editVuelta === 2 ? '9 hoyos (10–18)' : '9 hoyos (1–9)')
+    : '18 hoyos';
+  const vWrap = $('edit-vuelta-wrap');
+  if (vWrap) vWrap.style.display = editNumHoyos === 9 ? '' : 'none';
+  const vDisp = $('edit-r-vuelta-disp');
+  if (vDisp) vDisp.textContent = editVuelta === 2 ? '2ª (10–18)' : '1ª (1–9)';
+  // Guardar en hidden + dataset
+  const nHEl = $('edit-r-num-hoyos');
+  if (nHEl) { nHEl.value = editNumHoyos; nHEl.dataset.vuelta = editVuelta; }
   const hW = $('edit-hoyos-wrap');
-  if (campo?.hoyos?.length === 18) {
+  if (campo?.hoyos?.length >= 9) {
     hW.style.display = 'block';
-    buildEditHoyos(campo, Array.isArray(r.shots) ? r.shots : []);
+    buildEditHoyos(campo, Array.isArray(r.shots) ? r.shots : [], editNumHoyos, editVuelta);
     recalcEditStbl();
   } else {
     hW.style.display = 'none';
@@ -1744,13 +1767,23 @@ function abrirEditRonda(id) {
   $('modal-ronda').classList.remove('hidden');
 }
 
-function buildEditHoyos(campo, existing) {
-  ['edit-grid-out','edit-grid-in'].forEach(id => $(id).innerHTML = '');
-  for (let i = 1; i <= 18; i++) {
+function buildEditHoyos(campo, existing, numHoyos, vuelta) {
+  numHoyos = numHoyos || 18;
+  vuelta   = vuelta   || 1;
+  ['edit-grid-out','edit-grid-in'].forEach(id => { const el=$(id); if(el) el.innerHTML=''; });
+  const inLbl  = $('edit-grid-in-label');
+  const inGrid = $('edit-grid-in');
+  if (inLbl)  inLbl.style.display  = numHoyos === 9 ? 'none' : '';
+  if (inGrid) inGrid.style.display = numHoyos === 9 ? 'none' : '';
+  const startI = (numHoyos === 9 && vuelta === 2) ? 10 : 1;
+  const endI   = (numHoyos === 9 && vuelta === 2) ? 18 : (numHoyos === 9 ? 9  : 18);
+  for (let i = startI; i <= endI; i++) {
     const h = campo.hoyos.find(h => h.numero === i);
-    const val = existing[i - 1] != null ? existing[i - 1] : '';
-    const grid = i <= 9 ? $('edit-grid-out') : $('edit-grid-in');
-    const nextId = i < 18 ? 'edit-gh-' + (i + 1) : null;
+    // shots guardados: índice relativo (0 = primer hoyo jugado)
+    const shotIdx = i - startI;
+    const val = existing[shotIdx] != null ? existing[shotIdx] : '';
+    const grid = numHoyos === 9 ? $('edit-grid-out') : (i <= 9 ? $('edit-grid-out') : $('edit-grid-in'));
+    const nextId = i < endI ? 'edit-gh-' + (i + 1) : null;
     const cell = document.createElement('div');
     cell.className = 'hoyo-cell';
     cell.innerHTML = `
