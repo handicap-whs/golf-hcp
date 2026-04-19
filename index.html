@@ -356,9 +356,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="field" style="gap:3px"><label>HCP de Campo</label>
         <div id="edit-chcp-val" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
       </div>
-      <div class="field" style="gap:3px"><label>Playing HCP</label>
-        <div id="edit-playing-val" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
-      </div>
+
     </div>
     <div id="edit-hoyos-wrap" style="display:none">
       <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin:10px 0 8px">Golpes por hoyo</div>
@@ -1814,52 +1812,62 @@ function onEditBarra() {
 function recalcEditStbl() {
   const campoId = parseInt($('edit-r-campo-id').value) || null;
   const campo = campoId ? state.campos.find(c => c.id === campoId) : null;
-  // Actualizar Course HCP mostrado
+  if (!campo?.hoyos?.length) return;
+
+  const editNH     = parseInt($('edit-r-num-hoyos')?.value) || 18;
+  const editVuelta = parseInt($('edit-r-num-hoyos')?.dataset?.vuelta) || 1;
+  const startI     = (editNH === 9 && editVuelta === 2) ? 10 : 1;
+  const endI       = (editNH === 9 && editVuelta === 2) ? 18 : (editNH === 9 ? 9 : 18);
+  const startHoyo  = startI;
+
+  // Actualizar Course HCP
   const hcpForChcp = parseFloat($('edit-r-hcp').value);
   const crForChcp  = parseFloat($('edit-r-cr').value);
   const slForChcp  = parseFloat($('edit-r-slope').value);
-  const parForChcp = campo?.par_total;
   const echcpEl = $('edit-chcp-val');
-  const eplEl   = $('edit-playing-val');
   if (echcpEl && !isNaN(hcpForChcp) && !isNaN(crForChcp) && !isNaN(slForChcp)) {
-    const chcp = Math.round(hcpForChcp * (slForChcp / 113) + (parForChcp ? crForChcp - parForChcp : 0));
-    const fmt  = parseInt($('edit-fmt')?.value || '100');
-    const playing = Math.round(chcp * fmt / 100);
+    const chcp = Math.round(hcpForChcp * (slForChcp / 113) + (crForChcp - (campo?.par_total || 72)));
     echcpEl.textContent = (chcp >= 0 ? '+' : '') + chcp;
-    if (eplEl) eplEl.textContent = (playing >= 0 ? '+' : '') + playing;
     if (campo) renderRedDots('edit-', chcp, campo.hoyos);
   }
-  if (!campo?.hoyos?.length) return;
+
+  // Recoger shots del rango correcto
   let total = 0, complete = true;
   const shots = [];
-  const editNH = parseInt($('edit-r-num-hoyos')?.value) || 18;
-  for (let i = 1; i <= editNH; i++) {
+  for (let i = startI; i <= endI; i++) {
     const v = parseInt($('edit-gh-' + i)?.value);
     if (isNaN(v) || v < 1) { complete = false; shots.push(null); }
     else { total += v; shots.push(v); }
   }
-  // Símbolos en tiempo real
-  if (campo) renderScoreSymbols('edit-', campo.hoyos, shots);
+
+  // Símbolos en tiempo real (siempre, no solo cuando complete)
+  if (campo) renderScoreSymbols('edit-', campo.hoyos, shots, startHoyo);
+  // Dots stableford en tiempo real
+  const hcp = parseFloat($('edit-r-hcp').value);
+  if (!isNaN(hcp)) {
+    const eCR = parseFloat($('edit-r-cr').value);
+    const eSlope = parseFloat($('edit-r-slope').value);
+    const stbl = calcStableford(hcp, campo, shots, eCR, eSlope, editVuelta);
+    renderHoleDots('edit-', stbl?.byHole || null, startHoyo);
+  }
+
   $('edit-total').textContent = complete ? total : '—';
   if (complete) {
     $('edit-r-gross').value = total;
     const gd = $('edit-r-gross-disp'); if(gd) gd.textContent = total + ' golpes';
-  }
-  const hcp = parseFloat($('edit-r-hcp').value);
-  if (complete && !isNaN(hcp)) {
-    const eCR = parseFloat($('edit-r-cr').value);
-    const eSlope = parseFloat($('edit-r-slope').value);
-    const stbl = calcStableford(hcp, campo, shots, eCR, eSlope);
-    $('edit-stbl-prev').textContent = stbl ? stbl.total + ' pts' : '—';
-    renderHoleDots('edit-', stbl?.byHole || null);
-    renderScoreSymbols('edit-', campo.hoyos, shots);
-    if (stbl) {
-      $('edit-r-stbl').value = stbl.total;
-      const sd = $('edit-r-stbl-disp'); if(sd) sd.textContent = stbl.total + ' pts';
+    const hcp2 = parseFloat($('edit-r-hcp').value);
+    if (!isNaN(hcp2)) {
+      const eCR = parseFloat($('edit-r-cr').value);
+      const eSlope = parseFloat($('edit-r-slope').value);
+      const stbl = calcStableford(hcp2, campo, shots, eCR, eSlope, editVuelta);
+      $('edit-stbl-prev').textContent = stbl ? stbl.total + ' pts' : '—';
+      if (stbl) {
+        $('edit-r-stbl').value = stbl.total;
+        const sd = $('edit-r-stbl-disp'); if(sd) sd.textContent = stbl.total + ' pts';
+      }
     }
   } else {
     $('edit-stbl-prev').textContent = '—';
-    renderHoleDots('edit-', null);
   }
 }
 
