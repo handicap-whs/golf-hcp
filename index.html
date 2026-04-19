@@ -1487,6 +1487,11 @@ function cancelarNueva() {
 
 async function addRound() {
   if (document.activeElement) document.activeElement.blur();
+  // Validar campo obligatorio
+  if (!$('f-campo').value) {
+    toast('⚠️ Selecciona un campo antes de registrar la ronda.', true);
+    return;
+  }
   const campoId  = parseInt($('f-campo').value) || null;
   const campo    = campoId ? state.campos.find(c => c.id === campoId) : null;
   const cr       = parseFloat($('f-cr').value);
