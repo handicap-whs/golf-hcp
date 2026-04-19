@@ -492,11 +492,11 @@ nav.nav-hidden{transform:translateY(100%)}
           <option value="9">9 hoyos</option>
         </select>
       </div>
-      <div id="f-vuelta-wrap" style="display:none" class="field" style="gap:3px">
+      <div id="f-vuelta-wrap" style="display:none;gap:3px" class="field">
         <label>Vuelta</label>
         <select id="f-vuelta" onchange="onNumHoyosChange()" style="padding:5px 8px;font-size:13px;border-radius:4px">
-          <option value="1">1ª vuelta (1–9)</option>
-          <option value="2">2ª vuelta (10–18)</option>
+          <option value="1">1ª (1–9)</option>
+          <option value="2">2ª (10–18)</option>
         </select>
       </div>
     </div>
@@ -1466,10 +1466,12 @@ function renderRedDots(prefix, courseHCP, hoyos) {
   }
 }
 
-function renderHoleDots(prefix, byHole) {
+function renderHoleDots(prefix, byHole, startHoyo) {
+  startHoyo = startHoyo || 1;
   for (let i = 0; i < 18; i++) {
     const pts = byHole ? (byHole[i] || 0) : 0;
-    const el = document.getElementById(prefix + 'dots-' + (i + 1));
+    const hoyoNum = startHoyo + i;
+    const el = document.getElementById(prefix + 'dots-' + hoyoNum);
     if (!el) continue;
     el.innerHTML = pts > 0 ? Array(pts).fill('<span class="stbl-dot"></span>').join('') : '';
   }
@@ -1498,7 +1500,8 @@ function updateTotals() {
     const fSlope = parseFloat($('f-slope').value);
     const stbl = calcStableford(hcp, campo, shots, fCR, fSlope);
     $('preview-stbl').textContent = stbl ? stbl.total + ' pts' : '—';
-    renderHoleDots('gh-', stbl?.byHole || null);
+    const startHoyoU = (numH === 9 && vultaU === 2) ? 10 : 1;
+    renderHoleDots('gh-', stbl?.byHole || null, startHoyoU);
   } else {
     $('preview-stbl').textContent = '—';
     renderHoleDots('gh-', null);
@@ -1604,8 +1607,6 @@ async function addRound() {
       stableford, campo_id: campoId,
       hcp_idx: isNaN(hcpIdx) ? null : hcpIdx,
       shots: shots ? JSON.stringify(shots) : null,
-      num_hoyos: saveNumHoyos,
-      vuelta: saveNumHoyos === 9 ? saveVuelta : null,
       barra_color: barraColor,
       juego_fmt: parseInt($('nueva-fmt')?.value || '100'),
       num_hoyos: numHoyos,
