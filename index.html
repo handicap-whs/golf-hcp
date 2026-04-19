@@ -210,10 +210,9 @@ nav.nav-hidden{transform:translateY(100%)}
 #nav-dropdown .dd-danger{color:var(--red)}
 
 .hist-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
-.hist-table .col-num{position:sticky;left:0;background:#1a2f1a;z-index:2;min-width:24px}
-.hist-table .col-fecha{position:sticky;left:24px;background:#1a2f1a;z-index:2;min-width:68px;white-space:nowrap}
-.hist-table .col-campo{position:sticky;left:92px;background:#1a2f1a;z-index:2;min-width:100px;max-width:100px}
-.hist-table .col-campo-hdr{position:sticky;left:92px;background:#1a2f1a;z-index:2;min-width:100px}
+.hist-table .col-fecha{position:sticky;left:0;background:#1a2f1a;z-index:2;min-width:68px;white-space:nowrap}
+.hist-table .col-campo{position:sticky;left:68px;background:#1a2f1a;z-index:2;min-width:100px;max-width:100px}
+.hist-table .col-campo-hdr{position:sticky;left:68px;background:#1a2f1a;z-index:2;min-width:100px}
 
 
 </style>
@@ -1091,7 +1090,6 @@ function renderHistory() {
       ? `<span class="stbl-badge">⛳ ${r.stableford}</span>` : '—';
     const usedBadge = used ? '<span class="used-badge">✓</span>' : '';
     return `<tr>
-      <td class="col-num" style="color:rgba(255,255,255,.25);font-size:9px;text-align:right;padding-right:4px">${rowNum}</td>
       <td class="col-fecha" style="color:#fff">${fmtDate(r.date)}</td>
       <td class="col-campo" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.name||'—'}</td>
       <td style="text-align:center">${r.gross}</td>
@@ -1109,7 +1107,6 @@ function renderHistory() {
   }).join('');
   c.innerHTML = `<div class="hist-wrap"><table class="hist-table">
     <thead><tr>
-      <th class="col-num"></th>
       <th class="col-fecha">Fecha</th>
       <th class="col-campo-hdr">Campo</th>
       <th>Golpes</th><th>Dif.</th>
