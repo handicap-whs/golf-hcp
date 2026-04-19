@@ -540,9 +540,7 @@ nav.nav-hidden{transform:translateY(100%)}
         <span><span class="stbl-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);margin-right:4px;vertical-align:middle"></span>Punto Stableford</span>
       </div>
     </div>
-    <div id="gross-wrap" style="margin-bottom:12px">
-      <div class="field" style="gap:3px"><label>Golpes brutos totales</label><input id="f-gross" type="number" placeholder="82" inputmode="numeric"></div>
-    </div>
+
     <div style="display:flex;gap:10px">
       <button class="btn" id="btn-add" type="button" style="flex:2;margin-top:0">+ Registrar Ronda</button>
       <button class="btn-danger" onclick="if(confirm('¿Cancelar nueva ronda? Los datos introducidos se perderán.'))cancelarNueva()" style="flex:1;margin-top:0">Cancelar</button>
@@ -1317,7 +1315,7 @@ function loadPre() {
 function onCampoChange() {
   const id = parseInt($('f-campo').value);
   const campo = state.campos.find(c => c.id === id);
-  const bs = $('barra-selector'), hW = $('hoyos-wrap'), gW = $('gross-wrap'), mF = $('manual-fields');
+  const bs = $('barra-selector'), hW = $('hoyos-wrap'), mF = $('manual-fields');
   if (campo) {
     $('f-par-total').value = campo.par_total;
     mF.style.display = 'none';
@@ -1332,14 +1330,14 @@ function onCampoChange() {
       $('f-slope').value = campo.slope || '';
     }
     if (campo.hoyos?.length === 18) {
-      hW.style.display = 'block'; gW.style.display = 'none';
+      hW.style.display = 'block'; 
       buildHoyoInputs(campo); calcNuevaChcp();
     } else {
-      hW.style.display = 'none'; gW.style.display = 'block';
+      hW.style.display = 'none'; 
     }
   } else {
     mF.style.display = 'block'; bs.style.display = 'none';
-    hW.style.display = 'none'; gW.style.display = 'block';
+    hW.style.display = 'none'; 
     $('f-cr').value = ''; $('f-slope').value = ''; $('f-par-total').value = '';
   }
 }
@@ -1475,12 +1473,12 @@ function calcNuevaChcp() {
 
 function cancelarNueva() {
   $('f-campo').value = ''; $('f-cr').value = ''; $('f-slope').value = '';
-  $('f-par-total').value = ''; $('f-gross').value = ''; $('f-hcp-idx').value = '';
+  $('f-par-total').value = ''; $('f-hcp-idx').value = '';
   if ($('f-barra')) $('f-barra').value = '';
   $('barra-selector').style.display = 'none';
   const crD=$('f-cr-disp'), slD=$('f-slope-disp');
   if(crD) crD.textContent='—'; if(slD) slD.textContent='—';
-  $('hoyos-wrap').style.display = 'none'; $('gross-wrap').style.display = 'block';
+  $('hoyos-wrap').style.display = 'none';
   $('manual-fields').style.display = 'block';
   if ($('nueva-chcp-wrap')) $('nueva-chcp-wrap').style.display = 'none';
   for (let i = 1; i <= 18; i++) { const el = $('gh-'+i); if(el) el.value=''; }
@@ -1525,9 +1523,7 @@ async function addRound() {
       if (stblR) stableford = stblR.total;
     }
   } else {
-    gross = parseFloat($('f-gross').value);
-    if (isNaN(gross)||gross<40||gross>220) { $('f-gross').classList.add('err'); ok = false; }
-    else $('f-gross').classList.remove('err');
+
   }
   if (!ok) return;
 
