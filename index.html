@@ -466,7 +466,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.23.02</div>
+  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.23.03</div>
 </div>
 
 <!-- PAGE: NUEVA RONDA -->
@@ -819,16 +819,16 @@ function getCat(h) {
 function calcStableford(hcpIndex, campo, shots, crOverride, slopeOverride, vuelta) {
   if (!campo?.hoyos || campo.hoyos.length < 9) return null;
   const allHoyos = [...campo.hoyos].sort((a, b) => a.numero - b.numero);
-  const numHoyos = shots.filter(s => s != null && !isNaN(s) && s > 0).length > 0 &&
-                   allHoyos.length === 18 && shots.length <= 9 ? 9 : 18;
-  // Determinar qué hoyos del campo corresponden a esta ronda
-  const startIdx = (shots.length <= 9 && vuelta === 2) ? 9 : 0;
+  // shots.length <= 9 significa ronda de 9 hoyos
+  const is9 = shots.length <= 9;
+  const startIdx = (is9 && vuelta === 2) ? 9 : 0;
   const hoyos = allHoyos.slice(startIdx, startIdx + shots.length);
   const useCR    = (crOverride    != null && !isNaN(crOverride))    ? crOverride    : campo.cr;
   const useSlope = (slopeOverride != null && !isNaN(slopeOverride)) ? slopeOverride : campo.slope;
-  // Course HCP ajustado para 9 hoyos (mitad)
-  const courseHCP18 = Math.round(hcpIndex * (useSlope / 113) + (useCR - campo.par_total));
-  const courseHCP = shots.length <= 9 ? Math.round(courseHCP18 / 2) : courseHCP18;
+  // Course HCP: usar CR y Slope de la barra/vuelta tal cual
+  // Para 9 hoyos el par parcial es la suma de pares de los hoyos jugados
+  const parParcial = hoyos.reduce((s, h) => s + (h.par || 0), 0);
+  const courseHCP = Math.round(hcpIndex * (useSlope / 113) + (useCR - (is9 ? parParcial * 2 : campo.par_total)));
   let total = 0;
   const byHole = [];
   for (let i = 0; i < hoyos.length; i++) {
@@ -1509,7 +1509,7 @@ function updateTotals() {
     const fCR = parseFloat($('f-cr').value);
     const fSlope = parseFloat($('f-slope').value);
     // Calcular stableford solo con hoyos que tengan valor
-    const stbl = calcStableford(hcp, campo, shots, fCR, fSlope);
+    const stbl = calcStableford(hcp, campo, shots, fCR, fSlope, vultaU);
     if (complete) $('preview-stbl').textContent = stbl ? stbl.total + ' pts' : '—';
     renderHoleDots('gh-', stbl?.byHole || null, startHoyoU);
   } else {
@@ -1551,7 +1551,12 @@ function cancelarNueva() {
   $('hoyos-wrap').style.display = 'none';
   $('manual-fields').style.display = 'block';
   if ($('nueva-chcp-wrap')) $('nueva-chcp-wrap').style.display = 'none';
-  for (let i = 1; i <= 18; i++) { const el = $('gh-'+i); if(el) el.value=''; }
+  for (let i = 1; i <= 18; i++) {
+    const el = $('gh-'+i); if(el) { el.value=''; el.className='hoyo-input'; }
+  }
+  $('total-golpes').textContent = '—';
+  $('preview-stbl').textContent = '—';
+  renderHoleDots('gh-', null);
   goTo('inicio', $('nav-inicio'));
 }
 
