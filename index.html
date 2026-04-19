@@ -1046,7 +1046,14 @@ async function loadData() {
     name: r.nombre_campo, date: r.fecha, diff: r.diferencial,
     stableford: r.stableford, campo_id: r.campo_id,
     hcp_idx: r.hcp_idx != null ? Number(r.hcp_idx) : null,
-    shots: r.shots ? (typeof r.shots === 'string' ? JSON.parse(r.shots) : r.shots) : null,
+    shots: (() => {
+      if (!r.shots) return null;
+      if (r.num_hoyos === 9) console.log('[loadData 9H] shots raw:', r.shots, typeof r.shots);
+      if (typeof r.shots === 'string') { try { return JSON.parse(r.shots); } catch(e) { return null; } }
+      if (Array.isArray(r.shots)) return r.shots;
+      if (typeof r.shots === 'object') return Object.values(r.shots);
+      return null;
+    })(),
     barra_color: r.barra_color || null,
     juego_fmt: r.juego_fmt || 100,
     num_hoyos: r.num_hoyos || 18,
