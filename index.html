@@ -466,7 +466,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.23</div>
+  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.23.01</div>
 </div>
 
 <!-- PAGE: NUEVA RONDA -->
@@ -492,7 +492,7 @@ nav.nav-hidden{transform:translateY(100%)}
           <option value="9">9 hoyos</option>
         </select>
       </div>
-      <div id="f-vuelta-wrap" style="display:none;gap:3px" class="field">
+      <div id="f-vuelta-wrap" class="field" style="gap:3px;display:none">
         <label>Vuelta</label>
         <select id="f-vuelta" onchange="onNumHoyosChange()" style="padding:5px 8px;font-size:13px;border-radius:4px">
           <option value="1">1ª (1–9)</option>
@@ -1374,7 +1374,7 @@ function onNumHoyosChange() {
   if (!campo) return;
   const n = parseInt($('f-num-hoyos').value) || 18;
   const vW = $('f-vuelta-wrap');
-  if (vW) vW.style.display = n === 9 ? 'block' : 'none';
+  if (vW) vW.style.display = n === 9 ? '' : 'none';
   const vuelta = parseInt($('f-vuelta')?.value) || 1;
   buildHoyoInputs(campo, n, vuelta);
   calcNuevaChcp();
@@ -1495,16 +1495,17 @@ function updateTotals() {
   const hcp = parseFloat($('f-hcp-idx').value);
   // Aplicar símbolos en tiempo real (parcial o completo)
   if (campo) renderScoreSymbols('gh-', campo.hoyos, shots);
-  if (complete && campo && !isNaN(hcp)) {
+  const startHoyoU = (numH === 9 && vultaU === 2) ? 10 : 1;
+  if (campo && !isNaN(hcp)) {
     const fCR = parseFloat($('f-cr').value);
     const fSlope = parseFloat($('f-slope').value);
+    // Calcular stableford solo con hoyos que tengan valor
     const stbl = calcStableford(hcp, campo, shots, fCR, fSlope);
-    $('preview-stbl').textContent = stbl ? stbl.total + ' pts' : '—';
-    const startHoyoU = (numH === 9 && vultaU === 2) ? 10 : 1;
+    if (complete) $('preview-stbl').textContent = stbl ? stbl.total + ' pts' : '—';
     renderHoleDots('gh-', stbl?.byHole || null, startHoyoU);
   } else {
     $('preview-stbl').textContent = '—';
-    renderHoleDots('gh-', null);
+    renderHoleDots('gh-', null, startHoyoU);
   }
 }
 
@@ -1621,7 +1622,8 @@ async function addRound() {
       hcp_idx: isNaN(hcpIdx) ? null : hcpIdx,
       shots, barra_color: barraColor,
       juego_fmt: parseInt($('nueva-fmt')?.value || '100'),
-      num_hoyos: numHoyos
+      num_hoyos: numHoyos,
+      vuelta: vuelta
     });
     cancelarNueva();
     renderAll();
@@ -1810,7 +1812,9 @@ async function guardarEditRonda() {
       stableford: isNaN(stbl) ? null : stbl,
       hcp_idx: isNaN(hcpIdx) ? null : hcpIdx,
       shots: shots ? JSON.stringify(shots) : null,
-      barra_color: barra
+      barra_color: barra,
+      num_hoyos: saveNumHoyos,
+      vuelta: saveNumHoyos === 9 ? saveVuelta : null
     };
     const { error } = await sb.from('rondas').update(body).eq('id', id);
     if (error) throw error;
@@ -1821,7 +1825,7 @@ async function guardarEditRonda() {
         ...state.rounds[idx], gross, cr, slope, name: nombreFinal, date: fecha,
         diff, stableford: isNaN(stbl) ? null : stbl,
         hcp_idx: isNaN(hcpIdx) ? null : hcpIdx,
-        shots, barra_color: barra
+        shots, barra_color: barra, num_hoyos: saveNumHoyos, vuelta: saveNumHoyos === 9 ? saveVuelta : null
       };
     }
     cerrarModal('modal-ronda');
