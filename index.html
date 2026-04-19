@@ -484,6 +484,13 @@ nav.nav-hidden{transform:translateY(100%)}
         <label>Fecha</label>
         <input id="f-date" type="date" style="padding:5px 8px;font-size:13px;border-radius:4px">
       </div>
+      <div class="field" style="gap:3px">
+        <label>Hoyos</label>
+        <select id="f-num-hoyos" onchange="onNumHoyosChange()" style="padding:5px 8px;font-size:13px;border-radius:4px">
+          <option value="18">18 hoyos</option>
+          <option value="9">9 hoyos</option>
+        </select>
+      </div>
     </div>
     <div id="barra-selector" style="display:none;margin-bottom:6px">
       <div class="field" style="gap:3px">
@@ -531,7 +538,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px">Golpes por hoyo</div>
       <div class="hoyo-section"><div class="hoyo-label">Salida 1–9</div><div class="hoyo-grid" id="grid-out"></div></div>
       <div class="hoyo-separator"></div>
-      <div class="hoyo-section"><div class="hoyo-label">Vuelta 10–18</div><div class="hoyo-grid" id="grid-in"></div></div>
+      <div class="hoyo-section"><div class="hoyo-label" id="grid-in-label">Vuelta 10–18</div><div class="hoyo-grid" id="grid-in"></div></div>
       <div style="display:flex;gap:10px;font-size:11px;color:var(--muted);margin-top:8px">
         <span>Total: <strong id="total-golpes" style="color:var(--cream)">—</strong></span>
         <span>Stableford: <strong id="preview-stbl" style="color:var(--gold2)">—</strong></span>
@@ -1020,7 +1027,8 @@ async function loadData() {
     hcp_idx: r.hcp_idx != null ? Number(r.hcp_idx) : null,
     shots: r.shots ? (typeof r.shots === 'string' ? JSON.parse(r.shots) : r.shots) : null,
     barra_color: r.barra_color || null,
-    juego_fmt: r.juego_fmt || 100
+    juego_fmt: r.juego_fmt || 100,
+    num_hoyos: r.num_hoyos || 18
   }));
 
   const hoyosData  = hc.data || [];
@@ -1086,6 +1094,7 @@ function renderHistory() {
   const rows = sortedRounds.map((r, idx) => {
     const rowNum = idx + 1;
     const used = usedSet.has(r.id);
+    const nineTag = r.num_hoyos === 9 ? '<span style="background:rgba(59,130,246,.2);border:1px solid #3b82f6;color:#3b82f6;font-size:7px;padding:1px 4px;border-radius:8px;margin-left:4px">9H</span>' : '';
     const barraDot = r.barra_color
       ? `<span class="barra-dot" style="background:${BARRA_COLORS[r.barra_color]}"></span>`
       : '—';
@@ -1094,7 +1103,7 @@ function renderHistory() {
     const usedBadge = used ? '<span class="used-badge">✓</span>' : '';
     return `<tr>
       <td class="col-fecha" style="color:#fff">${fmtDate(r.date)}</td>
-      <td class="col-campo" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.name||'—'}</td>
+      <td class="col-campo" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.name||'—'}${nineTag}</td>
       <td style="text-align:center">${r.gross}</td>
       <td style="text-align:center">${fmtD(r.diff)}</td>
       <td style="text-align:center">${barraDot}</td>
@@ -1331,7 +1340,7 @@ function onCampoChange() {
     }
     if (campo.hoyos?.length === 18) {
       hW.style.display = 'block'; 
-      buildHoyoInputs(campo); calcNuevaChcp();
+      const nH = parseInt($('f-num-hoyos')?.value) || 18; buildHoyoInputs(campo, nH); calcNuevaChcp();
     } else {
       hW.style.display = 'none'; 
     }
@@ -1349,10 +1358,24 @@ function onBarraChange() {
   if (barra) { $('f-cr').value = barra.cr; $('f-slope').value = barra.slope; calcNuevaChcp(); }
 }
 
-function buildHoyoInputs(campo) {
+function onNumHoyosChange() {
+  const id = parseInt($('f-campo').value);
+  const campo = state.campos.find(c => c.id === id);
+  if (!campo) return;
+  const n = parseInt($('f-num-hoyos').value) || 18;
+  buildHoyoInputs(campo, n);
+  calcNuevaChcp();
+}
+
+function buildHoyoInputs(campo, numHoyos) {
+  numHoyos = numHoyos || 18;
   const go = $('grid-out'), gi = $('grid-in');
+  const lbl = $('grid-in-label');
   go.innerHTML = ''; gi.innerHTML = '';
-  for (let i = 0; i < 18; i++) {
+  if (lbl) lbl.style.display = numHoyos === 9 ? 'none' : '';
+  if (gi)  gi.style.display  = numHoyos === 9 ? 'none' : '';
+  const limit = numHoyos === 9 ? 9 : 18;
+  for (let i = 0; i < limit; i++) {
     const h = campo.hoyos[i];
     const grid = i < 9 ? go : gi;
     const nextId = h.numero < 18 ? 'gh-' + (h.numero + 1) : null;
@@ -1430,7 +1453,8 @@ function updateTotals() {
   const campo = state.campos.find(c => c.id === id);
   let total = 0, complete = true;
   const shots = [];
-  for (let i = 1; i <= 18; i++) {
+  const numH = parseInt($('f-num-hoyos')?.value) || 18;
+  for (let i = 1; i <= numH; i++) {
     const v = parseInt($('gh-' + i)?.value);
     if (isNaN(v) || v < 1) { complete = false; shots.push(null); }
     else { total += v; shots.push(v); }
@@ -1475,6 +1499,7 @@ function cancelarNueva() {
   $('f-campo').value = ''; $('f-cr').value = ''; $('f-slope').value = '';
   $('f-par-total').value = ''; $('f-hcp-idx').value = '';
   if ($('f-barra')) $('f-barra').value = '';
+  if ($('f-num-hoyos')) $('f-num-hoyos').value = '18';
   $('barra-selector').style.display = 'none';
   const crD=$('f-cr-disp'), slD=$('f-slope-disp');
   if(crD) crD.textContent='—'; if(slD) slD.textContent='—';
@@ -1512,29 +1537,28 @@ async function addRound() {
     else $('f-slope').classList.remove('err');
   }
 
+  const numHoyos = parseInt($('f-num-hoyos')?.value) || 18;
   let gross, stableford = null, shots = null;
-  if (campo?.hoyos?.length === 18) {
+  if (campo?.hoyos?.length >= 9) {
     shots = []; gross = 0; let allFilled = true;
-    for (let i = 1; i <= 18; i++) {
+    for (let i = 1; i <= numHoyos; i++) {
       const v = parseInt($('gh-' + i)?.value);
       if (isNaN(v) || v < 1) { allFilled = false; break; }
       shots.push(v); gross += v;
     }
     if (!allFilled) { toast('Introduce los golpes de todos los hoyos', true); return; }
-    if (!isNaN(hcpIdx)) {
+    if (numHoyos === 18 && !isNaN(hcpIdx)) {
       const fCR    = cr || campo?.cr;
       const fSlope = slope || campo?.slope;
       const stblR = calcStableford(hcpIdx, campo, shots, fCR, fSlope);
       if (stblR) stableford = stblR.total;
     }
-  } else {
-
   }
   if (!ok) return;
 
   const usedCR    = cr || campo?.cr;
   const usedSlope = slope || campo?.slope;
-  const diff = calcDiff(gross, usedCR, usedSlope);
+  const diff = calcDiff(gross, usedCR, usedSlope, numHoyos);
 
   const btn = $('btn-add');
   btn.textContent = 'Guardando…'; btn.disabled = true;
@@ -1546,7 +1570,8 @@ async function addRound() {
       hcp_idx: isNaN(hcpIdx) ? null : hcpIdx,
       shots: shots ? JSON.stringify(shots) : null,
       barra_color: barraColor,
-      juego_fmt: parseInt($('nueva-fmt')?.value || '100')
+      juego_fmt: parseInt($('nueva-fmt')?.value || '100'),
+      num_hoyos: numHoyos
     };
     const { data, error } = await sb.from('rondas').insert(body).select();
     if (error) throw error;
@@ -1556,7 +1581,8 @@ async function addRound() {
       stableford, campo_id: campoId,
       hcp_idx: isNaN(hcpIdx) ? null : hcpIdx,
       shots, barra_color: barraColor,
-      juego_fmt: parseInt($('nueva-fmt')?.value || '100')
+      juego_fmt: parseInt($('nueva-fmt')?.value || '100'),
+      num_hoyos: numHoyos
     });
     cancelarNueva();
     renderAll();
