@@ -1949,6 +1949,10 @@ async function guardarEditRonda() {
     }
     cerrarModal('modal-ronda');
     renderAll();
+    // Scroll al inicio del historial
+    window.scrollTo(0, 0);
+    const hc = $('hist-container');
+    if (hc) hc.scrollTop = 0;
     toast('✓ Ronda actualizada');
   } catch(e) {
     showErr('❌ ' + (e.message || 'Error al guardar.'));
