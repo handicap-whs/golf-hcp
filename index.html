@@ -1897,16 +1897,15 @@ async function guardarEditRonda() {
   const err    = $('edit-r-err');
   err.classList.remove('show');
   const showErr = msg => { err.textContent = msg; err.classList.add('show'); };
-  const minGross = saveNumHoyos === 9 ? 18 : 40;
-  const maxGross = saveNumHoyos === 9 ? 110 : 220;
-  if (isNaN(gross)||gross<minGross||gross>maxGross) { showErr('Golpes no válidos.'); return; }
-
   // Shots desde los inputs de hoyos (si existen)
   let shots = null;
   const campoId = parseInt($('edit-r-campo-id').value) || null;
   const campo = campoId ? state.campos.find(c => c.id === campoId) : null;
   const saveNumHoyos = parseInt($('edit-r-num-hoyos')?.value) || 18;
   const saveVuelta = parseInt($('edit-r-num-hoyos')?.dataset?.vuelta) || 1;
+  const minGross = saveNumHoyos === 9 ? 18 : 40;
+  const maxGross = saveNumHoyos === 9 ? 110 : 220;
+  if (isNaN(gross)||gross<minGross||gross>maxGross) { showErr('Golpes no válidos.'); return; }
   if (campo?.hoyos?.length >= 9) {
     shots = [];
     let allFilled = true;
