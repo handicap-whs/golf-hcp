@@ -88,7 +88,7 @@ select option{background:#1a2f1a}
 .del{background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.25);border-radius:4px;color:var(--red);cursor:pointer;font-size:16px;padding:3px 8px;line-height:1}
 
 /* ── TOAST ── */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(16px);background:rgba(26,47,26,.97);border:1px solid rgba(123,198,122,.3);color:#fff;font-size:11px;letter-spacing:1px;padding:10px 16px;border-radius:16px;opacity:0;transition:all .3s;pointer-events:none;white-space:normal;word-break:break-word;z-index:300;max-width:88vw;text-align:center}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(16px);background:rgba(26,47,26,.97);border:1px solid rgba(123,198,122,.3);color:#fff;font-size:11px;letter-spacing:1px;padding:10px 16px;border-radius:16px;opacity:0;transition:all .3s;pointer-events:none;white-space:normal;word-break:break-word;z-index:600;max-width:88vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.err{border-color:rgba(224,85,85,.4);color:var(--red)}
 
@@ -1917,7 +1917,7 @@ async function guardarEditRonda() {
       shots.push(v);
     }
     if (!allFilled) {
-      toast('⚠️ Completa los golpes de todos los hoyos', true);
+      setTimeout(() => toast('⚠️ Completa los golpes de todos los hoyos', true), 100);
       return;
     }
   }
