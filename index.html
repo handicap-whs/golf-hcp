@@ -211,8 +211,8 @@ nav.nav-hidden{transform:translateY(100%)}
 
 .hist-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
 .hist-table .col-fecha{position:sticky;left:0;background:#233723;opacity:1;z-index:2;min-width:68px;white-space:nowrap}
-.hist-table .col-campo{position:sticky;left:68px;background:#233723;z-index:2;min-width:100px;max-width:100px;opacity:1}
-.hist-table .col-campo-hdr{position:sticky;left:68px;background:#233723;z-index:2;min-width:100px;opacity:1}
+.hist-table .col-campo{position:sticky;left:68px;background:#233723;z-index:2;min-width:130px;max-width:130px;opacity:1}
+.hist-table .col-campo-hdr{position:sticky;left:68px;background:#233723;z-index:2;min-width:130px;opacity:1}
 
 
 
@@ -1642,10 +1642,10 @@ async function addRound() {
       shots.push(v); gross += v;
     }
     if (!allFilled) { toast('Introduce los golpes de todos los hoyos', true); return; }
-    if (numHoyos === 18 && !isNaN(hcpIdx)) {
+    if (!isNaN(hcpIdx)) {
       const fCR    = cr || campo?.cr;
       const fSlope = slope || campo?.slope;
-      const stblR = calcStableford(hcpIdx, campo, shots, fCR, fSlope);
+      const stblR = calcStableford(hcpIdx, campo, shots, fCR, fSlope, vuelta);
       if (stblR) stableford = stblR.total;
     }
   }
