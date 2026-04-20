@@ -2303,7 +2303,6 @@ function abrirEditCampo(id) {
   $('edit-c-id').value = id;
   $('edit-c-nombre').value = campo.nombre;
   $('edit-c-err').classList.remove('show');
-  buildBarrasEditor('edit-b-', 'edit-b-', campo.barras || []);
   buildHoyosEditor('edit-hoyos-campo', 'edit-c-', campo.hoyos || []);
   const bw = $('edit-barras-wrap');
   if (bw) { bw.innerHTML = ''; buildBarrasEditor('edit-barras-wrap', 'edit-b-', campo.barras || []); }
