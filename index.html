@@ -841,11 +841,22 @@ function golfShot(el, nextId) {
 function hoyoPar(el, i, prefix) {
   el.value = el.value.replace(/[^345]/g, '');
   calcParTotal(prefix);
+  if ('345'.includes(el.value) && el.value.length === 1) {
+    const next = $(prefix + 'idx-' + i);
+    if (next) setTimeout(() => next.focus(), 50);
+  }
 }
 
 function hoyoIdx(el, i, prefix, total) {
   el.value = el.value.replace(/[^0-9]/g, '');
   calcParTotal(prefix);
+  const v = parseInt(el.value);
+  if (!isNaN(v) && v >= 1 && v <= 18 && (el.value.length >= 2 || v >= 2)) {
+    if (i < total) {
+      const next = $(prefix + 'par-' + (i + 1));
+      if (next) setTimeout(() => next.focus(), 50);
+    }
+  }
 }
 
 function calcParTotal(prefix) {
@@ -1264,9 +1275,13 @@ function renderCampos() {
     return;
   }
   c.innerHTML = state.campos.map(campo => {
-    const dots = (campo.barras || []).map(b =>
-      `<span class="barra-dot" style="background:${BARRA_COLORS[b.color]};margin-right:2px" title="${BARRA_LABELS[b.color]}"></span>`
-    ).join('');
+    const dots = (campo.barras || []).map(b => {
+      const has9H = (b.cr_out && b.slope_out) || (b.cr_in && b.slope_in);
+      return `<span style="display:inline-flex;align-items:center;gap:2px;margin-right:4px">
+        <span class="barra-dot" style="background:${BARRA_COLORS[b.color]}" title="${BARRA_LABELS_PL[b.color]}"></span>
+        ${has9H ? '<span style="font-size:7px;color:#3b82f6">9H</span>' : ''}
+      </span>`;
+    }).join('');
     return `<div class="campo-item">
       <div>
         <div class="campo-name">${campo.nombre}</div>
@@ -1501,7 +1516,9 @@ function onBarraChange() {
   const campo = state.campos.find(c => c.id === id);
   const barra = campo?.barras?.find(b => b.color === $('f-barra').value);
   if (barra) {
-    const numH = parseInt($('f-num-hoyos')?.value) || 18;
+    const rawN = $('f-num-hoyos')?.value;
+    if (!rawN) return; // esperar a que el usuario elija hoyos
+    const numH = parseInt(rawN);
     const vlt  = parseInt($('f-vuelta')?.value) || 1;
     const {cr, slope} = getCRSlopeForVuelta(barra, numH, vlt);
     $('f-cr').value = cr; $('f-slope').value = slope;
