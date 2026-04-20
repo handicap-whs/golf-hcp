@@ -236,9 +236,9 @@ nav.nav-hidden{transform:translateY(100%)}
 .guide-skip{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:1px;text-transform:uppercase;margin-top:12px;display:block;background:none;border:none;cursor:pointer;width:100%}
 
 
-.barra-9h{margin-top:6px;padding:6px 8px;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15);border-radius:5px}
-.barra-9h-title{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:#3b82f6;margin-bottom:6px}
-.barra-9h-row{display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:6px;align-items:center;margin-bottom:4px}
+.barra-9h{margin-top:4px;padding:4px 6px;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15);border-radius:5px;margin-bottom:8px}
+.barra-9h-title{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:#3b82f6;margin-bottom:4px}
+.barra-9h-row{display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:4px;align-items:center;margin-bottom:3px}
 .barra-9h-row label{font-size:7px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
 </style>
 </head>
@@ -535,7 +535,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.26.00</div>
+  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.26.02</div>
 </div>
 
 <!-- PAGE: NUEVA RONDA -->
@@ -2116,25 +2116,15 @@ function buildBarrasEditor(containerId, prefix, existingBarras = []) {
   const wrap = $(containerId);
   if (!wrap) return;
   const nextColor = (color) => BARRAS[(BARRAS.indexOf(color)+1)%BARRAS.length];
+  const iS = `background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:4px;color:#fff;font-family:'DM Mono',monospace;font-size:11px;padding:4px 6px;width:100%;-webkit-appearance:none;outline:none`;
   wrap.innerHTML = BARRAS.map(color => {
     const b = existingBarras.find(b => b.color === color);
-    const iS = `background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:4px;color:#fff;font-family:'DM Mono',monospace;font-size:11px;padding:4px 6px;width:100%;-webkit-appearance:none;outline:none`;
-    return `<div class="barra-row">
-      <div class="barra-dot-lg" style="background:${BARRA_COLORS[color]}"></div>
-      <div style="font-size:9px;color:var(--cream);min-width:55px">${BARRA_LABELS[color]}</div>
-      <div class="barra-fields">
-        <div><label>CR 18H</label><input type="number" step="0.1" inputmode="decimal"
-          style="${iS}" id="${prefix}cr-${color}" value="${b?.cr||''}" placeholder="71.5"
-          oninput="autoNext(this,'${prefix}slope-${color}',4)"></div>
-        <div><label>Slope 18H</label><input type="number" inputmode="numeric"
-          style="${iS}" id="${prefix}slope-${color}" value="${b?.slope||''}" placeholder="125"
-          oninput="autoNext(this,'${prefix}cr-${nextColor(color)}',3)"></div>
-      </div>
-    </div>
+    const show9H = color === 'amarilla' || color === 'roja';
+    const nineBlock = show9H ? `
     <div class="barra-9h">
       <div class="barra-9h-title">Opcional — 9 hoyos</div>
       <div class="barra-9h-row">
-        <span style="font-size:8px;color:var(--muted);min-width:32px">1ª V.</span>
+        <span style="font-size:8px;color:var(--muted);min-width:28px">IDA</span>
         <div><label>CR</label><input type="number" step="0.1" inputmode="decimal"
           style="${iS}" id="${prefix}cr_out-${color}" value="${b?.cr_out||''}" placeholder="35.5"></div>
         <div><label>Slope</label><input type="number" inputmode="numeric"
@@ -2143,7 +2133,7 @@ function buildBarrasEditor(containerId, prefix, existingBarras = []) {
           style="${iS}" id="${prefix}par_out-${color}" value="${b?.par_out||''}" placeholder="36"></div>
       </div>
       <div class="barra-9h-row">
-        <span style="font-size:8px;color:var(--muted);min-width:32px">2ª V.</span>
+        <span style="font-size:8px;color:var(--muted);min-width:28px">VUELTA</span>
         <div><label>CR</label><input type="number" step="0.1" inputmode="decimal"
           style="${iS}" id="${prefix}cr_in-${color}" value="${b?.cr_in||''}" placeholder="36.0"></div>
         <div><label>Slope</label><input type="number" inputmode="numeric"
@@ -2151,7 +2141,19 @@ function buildBarrasEditor(containerId, prefix, existingBarras = []) {
         <div><label>Par</label><input type="number" inputmode="numeric"
           style="${iS}" id="${prefix}par_in-${color}" value="${b?.par_in||''}" placeholder="36"></div>
       </div>
-    </div>`;
+    </div>` : '';
+    return `<div class="barra-row" style="margin-bottom:4px">
+      <div class="barra-dot-lg" style="background:${BARRA_COLORS[color]}"></div>
+      <div style="font-size:9px;color:var(--cream);min-width:50px">${BARRA_LABELS[color]}</div>
+      <div class="barra-fields" style="gap:4px">
+        <div><label>CR 18H</label><input type="number" step="0.1" inputmode="decimal"
+          style="${iS}" id="${prefix}cr-${color}" value="${b?.cr||''}" placeholder="71.5"
+          oninput="autoNext(this,'${prefix}slope-${color}',4)"></div>
+        <div><label>Slope 18H</label><input type="number" inputmode="numeric"
+          style="${iS}" id="${prefix}slope-${color}" value="${b?.slope||''}" placeholder="125"
+          oninput="autoNext(this,'${prefix}cr-${nextColor(color)}',3)"></div>
+      </div>
+    </div>${nineBlock}`;
   }).join('');
 }
 
