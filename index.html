@@ -1497,7 +1497,7 @@ function onCampoChange() {
 
 
 function getCRSlopeForVuelta(barra, numHoyos, vuelta) {
-  // Devuelve {cr, slope} según hoyos y vuelta jugada
+  console.log('[9H] barra:', barra?.color, 'numHoyos:', numHoyos, 'vuelta:', vuelta, 'cr_out:', barra?.cr_out, 'slope_out:', barra?.slope_out);
   if (numHoyos === 9) {
     if (vuelta === 1 && barra.cr_out && barra.slope_out) {
       return { cr: barra.cr_out, slope: barra.slope_out, par: barra.par_out };
@@ -1505,7 +1505,6 @@ function getCRSlopeForVuelta(barra, numHoyos, vuelta) {
     if (vuelta === 2 && barra.cr_in && barra.slope_in) {
       return { cr: barra.cr_in, slope: barra.slope_in, par: barra.par_in };
     }
-    // Fallback: usar cr/2 si no hay datos específicos de 9H
     return { cr: barra.cr / 2, slope: barra.slope, par: null };
   }
   return { cr: barra.cr, slope: barra.slope, par: null };
