@@ -779,6 +779,7 @@ const WHS = [[1,-2],[1,-2],[1,-2],[1,-2],[2,-1],[2,-1],[2,0],[2,0],[3,0],[3,0],[
 const BARRAS = ['blanca','amarilla','azul','roja'];
 const BARRA_COLORS = {blanca:'#e8e8e8',amarilla:'#f5c518',azul:'#3b82f6',roja:'#e05555'};
 const BARRA_LABELS = {blanca:'Blanca',amarilla:'Amarilla',azul:'Azul',roja:'Roja'};
+const BARRA_LABELS_PL = {blanca:'Blancas',amarilla:'Amarillas',azul:'Azules',roja:'Rojas'};
 const PRE_KEY = 'golfhcp_pre_v1';
 
 // ── SUPABASE CLIENT ──────────────────────────────────────────────────────
@@ -2143,9 +2144,9 @@ function buildBarrasEditor(containerId, prefix, existingBarras = []) {
       </div>
     </div>` : '';
     return `<div class="barra-row" style="margin-bottom:4px">
-      <div style="display:flex;align-items:center;gap:5px;min-width:70px">
+      <div style="display:flex;align-items:center;justify-content:flex-start;gap:6px;min-width:72px;align-self:center">
         <div class="barra-dot-lg" style="background:${BARRA_COLORS[color]}"></div>
-        <div style="font-size:9px;color:var(--cream)">${BARRA_LABELS[color]}</div>
+        <div style="font-size:9px;color:var(--cream)">${BARRA_LABELS_PL[color]}</div>
       </div>
       <div class="barra-fields" style="gap:4px">
         <div><label>CR 18H</label><input type="number" step="0.1" inputmode="decimal"
