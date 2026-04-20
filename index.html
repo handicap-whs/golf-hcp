@@ -153,7 +153,7 @@ select option{background:#1a2f1a}
 .barra-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .barra-dot-lg{width:12px;height:12px;border-radius:50%;flex-shrink:0}
 .barra-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1}
-.barra-fields label{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.barra-fields label{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold2)}
 #p-barra-aviso{display:none;margin-top:8px;padding:10px 13px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:5px;font-size:11px;color:var(--gold2);line-height:1.6}
 
 /* ── FÓRMULA ── */
@@ -2144,7 +2144,7 @@ function buildBarrasEditor(containerId, prefix, existingBarras = []) {
       </div>
     </div>` : '';
     return `<div class="barra-row" style="margin-bottom:4px">
-      <div style="display:flex;align-items:center;justify-content:flex-start;gap:6px;min-width:72px;align-self:center">
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:72px;height:100%">
         <div class="barra-dot-lg" style="background:${BARRA_COLORS[color]}"></div>
         <div style="font-size:9px;color:var(--cream)">${BARRA_LABELS_PL[color]}</div>
       </div>
