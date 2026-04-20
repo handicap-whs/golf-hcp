@@ -2262,8 +2262,8 @@ async function guardarNuevoCampo() {
     showErr('⚠️ Completa los 18 hoyos con par e índice antes de guardar.');
     for (let i = 1; i <= 18; i++) {
       const pEl = $('nc-par-'+i), iEl = $('nc-idx-'+i);
-      if (pEl && (!pEl.value || isNaN(parseInt(pEl.value)))) pEl.classList.add('err');
-      if (iEl && (!iEl.value || isNaN(parseInt(iEl.value)))) iEl.classList.add('err');
+      if (pEl && (!pEl.value || isNaN(parseInt(pEl.value)))) { pEl.classList.add('err'); setTimeout(() => pEl.classList.remove('err'), 3000); }
+      if (iEl && (!iEl.value || isNaN(parseInt(iEl.value)))) { iEl.classList.add('err'); setTimeout(() => iEl.classList.remove('err'), 3000); }
     }
     return;
   }
