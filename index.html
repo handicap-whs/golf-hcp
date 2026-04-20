@@ -535,7 +535,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.26.02</div>
+  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.26.03</div>
 </div>
 
 <!-- PAGE: NUEVA RONDA -->
@@ -2143,9 +2143,9 @@ function buildBarrasEditor(containerId, prefix, existingBarras = []) {
       </div>
     </div>` : '';
     return `<div class="barra-row" style="margin-bottom:4px">
-      <div style="display:flex;flex-direction:column;align-items:center;min-width:56px;gap:2px">
+      <div style="display:flex;align-items:center;gap:5px;min-width:70px">
         <div class="barra-dot-lg" style="background:${BARRA_COLORS[color]}"></div>
-        <div style="font-size:8px;color:var(--cream);text-align:center">${BARRA_LABELS[color]}</div>
+        <div style="font-size:9px;color:var(--cream)">${BARRA_LABELS[color]}</div>
       </div>
       <div class="barra-fields" style="gap:4px">
         <div><label>CR 18H</label><input type="number" step="0.1" inputmode="decimal"
@@ -2238,31 +2238,27 @@ async function guardarNuevoCampo() {
   if (!nombre) { showErr('Completa el nombre del campo.'); return; }
   if (!uid)    { showErr('Sin sesión.'); return; }
 
+  const barras = getBarrasFromEditor('nc-');
+  const hasBlanca   = barras.some(b => b.color === 'blanca');
+  const hasAmarilla = barras.some(b => b.color === 'amarilla');
+  if (!hasBlanca && !hasAmarilla) {
+    showErr('⚠️ Introduce CR y Slope de la barra Blanca o Amarilla como mínimo.');
+    ['blanca','amarilla'].forEach(color => {
+      const crEl = $('nc-cr-'+color), slEl = $('nc-slope-'+color);
+      if (crEl && (!crEl.value || isNaN(parseFloat(crEl.value)))) crEl.classList.add('err');
+      if (slEl && (!slEl.value || isNaN(parseInt(slEl.value))))   slEl.classList.add('err');
+    });
+    return;
+  }
   const { hoyos, parTotal, error: hErr } = getHoyosFromEditor('nc-');
   if (hErr) { showErr(hErr); return; }
   if (hoyos.length < 18) {
     showErr('⚠️ Completa los 18 hoyos con par e índice antes de guardar.');
-    // Resaltar hoyos vacíos
     for (let i = 1; i <= 18; i++) {
       const pEl = $('nc-par-'+i), iEl = $('nc-idx-'+i);
       if (pEl && (!pEl.value || isNaN(parseInt(pEl.value)))) pEl.classList.add('err');
       if (iEl && (!iEl.value || isNaN(parseInt(iEl.value)))) iEl.classList.add('err');
     }
-    return;
-  }
-  const barras = getBarrasFromEditor('nc-');
-  // Exigir al menos amarilla O roja con CR y Slope completos
-  const hasAmarilla = barras.some(b => b.color === 'amarilla');
-  const hasRoja     = barras.some(b => b.color === 'roja');
-  if (!hasAmarilla && !hasRoja) {
-    showErr('⚠️ Introduce CR y Slope de la barra Amarilla o Roja como mínimo.');
-    // Resaltar campos vacíos de amarilla y roja
-    ['amarilla','roja'].forEach(color => {
-      const crEl    = $('nc-cr-'+color);
-      const slopeEl = $('nc-slope-'+color);
-      if (crEl    && (!crEl.value    || isNaN(parseFloat(crEl.value))))    crEl.classList.add('err');
-      if (slopeEl && (!slopeEl.value || isNaN(parseInt(slopeEl.value))))   slopeEl.classList.add('err');
-    });
     return;
   }
 
