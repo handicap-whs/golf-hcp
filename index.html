@@ -557,6 +557,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="field" style="gap:3px">
         <label>Hoyos</label>
         <select id="f-num-hoyos" onchange="onNumHoyosChange()" style="padding:5px 8px;font-size:13px;border-radius:4px">
+          <option value="">— Hoyos —</option>
           <option value="18">18 hoyos</option>
           <option value="9">9 hoyos</option>
         </select>
@@ -1517,12 +1518,14 @@ function onNumHoyosChange() {
   const id = parseInt($('f-campo').value);
   const campo = state.campos.find(c => c.id === id);
   if (!campo) return;
-  const n = parseInt($('f-num-hoyos').value) || 18;
+  const rawN = $('f-num-hoyos').value;
+  if (!rawN) { $('hoyos-wrap').style.display = 'none'; return; }
+  const n = parseInt(rawN);
   const vW = $('f-vuelta-wrap');
   if (vW) vW.style.display = n === 9 ? '' : 'none';
   const vuelta = parseInt($('f-vuelta')?.value) || 1;
   // Actualizar CR/Slope según barra y vuelta seleccionadas
-  const barraColor = $('f-barra')?.value;
+  const barraColor = $('f-barra')?.value || campo?.barras?.[0]?.color;
   const barra = campo?.barras?.find(b => b.color === barraColor);
   if (barra) {
     const {cr, slope} = getCRSlopeForVuelta(barra, n, vuelta);
@@ -1690,7 +1693,7 @@ function cancelarNueva() {
   $('f-campo').value = ''; $('f-cr').value = ''; $('f-slope').value = '';
   $('f-par-total').value = ''; $('f-hcp-idx').value = '';
   if ($('f-barra')) $('f-barra').value = '';
-  if ($('f-num-hoyos')) $('f-num-hoyos').value = '18';
+  if ($('f-num-hoyos')) $('f-num-hoyos').value = '';
   if ($('f-vuelta')) $('f-vuelta').value = '1';
   if ($('f-vuelta-wrap')) $('f-vuelta-wrap').style.display = 'none';
   $('barra-selector').style.display = 'none';
