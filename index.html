@@ -2347,8 +2347,8 @@ async function guardarEditCampo() {
   }
 
   const btn = $('btn-guardar-campo');
-  btn.textContent = 'Guardando…'; btn.disabled = true;
   try {
+    btn.textContent = 'Guardando…'; btn.disabled = true;
     const firstB = barras[0] || null;
     const upData = { nombre };
     if (parTotal > 0) upData.par_total = parTotal;
