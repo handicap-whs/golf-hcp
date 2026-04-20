@@ -1460,18 +1460,19 @@ function onCampoChange() {
       bs.style.display = 'block';
       buildBarraSelect('f-barra', campo, '');
       $('f-barra').value = campo.barras[0].color;
-      onBarraChange();
+      // Reset num-hoyos and clear CR/Slope — user must choose hoyos
+      if ($('f-num-hoyos')) $('f-num-hoyos').value = '';
+      if ($('f-vuelta-wrap')) $('f-vuelta-wrap').style.display = 'none';
+      $('f-cr').value = ''; $('f-slope').value = '';
+      const crD=$('f-cr-disp'), slD=$('f-slope-disp');
+      if(crD) crD.textContent='—'; if(slD) slD.textContent='—';
     } else {
       bs.style.display = 'none';
-      $('f-cr').value = campo.cr || '';
-      $('f-slope').value = campo.slope || '';
+      $('f-cr').value = ''; $('f-slope').value = '';
+      const crD=$('f-cr-disp'), slD=$('f-slope-disp');
+      if(crD) crD.textContent='—'; if(slD) slD.textContent='—';
     }
-    if (campo.hoyos?.length === 18) {
-      hW.style.display = 'block'; 
-      const nH = parseInt($('f-num-hoyos')?.value) || 18; const vlt = parseInt($('f-vuelta')?.value)||1; buildHoyoInputs(campo, nH, vlt); calcNuevaChcp();
-    } else {
-      hW.style.display = 'none'; 
-    }
+    hW.style.display = 'none';
   } else {
     mF.style.display = 'block'; bs.style.display = 'none';
     hW.style.display = 'none'; 
