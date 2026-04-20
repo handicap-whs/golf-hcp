@@ -828,27 +828,24 @@ function autoNext(el, nextId, maxLen) {
 }
 
 function fmtCR(el, nextId) {
-  // Formato xx.x — solo dígitos y punto, máx 4 chars significativos
-  let v = el.value.replace(/[^0-9.]/g, '');
-  // Evitar doble punto
+  // iOS usa coma como decimal — reemplazar por punto
+  let v = el.value.replace(',', '.').replace(/[^0-9.]/g, '');
   const parts = v.split('.');
   if (parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
-  // Limitar decimales a 1
   if (parts.length === 2 && parts[1].length > 1) v = parts[0] + '.' + parts[1][0];
   el.value = v;
-  // Auto-avanzar cuando hay entero + decimal (ej. "71.5")
-  if (parts.length === 2 && parts[1].length >= 1 && parts[0].length >= 2) {
+  // Saltar cuando hay formato completo xx.x (ej. "71.5")
+  if (parts.length === 2 && parts[0].length >= 2 && parts[1].length >= 1) {
     const next = $(nextId);
-    if (next) setTimeout(() => { next.focus(); next.select(); }, 30);
+    if (next) setTimeout(() => { next.focus(); next.select(); }, 80);
   }
 }
 
 function fmtSlope(el, nextId) {
-  // Formato xxx — solo dígitos, máx 3 chars
   el.value = el.value.replace(/[^0-9]/g, '').slice(0, 3);
   if (el.value.length >= 3) {
     const next = $(nextId);
-    if (next) setTimeout(() => { next.focus(); next.select(); }, 30);
+    if (next) setTimeout(() => { next.focus(); next.select(); }, 80);
   }
 }
 
