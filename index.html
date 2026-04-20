@@ -535,7 +535,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.26.06</div>
+  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.26.07</div>
 </div>
 
 <!-- PAGE: NUEVA RONDA -->
@@ -2323,6 +2323,20 @@ async function guardarNuevoCampo() {
       }
     });
     return;
+  }
+  // Validar que los campos de 9H en Amarillas y Rojas estén todos completos si hay alguno
+  for (const color of ['amarilla', 'roja']) {
+    const labels = {amarilla:'Amarillas', roja:'Rojas'};
+    const f9 = [
+      $('nc-cr_out-'+color), $('nc-slope_out-'+color), $('nc-par_out-'+color),
+      $('nc-cr_in-'+color),  $('nc-slope_in-'+color),  $('nc-par_in-'+color)
+    ];
+    const filled = f9.filter(el => el && el.value.trim() !== '').length;
+    if (filled > 0 && filled < 6) {
+      showErr('⚠️ Datos incompletos de 9 hoyos en ' + labels[color] + '. Completa IDA y VUELTA (CR, Slope, Par).');
+      f9.forEach(el => { if (el && el.value.trim() === '') { el.classList.add('err'); setTimeout(() => el.classList.remove('err'), 3000); } });
+      return;
+    }
   }
   const { hoyos, parTotal, error: hErr } = getHoyosFromEditor('nc-');
   if (hErr) { showErr(hErr); return; }
