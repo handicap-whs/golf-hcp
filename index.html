@@ -823,7 +823,32 @@ function autoNext(el, nextId, maxLen) {
   const v = el.value.replace('.', '');
   if (v.length >= maxLen) {
     const next = $(nextId);
-    if (next) { next.focus(); next.select(); }
+    if (next) setTimeout(() => { next.focus(); next.select(); }, 30);
+  }
+}
+
+function fmtCR(el, nextId) {
+  // Formato xx.x — solo dígitos y punto, máx 4 chars significativos
+  let v = el.value.replace(/[^0-9.]/g, '');
+  // Evitar doble punto
+  const parts = v.split('.');
+  if (parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
+  // Limitar decimales a 1
+  if (parts.length === 2 && parts[1].length > 1) v = parts[0] + '.' + parts[1][0];
+  el.value = v;
+  // Auto-avanzar cuando hay entero + decimal (ej. "71.5")
+  if (parts.length === 2 && parts[1].length >= 1 && parts[0].length >= 2) {
+    const next = $(nextId);
+    if (next) setTimeout(() => { next.focus(); next.select(); }, 30);
+  }
+}
+
+function fmtSlope(el, nextId) {
+  // Formato xxx — solo dígitos, máx 3 chars
+  el.value = el.value.replace(/[^0-9]/g, '').slice(0, 3);
+  if (el.value.length >= 3) {
+    const next = $(nextId);
+    if (next) setTimeout(() => { next.focus(); next.select(); }, 30);
   }
 }
 
@@ -2234,12 +2259,12 @@ function buildBarrasEditor(containerId, prefix, existingBarras = []) {
         <div style="font-size:9px;color:var(--cream)">${BARRA_LABELS_PL[color]}</div>
       </div>
       <div class="barra-fields" style="gap:4px">
-        <div><label>CR 18H</label><input type="number" step="0.1" inputmode="decimal"
+        <div><label>CR 18H</label><input type="text" inputmode="decimal"
           style="${iS}" id="${prefix}cr-${color}" value="${b?.cr||''}" placeholder="71.5"
-          oninput="autoNext(this,'${prefix}slope-${color}',4)"></div>
-        <div><label>Slope 18H</label><input type="number" inputmode="numeric"
+          oninput="fmtCR(this,'${prefix}slope-${color}')"></div>
+        <div><label>Slope 18H</label><input type="text" inputmode="numeric"
           style="${iS}" id="${prefix}slope-${color}" value="${b?.slope||''}" placeholder="125"
-          oninput="autoNext(this, color === 'roja' ? '${prefix}par-1' : '${prefix}cr-${nextColor(color)}', 3)"></div>
+          oninput="fmtSlope(this, color === 'roja' ? '${prefix}par-1' : '${prefix}cr-${nextColor(color)}')"></div>
       </div>
     </div>${nineBlock}`;
   }).join('');
