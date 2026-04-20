@@ -853,13 +853,16 @@ function calcParTotal(prefix) {
     const v = parseInt($(prefix + 'par-' + i)?.value || '');
     if (!isNaN(v) && v >= 3 && v <= 5) { total += v; count++; }
   }
-  const wrapId = prefix === 'nc-' ? 'nc-par-total' : 'edit-c-par-total';
-  const numId  = prefix === 'nc-' ? 'nc-par-num'   : 'edit-c-par-num';
-  const wrap = $(wrapId), num = $(numId);
-  if (wrap && count > 0) {
-    wrap.style.display = 'block';
-    num.textContent = total + (count < 18 ? ' (' + count + '/18)' : '');
-  } else if (wrap) wrap.style.display = 'none';
+  // Diferir actualización del DOM para evitar reflow en iOS
+  requestAnimationFrame(() => {
+    const wrapId = prefix === 'nc-' ? 'nc-par-total' : 'edit-c-par-total';
+    const numId  = prefix === 'nc-' ? 'nc-par-num'   : 'edit-c-par-num';
+    const wrap = $(wrapId), num = $(numId);
+    if (wrap && count > 0) {
+      wrap.style.display = 'block';
+      if (num) num.textContent = total + (count < 18 ? ' (' + count + '/18)' : '');
+    } else if (wrap) wrap.style.display = 'none';
+  });
 }
 
 // ── WHS / STABLEFORD ─────────────────────────────────────────────────────
@@ -2326,14 +2329,23 @@ async function guardarEditCampo() {
   if (hErr) { showErr(hErr); return; }
   if (hoyos.length < 18) {
     toast('⚠️ Completa los 18 hoyos con par e índice', true);
+    let firstErrEl = null;
     for (let i = 1; i <= 18; i++) {
       const pEl = $('edit-c-par-'+i), iEl = $('edit-c-idx-'+i);
-      if (pEl && (!pEl.value || isNaN(parseInt(pEl.value)))) { pEl.classList.add('err'); setTimeout(() => pEl.classList.remove('err'),3000); }
-      if (iEl && (!iEl.value || isNaN(parseInt(iEl.value)))) { iEl.classList.add('err'); setTimeout(() => iEl.classList.remove('err'),3000); }
+      if (pEl && (!pEl.value || isNaN(parseInt(pEl.value)))) {
+        pEl.classList.add('err'); setTimeout(() => pEl.classList.remove('err'),3000);
+        if (!firstErrEl) firstErrEl = pEl;
+      }
+      if (iEl && (!iEl.value || isNaN(parseInt(iEl.value)))) {
+        iEl.classList.add('err'); setTimeout(() => iEl.classList.remove('err'),3000);
+        if (!firstErrEl) firstErrEl = iEl;
+      }
     }
-    // Scroll al primer hoyo con error
-    const firstErr = document.querySelector('#edit-hoyos-campo input.err');
-    if (firstErr) firstErr.scrollIntoView({behavior:'smooth', block:'center'});
+    if (firstErrEl) {
+      const modal = document.querySelector('#modal-campo .modal');
+      if (modal) modal.scrollTop = firstErrEl.offsetTop - 100;
+      else firstErrEl.scrollIntoView({behavior:'smooth', block:'center'});
+    }
     return;
   }
 
