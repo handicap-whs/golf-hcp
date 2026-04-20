@@ -2239,7 +2239,7 @@ function buildBarrasEditor(containerId, prefix, existingBarras = []) {
           oninput="autoNext(this,'${prefix}slope-${color}',4)"></div>
         <div><label>Slope 18H</label><input type="number" inputmode="numeric"
           style="${iS}" id="${prefix}slope-${color}" value="${b?.slope||''}" placeholder="125"
-          oninput="autoNext(this,'${prefix}cr-${nextColor(color)}',3)"></div>
+          oninput="autoNext(this, color === 'roja' ? '${prefix}par-1' : '${prefix}cr-${nextColor(color)}', 3)"></div>
       </div>
     </div>${nineBlock}`;
   }).join('');
