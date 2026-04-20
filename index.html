@@ -75,7 +75,7 @@ nav button.active svg{stroke:var(--gold)}
 .field label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--green);opacity:.9}
 input,select{background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:5px;color:#fff;font-family:'DM Mono',monospace;font-size:16px;padding:10px;outline:none;width:100%;-webkit-appearance:none}
 input:focus,select:focus{border-color:var(--gold);background:rgba(201,168,76,.09)}
-input.err{border-color:var(--red)}
+input.err{border-color:var(--red)!important;background:rgba(224,85,85,.08)!important}
 select option{background:#1a2f1a}
 
 /* ── BUTTONS ── */
@@ -2245,8 +2245,14 @@ async function guardarNuevoCampo() {
     showErr('⚠️ Introduce CR y Slope de la barra Blanca o Amarilla como mínimo.');
     ['blanca','amarilla'].forEach(color => {
       const crEl = $('nc-cr-'+color), slEl = $('nc-slope-'+color);
-      if (crEl && (!crEl.value || isNaN(parseFloat(crEl.value)))) crEl.classList.add('err');
-      if (slEl && (!slEl.value || isNaN(parseInt(slEl.value))))   slEl.classList.add('err');
+      if (crEl && (!crEl.value || isNaN(parseFloat(crEl.value)))) {
+        crEl.classList.add('err');
+        setTimeout(() => crEl.classList.remove('err'), 3000);
+      }
+      if (slEl && (!slEl.value || isNaN(parseInt(slEl.value)))) {
+        slEl.classList.add('err');
+        setTimeout(() => slEl.classList.remove('err'), 3000);
+      }
     });
     return;
   }
