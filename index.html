@@ -578,17 +578,17 @@ nav.nav-hidden{transform:translateY(100%)}
         </select>
       </div>
     </div>
-    <div id="manual-fields">
-      <div class="fields f2" style="margin-bottom:6px;gap:6px">
-        <div class="field" style="gap:3px"><label>Course Rating</label>
-          <div id="f-cr-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
-          <input type="hidden" id="f-cr">
-        </div>
-        <div class="field" style="gap:3px"><label>Slope Rating</label>
-          <div id="f-slope-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
-          <input type="hidden" id="f-slope">
-        </div>
+    <div class="fields f2" style="margin-bottom:6px;gap:6px">
+      <div class="field" style="gap:3px"><label>Course Rating</label>
+        <div id="f-cr-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+        <input type="hidden" id="f-cr">
       </div>
+      <div class="field" style="gap:3px"><label>Slope Rating</label>
+        <div id="f-slope-disp" style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--gold2);font-family:'DM Mono',monospace">—</div>
+        <input type="hidden" id="f-slope">
+      </div>
+    </div>
+    <div id="manual-fields" style="display:none">
     </div>
     <div class="field" style="gap:3px;margin-bottom:6px">
       <label>HCP Jugador</label>
@@ -1497,7 +1497,6 @@ function onCampoChange() {
 
 
 function getCRSlopeForVuelta(barra, numHoyos, vuelta) {
-  console.log('[9H] barra:', barra?.color, 'numHoyos:', numHoyos, 'vuelta:', vuelta, 'cr_out:', barra?.cr_out, 'slope_out:', barra?.slope_out);
   if (numHoyos === 9) {
     if (vuelta === 1 && barra.cr_out && barra.slope_out) {
       return { cr: barra.cr_out, slope: barra.slope_out, par: barra.par_out };
@@ -1552,6 +1551,7 @@ function onNumHoyosChange() {
     if(slD) slD.textContent = slope + ' Slope';
     calcNuevaChcp();
   }
+  $('hoyos-wrap').style.display = 'block';
   buildHoyoInputs(campo, n, vuelta);
 }
 
