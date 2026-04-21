@@ -32,7 +32,7 @@ body{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:env(safe-area-
 .auth-sub{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#7bc67a;opacity:.8;margin-bottom:32px}
 .auth-box{width:100%;max-width:360px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:28px 24px}
 .auth-title{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;text-align:center}
-.auth-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.auth-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}.auth-input-wrap{position:relative;display:flex;align-items:center}.auth-input-wrap input{flex:1;padding-right:32px}.auth-clear{position:absolute;right:8px;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.2);border:none;color:#fff;font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;touch-action:manipulation;opacity:0;transition:opacity .2s}.auth-input-wrap input:not(:placeholder-shown) ~ .auth-clear{opacity:1}
 .auth-field label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--green);opacity:.9}
 .auth-field input{background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:5px;color:#fff;font-family:'DM Mono',monospace;font-size:16px;padding:12px;outline:none;width:100%;-webkit-appearance:none}
 .auth-field input:focus{border-color:var(--gold);background:rgba(201,168,76,.09)}
@@ -312,8 +312,8 @@ nav.nav-hidden{transform:translateY(100%)}
   <div class="auth-box">
     <div class="auth-title">Iniciar Sesión</div>
     <div class="auth-msg err" id="login-err"></div>
-    <div class="auth-field"><label>Email</label><input id="login-email" type="email" inputmode="email" autocomplete="email" placeholder="tu@email.com"></div>
-    <div class="auth-field"><label>Contraseña</label><input id="login-pass" type="password" autocomplete="current-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="auth-field"><label>Email</label><div class="auth-input-wrap"><input id="login-email" type="email" inputmode="email" autocomplete="email" placeholder="tu@email.com"><button class="auth-clear" type="button" tabindex="-1" onclick="$(&apos;login-email&apos;).value=&apos;&apos;;$(&apos;login-email&apos;).focus()">✕</button></div></div>
+    <div class="auth-field"><label>Contraseña</label><div class="auth-input-wrap"><input id="login-pass" type="password" autocomplete="current-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"><button class="auth-clear" type="button" tabindex="-1" onclick="$(&apos;login-pass&apos;).value=&apos;&apos;;$(&apos;login-pass&apos;).focus()">✕</button></div></div>
     <button class="auth-btn" id="btn-login" onclick="doLogin()">Entrar</button>
     <div class="auth-link">¿Sin cuenta? <span onclick="showAuth('register')">Regístrate</span></div>
     <div class="auth-link" style="margin-top:6px"><span onclick="showAuth('reset')">¿Olvidaste la contraseña?</span></div>
