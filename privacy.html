@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidad — Golf HCP</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #1a2f1a;
+      color: #f5f0e8;
+      min-height: 100vh;
+      padding: 40px 20px 60px;
+    }
+    .container { max-width: 680px; margin: 0 auto; }
+    .logo {
+      font-family: Georgia, serif;
+      font-size: 32px;
+      font-weight: 900;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .logo em { color: #c9a84c; font-style: italic; }
+    .sub {
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #7bc67a;
+      opacity: .7;
+      margin-bottom: 40px;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #c9a84c;
+      margin-bottom: 6px;
+      border-bottom: 1px solid rgba(201,168,76,.2);
+      padding-bottom: 10px;
+      margin-top: 32px;
+    }
+    h1:first-of-type { margin-top: 0; }
+    h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #7bc67a;
+      margin: 20px 0 8px;
+      letter-spacing: .5px;
+    }
+    p {
+      font-size: 14px;
+      color: rgba(245,240,232,.75);
+      line-height: 1.75;
+      margin-bottom: 12px;
+    }
+    ul {
+      margin: 0 0 14px 20px;
+    }
+    ul li {
+      font-size: 14px;
+      color: rgba(245,240,232,.75);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+    .card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 10px;
+      padding: 20px 22px;
+      margin-bottom: 16px;
+    }
+    .updated {
+      text-align: center;
+      font-size: 11px;
+      color: rgba(245,240,232,.35);
+      margin-top: 40px;
+      letter-spacing: 1px;
+    }
+    a { color: #c9a84c; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="logo">Golf <em>HCP</em></div>
+    <div class="sub">Política de Privacidad</div>
+
+    <div class="card">
+      <h1>1. Información General</h1>
+      <p>Golf HCP es una aplicación de cálculo de handicap de golf según el sistema World Handicap System (WHS) 2020. Esta política de privacidad describe cómo recopilamos, usamos y protegemos tus datos personales.</p>
+      <p>Al utilizar Golf HCP, aceptas las prácticas descritas en esta política.</p>
+    </div>
+
+    <div class="card">
+      <h1>2. Datos que Recopilamos</h1>
+      <h2>Datos de cuenta</h2>
+      <ul>
+        <li>Dirección de correo electrónico (para autenticación)</li>
+        <li>Nombre o apodo (para identificación dentro de la app)</li>
+      </ul>
+      <h2>Datos de juego</h2>
+      <ul>
+        <li>Rondas de golf registradas (fecha, campo, golpes por hoyo, resultado)</li>
+        <li>Campos de golf creados (nombre, par, índice de cada hoyo, barras de salida)</li>
+        <li>Handicap Index calculado según el sistema WHS 2020</li>
+      </ul>
+      <h2>Datos técnicos</h2>
+      <ul>
+        <li>Datos de sesión almacenados localmente en el dispositivo</li>
+        <li>No se recopilan datos de ubicación, contactos, cámara ni micrófono</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h1>3. Cómo Usamos tus Datos</h1>
+      <p>Utilizamos tus datos exclusivamente para:</p>
+      <ul>
+        <li>Calcular y mantener tu Handicap Index según la normativa WHS 2020</li>
+        <li>Almacenar el historial de rondas y campos de golf</li>
+        <li>Permitir el acceso seguro a tu cuenta desde múltiples dispositivos</li>
+        <li>Mostrar estadísticas personales de tu juego</li>
+      </ul>
+      <p>No utilizamos tus datos para publicidad, marketing ni los compartimos con terceros con fines comerciales.</p>
+    </div>
+
+    <div class="card">
+      <h1>4. Almacenamiento y Seguridad</h1>
+      <p>Los datos se almacenan de forma segura en <strong style="color:#c9a84c">Supabase</strong> (PostgreSQL), una plataforma de base de datos con cifrado en tránsito (TLS) y en reposo. La autenticación se gestiona mediante tokens JWT seguros.</p>
+      <p>Los datos de sesión se almacenan localmente en tu dispositivo mediante almacenamiento seguro del navegador/app.</p>
+    </div>
+
+    <div class="card">
+      <h1>5. Compartición de Datos</h1>
+      <p>No vendemos, alquilamos ni compartimos tus datos personales con terceros, excepto:</p>
+      <ul>
+        <li><strong style="color:#c9a84c">Supabase Inc.</strong> — proveedor de infraestructura de base de datos (procesador de datos)</li>
+      </ul>
+      <p>Supabase actúa como procesador de datos bajo acuerdo de confidencialidad y cumple con el RGPD.</p>
+    </div>
+
+    <div class="card">
+      <h1>6. Tus Derechos</h1>
+      <p>Tienes derecho a:</p>
+      <ul>
+        <li><strong>Acceso</strong> — solicitar una copia de tus datos</li>
+        <li><strong>Rectificación</strong> — corregir datos incorrectos</li>
+        <li><strong>Eliminación</strong> — solicitar la eliminación de tu cuenta y datos</li>
+        <li><strong>Portabilidad</strong> — exportar tus datos en formato legible</li>
+      </ul>
+      <p>Para ejercer estos derechos, contacta a través del correo indicado en la sección de contacto.</p>
+    </div>
+
+    <div class="card">
+      <h1>7. Menores de Edad</h1>
+      <p>Golf HCP no está dirigida a menores de 13 años. No recopilamos conscientemente datos de menores. Si eres padre o tutor y crees que tu hijo ha proporcionado datos personales, contacta con nosotros para eliminarlos.</p>
+    </div>
+
+    <div class="card">
+      <h1>8. Cambios en esta Política</h1>
+      <p>Podemos actualizar esta política ocasionalmente. Te notificaremos de cambios significativos mediante la aplicación. El uso continuado de la app tras los cambios implica la aceptación de la nueva política.</p>
+    </div>
+
+    <div class="card">
+      <h1>9. Contacto</h1>
+      <p>Para cualquier consulta sobre privacidad o para ejercer tus derechos:</p>
+      <p>
+        <strong style="color:#c9a84c">Email:</strong> <a href="mailto:fgeneroso@gmail.com">fgeneroso@gmail.com</a><br>
+        <strong style="color:#c9a84c">Aplicación:</strong> Golf HCP — Calculadora WHS 2020
+      </p>
+    </div>
+
+    <p class="updated">Última actualización: Abril 2026</p>
+
+  </div>
+</body>
+</html>
