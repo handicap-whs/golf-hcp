@@ -966,10 +966,12 @@ function calcStableford(hcpIndex, campo, shots, crOverride, slopeOverride, vuelt
   const hoyos = allHoyos.slice(startIdx, startIdx + shots.length);
   const useCR    = (crOverride    != null && !isNaN(crOverride))    ? crOverride    : campo.cr;
   const useSlope = (slopeOverride != null && !isNaN(slopeOverride)) ? slopeOverride : campo.slope;
-  // Course HCP: usar CR y Slope de la barra/vuelta tal cual
-  // Para 9 hoyos el par parcial es la suma de pares de los hoyos jugados
+  // Course HCP según WHS
+  // Para 9H: Course HCP = round(HCP × Slope/113 + (CR_9H − Par_9H))
+  // Para 18H: Course HCP = round(HCP × Slope/113 + (CR_18H − Par_18H))
   const parParcial = hoyos.reduce((s, h) => s + (h.par || 0), 0);
-  const courseHCP = Math.round(hcpIndex * (useSlope / 113) + (useCR - (is9 ? parParcial * 2 : campo.par_total)));
+  const parRef = is9 ? parParcial : (campo.par_total || parParcial);
+  const courseHCP = Math.round(hcpIndex * (useSlope / 113) + (useCR - parRef));
   let total = 0;
   const byHole = [];
   for (let i = 0; i < hoyos.length; i++) {
