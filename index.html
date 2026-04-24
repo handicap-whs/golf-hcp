@@ -2037,7 +2037,7 @@ function recalcEditStbl() {
       const sorted = [...campo.hoyos].sort((a,b) => a.numero - b.numero);
       const hoyosVuelta = sorted.slice(startI - 1, startI - 1 + 9);
       const strokesVuelta = hoyosVuelta.reduce((s, h) => {
-        return s + (chcp >= h.indice ? 1 : 0) + (chcp >= h.indice + 18 ? 1 : 0);
+        const hI = parseInt(h.indice)||0; return s + (hI>0&&chcp>=hI?1:0) + (hI>0&&chcp>=hI+18?1:0);
       }, 0);
       echcpEl.textContent = '+' + strokesVuelta;
     } else {
