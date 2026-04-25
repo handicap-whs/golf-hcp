@@ -1701,7 +1701,9 @@ function updateTotals() {
     if (isNaN(v) || v < 1) { complete = false; shots.push(null); }
     else { total += v; shots.push(v); }
   }
-  $('total-golpes').textContent = complete ? total : '—';
+  // Mostrar total parcial en tiempo real (aunque no estén todos los hoyos)
+  const validCount = shots.filter(s => s != null).length;
+  $('total-golpes').textContent = validCount > 0 ? total + (complete ? '' : '…') : '—';
   const hcp = parseFloat($('f-hcp-idx').value);
   // Aplicar símbolos en tiempo real (parcial o completo)
   const startHoyoS = (numH === 9 && vultaU === 2) ? 10 : 1;
@@ -1712,7 +1714,8 @@ function updateTotals() {
     const fSlope = parseFloat($('f-slope').value);
     // Calcular stableford solo con hoyos que tengan valor
     const stbl = calcStableford(hcp, campo, shots, fCR, fSlope, vultaU);
-    if (complete) $('preview-stbl').textContent = stbl ? stbl.total + ' pts' : '—';
+    // Mostrar stableford parcial en tiempo real
+    $('preview-stbl').textContent = stbl && stbl.total > 0 ? stbl.total + ' pts' + (complete ? '' : '…') : '—';
     renderHoleDots('gh-', stbl?.byHole || null, startHoyoU);
   } else {
     $('preview-stbl').textContent = '—';
@@ -2068,7 +2071,8 @@ function recalcEditStbl() {
     renderHoleDots('edit-', stbl?.byHole || null, startHoyo);
   }
 
-  $('edit-total').textContent = complete ? total : '—';
+  const validEditCount = shots.filter(s => s != null).length;
+  $('edit-total').textContent = validEditCount > 0 ? total + (complete ? '' : '…') : '—';
   if (complete) {
     $('edit-r-gross').value = total;
     const gd = $('edit-r-gross-disp'); if(gd) gd.textContent = total + ' golpes';
@@ -2077,7 +2081,7 @@ function recalcEditStbl() {
       const eCR = parseFloat($('edit-r-cr').value);
       const eSlope = parseFloat($('edit-r-slope').value);
       const stbl = calcStableford(hcp2, campo, shots, eCR, eSlope, editVuelta);
-      $('edit-stbl-prev').textContent = stbl ? stbl.total + ' pts' : '—';
+      $('edit-stbl-prev').textContent = stbl && stbl.total > 0 ? stbl.total + ' pts' + (complete ? '' : '…') : '—';
       if (stbl) {
         $('edit-r-stbl').value = stbl.total;
         const sd = $('edit-r-stbl-disp'); if(sd) sd.textContent = stbl.total + ' pts';
