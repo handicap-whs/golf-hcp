@@ -445,7 +445,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <div class="modal-title">Editar Campo</div>
     <input type="hidden" id="edit-c-id">
     <div class="modal-err" id="edit-c-err"></div>
-    <div class="field" style="margin-bottom:14px"><label>Nombre del campo <span style="color:var(--muted);font-weight:normal;text-transform:none;letter-spacing:0">(máx. 15 caracteres)</span></label><input id="edit-c-nombre" placeholder="CLUB DE GOLF" maxlength="15" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></div>
+    <div class="field" style="gap:3px;margin-bottom:8px"><label>Nombre del campo <span style="color:var(--muted);font-weight:normal;text-transform:none;letter-spacing:0">(máx. 15 caracteres)</span></label><input id="edit-c-nombre" placeholder="CLUB DE GOLF" maxlength="15" style="background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:4px;color:#fff;font-family:'DM Mono',monospace;font-size:13px;padding:5px 8px;width:100%;-webkit-appearance:none;outline:none;text-transform:uppercase;touch-action:manipulation" oninput="this.value=this.value.toUpperCase()"></div>
     <div class="section-title">Barras de Salida</div>
     <div id="edit-barras-wrap"></div>
     <div class="section-title">Par e Índice por Hoyo</div>
@@ -455,7 +455,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <div id="edit-hoyos-campo"></div>
     <div class="modal-actions">
       <button class="btn" style="margin-top:0" id="btn-guardar-campo">Guardar</button>
-      <button class="btn-danger" style="margin-top:0" onclick="if(confirm('¿Cancelar edición del campo? Los cambios no se guardarán.'))cerrarModal('modal-campo')">Cancelar</button>
+      <button class="btn-danger" style="margin-top:0" onclick="cancelarEditCampo()">Cancelar</button>
     </div>
   </div>
 </div>
@@ -536,7 +536,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.26.11</div>
+  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.26.12</div>
 </div>
 
 <!-- PAGE: NUEVA RONDA -->
@@ -2431,6 +2431,16 @@ async function guardarNuevoCampo() {
   }
 }
 
+function cancelarEditCampo() {
+  const nombre = $('edit-c-nombre')?.value?.trim();
+  const barras = getBarrasFromEditor('edit-b-');
+  const tieneBarras = barras.length > 0;
+  if (nombre || tieneBarras) {
+    if (!confirm('¿Cancelar edición del campo? Los cambios no se guardarán.')) return;
+  }
+  cerrarModal('modal-campo');
+}
+
 function abrirEditCampo(id) {
   const campo = state.campos.find(c => c.id === id);
   if (!campo) { toast('Campo no encontrado', true); return; }
@@ -2454,7 +2464,7 @@ async function guardarEditCampo() {
   if (!nombre) { showErr('Completa el nombre.'); return; }
   if (!uid)    { showErr('Sin sesión.'); return; }
 
-  // Validar barras primero
+  // 1. Validar barras primero
   const barras = getBarrasFromEditor('edit-b-');
   const hasBlancaV   = barras.some(b => b.color === 'blanca');
   const hasAmarillaV = barras.some(b => b.color === 'amarilla');
@@ -2467,7 +2477,21 @@ async function guardarEditCampo() {
     });
     return;
   }
-  // Validar hoyos
+  // 2. Validar completitud datos 9H en Amarillas y Rojas
+  for (const color of ['amarilla', 'roja']) {
+    const labels = {amarilla:'Amarillas', roja:'Rojas'};
+    const f9 = [
+      $('edit-b-cr_out-'+color), $('edit-b-slope_out-'+color), $('edit-b-par_out-'+color),
+      $('edit-b-cr_in-'+color),  $('edit-b-slope_in-'+color),  $('edit-b-par_in-'+color)
+    ];
+    const filled = f9.filter(el => el && el.value.trim() !== '').length;
+    if (filled > 0 && filled < 6) {
+      showErr('⚠️ Datos incompletos de 9 hoyos en ' + labels[color] + '. Completa IDA y VUELTA (CR, Slope, Par).');
+      f9.forEach(el => { if (el && el.value.trim() === '') { el.classList.add('err'); setTimeout(() => el.classList.remove('err'), 3000); } });
+      return;
+    }
+  }
+  // 3. Validar hoyos
   const { hoyos, parTotal, error: hErr } = getHoyosFromEditor('edit-c-');
   if (hErr) { showErr(hErr); return; }
   if (hoyos.length < 18) {
