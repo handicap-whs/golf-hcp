@@ -218,7 +218,7 @@ nav.nav-hidden{transform:translateY(100%)}
 
 .hist-table .col-fecha,.hist-table .col-campo,.hist-table .col-campo-hdr{background:#233723!important}
 
-#guide-screen{position:fixed;inset:0;background:#1a2f1a;z-index:8400;display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:env(safe-area-inset-top,0px) 0 0}
+#guide-screen{position:fixed;inset:0;background:#1a2f1a;z-index:8400;display:flex;flex-direction:column;padding:env(safe-area-inset-top,0px) 0 0}
 #guide-screen.hidden{display:none}
 .guide-hero{text-align:center;padding:32px 24px 24px}
 .guide-logo{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:#fff;line-height:1}
@@ -231,7 +231,7 @@ nav.nav-hidden{transform:translateY(100%)}
 .guide-card-body{font-size:11px;color:rgba(255,255,255,.65);line-height:1.7}
 .guide-card-body li{margin-bottom:4px;padding-left:10px;position:relative}
 .guide-card-body li::before{content:'⛳';position:absolute;left:-4px;font-size:9px}
-.guide-footer{position:sticky;bottom:0;background:#1a2f1a;padding:16px 20px calc(env(safe-area-inset-bottom,0px) + 20px);text-align:center;border-top:1px solid rgba(255,255,255,.06)}
+.guide-footer{flex-shrink:0;background:#1a2f1a;padding:16px 20px calc(env(safe-area-inset-bottom,0px) + 20px);text-align:center;border-top:1px solid rgba(255,255,255,.06)}
 .guide-btn{width:100%;background:linear-gradient(135deg,#c9a84c,#e8c96a);color:#1a2f1a;font-family:'DM Mono',monospace;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;border-radius:8px;padding:16px;cursor:pointer}
 .guide-skip{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:1px;text-transform:uppercase;margin-top:12px;display:block;background:none;border:none;cursor:pointer;width:100%}
 
@@ -248,6 +248,7 @@ nav.nav-hidden{transform:translateY(100%)}
 
 <!-- GUÍA INICIAL -->
 <div id="guide-screen" class="hidden">
+  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch">
   <div class="guide-hero">
     <div class="guide-logo">Golf <em>HCP</em></div>
     <div class="guide-sub">Calculadora WHS 2020</div>
@@ -301,6 +302,7 @@ nav.nav-hidden{transform:translateY(100%)}
         <li><strong style="color:#e8c96a">Salir</strong> — Cierra tu sesión en la app.</li>
       </ul>
     </div>
+  </div>
   </div>
   <div class="guide-footer">
     <button class="guide-btn" onclick="closeGuide()">Continuar</button>
@@ -360,7 +362,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()">Entrar</button>
     <div class="auth-link">¿Sin cuenta? <span onclick="showAuth('register')">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.27.01</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.27.02</div>
   </div>
 </div>
 
@@ -579,7 +581,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.27.01</div>
+  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.27.02</div>
 </div>
 
 <!-- PAGE: NUEVA RONDA -->
