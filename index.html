@@ -231,7 +231,7 @@ nav.nav-hidden{transform:translateY(100%)}
 .guide-card-body{font-size:11px;color:rgba(255,255,255,.65);line-height:1.7}
 .guide-card-body li{margin-bottom:4px;padding-left:10px;position:relative}
 .guide-card-body li::before{content:'⛳';position:absolute;left:-4px;font-size:9px}
-.guide-footer{padding:16px 20px calc(env(safe-area-inset-bottom,0px) + 20px);text-align:center}
+.guide-footer{position:sticky;bottom:0;background:#1a2f1a;padding:16px 20px calc(env(safe-area-inset-bottom,0px) + 20px);text-align:center;border-top:1px solid rgba(255,255,255,.06)}
 .guide-btn{width:100%;background:linear-gradient(135deg,#c9a84c,#e8c96a);color:#1a2f1a;font-family:'DM Mono',monospace;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;border-radius:8px;padding:16px;cursor:pointer}
 .guide-skip{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:1px;text-transform:uppercase;margin-top:12px;display:block;background:none;border:none;cursor:pointer;width:100%}
 
@@ -359,9 +359,8 @@ nav.nav-hidden{transform:translateY(100%)}
     <div class="auth-field"><label>Contraseña</label><div class="auth-input-wrap has-eye"><input id="login-pass" type="password" autocomplete="current-password" placeholder="••••••••" oninput="$('clr-login-pass').classList.toggle('visible',this.value.length>0)" onkeydown="if(event.key==='Enter')doLogin()"><button class="auth-eye" type="button" tabindex="-1" onclick="var i=$('login-pass');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'👁':' 🙈'">👁</button><button class="auth-clear" id="clr-login-pass" type="button" tabindex="-1" onclick="$('login-pass').value='';$('clr-login-pass').classList.remove('visible');$('login-pass').focus()">✕</button></div></div>
     <button class="auth-btn" id="btn-login" onclick="doLogin()">Entrar</button>
     <div class="auth-link">¿Sin cuenta? <span onclick="showAuth('register')">Regístrate</span></div>
-    <div class="auth-link" style="margin-top:6px"><span onclick="showAuth('reset')">¿Olvidaste la contraseña?</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.27.00</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.27.01</div>
   </div>
 </div>
 
@@ -580,7 +579,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.27.00</div>
+  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.27.01</div>
 </div>
 
 <!-- PAGE: NUEVA RONDA -->
