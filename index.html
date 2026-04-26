@@ -241,8 +241,8 @@ nav.nav-hidden{transform:translateY(100%)}
 .barra-9h-row{display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:4px;align-items:center;margin-bottom:3px}
 .barra-9h-row label{font-size:7px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
 
-.nav-dropdown{position:relative;display:inline-block}
-.nav-dropdown-menu{position:fixed;bottom:70px;right:8px;background:#1e3d1e;border:1px solid rgba(255,255,255,.12);border-radius:10px;min-width:160px;z-index:400;box-shadow:0 -4px 20px rgba(0,0,0,.4);display:none;flex-direction:column;overflow:hidden}
+.nav-dropdown{flex:1;display:flex;position:relative}
+.nav-dropdown>button{flex:1;width:100%}.nav-dropdown-menu{position:fixed;bottom:70px;right:8px;background:#1e3d1e;border:1px solid rgba(255,255,255,.12);border-radius:10px;min-width:160px;z-index:400;box-shadow:0 -4px 20px rgba(0,0,0,.4);display:none;flex-direction:column;overflow:hidden}
 .nav-dropdown-menu.open{display:flex}
 .nav-dd-item{display:flex;align-items:center;gap:10px;padding:12px 16px;font-size:12px;letter-spacing:.5px;color:rgba(255,255,255,.8);cursor:pointer;border:none;background:none;width:100%;text-align:left;touch-action:manipulation;border-bottom:1px solid rgba(255,255,255,.06)}
 .nav-dd-item:last-child{border-bottom:none}
@@ -250,6 +250,15 @@ nav.nav-hidden{transform:translateY(100%)}
 .nav-dd-item.danger{color:#e05555}
 .nav-dd-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
 
+
+.nav-dropdown{position:relative;display:inline-block}
+.nav-dropdown-menu{position:absolute;bottom:100%;right:0;background:#1e3d1e;border:1px solid rgba(255,255,255,.12);border-radius:10px;min-width:150px;box-shadow:0 -4px 20px rgba(0,0,0,.4);overflow:hidden;display:none;flex-direction:column;z-index:900;margin-bottom:6px}
+.nav-dropdown-menu.open{display:flex}
+.nav-dropdown-item{display:flex;align-items:center;gap:10px;padding:12px 16px;font-size:11px;letter-spacing:.5px;color:rgba(255,255,255,.8);cursor:pointer;border:none;background:none;width:100%;text-align:left;touch-action:manipulation}
+.nav-dropdown-item:not(:last-child){border-bottom:1px solid rgba(255,255,255,.07)}
+.nav-dropdown-item:active{background:rgba(255,255,255,.08)}
+.nav-dropdown-item svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.nav-dropdown-item.danger{color:var(--red)}
 </style>
 </head>
 <body>
@@ -370,7 +379,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()">Entrar</button>
     <div class="auth-link">¿Sin cuenta? <span onclick="showAuth('register')">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.28.00</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.28.01</div>
   </div>
 </div>
 
@@ -589,7 +598,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.28.00</div>
+  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.28.01</div>
 </div>
 
 <!-- PAGE: NUEVA RONDA -->
@@ -741,9 +750,7 @@ nav.nav-hidden{transform:translateY(100%)}
 
 <!-- PAGE: FÓRMULA -->
 <div class="page" id="page-formula">
-  <button onclick="localStorage.removeItem('golf_guide_seen');$('guide-screen').classList.remove('hidden')" style="width:100%;margin-bottom:10px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:8px;color:var(--gold2);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;padding:12px;cursor:pointer;touch-action:manipulation">
-    📖 Ver guía de inicio
-  </button>
+
   <div class="card" style="margin-bottom:8px">
     <div class="card-title" style="margin-bottom:6px">Fórmula WHS 2020</div>
     <div class="formula-grid">
@@ -834,7 +841,7 @@ nav.nav-hidden{transform:translateY(100%)}
         <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Cambiar clave
       </button>
-      <button class="nav-dd-item danger" onclick="closeNavMenu();doLogout()">
+      <button class="nav-dd-item danger" onclick="closeNavMenu();if(confirm('¿Cerrar sesión?'))doLogout()">
         <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         Salir
       </button>
@@ -2382,6 +2389,22 @@ function cancelarNuevoCampo() {
     if (!confirm('¿Cancelar nuevo campo? Los datos introducidos se perderán.')) return;
   }
   cerrarNuevoCampo();
+}
+
+
+function toggleNavMenu() {
+  const menu = $('nav-dd-menu');
+  const btn  = $('nav-formula');
+  if (!menu) return;
+  const isOpen = menu.classList.contains('open');
+  menu.classList.toggle('open', !isOpen);
+  btn.classList.toggle('active', !isOpen);
+}
+function closeNavMenu() {
+  const menu = $('nav-dd-menu');
+  const btn  = $('nav-formula');
+  if (menu) menu.classList.remove('open');
+  if (btn)  btn.classList.remove('active');
 }
 
 function toggleNuevoCampo() {
