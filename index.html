@@ -242,13 +242,13 @@ nav.nav-hidden{transform:translateY(100%)}
 .barra-9h-row label{font-size:7px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
 
 .nav-dropdown{display:none}
-.nav-dropdown>button{flex:1;width:100%}.nav-dropdown-menu{position:fixed;bottom:70px;right:8px;background:#1e3d1e;border:1px solid rgba(255,255,255,.12);border-radius:10px;min-width:160px;z-index:400;box-shadow:0 -4px 20px rgba(0,0,0,.4);display:none;flex-direction:column;overflow:hidden}
+.nav-dropdown>button{flex:1;width:100%}.nav-dropdown-menu{position:fixed;bottom:62px;right:6px;background:#162916;border:1px solid rgba(255,255,255,.14);border-radius:8px;min-width:148px;z-index:400;box-shadow:0 -2px 16px rgba(0,0,0,.5);display:none;flex-direction:column;overflow:hidden}
 .nav-dropdown-menu.open{display:flex}
-.nav-dd-item{display:flex;align-items:center;gap:10px;padding:12px 16px;font-size:12px;letter-spacing:.5px;color:rgba(255,255,255,.8);cursor:pointer;border:none;background:none;width:100%;text-align:left;touch-action:manipulation;border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-dd-item{display:flex;align-items:center;gap:8px;padding:9px 12px;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.75);cursor:pointer;border:none;background:none;width:100%;text-align:left;touch-action:manipulation;border-bottom:1px solid rgba(255,255,255,.06);font-family:'DM Mono',monospace}
 .nav-dd-item:last-child{border-bottom:none}
-.nav-dd-item:active{background:rgba(255,255,255,.06)}
+.nav-dd-item:active{background:rgba(255,255,255,.05)}
 .nav-dd-item.danger{color:#e05555}
-.nav-dd-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.nav-dd-item svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
 
 
 .nav-dropdown{position:relative;display:inline-block}
@@ -379,7 +379,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()">Entrar</button>
     <div class="auth-link">¿Sin cuenta? <span onclick="showAuth('register')">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.28.03</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.28.04</div>
   </div>
 </div>
 
@@ -598,7 +598,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.28.03</div>
+  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.28.04</div>
 </div>
 
 <!-- PAGE: NUEVA RONDA -->
@@ -2560,6 +2560,15 @@ function closeNavMenuOutside(e) {
     closeNavMenu();
   }
 }
+// Cerrar menu al tocar cualquier parte de la pantalla
+document.addEventListener('touchstart', function(e) {
+  const menu = $('nav-dd-menu');
+  if (menu && menu.classList.contains('open')) {
+    if (!e.target.closest('#nav-formula') && !e.target.closest('#nav-dd-menu')) {
+      closeNavMenu();
+    }
+  }
+}, {passive: true});
 
 function cancelarEditCampo() {
   const nombre = $('edit-c-nombre')?.value?.trim();
@@ -2716,6 +2725,7 @@ async function delCampo(id) {
 
 // ── NAV ───────────────────────────────────────────────────────────────────
 function goTo(id, btn) {
+  closeNavMenu();
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
   $('page-' + id).classList.add('active');
