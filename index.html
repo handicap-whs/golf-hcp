@@ -244,7 +244,7 @@ nav.nav-hidden{transform:translateY(100%)}
 .nav-dropdown{display:none}
 .nav-dropdown>button{flex:1;width:100%}.nav-dropdown-menu{position:fixed;bottom:62px;right:6px;background:#162916;border:1px solid rgba(255,255,255,.14);border-radius:8px;min-width:148px;z-index:400;box-shadow:0 -2px 16px rgba(0,0,0,.5);display:none;flex-direction:column;overflow:hidden}
 .nav-dropdown-menu.open{display:flex}
-.nav-dd-item{display:flex;flex-direction:row!important;align-items:center;gap:7px;padding:7px 11px;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.75);cursor:pointer;border:none;background:none;width:100%;text-align:left;touch-action:manipulation;border-bottom:1px solid rgba(255,255,255,.06);font-family:'DM Mono',monospace;white-space:nowrap}
+.nav-dd-item{display:flex;flex-direction:row!important;align-items:center;gap:6px;padding:5px 10px;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.75);cursor:pointer;border:none;background:none;width:100%;text-align:left;touch-action:manipulation;border-bottom:1px solid rgba(255,255,255,.08);font-family:'DM Mono',monospace;white-space:nowrap;min-height:28px}
 .nav-dd-item:last-child{border-bottom:none}
 .nav-dd-item:active{background:rgba(255,255,255,.05)}
 .nav-dd-item.danger{color:#e05555}
@@ -379,7 +379,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()">Entrar</button>
     <div class="auth-link">¿Sin cuenta? <span onclick="showAuth('register')">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.28.07</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.28.09</div>
   </div>
 </div>
 
@@ -598,7 +598,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.28.07</div>
+  <div style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace">v1.28.09</div>
 </div>
 
 <!-- PAGE: NUEVA RONDA -->
@@ -830,7 +830,7 @@ nav.nav-hidden{transform:translateY(100%)}
   <div class="nav-dropdown-menu" id="nav-dd-menu">
       <button class="nav-dd-item" onclick="closeNavMenu();goTo('formula',$('nav-formula'))">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Información
+        Info HCP
       </button>
       <button class="nav-dd-item" onclick="closeNavMenu();localStorage.removeItem('golf_guide_seen');$('guide-screen').classList.remove('hidden')">
         <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
