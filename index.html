@@ -880,7 +880,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.050</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.051</div>
   </div>
 </div>
 
@@ -1110,7 +1110,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.050</div>
+  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.051</div>
   <div class="card" style="margin-bottom:8px;padding:12px 14px;display:none" id="mini-chart-wrap">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-size:11px;letter-spacing:1.5px;color:var(--gold2)" data-i18n="evolucion_hcp">EVOLUCIÓN HCP</span><span style="font-size:9px;color:var(--muted);letter-spacing:.5px" data-i18n="ultimas_20">20 últimas rondas</span></div>
     <canvas id="mini-hcp-chart" height="100" style="width:100%;display:block"></canvas>
@@ -2153,14 +2153,20 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 </div>
 
-<!-- PAGE: HCP OFICIAL FEDERACIÓN (v1.34.049) -->
+<!-- PAGE: HCP OFICIAL FEDERACIÓN (v1.34.049, refactor v1.34.051) -->
 <div class="page" id="page-hcp-oficial">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+    <button onclick="goTo('ajustes',$('nav-ajustes'))" style="background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:14px;cursor:pointer;padding:0;display:flex;align-items:center;gap:5px;height:40px">
+      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><polyline points="15 18 9 12 15 6"/></svg>
+      <span data-i18n="volver_btn">VOLVER</span>
+    </button>
+  </div>
   <div class="card">
     <div style="margin-bottom:16px">
       <div class="card-title" style="margin:0" data-i18n="hcp_oficial_titulo">Tu HCP Oficial</div>
     </div>
 
-    <!-- Toggle activar/desactivar -->
+    <!-- Toggle activar/desactivar (autoguarda al cambiar) -->
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:10px;background:var(--input-bg);border:1px solid var(--border);border-radius:8px">
       <label class="toggle-switch">
         <input type="checkbox" id="ho-toggle" onchange="onHcpOficialToggle()">
@@ -2174,22 +2180,22 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="field" style="gap:3px;margin-bottom:10px">
         <label data-i18n="hcp_oficial_valor">Valor</label>
         <input id="ho-valor" type="text" inputmode="decimal" placeholder="15,7"
+          onblur="guardarValorHcpOficial()"
           style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:5px 8px;width:100%;-webkit-appearance:none;outline:none">
       </div>
       <div id="ho-fecha-wrap" style="font-size:10px;color:var(--muted);margin-bottom:14px;font-family:'DM Mono',monospace"></div>
     </div>
 
     <!-- Info -->
-    <div style="font-size:10px;color:var(--muted);margin-bottom:14px;padding:8px 10px;background:rgba(201,168,76,.07);border-left:2px solid var(--gold2);border-radius:0 4px 4px 0">
+    <div style="font-size:10px;color:var(--muted);margin-bottom:8px;padding:8px 10px;background:rgba(201,168,76,.07);border-left:2px solid var(--gold2);border-radius:0 4px 4px 0">
       <span style="color:var(--gold2)">ℹ️</span> <span data-i18n="hcp_oficial_info">Solo informativo. No afecta a los cálculos de la app (WHS 2020).</span>
     </div>
 
-    <div class="modal-err" id="ho-err" style="margin-bottom:10px"></div>
+    <!-- Estado autosave -->
+    <div id="ho-status" style="font-size:10px;color:var(--muted);text-align:center;min-height:14px;font-family:'DM Mono',monospace"></div>
 
-    <div style="display:flex;gap:10px">
-      <button class="btn" id="btn-guardar-ho" onclick="guardarHcpOficial()" style="flex:1;margin-top:0" data-i18n="guardar">Guardar</button>
-      <button class="btn-danger" onclick="goTo('ajustes',$('nav-ajustes'))" style="flex:1;margin-top:0" data-i18n="cancelar">Cancelar</button>
-    </div>
+    <!-- Error oculto si validación falla -->
+    <div class="modal-err" id="ho-err" style="margin-top:8px"></div>
   </div>
 </div>
 
@@ -4652,7 +4658,7 @@ async function onLogin(user) {
 
   // 2. LUEGO: queries async (no bloquean la UI)
   try {
-    const { data } = await sb.from('profiles').select('nombre,is_admin,hcp_oficial,hcp_oficial_fecha').eq('id', user.id).single();
+    const { data } = await sb.from('profiles').select('nombre,is_admin,hcp_oficial,hcp_oficial_fecha,hcp_oficial_activo').eq('id', user.id).single();
     if (data?.nombre) {
       state.user.nombre = data.nombre;
       if ($('pb-name')) $('pb-name').textContent = data.nombre;
@@ -4662,6 +4668,7 @@ async function onLogin(user) {
     // v1.34.049: HCP oficial federación
     state.user.hcp_oficial = data?.hcp_oficial != null ? Number(data.hcp_oficial) : null;
     state.user.hcp_oficial_fecha = data?.hcp_oficial_fecha || null;
+    state.user.hcp_oficial_activo = !!data?.hcp_oficial_activo;
     try { refrescarBtnsHcpOficial(); } catch(e) {}
   } catch(e) { state.user.is_admin = false; }
 
@@ -7771,63 +7778,98 @@ function cargarHcpOficialPage() {
   const valor = $('ho-valor');
   const fechaWrap = $('ho-fecha-wrap');
   const errEl = $('ho-err');
+  const statusEl = $('ho-status');
   if (errEl) errEl.classList.remove('show');
+  if (statusEl) statusEl.textContent = '';
+  // v1.34.051: valor siempre se guarda; el toggle activo controla visibilidad del boton
   const hcp = state.user?.hcp_oficial;
   const fecha = state.user?.hcp_oficial_fecha;
-  const activo = hcp != null;
+  const activo = !!state.user?.hcp_oficial_activo;
   if (togg) togg.checked = activo;
   if (fieldsWrap) fieldsWrap.style.display = activo ? '' : 'none';
-  if (valor) valor.value = activo ? _hoFormat(hcp) : '';
+  if (valor) valor.value = hcp != null ? _hoFormat(hcp) : '';  // siempre mostrar el último valor
   if (fechaWrap) {
-    fechaWrap.textContent = (activo && fecha)
+    fechaWrap.textContent = (hcp != null && fecha)
       ? ((t('hcp_oficial_fecha')||'Última actualización: {fecha}').replace('{fecha}', _hoFormatFecha(fecha)))
       : '';
   }
 }
-// Handler del toggle: muestra/oculta campos
-function onHcpOficialToggle() {
+
+// Mostrar mensaje breve "Guardado" + ocultar tras 2 segundos
+function _hoStatus(msg, isError) {
+  const el = $('ho-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = isError ? 'var(--red)' : 'var(--gold2)';
+  clearTimeout(window._hoStatusTimer);
+  if (!isError) {
+    window._hoStatusTimer = setTimeout(() => { el.textContent = ''; }, 2500);
+  }
+}
+
+// Handler del toggle: muestra/oculta campos Y autoguarda el flag activo
+async function onHcpOficialToggle() {
   const togg = $('ho-toggle');
   const fieldsWrap = $('ho-fields');
-  if (fieldsWrap) fieldsWrap.style.display = togg?.checked ? '' : 'none';
+  const activo = !!togg?.checked;
+  if (fieldsWrap) fieldsWrap.style.display = activo ? '' : 'none';
+  // Autoguardar el flag activo
+  const uid = state.user?.id;
+  if (!uid) return;
+  try {
+    const { error } = await sb.from('profiles')
+      .update({ hcp_oficial_activo: activo })
+      .eq('id', uid);
+    if (error) throw error;
+    state.user.hcp_oficial_activo = activo;
+    refrescarBtnsHcpOficial();
+    _hoStatus('✓ ' + (t('t_hcp_oficial_ok')||'Guardado'));
+  } catch(e) {
+    _hoStatus('❌ ' + (e.message || 'Error'), true);
+  }
 }
-// Guardar HCP oficial en Supabase profiles
-async function guardarHcpOficial() {
-  const togg = $('ho-toggle');
+
+// Autoguardar el valor cuando el input pierde el foco
+async function guardarValorHcpOficial() {
   const valorEl = $('ho-valor');
   const errEl = $('ho-err');
-  const btn = $('btn-guardar-ho');
-  const showErr = msg => { errEl.textContent = msg; errEl.classList.add('show'); };
-  errEl.classList.remove('show');
+  if (errEl) errEl.classList.remove('show');
   const uid = state.user?.id;
-  if (!uid) { showErr(t('e_sin_sesion')||'Sin sesión'); return; }
+  if (!uid) return;
 
-  let nuevoHcp = null;
-  let nuevaFecha = null;
-  if (togg?.checked) {
-    nuevoHcp = _hoParse(valorEl?.value);
-    if (nuevoHcp == null) {
-      showErr(t('ho_err_valor')||'Valor inválido. Usa un número entre -10 y 54.');
-      return;
-    }
-    nuevaFecha = new Date().toISOString().slice(0,10);
+  // Si vacío: no tocar (se queda con el valor anterior)
+  const raw = (valorEl?.value || '').trim();
+  if (!raw) return;
+
+  const nuevoHcp = _hoParse(raw);
+  if (nuevoHcp == null) {
+    errEl.textContent = t('ho_err_valor')||'Valor inválido. Usa un número entre -10 y 54.';
+    errEl.classList.add('show');
+    return;
   }
 
-  btn.textContent = t('guardando')||'Guardando…'; btn.disabled = true;
+  // Si no cambia, no guardamos
+  if (state.user?.hcp_oficial === nuevoHcp) return;
+
+  const nuevaFecha = new Date().toISOString().slice(0,10);
   try {
     const { error } = await sb.from('profiles')
       .update({ hcp_oficial: nuevoHcp, hcp_oficial_fecha: nuevaFecha })
       .eq('id', uid);
     if (error) throw error;
-    // Actualizar state local
     state.user.hcp_oficial = nuevoHcp;
     state.user.hcp_oficial_fecha = nuevaFecha;
+    // Actualizar visual de fecha
+    const fechaWrap = $('ho-fecha-wrap');
+    if (fechaWrap) {
+      fechaWrap.textContent = (t('hcp_oficial_fecha')||'Última actualización: {fecha}').replace('{fecha}', _hoFormatFecha(nuevaFecha));
+    }
+    // Reformatear el input con coma/punto consistente
+    if (valorEl) valorEl.value = _hoFormat(nuevoHcp);
     refrescarBtnsHcpOficial();
-    toast('✓ ' + (t('t_hcp_oficial_ok')||'HCP oficial guardado'));
-    goTo('ajustes', $('nav-ajustes'));
+    _hoStatus('✓ ' + (t('t_hcp_oficial_ok')||'Guardado'));
   } catch(e) {
-    showErr('❌ ' + (e.message || 'Error'));
-  } finally {
-    btn.textContent = t('guardar')||'Guardar'; btn.disabled = false;
+    _hoStatus('❌ ' + (e.message || 'Error'), true);
   }
 }
 
@@ -7835,7 +7877,9 @@ async function guardarHcpOficial() {
 function refrescarBtnsHcpOficial() {
   const hcp = state.user?.hcp_oficial;
   const fecha = state.user?.hcp_oficial_fecha;
-  const visible = hcp != null;
+  const activo = !!state.user?.hcp_oficial_activo;
+  // v1.34.051: visible solo si el toggle está ON Y hay valor guardado
+  const visible = activo && hcp != null;
   const txt = visible
     ? '🏅 ' + (t('hcp_oficial_btn_usar')||'Usar oficial:') + ' ' + _hoFormat(hcp) + (fecha ? ' · ' + _hoFormatFecha(fecha) : '')
     : '';
@@ -8001,8 +8045,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.050' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.050\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.051' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.051\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
