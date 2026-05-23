@@ -883,7 +883,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.060</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.061</div>
   </div>
 </div>
 
@@ -1097,16 +1097,16 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
       <div class="chcp-detail" id="chcp-detail" data-i18n="selecciona_campo_calc">Selecciona un campo para calcular.</div>
     </div>
-    <!-- v1.34.060: 3 formatos en una sola línea inline, sin recuadros -->
-    <div id="php-wrap" style="display:none;flex-wrap:nowrap;gap:8px;align-items:center;margin-top:8px;padding:0 4px;font-family:'DM Mono',monospace;font-size:13px;color:var(--text);letter-spacing:.3px;white-space:nowrap;overflow:hidden">
-      <span><span style="color:var(--muted);font-size:11px" data-i18n="fmt_100">100% — Informal</span>: <span id="php-100">—</span></span>
-      <span style="color:var(--muted)">·</span>
-      <span><span style="color:var(--muted);font-size:11px" data-i18n="fmt_95">95% — Medal / Stblf</span>: <span id="php-95">—</span></span>
-      <span style="color:var(--muted)">·</span>
-      <span><span style="color:var(--muted);font-size:11px" data-i18n="fmt_85">85% — Four Ball</span>: <span id="php-85">—</span></span>
+    <!-- v1.34.060: 3 formatos en una sola línea inline, sin recuadros (v1.34.061: compacto y / separador) -->
+    <div id="php-wrap" style="display:none;flex-wrap:nowrap;gap:5px;align-items:center;justify-content:center;margin-top:8px;padding:0 4px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text);letter-spacing:.2px;white-space:nowrap;overflow:hidden">
+      <span><span style="color:var(--muted)">100%:Informal:</span> <span id="php-100">—</span></span>
+      <span style="color:var(--muted)">/</span>
+      <span><span style="color:var(--muted)">95%:Medal/Stblf:</span> <span id="php-95">—</span></span>
+      <span style="color:var(--muted)">/</span>
+      <span><span style="color:var(--muted)">85%:Four Ball:</span> <span id="php-85">—</span></span>
     </div>
   </div>
-  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.060</div>
+  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.061</div>
   <div class="card" style="margin-bottom:8px;padding:12px 14px;display:none" id="mini-chart-wrap">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-size:11px;letter-spacing:1.5px;color:var(--gold2)" data-i18n="evolucion_hcp">EVOLUCIÓN HCP</span><span style="font-size:9px;color:var(--muted);letter-spacing:.5px" data-i18n="ultimas_20">20 últimas rondas</span></div>
     <canvas id="mini-hcp-chart" height="100" style="width:100%;display:block"></canvas>
@@ -8043,8 +8043,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.060' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.060\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.061' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.061\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
