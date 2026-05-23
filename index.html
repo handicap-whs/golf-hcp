@@ -886,7 +886,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.089</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.091</div>
   </div>
 </div>
 
@@ -1043,7 +1043,7 @@ nav.nav-hidden{transform:translateY(100%)}
 <!-- PAGE: INICIO -->
 <div class="page active" id="page-inicio">
   <div class="result">
-    <div class="r-sub" data-i18n="handicap_jugador">Handicap Jugador</div>
+    <div class="r-sub" data-i18n="handicap_jugador">Hándicap Jugador</div>
     <div class="r-hcp" id="r-hcp">—</div>
     <div class="r-cat" id="r-cat">Añade rondas para calcular</div>
     <div id="r-fecha-hcp" style="font-size:9px;color:var(--muted);margin-top:4px;letter-spacing:.5px"></div>
@@ -1054,7 +1054,7 @@ nav.nav-hidden{transform:translateY(100%)}
 
   </div>
   <div class="card">
-    <div class="card-title" style="font-size:17px;text-align:center" data-i18n="hcp_campo_title">Handicap de Campo</div>
+    <div class="card-title" style="font-size:17px;text-align:center" data-i18n="hcp_campo_title">Hándicap de Campo</div>
     <div class="field" style="margin-bottom:8px">
       <label data-i18n="campo">Campo</label>
       <select id="p-campo" class="light-select" onchange="onCampoAntes()" style="padding:5px 8px;font-size:13px;border-radius:4px">
@@ -1094,7 +1094,7 @@ nav.nav-hidden{transform:translateY(100%)}
     </div>
     <div class="chcp-box" style="margin-top:8px;text-align:center">
       <div>
-        <div class="chcp-sub" data-i18n="handicap_campo">Handicap Campo</div>
+        <div class="chcp-sub" data-i18n="handicap_campo">Hándicap Campo</div>
         <div class="chcp-num empty" id="chcp-num">—</div>
       </div>
       <div class="chcp-detail" id="chcp-detail" data-i18n="selecciona_campo_calc">Selecciona un campo para calcular.</div>
@@ -1108,7 +1108,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <span><span style="color:var(--muted)">85%:4B:</span> <span id="php-85">—</span></span>
     </div>
   </div>
-  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.089</div>
+  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.091</div>
   <div class="card" style="margin-bottom:8px;padding:12px 14px;display:none" id="mini-chart-wrap">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-size:11px;letter-spacing:1.5px;color:var(--gold2)" data-i18n="evolucion_hcp">EVOLUCIÓN HCP</span><span style="font-size:9px;color:var(--muted);letter-spacing:.5px" data-i18n="ultimas_20">20 últimas rondas</span></div>
     <canvas id="mini-hcp-chart" height="100" style="width:100%;display:block"></canvas>
@@ -1174,20 +1174,23 @@ nav.nav-hidden{transform:translateY(100%)}
           <option value="9" data-i18n-opt="hoyos_9">9 hoyos</option>
         </select>
       </div>
-      <div id="f-vuelta-wrap" class="field" style="gap:3px;display:none">
-        <label data-i18n="vuelta">Vuelta</label>
-        <select id="f-vuelta" class="light-select" onchange="onVueltaChange()" style="padding:5px 8px;font-size:13px;border-radius:4px">
-          <option value="1" data-i18n="ida">Ida (1–9)</option>
-          <option value="2" data-i18n="vuelta2">Vuelta (10–18)</option>
-        </select>
-      </div>
     </div>
+    <!-- v1.34.091: Barra y Vuelta en fila grid f2 (mitad cada uno). Cuando 18H, Vuelta oculto y Barra ocupa su mitad. -->
     <div id="barra-selector" style="display:none;margin-bottom:6px">
-      <div class="field" style="gap:3px">
-        <label data-i18n="barra_salida">Barra de salida</label>
-        <select id="f-barra" class="light-select" onchange="onBarraChange()" style="padding:5px 8px;font-size:13px;border-radius:4px">
-          <option value="">— Selecciona barra —</option>
-        </select>
+      <div class="fields f2" style="gap:6px">
+        <div class="field" style="gap:3px">
+          <label data-i18n="barra_salida">Barra de salida</label>
+          <select id="f-barra" class="light-select" onchange="onBarraChange()" style="padding:5px 8px;font-size:13px;border-radius:4px">
+            <option value="">— Selecciona barra —</option>
+          </select>
+        </div>
+        <div id="f-vuelta-wrap" class="field" style="gap:3px;display:none">
+          <label data-i18n="vuelta">Vuelta</label>
+          <select id="f-vuelta" class="light-select" onchange="onVueltaChange()" style="padding:5px 8px;font-size:13px;border-radius:4px">
+            <option value="1" data-i18n="ida">Ida (1–9)</option>
+            <option value="2" data-i18n="vuelta2">Vuelta (10–18)</option>
+          </select>
+        </div>
       </div>
     </div>
     <!-- v1.34.085: CR/Slope sin recuadro, labels en azul (estilo Editar Ronda) -->
@@ -1210,18 +1213,20 @@ nav.nav-hidden{transform:translateY(100%)}
         <button type="button" id="f-hcp-idx-usar-oficial" onclick="usarHcpOficial('f-hcp-idx','calcNuevaChcp')" class="hcp-oficial-btn" style="display:none;margin-top:0;min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis"></button>
       </div>
     </div>
-    <!-- v1.34.085: Formato (editable con recuadro) + HCP Campo (texto plano) -->
+    <!-- v1.34.085: Formato (editable con recuadro) + HCP Campo (texto plano) - v1.34.091: en misma fila grid f2 -->
     <div id="nueva-chcp-wrap" style="display:none;margin-bottom:12px">
-      <div class="field" style="gap:3px;margin-bottom:6px">
-        <label data-i18n="formato">Formato de juego</label>
-        <select id="nueva-fmt" class="light-select" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:5px 8px;width:100%;-webkit-appearance:none;outline:none" onchange="calcNuevaChcp(); updateTotals();">
-          <option value="100">100% — Informal</option>
-          <option value="95">95% — Medal / Stblf</option>
-          <option value="85">85% — Four Ball</option>
-        </select>
-      </div>
-      <div style="margin:6px 0 0 8px;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
-        <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hcp_campo">HCP de Campo</span>: <span id="nueva-chcp-val" style="color:var(--text)">—</span>
+      <div class="fields f2" style="gap:6px;align-items:end">
+        <div class="field" style="gap:3px">
+          <label data-i18n="formato">Formato de juego</label>
+          <select id="nueva-fmt" class="light-select" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:5px 8px;width:100%;-webkit-appearance:none;outline:none" onchange="calcNuevaChcp(); updateTotals();">
+            <option value="100">100% — Informal</option>
+            <option value="95">95% — Medal / Stblf</option>
+            <option value="85">85% — Four Ball</option>
+          </select>
+        </div>
+        <div style="padding:5px 8px;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
+          <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hcp_campo">HCP de Campo</span>: <span id="nueva-chcp-val" style="color:var(--text)">—</span>
+        </div>
       </div>
     </div>
     <div id="hoyos-wrap" style="display:none;margin-bottom:12px">
@@ -1487,7 +1492,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <div class="formula-grid">
       <div class="formula-row"><span class="fk" data-i18n="fi_dif">Diferencial</span><span class="fv" data-i18n="fi_dif_f">(Golpes − CR) × 113 / Slope</span></div>
       <div class="formula-row"><span class="fk" data-i18n="fi_hcp_jug">HCP Jugador</span><span class="fv" data-i18n="fi_hcp_jug_f">Promedio mejores diferenciales × 0.95</span></div>
-      <div class="formula-row" style="background:rgba(201,168,76,.07);border-radius:4px"><span class="fk" data-i18n="fi_hi_label">HI</span><span class="fv" data-i18n="fi_hi_desc">Handicap Index (tu nivel de juego)</span></div>
+      <div class="formula-row" style="background:rgba(201,168,76,.07);border-radius:4px"><span class="fk" data-i18n="fi_hi_label">HI</span><span class="fv" data-i18n="fi_hi_desc">Hándicap Index (tu nivel de juego)</span></div>
       <div class="formula-row"><span class="fk" data-i18n="fi_chcp">Course HCP</span><span class="fv" data-i18n="fi_chcp_f">HI × SR/113 + CR − Par</span></div>
       <div class="formula-row"><span class="fk" data-i18n="fi_chcp9">Course HCP 9H</span><span class="fv" data-i18n="fi_chcp9_f">0,5 × HI × SR/113 + CR − Par</span></div>
       <div class="formula-row"><span class="fk" data-i18n="fi_chcp_old">Antes 2024</span><span class="fv" data-i18n="fi_chcp_old_f">HI × SR/113 (sin CR−Par)</span></div>
@@ -2333,7 +2338,7 @@ const i18n = {
     'enviar_enlace':'Enviar enlace','volver':'← Volver','volver_btn':'VOLVER','recuperar_pass':'Recuperar contraseña',
     'email_ph':'tu@email.com','pass_ph':'••••••••',
     'selecciona_campo':'— Selecciona campo —','selecciona_campo_calc':'Selecciona un campo para calcular.','fi_dif_formula':'Diferencial = (Golpes − CR) × 113 / Slope','selecciona_barra':'— Selecciona barra —','selecciona_hoyos':'— Hoyos —',
-    'hcp_jugador':'HCP Jugador','handicap_jugador':'Handicap Jugador','hcp_campo':'HCP de Campo','handicap_campo':'Handicap Campo','course_rating':'Course Rating','slope_rating':'Slope Rating',
+    'hcp_jugador':'HCP Jugador','handicap_jugador':'Hándicap Jugador','hcp_campo':'HCP de Campo','handicap_campo':'Hándicap Campo','course_rating':'Course Rating','slope_rating':'Slope Rating',
     'total_golpes':'Total Golpes','formato':'Formato de juego',
     'golpes_hoyo':'Golpes por hoyo','salida_19':'Ida 1–9','vuelta_1018':'Vuelta 10–18',
     'golpe_ventaja':'Golpe de ventaja (HCP campo)','punto_stbl':'Punto Stableford',
@@ -2353,7 +2358,7 @@ const i18n = {
     'golpes_brutos':'Golpes brutos','par_campo':'Par campo','stbl_label_f':'Stableford',
     'nombre_label':'Nombre','par_label':'Par','slope_label':'Slope',
     'cr_18h':'CR 18H','slope_18h':'Slope 18H','confirmar_label':'Confirmar',
-    'hcp_campo':'HCP Campo','hcp_campo_title':'Handicap de Campo','guardar_campo':'Guardar Campo','guardar':'Guardar','ida_label':'IDA','vuelta_label':'VUELTA','opcional_9h':'OPCIONAL: 9 HOYOS','par_label':'Par','ind_label':'Índ',
+    'hcp_campo':'HCP Campo','hcp_campo_title':'Hándicap de Campo','guardar_campo':'Guardar Campo','guardar':'Guardar','ida_label':'IDA','vuelta_label':'VUELTA','opcional_9h':'OPCIONAL: 9 HOYOS','par_label':'Par','ind_label':'Índ',
     'editar':'Editar','eliminar':'Eliminar',
     'cambiar_clave':'Cambiar Contraseña','nueva_pass':'Nueva contraseña','confirmar_pass':'Confirmar contraseña',
     'min6':'mínimo 6 caracteres','repite_pass':'repite la contraseña','cambiar':'Cambiar',
@@ -2392,7 +2397,7 @@ const i18n = {
     'g_nav_clave':'Ajustes — Campos, guías, idioma, apariencia, cuenta y más.',
     'g_nav_salir':'Compartir — Comparte tu HCP Index con un toque desde la pantalla de Inicio.',
     'g_tip_cerrar':'💡 Se recomienda encarecidamente cerrar completamente la App deslizando hacia arriba cuando dejes de utilizarla, proteges tu cuenta y te aseguras reinicios más limpios y completos.',
-    'fi_hi_label':'HI','fi_hi_desc':'Handicap Index (tu nivel de juego)','fi_chcp':'Course HCP','fi_chcp_f':'HI × SR/113 + CR − Par','fi_chcp9':'Course HCP 9H','fi_chcp9_f':'0,5 × HI × SR/113 + CR − Par','fi_chcp_old':'Antes 2024','fi_chcp_old_f':'HI × SR/113 (sin CR−Par)','fi_chcp':'Course HCP','fi_chcp_f':'HI × SR/113 + CR − Par','fi_chcp9':'Course HCP 9H','fi_chcp9_f':'0,5 × HI × SR/113 + CR − Par','fi_chcp_old':'Antes 2024','fi_chcp_old_f':'HI × SR/113 (sin CR−Par)','fi_dif':'Diferencial','fi_dif_f':'(Golpes − CR) × 113 / Slope',
+    'fi_hi_label':'HI','fi_hi_desc':'Hándicap Index (tu nivel de juego)','fi_chcp':'Course HCP','fi_chcp_f':'HI × SR/113 + CR − Par','fi_chcp9':'Course HCP 9H','fi_chcp9_f':'0,5 × HI × SR/113 + CR − Par','fi_chcp_old':'Antes 2024','fi_chcp_old_f':'HI × SR/113 (sin CR−Par)','fi_chcp':'Course HCP','fi_chcp_f':'HI × SR/113 + CR − Par','fi_chcp9':'Course HCP 9H','fi_chcp9_f':'0,5 × HI × SR/113 + CR − Par','fi_chcp_old':'Antes 2024','fi_chcp_old_f':'HI × SR/113 (sin CR−Par)','fi_dif':'Diferencial','fi_dif_f':'(Golpes − CR) × 113 / Slope',
     'fi_hcp_jug':'HCP Jugador','fi_hcp_jug_f':'Promedio mejores diferenciales × 0.95',
     'fi_max':'Máximo','fi_eagle':'Eagle o mejor','fi_bogey':'Bogey','fi_dbogey':'Doble bogey +',
     'fi_stbl_title':'Stableford','fi_barras_title':'Barras de Salida',
@@ -8100,8 +8105,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.089' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.089\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.091' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.091\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
