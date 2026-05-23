@@ -227,7 +227,7 @@ input:checked+.toggle-slider:before{transform:translateX(18px)}
 
 /* v1.34.050: boton "Usar oficial" debajo de inputs HCP */
 /* v1.34.056: boton "HCP oficial" sin recuadro, solo texto clicable (v1.34.057: color tema + nowrap, v1.34.065: unificado 13px sin subrayado) */
-.hcp-oficial-btn{margin-top:4px;background:none;border:none;padding:2px 0;font-family:'DM Mono',monospace;font-size:13px;color:var(--text);cursor:pointer;text-align:left;width:auto;letter-spacing:.2px;font-weight:600;white-space:nowrap;transition:opacity .15s}
+.hcp-oficial-btn{margin-top:4px;background:none;border:none;padding:2px 0;font-family:'DM Mono',monospace;font-size:13px;color:var(--text);cursor:pointer;text-align:left;width:auto;letter-spacing:.2px;white-space:nowrap;transition:opacity .15s}
 .hcp-oficial-btn:active{opacity:.6}
 .hcp-oficial-btn:hover{opacity:.8}
 
@@ -883,7 +883,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.066</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.067</div>
   </div>
 </div>
 
@@ -1106,7 +1106,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <span><span style="color:var(--muted)">85%:4B:</span> <span id="php-85">—</span></span>
     </div>
   </div>
-  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.066</div>
+  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.067</div>
   <div class="card" style="margin-bottom:8px;padding:12px 14px;display:none" id="mini-chart-wrap">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-size:11px;letter-spacing:1.5px;color:var(--gold2)" data-i18n="evolucion_hcp">EVOLUCIÓN HCP</span><span style="font-size:9px;color:var(--muted);letter-spacing:.5px" data-i18n="ultimas_20">20 últimas rondas</span></div>
     <canvas id="mini-hcp-chart" height="100" style="width:100%;display:block"></canvas>
@@ -7879,7 +7879,7 @@ function refrescarBtnsHcpOficial() {
   // v1.34.051: visible solo si el toggle está ON Y hay valor guardado
   const visible = activo && hcp != null;
   const txt = visible
-    ? (t('hcp_oficial_btn_usar')||'HCP oficial:') + ' ' + _hoFormat(hcp) + (fecha ? '·' + _hoFormatFecha(fecha) : '')
+    ? (t('hcp_oficial_btn_usar')||'HCP oficial:') + ' ' + _hoFormat(hcp) + (fecha ? '·' + _hoFormatFecha(fecha) : '') + ' ›'
     : '';
   ['p-hcp-usar-oficial','f-hcp-idx-usar-oficial','edit-r-hcp-usar-oficial'].forEach(id => {
     const el = $(id);
@@ -8043,8 +8043,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.066' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.066\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.067' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.067\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
