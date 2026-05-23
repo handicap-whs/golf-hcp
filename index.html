@@ -30,8 +30,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--hist-sticky:#233723;--bg:#1a2f1a;--bg2:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.09);--gold:#c9a84c;--gold2:#e8c96a;--green:#7bc67a;--cream:#f5f0e8;--muted:rgba(255,255,255,0.35);--red:#e05555;--red-intenso:#cc0000;--blue-intenso:#0066cc;--text:#ffffff;--text2:rgba(255,255,255,0.65);--card-bg:rgba(255,255,255,0.04);--nav-bg:#0f1a0f;--input-bg:rgba(255,255,255,0.07);--splash-bg:#1a2f1a}
-:root.light{--hist-sticky:#e8f0e8;--bg:#f0f4f0;--text:#000000;--cream:#1a2f1a;--bg2:rgba(0,0,0,0.03);--border:rgba(0,0,0,0.12);--gold:#7a5a10;--gold2:#8a6a18;--green:#1a4a1a;--cream:#2a1a00;--muted:rgba(0,0,0,0.5);--red:#b01010;--red-intenso:#cc0000;--blue-intenso:#0066cc;--text:#000000;--text2:rgba(0,0,0,0.75);--card-bg:rgba(255,255,255,0.9);--nav-bg:#e0ebe0;--input-bg:#ffffff;--splash-bg:#f0f4f0}
+:root{--hist-sticky:#233723;--bg:#1a2f1a;--bg2:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.09);--gold:#c9a84c;--gold2:#e8c96a;--green:#7bc67a;--cream:#f5f0e8;--muted:rgba(255,255,255,0.35);--red:#e05555;--red-intenso:#cc0000;--blue-intenso:#0066cc;--blue-adapt:#4da3ff;--text:#ffffff;--text2:rgba(255,255,255,0.65);--card-bg:rgba(255,255,255,0.04);--nav-bg:#0f1a0f;--input-bg:rgba(255,255,255,0.07);--splash-bg:#1a2f1a}
+:root.light{--hist-sticky:#e8f0e8;--bg:#f0f4f0;--text:#000000;--cream:#1a2f1a;--bg2:rgba(0,0,0,0.03);--border:rgba(0,0,0,0.12);--gold:#7a5a10;--gold2:#8a6a18;--green:#1a4a1a;--cream:#2a1a00;--muted:rgba(0,0,0,0.5);--red:#b01010;--red-intenso:#cc0000;--blue-intenso:#0066cc;--blue-adapt:#0066cc;--text:#000000;--text2:rgba(0,0,0,0.75);--card-bg:rgba(255,255,255,0.9);--nav-bg:#e0ebe0;--input-bg:#ffffff;--splash-bg:#f0f4f0}
 input::placeholder,textarea::placeholder{color:var(--gold);opacity:0.20}
 input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{color:var(--gold);opacity:0.20}
 input::-moz-placeholder,textarea::-moz-placeholder{color:var(--gold);opacity:0.20}
@@ -340,7 +340,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 /* ── HOYOS ── */
 .hoyo-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:6px;margin-bottom:10px}
 .hoyo-cell{display:flex;flex-direction:column;gap:4px;align-items:center}
-.hoyo-num{font-size:8px;color:var(--muted);letter-spacing:1px;text-align:center}
+.hoyo-num{font-size:8px;color:var(--text);font-weight:700;letter-spacing:1px;text-align:center} /* v1.34.079: color tema + negrita */
 .hoyo-input{background:var(--input-bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:6px 3px;text-align:center;width:100%;-webkit-appearance:none;outline:none;touch-action:manipulation}
 .hoyo-input:focus{border-color:var(--gold)}
 .hoyo-label{font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:2px}
@@ -402,7 +402,7 @@ nav.nav-hidden{transform:translateY(100%)}
 .hoyo-input-wrap{position:relative;width:100%;overflow:visible}
 .ndb-overlay{position:absolute;top:-5px;right:-5px;min-width:14px;height:14px;padding:0 3px;background:#fff;color:var(--red-intenso);border:1px solid var(--red-intenso);border-radius:8px;font-size:9px;font-family:'DM Mono',monospace;font-weight:700;line-height:12px;text-align:center;pointer-events:none;box-shadow:0 1px 2px rgba(0,0,0,.25);z-index:2;box-sizing:border-box}
 .ndb-overlay:empty{display:none}
-.btn-modor{display:inline-flex;align-items:center;padding:3px 8px;border-radius:3px;background:transparent;color:rgba(255,255,255,.55);border:1px solid var(--red-intenso);font-family:inherit;font-size:9px;cursor:pointer;line-height:1.2;transition:background .12s,color .12s}
+.btn-modor{display:inline-flex;align-items:center;padding:3px 8px;border-radius:3px;background:transparent;color:var(--text);border:1px solid var(--red-intenso);font-family:inherit;font-size:9px;cursor:pointer;line-height:1.2;transition:background .12s,color .12s} /* v1.34.079: color:var(--text) en vez de rgba blanquecino */
 .btn-modor.active{background:var(--red-intenso);color:#fff}
 .btn-modor.active .btn-modor-label,.btn-modor.active{color:#fff!important;-webkit-text-fill-color:#fff!important}
 .info-tip{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;background:rgba(123,198,122,.18);color:var(--green);font-size:9px;font-weight:600;font-family:'DM Mono',monospace;cursor:pointer;margin-left:4px;vertical-align:middle;user-select:none;line-height:1}
@@ -883,7 +883,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.078</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.079</div>
   </div>
 </div>
 
@@ -954,37 +954,37 @@ nav.nav-hidden{transform:translateY(100%)}
     <div id="edit-r-nombre" style="font-size:15px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.5px;margin-bottom:8px">—</div>
     <div style="display:flex;flex-direction:column;gap:4px;margin:0 0 10px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
       <div id="edit-r-barra-disp" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">—</div>
-      <!-- v1.34.078: Par + CR + Slope todos en azul -->
+      <!-- v1.34.079: Par + CR + Slope: labels en azul, valores en color tema (negro/blanco) -->
       <div id="edit-r-campo-info" style="display:flex;flex-wrap:nowrap;gap:6px;align-items:center;white-space:nowrap;overflow:hidden">
-        <span><span style="color:var(--blue-intenso);font-weight:600">Par</span> <span id="edit-r-par-disp">—</span></span>
+        <span><span style="color:var(--blue-adapt);font-weight:600">Par</span> <span id="edit-r-par-disp" style="color:var(--text)">—</span></span>
         <span style="color:var(--muted)">·</span>
-        <span id="edit-r-cr-disp" style="color:var(--blue-intenso);font-weight:600">—</span>
+        <span id="edit-r-cr-disp" style="color:var(--text)">—</span>
         <span style="color:var(--muted)">·</span>
-        <span id="edit-r-slope-disp" style="color:var(--blue-intenso);font-weight:600">—</span>
+        <span id="edit-r-slope-disp" style="color:var(--text)">—</span>
       </div>
-      <!-- v1.34.078: Hoyos y HCP Campo en l&iacute;neas separadas (Vuelta sigue inline tras Hoyos) -->
+      <!-- Hoyos en su linea + Vuelta inline si aplica -->
       <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
-        <span><span style="color:var(--blue-intenso);font-weight:600" data-i18n="hoyos">Hoyos</span>: <span id="edit-r-num-hoyos-disp">18</span></span>
-        <span id="edit-vuelta-wrap-inline" style="display:none"><span style="color:var(--blue-intenso);font-weight:600" data-i18n="vuelta">Vuelta</span>: <span id="edit-r-vuelta-disp">—</span></span>
+        <span><span style="color:var(--blue-adapt);font-weight:600" data-i18n="hoyos">Hoyos</span>: <span id="edit-r-num-hoyos-disp" style="color:var(--text)">18</span></span>
+        <span id="edit-vuelta-wrap-inline" style="display:none"><span style="color:var(--blue-adapt);font-weight:600" data-i18n="vuelta">Vuelta</span>: <span id="edit-r-vuelta-disp" style="color:var(--text)">—</span></span>
       </div>
       <div>
-        <span style="color:var(--blue-intenso);font-weight:600" data-i18n="hcp_campo">HCP de Campo</span>: <span id="edit-chcp-val">—</span>
+        <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hcp_campo">HCP de Campo</span>: <span id="edit-chcp-val" style="color:var(--text)">—</span>
       </div>
-      <!-- v1.34.078: HCP Index y Formato de juego en l&iacute;neas separadas, color gris oscuro + negrita (prueba) -->
+      <!-- v1.34.079: HCP Index y Formato de juego en linea separada, labels en azul -->
       <div>
-        <span style="color:#555;font-weight:700" data-i18n="hcp_idx">HCP Index</span>: <span id="edit-r-hcp-disp" style="color:#555;font-weight:700">—</span>
+        <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hcp_idx">HCP Index</span>: <span id="edit-r-hcp-disp" style="color:var(--text)">—</span>
       </div>
       <div>
-        <span style="color:#555;font-weight:700" data-i18n="formato">Formato de juego</span>: <span id="edit-r-fmt-disp" style="color:#555;font-weight:700">—</span>
+        <span style="color:var(--blue-adapt);font-weight:600" data-i18n="formato">Formato de juego</span>: <span id="edit-r-fmt-disp" style="color:var(--text)">—</span>
       </div>
     </div>
 
     <!-- Separador fino antes de la zona editable -->
     <hr style="border:none;border-top:1px solid var(--border);opacity:.35;margin:10px 0">
 
-    <!-- ZONA EDITABLE: solo Fecha (sin recuadro, igual estilo que el resto) -->
+    <!-- ZONA EDITABLE: solo Fecha (sin recuadro, igual estilo que el resto) - v1.34.079: label "Fecha" en color tema -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-      <span style="color:var(--blue-intenso);font-weight:600" data-i18n="fecha">Fecha</span>:
+      <span style="color:var(--text);font-weight:600" data-i18n="fecha">Fecha</span>:
       <input type="date" id="edit-r-fecha" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
       <span style="font-size:10px;color:var(--muted);letter-spacing:.2px" data-i18n="edit_click_hint">(Click para editar)</span>
     </div>
@@ -992,8 +992,8 @@ nav.nav-hidden{transform:translateY(100%)}
     <div id="edit-hoyos-wrap" style="display:none">
       <!-- Separador fino antes del panel de hoyos -->
       <hr style="border:none;border-top:1px solid var(--border);opacity:.35;margin:10px 0 8px">
-      <!-- v1.34.078: Total y Stableford con datos en color tema (negro en claro, claro en oscuro) -->
-      <div style="font-size:11px;color:var(--muted);margin-bottom:6px"><span style="color:var(--blue-intenso);font-weight:600">Total</span>: <strong id="edit-total" style="color:var(--text);font-weight:700">—</strong> · <span style="color:var(--blue-intenso);font-weight:600">Stableford</span>: <strong id="edit-stbl-prev" style="color:var(--text);font-weight:700">—</strong></div>
+      <!-- v1.34.079: Total y Stableford labels y valores en color tema -->
+      <div style="font-size:11px;color:var(--text);margin-bottom:6px"><span style="color:var(--text);font-weight:600">Total</span>: <strong id="edit-total" style="color:var(--text);font-weight:700">—</strong> · <span style="color:var(--text);font-weight:600">Stableford</span>: <strong id="edit-stbl-prev" style="color:var(--text);font-weight:700">—</strong></div>
       <div style="display:flex;gap:14px;margin-top:6px;font-size:9px;color:var(--muted);flex-wrap:wrap">
         <span><span class="red-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#e05555;margin-right:4px;vertical-align:middle"></span><span data-i18n="golpe_ventaja">Golpe de ventaja (HCP campo)</span></span>
         <span><span class="stbl-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:middle"></span><span data-i18n="punto_stbl">Punto Stableford</span></span>
@@ -1002,10 +1002,10 @@ nav.nav-hidden{transform:translateY(100%)}
         <button type="button" id="btn-modor-edit" class="btn-modor" onclick="toggleModoR('edit')"><span class="btn-modor-icon">R</span><span class="btn-modor-label" data-i18n="btn_marcar_r">Marcar bola retirada</span></button>
       </div>
       <div class="hoyo-section"><div class="hoyo-label" data-i18n="salida_19">Ida 1–9</div><div class="hoyo-grid" id="edit-grid-out"></div></div>
-      <div id="edit-grid-out-subtotal" style="display:none;text-align:right;font-size:10px;color:var(--muted);margin:2px 2px 0 0;font-family:'DM Mono',monospace;letter-spacing:.3px"></div>
+      <div id="edit-grid-out-subtotal" style="display:none;text-align:right;font-size:11px;color:var(--text);font-weight:600;margin:2px 2px 0 0;font-family:'DM Mono',monospace;letter-spacing:.3px"></div>
       <div class="hoyo-separator"></div>
       <div class="hoyo-section"><div class="hoyo-label" id="edit-grid-in-label" data-i18n="vuelta_1018">Vuelta 10–18</div><div class="hoyo-grid" id="edit-grid-in"></div></div>
-      <div id="edit-grid-in-subtotal" style="display:none;text-align:right;font-size:10px;color:var(--muted);margin:2px 2px 0 0;font-family:'DM Mono',monospace;letter-spacing:.3px"></div>
+      <div id="edit-grid-in-subtotal" style="display:none;text-align:right;font-size:11px;color:var(--text);font-weight:600;margin:2px 2px 0 0;font-family:'DM Mono',monospace;letter-spacing:.3px"></div>
     </div>
     <div class="modal-actions">
       <button class="btn" style="margin-top:0" id="btn-guardar-ronda" onclick="guardarEditRonda()" data-i18n="guardar">Guardar</button>
@@ -1106,7 +1106,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <span><span style="color:var(--muted)">85%:4B:</span> <span id="php-85">—</span></span>
     </div>
   </div>
-  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.078</div>
+  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.079</div>
   <div class="card" style="margin-bottom:8px;padding:12px 14px;display:none" id="mini-chart-wrap">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-size:11px;letter-spacing:1.5px;color:var(--gold2)" data-i18n="evolucion_hcp">EVOLUCIÓN HCP</span><span style="font-size:9px;color:var(--muted);letter-spacing:.5px" data-i18n="ultimas_20">20 últimas rondas</span></div>
     <canvas id="mini-hcp-chart" height="100" style="width:100%;display:block"></canvas>
@@ -8068,8 +8068,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.078' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.078\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.079' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.079\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
