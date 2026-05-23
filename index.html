@@ -886,7 +886,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.091</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.092</div>
   </div>
 </div>
 
@@ -933,7 +933,8 @@ nav.nav-hidden{transform:translateY(100%)}
 <!-- MODAL: EDITAR RONDA -->
 <div class="modal-overlay hidden" id="modal-ronda">
   <div class="modal">
-    <div class="modal-title" style="margin-bottom:10px" data-i18n="editar_ronda">Editar Ronda</div>
+    <!-- v1.34.092: titulo centrado + 5px (coherente con Nueva Ronda) -->
+    <div class="modal-title" style="margin-bottom:14px;text-align:center;font-size:14px" data-i18n="editar_ronda">Editar Ronda</div>
     <input type="hidden" id="edit-r-id">
     <input type="hidden" id="edit-r-campo-id">
     <div class="modal-err" id="edit-r-err"></div>
@@ -1108,7 +1109,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <span><span style="color:var(--muted)">85%:4B:</span> <span id="php-85">—</span></span>
     </div>
   </div>
-  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.091</div>
+  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.092</div>
   <div class="card" style="margin-bottom:8px;padding:12px 14px;display:none" id="mini-chart-wrap">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-size:11px;letter-spacing:1.5px;color:var(--gold2)" data-i18n="evolucion_hcp">EVOLUCIÓN HCP</span><span style="font-size:9px;color:var(--muted);letter-spacing:.5px" data-i18n="ultimas_20">20 últimas rondas</span></div>
     <canvas id="mini-hcp-chart" height="100" style="width:100%;display:block"></canvas>
@@ -1145,13 +1146,8 @@ nav.nav-hidden{transform:translateY(100%)}
 <!-- PAGE: NUEVA RONDA -->
 <div class="page" id="page-nueva">
   <div class="card">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-      <button onclick="goTo('rondas',$('nav-rondas'))" style="background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;padding:0;display:flex;align-items:center;gap:5px">
-        <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><polyline points="15 18 9 12 15 6"/></svg>
-        <span data-i18n="nav_rondas">Rondas</span>
-      </button>
-      <div class="modal-title" style="margin:0" data-i18n="nueva_ronda">Nueva Ronda</div>
-    </div>
+    <!-- v1.34.092: titulo centrado + 5px (sin boton volver, usar Cancelar/Guardar abajo) -->
+    <div class="modal-title" style="margin:0 0 14px 0;text-align:center;font-size:14px" data-i18n="nueva_ronda">Nueva Ronda</div>
     <input type="hidden" id="f-par-total">
     <!-- v1.34.086: Fecha al estilo Editar Ronda (inline sin recuadro + hint clicable) -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
@@ -1213,20 +1209,21 @@ nav.nav-hidden{transform:translateY(100%)}
         <button type="button" id="f-hcp-idx-usar-oficial" onclick="usarHcpOficial('f-hcp-idx','calcNuevaChcp')" class="hcp-oficial-btn" style="display:none;margin-top:0;min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis"></button>
       </div>
     </div>
-    <!-- v1.34.085: Formato (editable con recuadro) + HCP Campo (texto plano) - v1.34.091: en misma fila grid f2 -->
+    <!-- v1.34.085: Formato (editable) + HCP Campo - v1.34.092: Formato estilo Fecha (sin recuadro) -->
     <div id="nueva-chcp-wrap" style="display:none;margin-bottom:12px">
-      <div class="fields f2" style="gap:6px;align-items:end">
-        <div class="field" style="gap:3px">
-          <label data-i18n="formato">Formato de juego</label>
-          <select id="nueva-fmt" class="light-select" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:5px 8px;width:100%;-webkit-appearance:none;outline:none" onchange="calcNuevaChcp(); updateTotals();">
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:0 0 6px 0;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
+        <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="color:var(--text);font-weight:600" data-i18n="formato">Formato de juego</span>:
+          <select id="nueva-fmt" style="background:none;border:none;padding:2px 0;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto" onchange="calcNuevaChcp(); updateTotals();">
             <option value="100">100% — Informal</option>
             <option value="95">95% — Medal / Stblf</option>
             <option value="85">85% — Four Ball</option>
           </select>
-        </div>
-        <div style="padding:5px 8px;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
-          <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hcp_campo">HCP de Campo</span>: <span id="nueva-chcp-val" style="color:var(--text)">—</span>
-        </div>
+          <span style="font-size:10px;color:var(--muted);letter-spacing:.2px" data-i18n="edit_click_hint">(Click para editar)</span>
+        </span>
+      </div>
+      <div style="font-size:13px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
+        <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hcp_campo">HCP de Campo</span>: <span id="nueva-chcp-val" style="color:var(--text)">—</span>
       </div>
     </div>
     <div id="hoyos-wrap" style="display:none;margin-bottom:12px">
@@ -8105,8 +8102,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.091' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.091\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.092' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.092\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
