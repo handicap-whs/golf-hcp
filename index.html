@@ -886,7 +886,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.094</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.095</div>
   </div>
 </div>
 
@@ -1109,7 +1109,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <span><span style="color:var(--muted)">85%:4B:</span> <span id="php-85">—</span></span>
     </div>
   </div>
-  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.094</div>
+  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.095</div>
   <div class="card" style="margin-bottom:8px;padding:12px 14px;display:none" id="mini-chart-wrap">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-size:11px;letter-spacing:1.5px;color:var(--gold2)" data-i18n="evolucion_hcp">EVOLUCIÓN HCP</span><span style="font-size:9px;color:var(--muted);letter-spacing:.5px" data-i18n="ultimas_20">20 últimas rondas</span></div>
     <canvas id="mini-hcp-chart" height="100" style="width:100%;display:block"></canvas>
@@ -1171,21 +1171,23 @@ nav.nav-hidden{transform:translateY(100%)}
         <option value="9" data-i18n-opt="hoyos_9">9 hoyos</option>
       </select>
       <span style="font-size:10px;color:var(--muted);letter-spacing:.2px" data-i18n="edit_click_hint">(Click)</span>
+      <!-- v1.34.095: Vuelta inline en l&iacute;nea de Hoyos cuando 9H -->
+      <span id="f-vuelta-wrap" style="display:none;align-items:center;gap:8px">
+        <span style="color:var(--text);font-weight:600" data-i18n="vuelta">Vuelta</span>:
+        <select id="f-vuelta" onchange="onVueltaChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
+          <option value="1" data-i18n="ida">Ida (1–9)</option>
+          <option value="2" data-i18n="vuelta2">Vuelta (10–18)</option>
+        </select>
+      </span>
     </div>
-    <!-- v1.34.091: Barra y Vuelta - v1.34.094: estilo Fecha (sin recuadro, sin hint) -->
+    <!-- v1.34.091: Barra grid -> v1.34.094: estilo Fecha -> v1.34.095: Vuelta movida a Hoyos, Barra con (Click) -->
     <div id="barra-selector" style="display:none;margin-bottom:6px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
         <span style="color:var(--text);font-weight:600" data-i18n="barra_salida">Barra de salida</span>:
         <select id="f-barra" onchange="onBarraChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
           <option value="">— Selecciona barra —</option>
         </select>
-        <span id="f-vuelta-wrap" style="display:none;align-items:center;gap:8px">
-          <span style="color:var(--text);font-weight:600" data-i18n="vuelta">Vuelta</span>:
-          <select id="f-vuelta" onchange="onVueltaChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
-            <option value="1" data-i18n="ida">Ida (1–9)</option>
-            <option value="2" data-i18n="vuelta2">Vuelta (10–18)</option>
-          </select>
-        </span>
+        <span style="font-size:10px;color:var(--muted);letter-spacing:.2px" data-i18n="edit_click_hint">(Click)</span>
       </div>
     </div>
     <!-- v1.34.085: CR/Slope sin recuadro, labels en azul (estilo Editar Ronda) -->
@@ -7932,17 +7934,17 @@ function refrescarBtnsHcpOficial() {
   const fecha = state.user?.hcp_oficial_fecha;
   const activo = !!state.user?.hcp_oficial_activo;
   // v1.34.051: visible solo si el toggle está ON Y hay valor guardado
-  // v1.34.094: añadir "(Click)" al final muy pegado para indicar accion
+  // v1.34.095: (Click) en mismo estilo que otros hints (10px muted), no como parte del texto principal
   const visible = activo && hcp != null;
-  const clickHint = ' ' + (t('edit_click_hint')||'(Click)');
+  const clickHint = t('edit_click_hint')||'(Click)';
   const txt = visible
-    ? (t('hcp_oficial_btn_usar')||'Hcp F.G.:') + ' ' + _hoFormat(hcp) + (fecha ? ' · ' + _hoFormatFechaCorta(fecha) : '') + clickHint
+    ? (t('hcp_oficial_btn_usar')||'Hcp F.G.:') + ' ' + _hoFormat(hcp) + (fecha ? ' · ' + _hoFormatFechaCorta(fecha) : '') + ' <span style="font-size:10px;color:var(--muted);letter-spacing:.2px">' + clickHint + '</span>'
     : '';
   ['p-hcp-usar-oficial','f-hcp-idx-usar-oficial','edit-r-hcp-usar-oficial'].forEach(id => {
     const el = $(id);
     if (!el) return;
     el.style.display = visible ? '' : 'none';
-    el.textContent = txt;
+    el.innerHTML = txt;
   });
 }
 
@@ -8100,8 +8102,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.094' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.094\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.095' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.095\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
