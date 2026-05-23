@@ -883,7 +883,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.077</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.078</div>
   </div>
 </div>
 
@@ -954,21 +954,28 @@ nav.nav-hidden{transform:translateY(100%)}
     <div id="edit-r-nombre" style="font-size:15px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.5px;margin-bottom:8px">—</div>
     <div style="display:flex;flex-direction:column;gap:4px;margin:0 0 10px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
       <div id="edit-r-barra-disp" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">—</div>
+      <!-- v1.34.078: Par + CR + Slope todos en azul -->
       <div id="edit-r-campo-info" style="display:flex;flex-wrap:nowrap;gap:6px;align-items:center;white-space:nowrap;overflow:hidden">
         <span><span style="color:var(--blue-intenso);font-weight:600">Par</span> <span id="edit-r-par-disp">—</span></span>
         <span style="color:var(--muted)">·</span>
-        <span id="edit-r-cr-disp">—</span>
+        <span id="edit-r-cr-disp" style="color:var(--blue-intenso);font-weight:600">—</span>
         <span style="color:var(--muted)">·</span>
-        <span id="edit-r-slope-disp">—</span>
+        <span id="edit-r-slope-disp" style="color:var(--blue-intenso);font-weight:600">—</span>
       </div>
+      <!-- v1.34.078: Hoyos y HCP Campo en l&iacute;neas separadas (Vuelta sigue inline tras Hoyos) -->
       <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
         <span><span style="color:var(--blue-intenso);font-weight:600" data-i18n="hoyos">Hoyos</span>: <span id="edit-r-num-hoyos-disp">18</span></span>
         <span id="edit-vuelta-wrap-inline" style="display:none"><span style="color:var(--blue-intenso);font-weight:600" data-i18n="vuelta">Vuelta</span>: <span id="edit-r-vuelta-disp">—</span></span>
-        <span><span style="color:var(--blue-intenso);font-weight:600" data-i18n="hcp_campo">HCP de Campo</span>: <span id="edit-chcp-val">—</span></span>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
-        <span><span style="color:var(--blue-intenso);font-weight:600" data-i18n="hcp_idx">HCP Index</span>: <span id="edit-r-hcp-disp">—</span></span>
-        <span><span style="color:var(--blue-intenso);font-weight:600" data-i18n="formato">Formato de juego</span>: <span id="edit-r-fmt-disp">—</span></span>
+      <div>
+        <span style="color:var(--blue-intenso);font-weight:600" data-i18n="hcp_campo">HCP de Campo</span>: <span id="edit-chcp-val">—</span>
+      </div>
+      <!-- v1.34.078: HCP Index y Formato de juego en l&iacute;neas separadas, color gris oscuro + negrita (prueba) -->
+      <div>
+        <span style="color:#555;font-weight:700" data-i18n="hcp_idx">HCP Index</span>: <span id="edit-r-hcp-disp" style="color:#555;font-weight:700">—</span>
+      </div>
+      <div>
+        <span style="color:#555;font-weight:700" data-i18n="formato">Formato de juego</span>: <span id="edit-r-fmt-disp" style="color:#555;font-weight:700">—</span>
       </div>
     </div>
 
@@ -985,7 +992,8 @@ nav.nav-hidden{transform:translateY(100%)}
     <div id="edit-hoyos-wrap" style="display:none">
       <!-- Separador fino antes del panel de hoyos -->
       <hr style="border:none;border-top:1px solid var(--border);opacity:.35;margin:10px 0 8px">
-      <div style="font-size:10px;color:var(--muted);margin-bottom:6px">Total: <strong id="edit-total" style="color:var(--cream)">—</strong> · Stableford: <strong id="edit-stbl-prev" style="color:var(--gold2)">—</strong></div>
+      <!-- v1.34.078: Total y Stableford con datos en color tema (negro en claro, claro en oscuro) -->
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px"><span style="color:var(--blue-intenso);font-weight:600">Total</span>: <strong id="edit-total" style="color:var(--text);font-weight:700">—</strong> · <span style="color:var(--blue-intenso);font-weight:600">Stableford</span>: <strong id="edit-stbl-prev" style="color:var(--text);font-weight:700">—</strong></div>
       <div style="display:flex;gap:14px;margin-top:6px;font-size:9px;color:var(--muted);flex-wrap:wrap">
         <span><span class="red-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#e05555;margin-right:4px;vertical-align:middle"></span><span data-i18n="golpe_ventaja">Golpe de ventaja (HCP campo)</span></span>
         <span><span class="stbl-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:middle"></span><span data-i18n="punto_stbl">Punto Stableford</span></span>
@@ -1098,7 +1106,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <span><span style="color:var(--muted)">85%:4B:</span> <span id="php-85">—</span></span>
     </div>
   </div>
-  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.077</div>
+  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.078</div>
   <div class="card" style="margin-bottom:8px;padding:12px 14px;display:none" id="mini-chart-wrap">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-size:11px;letter-spacing:1.5px;color:var(--gold2)" data-i18n="evolucion_hcp">EVOLUCIÓN HCP</span><span style="font-size:9px;color:var(--muted);letter-spacing:.5px" data-i18n="ultimas_20">20 últimas rondas</span></div>
     <canvas id="mini-hcp-chart" height="100" style="width:100%;display:block"></canvas>
@@ -8060,8 +8068,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.077' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.077\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.078' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.078\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
