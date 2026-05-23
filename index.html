@@ -660,12 +660,12 @@ nav.nav-hidden{transform:translateY(100%)}
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: rgba(201,168,76,0.85);
+  background: none;
   border: none;
-  color: #1a2f1a;
-  font-size: 11px;
+  color: var(--text);
+  font-size: 16px;
   line-height: 1;
-  font-weight: bold;
+  font-weight: normal;
   cursor: pointer;
   display: none;
   align-items: center;
@@ -676,20 +676,22 @@ nav.nav-hidden{transform:translateY(100%)}
   -webkit-tap-highlight-color: transparent;
   z-index: 5;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  box-shadow: none;
 }
 .clr-btn.visible { display: flex; }
 .clr-btn:active {
-  background: rgba(201,168,76,1);
-  transform: translateY(-50%) scale(0.92);
+  background: none;
+  transform: translateY(-50%) scale(0.85);
+  opacity: 0.6;
 }
 :root.light .clr-btn {
-  background: rgba(0,0,0,0.18);
-  color: rgba(0,0,0,0.7);
+  background: none;
+  color: var(--text);
   box-shadow: none;
 }
 :root.light .clr-btn:active {
-  background: rgba(0,0,0,0.28);
+  background: none;
+  opacity: 0.6;
 }
 
 /* Login: arreglar .auth-clear (X gris pequena del email/password)
@@ -886,7 +888,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.116</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.117</div>
   </div>
 </div>
 
@@ -1025,10 +1027,10 @@ nav.nav-hidden{transform:translateY(100%)}
     <div class="modal-title" style="margin-bottom:14px;text-align:center;font-size:14px;color:var(--text)">Editar Campo</div>
     <input type="hidden" id="edit-c-id">
     <div class="modal-err" id="edit-c-err"></div>
-    <!-- v1.34.115: Nombre del campo estilo Fecha (label azul, sin recuadro grande). Mantiene uppercase auto. -->
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-      <span style="color:var(--blue-adapt);font-weight:600" data-i18n="nombre_campo">Nombre</span>:
-      <input id="edit-c-nombre" type="text" data-clearable placeholder="CLUB DE GOLF" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;text-transform:uppercase;touch-action:manipulation;flex:1;min-width:0" oninput="this.value=this.value.toUpperCase()">
+    <!-- v1.34.115: Nombre del campo estilo Fecha. v1.34.117: centrado + sin ":" -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
+      <span style="color:var(--blue-adapt);font-weight:600" data-i18n="nombre_campo">Nombre</span>
+      <input id="edit-c-nombre" type="text" data-clearable placeholder="CLUB DE GOLF" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;text-transform:uppercase;touch-action:manipulation;text-align:center;flex:1;min-width:0" oninput="this.value=this.value.toUpperCase()">
     </div>
     <div class="section-title" data-i18n="barras_salida">Barras de Salida</div>
     <div id="edit-barras-wrap"></div>
@@ -1127,7 +1129,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.116</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.117</div>
   </div>
 </div>
 
@@ -8167,8 +8169,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.116' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.116\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.117' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.117\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
