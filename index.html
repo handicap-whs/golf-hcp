@@ -317,7 +317,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .chcp-num.empty{color:var(--muted);font-size:32px}
 .chcp-sub{font-size:19px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
 .chcp-detail{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5}
-.player-name{font-family:'DM Mono',monospace;font-size:21px;color:var(--gold2);margin-bottom:6px}
+.player-name{font-family:'DM Mono',monospace;font-size:21px;color:var(--text);margin-bottom:6px}
 .target-box{margin-top:4px;padding:4px 8px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:5px;font-size:11px;color:var(--cream);line-height:1.3}
 
 /* ── HISTORY ── */
@@ -883,7 +883,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.057</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.058</div>
   </div>
 </div>
 
@@ -1069,17 +1069,19 @@ nav.nav-hidden{transform:translateY(100%)}
     </div>
     <div class="fields f2" style="margin-bottom:6px;gap:6px">
       <div class="field" style="gap:3px">
-        <label data-i18n="hcp_jugador">HCP Jugador</label>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:nowrap;min-width:0">
+          <label data-i18n="hcp_jugador" style="margin:0;flex-shrink:0">HCP Jugador</label>
+          <button type="button" id="p-hcp-usar-oficial" onclick="usarHcpOficial('p-hcp','calcCHCP')" class="hcp-oficial-btn" style="display:none;margin-top:0;min-width:0;overflow:hidden;text-overflow:ellipsis"></button>
+        </div>
         <input id="p-hcp" type="number" placeholder="18.4" step="0.1" inputmode="decimal"
           style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:5px 8px;width:100%;-webkit-appearance:none;outline:none" oninput="calcCHCP()">
-        <button type="button" id="p-hcp-usar-oficial" onclick="usarHcpOficial('p-hcp','calcCHCP')" class="hcp-oficial-btn" style="display:none"></button>
       </div>
       <input type="hidden" id="p-par">
       <input type="hidden" id="p-cr">
       <input type="hidden" id="p-slope">
     </div>
-    <!-- v1.34.056: PAR/CR/Slope en una sola línea, sin recuadros ni etiquetas (v1.34.057: color tema + nowrap) -->
-    <div id="p-campo-info" style="display:flex;flex-wrap:nowrap;gap:6px;align-items:center;margin:0 0 10px 8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;white-space:nowrap;overflow:hidden">
+    <!-- v1.34.056: PAR/CR/Slope en una sola línea, sin recuadros ni etiquetas (v1.34.058: color tema + nowrap, v1.34.058: +3px tamaño) -->
+    <div id="p-campo-info" style="display:flex;flex-wrap:nowrap;gap:6px;align-items:center;margin:0 0 10px 8px;font-size:15px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;white-space:nowrap;overflow:hidden">
       <span>Par <span id="p-par-disp">—</span></span>
       <span style="color:var(--muted)">·</span>
       <span id="p-cr-disp">—</span>
@@ -1109,7 +1111,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.057</div>
+  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.058</div>
   <div class="card" style="margin-bottom:8px;padding:12px 14px;display:none" id="mini-chart-wrap">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-size:11px;letter-spacing:1.5px;color:var(--gold2)" data-i18n="evolucion_hcp">EVOLUCIÓN HCP</span><span style="font-size:9px;color:var(--muted);letter-spacing:.5px" data-i18n="ultimas_20">20 últimas rondas</span></div>
     <canvas id="mini-hcp-chart" height="100" style="width:100%;display:block"></canvas>
@@ -8046,8 +8048,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.057' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.057\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.058' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.058\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
