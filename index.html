@@ -886,7 +886,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.095</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.096</div>
   </div>
 </div>
 
@@ -988,9 +988,9 @@ nav.nav-hidden{transform:translateY(100%)}
 
     <!-- ZONA EDITABLE: solo Fecha (sin recuadro, igual estilo que el resto) - v1.34.079: label "Fecha" en color tema -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-      <span style="color:var(--text);font-weight:600" data-i18n="fecha">Fecha</span>:
+      <span style="color:var(--blue-adapt);font-weight:600" data-i18n="fecha">Fecha</span>:
       <input type="date" id="edit-r-fecha" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
-      <span style="font-size:10px;color:var(--muted);letter-spacing:.2px" data-i18n="edit_click_hint">(Click)</span>
+      
     </div>
 
     <div id="edit-hoyos-wrap" style="display:none">
@@ -1109,7 +1109,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <span><span style="color:var(--muted)">85%:4B:</span> <span id="php-85">—</span></span>
     </div>
   </div>
-  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.095</div>
+  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.096</div>
   <div class="card" style="margin-bottom:8px;padding:12px 14px;display:none" id="mini-chart-wrap">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-size:11px;letter-spacing:1.5px;color:var(--gold2)" data-i18n="evolucion_hcp">EVOLUCIÓN HCP</span><span style="font-size:9px;color:var(--muted);letter-spacing:.5px" data-i18n="ultimas_20">20 últimas rondas</span></div>
     <canvas id="mini-hcp-chart" height="100" style="width:100%;display:block"></canvas>
@@ -1151,29 +1151,29 @@ nav.nav-hidden{transform:translateY(100%)}
     <input type="hidden" id="f-par-total">
     <!-- v1.34.086: Fecha al estilo Editar Ronda (inline sin recuadro + hint clicable) -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-      <span style="color:var(--text);font-weight:600" data-i18n="fecha">Fecha</span>:
+      <span style="color:var(--blue-adapt);font-weight:600" data-i18n="fecha">Fecha</span>:
       <input id="f-date" type="date" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
-      <span style="font-size:10px;color:var(--muted);letter-spacing:.2px" data-i18n="edit_click_hint">(Click)</span>
+      
     </div>
     <!-- v1.34.093: Campo y Hoyos estilo Fecha (sin recuadro, con hint). En lineas separadas. -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-      <span style="color:var(--text);font-weight:600" data-i18n="campo">Campo</span>:
+      <span style="color:var(--blue-adapt);font-weight:600" data-i18n="campo">Campo</span>:
       <select id="f-campo" onchange="onCampoChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
         <option value="">— Selecciona campo —</option>
       </select>
-      <span style="font-size:10px;color:var(--muted);letter-spacing:.2px" data-i18n="edit_click_hint">(Click)</span>
+      
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-      <span style="color:var(--text);font-weight:600" data-i18n="hoyos">Hoyos</span>:
+      <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hoyos">Hoyos</span>:
       <select id="f-num-hoyos" onchange="onNumHoyosChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
         <option value="" id="opt-hoyos-ph">— Hoyos —</option>
         <option value="18" data-i18n-opt="hoyos_18">18 hoyos</option>
         <option value="9" data-i18n-opt="hoyos_9">9 hoyos</option>
       </select>
-      <span style="font-size:10px;color:var(--muted);letter-spacing:.2px" data-i18n="edit_click_hint">(Click)</span>
+      
       <!-- v1.34.095: Vuelta inline en l&iacute;nea de Hoyos cuando 9H -->
       <span id="f-vuelta-wrap" style="display:none;align-items:center;gap:8px">
-        <span style="color:var(--text);font-weight:600" data-i18n="vuelta">Vuelta</span>:
+        <span style="color:var(--blue-adapt);font-weight:600" data-i18n="vuelta">Vuelta</span>:
         <select id="f-vuelta" onchange="onVueltaChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
           <option value="1" data-i18n="ida">Ida (1–9)</option>
           <option value="2" data-i18n="vuelta2">Vuelta (10–18)</option>
@@ -1183,11 +1183,11 @@ nav.nav-hidden{transform:translateY(100%)}
     <!-- v1.34.091: Barra grid -> v1.34.094: estilo Fecha -> v1.34.095: Vuelta movida a Hoyos, Barra con (Click) -->
     <div id="barra-selector" style="display:none;margin-bottom:6px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-        <span style="color:var(--text);font-weight:600" data-i18n="barra_salida">Barra de salida</span>:
+        <span style="color:var(--blue-adapt);font-weight:600" data-i18n="barra_salida">Barra de salida</span>:
         <select id="f-barra" onchange="onBarraChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
           <option value="">— Selecciona barra —</option>
         </select>
-        <span style="font-size:10px;color:var(--muted);letter-spacing:.2px" data-i18n="edit_click_hint">(Click)</span>
+        
       </div>
     </div>
     <!-- v1.34.085: CR/Slope sin recuadro, labels en azul (estilo Editar Ronda) -->
@@ -1202,7 +1202,7 @@ nav.nav-hidden{transform:translateY(100%)}
     </div>
     <!-- v1.34.094: HCP Jugador estilo Fecha (sin recuadro, sin hint) + Hcp F.G. al lado -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-      <span style="color:var(--text);font-weight:600" data-i18n="hcp_jugador">HCP Jugador</span>:
+      <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hcp_jugador">HCP Jugador</span>:
       <input id="f-hcp-idx" type="number" placeholder="18.4" step="0.1" inputmode="decimal"
         style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:50px"
         oninput="calcNuevaChcp()">
@@ -1212,7 +1212,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <div id="nueva-chcp-wrap" style="display:none;margin-bottom:12px">
       <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:0 0 6px 0;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
         <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <span style="color:var(--text);font-weight:600" data-i18n="formato">Formato de juego</span>:
+          <span style="color:var(--blue-adapt);font-weight:600" data-i18n="formato">Formato de juego</span>:
           <select id="nueva-fmt" style="background:none;border:none;padding:2px 0;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto" onchange="calcNuevaChcp(); updateTotals();">
             <option value="100">100% — Informal</option>
             <option value="95">95% — Medal / Stblf</option>
@@ -8102,8 +8102,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.095' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.095\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.096' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.096\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
