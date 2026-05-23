@@ -883,7 +883,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.074</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.075</div>
   </div>
 </div>
 
@@ -934,27 +934,24 @@ nav.nav-hidden{transform:translateY(100%)}
     <input type="hidden" id="edit-r-id">
     <input type="hidden" id="edit-r-campo-id">
     <div class="modal-err" id="edit-r-err"></div>
-    <!-- v1.34.074: bloque solo lectura compacto con separadores entre conceptos -->
+    <!-- v1.34.075: Editar Ronda solo permite editar Fecha + golpes hoyo a hoyo. Todo lo demas es lectura. -->
+    <!-- Inputs hidden (mantienen valores para el JS de guardado) -->
     <input type="hidden" id="edit-r-barra">
     <input type="hidden" id="edit-r-cr">
     <input type="hidden" id="edit-r-slope">
     <input type="hidden" id="edit-r-gross">
     <input type="hidden" id="edit-r-stbl">
-    <!-- Fila 1: Fecha (a la derecha sola) + Campo (debajo, sin label "Campo") -->
-    <div class="fields f2" style="margin-bottom:6px;gap:8px">
-      <div class="field" style="gap:3px">
-        <!-- Campo sin label (el nombre del campo ya es autodescriptivo) -->
-        <div id="edit-r-nombre" style="padding:14px 8px 5px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace">—</div>
-      </div>
-      <div class="field" style="gap:3px">
-        <label data-i18n="fecha" style="font-size:10px">Fecha</label>
-        <input type="date" id="edit-r-fecha" style="padding:5px 8px;font-size:12px;border-radius:4px">
-      </div>
-    </div>
-    <!-- Separador fino tras Campo+Fecha -->
-    <hr style="border:none;border-top:1px solid var(--border);opacity:.35;margin:6px 0 8px">
-    <!-- Bloque info de campo: barra · Par · CR · Slope · Hoyos · HCP Campo -->
-    <div style="display:flex;flex-direction:column;gap:4px;margin:0 0 8px 8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
+    <input type="hidden" id="edit-r-hcp">
+    <input type="hidden" id="edit-fmt">
+    <input type="hidden" id="edit-r-num-hoyos" value="18">
+    <div id="edit-vuelta-wrap" style="display:none"></div>
+    <!-- Spans hidden para que el JS no rompa al rellenar gross/stbl displays -->
+    <span id="edit-r-gross-disp" style="display:none"></span>
+    <span id="edit-r-stbl-disp" style="display:none"></span>
+
+    <!-- BLOQUE LECTURA: nombre del campo (grande) + datos del campo -->
+    <div id="edit-r-nombre" style="font-size:15px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.5px;margin-bottom:8px">—</div>
+    <div style="display:flex;flex-direction:column;gap:4px;margin:0 0 10px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
       <div id="edit-r-barra-disp" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">—</div>
       <div id="edit-r-campo-info" style="display:flex;flex-wrap:nowrap;gap:6px;align-items:center;white-space:nowrap;overflow:hidden">
         <span>Par <span id="edit-r-par-disp">—</span></span>
@@ -968,32 +965,21 @@ nav.nav-hidden{transform:translateY(100%)}
         <span id="edit-vuelta-wrap-inline" style="display:none"><span style="color:var(--muted)" data-i18n="vuelta">Vuelta</span>: <span id="edit-r-vuelta-disp">—</span></span>
         <span><span style="color:var(--muted)" data-i18n="hcp_campo">HCP de Campo</span>: <span id="edit-chcp-val">—</span></span>
       </div>
-    </div>
-    <!-- Spans hidden para que el JS no rompa al rellenar gross/stbl displays -->
-    <span id="edit-r-gross-disp" style="display:none"></span>
-    <span id="edit-r-stbl-disp" style="display:none"></span>
-    <!-- Separador fino tras info campo -->
-    <hr style="border:none;border-top:1px solid var(--border);opacity:.35;margin:6px 0 8px">
-    <!-- HCP Index + Hcp F.G. y Formato de juego -->
-    <div class="fields f2" style="margin-bottom:6px;gap:6px">
-      <div class="field" style="gap:3px">
-        <label data-i18n="hcp_idx" style="margin:0;font-size:10px">HCP Index</label>
-        <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;min-width:0">
-          <input id="edit-r-hcp" type="number" step="0.1" inputmode="decimal" placeholder="18.4" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 8px;width:90px;flex-shrink:0;-webkit-appearance:none;outline:none" oninput="recalcEditStbl()">
-          <button type="button" id="edit-r-hcp-usar-oficial" onclick="usarHcpOficial('edit-r-hcp','recalcEditStbl')" class="hcp-oficial-btn" style="display:none;margin-top:0;min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis"></button>
-        </div>
-      </div>
-      <div class="field" style="gap:3px">
-        <label data-i18n="formato" style="font-size:10px">Formato de juego</label>
-        <select id="edit-fmt" class="light-select" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 8px;width:100%;-webkit-appearance:none;outline:none" onchange="recalcEditStbl()">
-          <option value="100">100% — Informal</option>
-          <option value="95">95% — Medal / Stblf</option>
-          <option value="85">85% — Four Ball</option>
-        </select>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+        <span><span style="color:var(--muted)" data-i18n="hcp_idx">HCP Index</span>: <span id="edit-r-hcp-disp">—</span></span>
+        <span><span style="color:var(--muted)" data-i18n="formato">Formato de juego</span>: <span id="edit-r-fmt-disp">—</span></span>
       </div>
     </div>
-    <input type="hidden" id="edit-r-num-hoyos" value="18">
-    <div id="edit-vuelta-wrap" style="display:none"></div>
+
+    <!-- Separador fino antes de la zona editable -->
+    <hr style="border:none;border-top:1px solid var(--border);opacity:.35;margin:10px 0">
+
+    <!-- ZONA EDITABLE: solo Fecha -->
+    <div class="field" style="gap:3px;margin-bottom:6px">
+      <label data-i18n="fecha" style="font-size:10px">Fecha</label>
+      <input type="date" id="edit-r-fecha" style="padding:5px 8px;font-size:12px;border-radius:4px;width:auto">
+    </div>
+
     <div id="edit-hoyos-wrap" style="display:none">
       <!-- Separador fino antes del panel de hoyos -->
       <hr style="border:none;border-top:1px solid var(--border);opacity:.35;margin:10px 0 8px">
@@ -1110,7 +1096,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <span><span style="color:var(--muted)">85%:4B:</span> <span id="php-85">—</span></span>
     </div>
   </div>
-  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.074</div>
+  <div id="version-tap" style="text-align:center;padding:12px 0 4px;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.075</div>
   <div class="card" style="margin-bottom:8px;padding:12px 14px;display:none" id="mini-chart-wrap">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-size:11px;letter-spacing:1.5px;color:var(--gold2)" data-i18n="evolucion_hcp">EVOLUCIÓN HCP</span><span style="font-size:9px;color:var(--muted);letter-spacing:.5px" data-i18n="ultimas_20">20 últimas rondas</span></div>
     <canvas id="mini-hcp-chart" height="100" style="width:100%;display:block"></canvas>
@@ -7017,6 +7003,14 @@ function abrirEditRonda(id) {
   $('edit-r-barra').value    = r.barra_color || '';
   $('edit-r-stbl').value     = r.stableford != null ? r.stableford : '';
   $('edit-r-hcp').value      = r.hcp_idx != null ? r.hcp_idx : '';
+  // v1.34.075: rellenar displays de HCP Index y Formato (solo lectura en Editar Ronda)
+  const _hcpDisp = $('edit-r-hcp-disp');
+  if (_hcpDisp) _hcpDisp.textContent = r.hcp_idx != null ? String(r.hcp_idx).replace('.', ',') : '—';
+  const _fmtDisp = $('edit-r-fmt-disp');
+  if (_fmtDisp) {
+    const _fmtLabels = {'100':'100% — Informal','95':'95% — Medal / Stblf','85':'85% — Four Ball'};
+    _fmtDisp.textContent = _fmtLabels[_fmtVal] || _fmtVal + '%';
+  }
   $('edit-r-err').classList.remove('show');
 
   const campo = r.campo_id ? state.campos.find(c => c.id === r.campo_id) : null;
@@ -8064,8 +8058,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.074' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.074\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.075' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.075\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
