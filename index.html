@@ -367,7 +367,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .empty{text-align:center;color:var(--muted);font-size:11px;padding:24px;line-height:1.8}
 .info{font-size:9px;color:var(--muted);margin-top:10px;line-height:1.6;letter-spacing:.5px}
 .hidden{display:none}
-.section-title{font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin:16px 0 10px}
+.section-title{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text);margin:16px 0 10px;text-align:center;font-weight:600} /* v1.34.115: color tema + centrado + 11px (estilo Editar Ronda) */
 
 @media(max-width:480px){.f3{grid-template-columns:1fr 1fr}}
 
@@ -886,7 +886,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.114</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.115</div>
   </div>
 </div>
 
@@ -1021,15 +1021,21 @@ nav.nav-hidden{transform:translateY(100%)}
 <!-- MODAL: EDITAR CAMPO -->
 <div class="modal-overlay hidden" id="modal-campo">
   <div class="modal">
-    <div class="modal-title">Editar Campo</div>
+    <!-- v1.34.115: t&iacute;tulo centrado, color tema, 14px (estilo Editar/Nueva Ronda) -->
+    <div class="modal-title" style="margin-bottom:14px;text-align:center;font-size:14px;color:var(--text)">Editar Campo</div>
     <input type="hidden" id="edit-c-id">
     <div class="modal-err" id="edit-c-err"></div>
-    <div class="field" style="gap:3px;margin-bottom:8px"><label data-i18n="nombre_campo" style="display:inline">Nombre del campo</label><input id="edit-c-nombre" type="text" data-clearable placeholder="CLUB DE GOLF" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:5px 8px;width:100%;-webkit-appearance:none;outline:none;text-transform:uppercase;touch-action:manipulation" oninput="this.value=this.value.toUpperCase()"></div>
+    <!-- v1.34.115: Nombre del campo estilo Fecha (label azul, sin recuadro grande). Mantiene uppercase auto. -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
+      <span style="color:var(--blue-adapt);font-weight:600" data-i18n="nombre_campo">Nombre</span>:
+      <input id="edit-c-nombre" type="text" data-clearable placeholder="CLUB DE GOLF" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;text-transform:uppercase;touch-action:manipulation;flex:1;min-width:0" oninput="this.value=this.value.toUpperCase()">
+    </div>
     <div class="section-title" data-i18n="barras_salida">Barras de Salida</div>
     <div id="edit-barras-wrap"></div>
     <div class="section-title" data-i18n="par_indice">Par e Índice por Hoyo</div>
-    <div id="edit-c-par-total" style="display:none;text-align:center;padding:8px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:5px;font-size:12px;color:var(--cream);margin-bottom:10px">
-      Par total: <strong id="edit-c-par-num" style="color:var(--gold2);font-size:15px">—</strong>
+    <!-- v1.34.115: Par total sin recuadro dorado, texto plano color tema -->
+    <div id="edit-c-par-total" style="display:none;text-align:center;padding:4px;font-size:12px;color:var(--text);margin-bottom:10px;font-family:'DM Mono',monospace;letter-spacing:.3px">
+      <span style="color:var(--blue-adapt);font-weight:600">Par total</span>: <strong id="edit-c-par-num" style="color:var(--text);font-size:14px;font-weight:700">—</strong>
     </div>
     <div id="edit-hoyos-campo"></div>
     <div class="modal-actions">
@@ -1120,7 +1126,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.114</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.115</div>
   </div>
 </div>
 
@@ -8160,8 +8166,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.114' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.114\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.115' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.115\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
