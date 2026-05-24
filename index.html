@@ -36,6 +36,8 @@
 :root.light #page-inicio{background:#ffffff;border-radius:8px;padding:8px} /* v1.34.143: fondo blanco Inicio modo claro (contenedores intactos) */
 :root.light #page-stats{background:#ffffff;border-radius:8px;padding:8px} /* v1.34.143: fondo blanco Estadisticas modo claro (contenedores intactos) */
 :root.light #page-campos{background:#ffffff;border-radius:8px;padding:8px} /* v1.34.145: fondo blanco Mis Campos + Nuevo Campo (heredado, contenedores intactos) */
+:root.light #page-nueva{background:#ffffff;border-radius:8px;padding:8px} /* v1.34.149: fondo blanco Nueva Ronda modo claro (contenedores intactos) */
+:root.light #page-ajustes{background:#ffffff;border-radius:8px;padding:8px} /* v1.34.149: fondo blanco Ajustes modo claro (zonas por temas conservan colores) */
 input::placeholder,textarea::placeholder{color:var(--gold);opacity:0.20}
 input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{color:var(--gold);opacity:0.20}
 input::-moz-placeholder,textarea::-moz-placeholder{color:var(--gold);opacity:0.20}
@@ -326,9 +328,12 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 /* ── CHCP ── */
 .chcp-box{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:6px 10px;text-align:center;margin-top:6px} /* v1.34.089: padding reducido tras quitar nombre */
 .chcp-num{font-family:'DM Mono',monospace;font-size:40px;font-weight:500;color:var(--cream);line-height:1} /* v1.34.089: 48px -> 40px */
-/* v1.34.147: HCP Jugador (input) + HCP Campo (.chcp-num) en dorado SOLO modo oscuro */
-:root:not(.light) .hcp-jugador-input{color:var(--gold2) !important}
-:root:not(.light) .chcp-num{color:var(--gold2)}
+/* v1.34.148: ETIQUETAS HCP Jugador y H&aacute;ndicap de Campo en dorado claro; VALORES en blanco. Solo modo oscuro. */
+:root:not(.light) .hcp-label-dorado{color:var(--gold2) !important}
+/* v1.34.149: prompts Campo/Barra/HCP Jugador con borde muy sutil segun tema (gris en claro, amarillo en oscuro) */
+.prompt-inicio{border:1px solid rgba(255,255,255,0.05);border-radius:6px;padding:6px 8px}
+:root.light .prompt-inicio{border-color:rgba(0,0,0,0.06)} /* gris MUY suave modo claro */
+:root:not(.light) .prompt-inicio{border-color:rgba(232,201,106,0.10)} /* amarillo MUY suave modo oscuro */
 .chcp-num.empty{color:var(--muted);font-size:32px}
 .chcp-sub{font-size:19px;letter-spacing:2px;text-transform:uppercase;color:var(--blue-adapt);font-weight:600;margin-bottom:2px} /* v1.34.089: azul + negrita (era muted) */
 .chcp-detail{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5}
@@ -908,7 +913,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.147</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.149</div>
   </div>
 </div>
 
@@ -1084,16 +1089,16 @@ nav.nav-hidden{transform:translateY(100%)}
 
   </div>
   <div class="card">
-    <div class="card-title" style="font-size:17px;text-align:center" data-i18n="hcp_campo_title">Hándicap de Campo</div>
-    <!-- v1.34.101: Campo, Barra y HCP Jugador estilo Nueva Ronda (sin recuadro, labels azul). v1.34.102: alineados a izquierda. -->
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
+    <div class="card-title hcp-label-dorado" style="font-size:17px;text-align:center" data-i18n="hcp_campo_title">Hándicap de Campo</div>
+    <!-- v1.34.101: Campo, Barra y HCP Jugador estilo Nueva Ronda (sin recuadro, labels azul). v1.34.102: alineados a izquierda. v1.34.149: recuadro muy sutil. -->
+    <div class="prompt-inicio" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
       <span style="color:var(--text);font-weight:600" data-i18n="campo">Campo</span>:
       <select id="p-campo" onchange="onCampoAntes()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;flex:1;min-width:0">
         <option value="">— Selecciona un campo —</option>
       </select>
     </div>
     <div id="p-barra-wrap" style="display:none;margin-bottom:6px">
-      <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
+      <div class="prompt-inicio" style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
         <span style="color:var(--text);font-weight:600" data-i18n="barra_salida">Barra de salida</span>:
         <select id="p-barra" onchange="onBarraAntes()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:15ch">
           <option value="">— Selecciona barra —</option>
@@ -1101,11 +1106,10 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
       <div id="p-barra-aviso" style="margin-top:4px">${lang==='pt'?'⚠️ Este campo não tem barras definidas.<br><span style="color:var(--muted)">Vá a <strong style="color:var(--cream)">Campos → ✏ Editar</strong> para adicionar barras com CR e Slope.</span>':'⚠️ Este campo no tiene barras definidas.<br><span style="color:var(--muted)">Ve a <strong style="color:var(--cream)">Campos → ✏ Editar</strong> para añadir barras con su CR y Slope.</span>'}</div>
     </div>
-    <!-- v1.34.101: HCP Jugador estilo Nueva Ronda (sin recuadro, input 50px, boton Hcp F.G. al lado) -->
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-      <span style="color:var(--text);font-weight:600" data-i18n="hcp_jugador">HCP Jugador</span>:
+    <!-- v1.34.101: HCP Jugador estilo Nueva Ronda (sin recuadro, input 50px, boton Hcp F.G. al lado). v1.34.149: recuadro muy sutil. -->
+    <div class="prompt-inicio" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
+      <span class="hcp-label-dorado" style="color:var(--text);font-weight:600" data-i18n="hcp_jugador">HCP Jugador</span>:
       <input id="p-hcp" type="number" placeholder="18.4" step="0.1" inputmode="decimal"
-        class="hcp-jugador-input"
         style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:50px"
         oninput="calcCHCP()">
       <button type="button" id="p-hcp-usar-oficial" onclick="usarHcpOficial('p-hcp','calcCHCP')" class="hcp-oficial-btn" style="display:none;margin-top:0;min-width:0;overflow:hidden;text-overflow:ellipsis"></button>
@@ -1150,7 +1154,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.147</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.149</div>
   </div>
 </div>
 
@@ -1330,8 +1334,9 @@ nav.nav-hidden{transform:translateY(100%)}
 
 <!-- PAGE: CAMPOS -->
 <div class="page" id="page-campos">
-  <div style="margin-bottom:6px"><button onclick="goTo('ajustes',$('nav-ajustes'))" style="background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:14px;cursor:pointer;padding:0;display:flex;align-items:center;gap:5px"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="nav_ajustes">Ajustes</span></button></div>
-  <!-- Formulario Nuevo Campo — aparece primero cuando está abierto -->
+  <div style="margin-bottom:6px"><button onclick="cerrarNuevoCampo();goTo('ajustes',$('nav-ajustes'))" style="background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:14px;cursor:pointer;padding:0;display:flex;align-items:center;gap:5px"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="nav_ajustes">Ajustes</span></button></div>
+  <!-- v1.34.148: bot&oacute;n volver cierra nuevo-campo-wrap antes de navegar (evita que al regresar aparezca el formulario en vez del listado) -->
+  <!-- Formulario Nuevo Campo — aparece primero cuando est&aacute; abierto -->
   <div id="nuevo-campo-wrap" style="display:none">
     <div class="card">
       <div class="card-row" style="margin-bottom:10px">
@@ -8246,8 +8251,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.147' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.147\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.149' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.149\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
