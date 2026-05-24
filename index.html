@@ -30,7 +30,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--hist-sticky:#233723;--bg:#1a2f1a;--bg2:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.09);--gold:#c9a84c;--gold2:#e8c96a;--green:#7bc67a;--cream:#f5f0e8;--muted:rgba(255,255,255,0.35);--red:#e05555;--red-intenso:#cc0000;--blue-intenso:#0066cc;--blue-adapt:#4da3ff;--text:#ffffff;--text2:rgba(255,255,255,0.65);--card-bg:rgba(255,255,255,0.04);--nav-bg:#0f1a0f;--input-bg:rgba(255,255,255,0.07);--splash-bg:#1a2f1a}
+:root{--hist-sticky:#233723;--bg:#1a2f1a;--bg2:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.09);--gold:#c9a84c;--gold2:#e8c96a;--green:#4caf50;--cream:#f5f0e8;--muted:rgba(255,255,255,0.35);--red:#e05555;--red-intenso:#cc0000;--blue-intenso:#0066cc;--blue-adapt:#4da3ff;--text:#ffffff;--text2:rgba(255,255,255,0.65);--card-bg:rgba(255,255,255,0.04);--nav-bg:#0f1a0f;--input-bg:rgba(255,255,255,0.07);--splash-bg:#1a2f1a} /* v1.34.140: --green #7bc67a -> #4caf50 (verde intenso, mejor contraste con azul) */
 :root.light{--hist-sticky:#e8f0e8;--bg:#f0f4f0;--text:#000000;--cream:#1a2f1a;--bg2:rgba(0,0,0,0.03);--border:rgba(0,0,0,0.12);--gold:#7a5a10;--gold2:#8a6a18;--green:#1a4a1a;--cream:#2a1a00;--muted:rgba(0,0,0,0.5);--red:#b01010;--red-intenso:#cc0000;--blue-intenso:#0066cc;--blue-adapt:#0066cc;--text:#000000;--text2:rgba(0,0,0,0.75);--card-bg:rgba(255,255,255,0.9);--nav-bg:#e0ebe0;--input-bg:#ffffff;--splash-bg:#f0f4f0}
 input::placeholder,textarea::placeholder{color:var(--gold);opacity:0.20}
 input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{color:var(--gold);opacity:0.20}
@@ -331,7 +331,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .hist-table th{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);padding:3px 5px;text-align:left;border-bottom:1px solid var(--border);font-weight:normal} /* v1.34.137: muted -> text + sin negrita */
 .hist-table td{padding:6px 5px;border-bottom:1px solid var(--border);color:var(--text,var(--cream));vertical-align:middle}
 .hist-table tr:last-child td{border-bottom:none}
-.used-badge{background:rgba(123,198,122,.15);border:1px solid var(--border);color:var(--green);font-size:7px;padding:2px 5px;border-radius:10px}
+.used-badge{background:rgba(76,175,80,.18);border:1px solid var(--border);color:var(--green);font-size:7px;padding:2px 5px;border-radius:10px} /* v1.34.140: fondo coherente con nuevo --green #4caf50 */
 .used-badge-9h{background:rgba(77,163,255,.15);border-color:rgba(77,163,255,.4);color:#4da3ff} /* v1.34.136: rondas 9H combinadas en azul claro */
 .stbl-badge{background:rgba(201,168,76,.15);border:1px solid var(--border);color:var(--gold2);font-size:7px;letter-spacing:1px;padding:2px 6px;border-radius:20px;white-space:nowrap}
 .barra-dot{display:inline-block;width:8px;height:8px;border-radius:50%;border:1px solid rgba(0,0,0,.2)}
@@ -899,7 +899,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.137</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.140</div>
   </div>
 </div>
 
@@ -1140,7 +1140,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.137</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.140</div>
   </div>
 </div>
 
@@ -1301,7 +1301,8 @@ nav.nav-hidden{transform:translateY(100%)}
       style="flex:1;background:var(--input-bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:6px 10px;-webkit-appearance:none;outline:none">
     <div id="hist-counter" style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.3px;white-space:nowrap"></div>
   </div>
-  <div class="card" style="margin-bottom:70px">
+  <!-- v1.34.138: eliminado el <div class="card"> envolvente -->
+  <div style="margin-bottom:70px">
     <div id="hist-container"><div class="empty">Cargando…</div></div>
   </div>
 </div>
@@ -2724,7 +2725,8 @@ function setLang(l) {
 // ── CONSTANTES ──────────────────────────────────────────────────────────
 const SB_URL = 'https://buuphupprlvtngkcyyur.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1dXBodXBwcmx2dG5na2N5eXVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5MDA3NTcsImV4cCI6MjA5MDQ3Njc1N30.sHi-UnaStyz1G-S1wSYrZYZA0TReClvlZvYdAbuejaI';
-const WHS = [[1,-2],[1,-2],[1,-2],[1,-2],[2,-1],[2,-1],[2,0],[2,0],[3,0],[3,0],[3,0],[4,0],[4,0],[4,0],[5,0],[5,0],[6,0],[6,0],[7,0],[8,0]];
+// v1.34.139: corregida tabla WHS segun regulacion oficial 2020. Errores en WHS[3] (4 rondas) y WHS[4] (5 rondas).
+const WHS = [[1,-2],[1,-2],[1,-2],[1,-1],[1,0],[2,-1],[2,0],[2,0],[3,0],[3,0],[3,0],[4,0],[4,0],[4,0],[5,0],[5,0],[6,0],[6,0],[7,0],[8,0]];
 const BARRAS = ['blanca','amarilla','azul','roja'];
 const BARRAS_FR = ['blanca','amarilla','azul','roja','violeta','naranja','negra'];
 const BARRA_COLORS_EXT = {violeta:'#8b5cf6',naranja:'#f97316',negra:'#1a1a1a'};
@@ -6078,23 +6080,20 @@ function renderHistory() {
   if (kebabWrap) kebabWrap.style.visibility = 'visible';
 
   // ── Calcular usedSet (rondas usadas en el calculo de HCP)
-  // v1.34.137: tambien pairMap (id -> color) para identificar parejas 9H combinadas
-  const PAIR_COLORS = ['#e91e63','#9c27b0','#673ab7','#3f51b5','#00bcd4','#009688','#ff9800','#795548']; // rosa, morado, indigo, etc.
+  // v1.34.137: pairMap para identificar parejas 9H combinadas
+  // v1.34.138: simplificado a Set (sin colores). La presencia indica que la ronda es 9H combinada que cuenta.
   const { combined, pending9Ids } = combineNineHoleRounds(state.rounds);
   const pending9Set = new Set(pending9Ids);
   const res = getHCP(state.rounds);
   const usedSet = new Set();
-  const pairMap = new Map(); // id -> color del par
-  let pairIdx = 0;
+  const pairMap = new Set(); // ids de rondas 9H combinadas que cuentan para el HCP
   if (res) {
     const sortedC = [...combined].sort((a, b) => a.diff - b.diff);
     sortedC.slice(0, res.numBest).forEach(r => {
       if (r._combined9) {
-        const color = PAIR_COLORS[pairIdx % PAIR_COLORS.length];
-        pairIdx++;
         r._combined9.forEach(id => {
           usedSet.add(id);
-          pairMap.set(id, color);
+          pairMap.add(id);
         });
       } else {
         usedSet.add(r.id);
@@ -6171,9 +6170,10 @@ function renderHistory() {
       : '—';
     const stbl = r.stableford != null
       ? `<span class="stbl-badge">⛳ ${r.stableford}</span>` : '—';
-    // v1.34.137: si es 9H combinada que cuenta, añadir circulo del par (mismo color en las 2 rondas del par)
-    const pairColor = pairMap.get(r.id);
-    const pairDot = pairColor ? `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${pairColor};margin-left:3px;vertical-align:middle"></span>` : '';
+    // v1.34.137: si es 9H combinada que cuenta, marca visual
+    // v1.34.138: cambiado circulo de color por icono cadena (mas claro visualmente: "esta ronda esta combinada con otra")
+    const isPair = pairMap.has(r.id);
+    const pairDot = isPair ? `<span style="margin-left:3px;font-size:9px;vertical-align:middle;color:var(--blue-adapt)">🔗</span>` : '';
     const usedBadge = used 
       ? (r.num_hoyos === 9 
           ? `<span class="used-badge used-badge-9h">✓</span>${pairDot}`  // v1.34.136: 9H combinada en azul + v1.34.137: dot del par
@@ -8204,8 +8204,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.137' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.137\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.140' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.140\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
