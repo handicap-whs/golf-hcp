@@ -915,7 +915,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.161</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.162</div>
   </div>
 </div>
 
@@ -1156,7 +1156,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.161</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.162</div>
   </div>
 </div>
 
@@ -5525,11 +5525,14 @@ function renderStats() {
   const avgStbl    = stbl18.length        ? (stbl18.reduce((s,r)=>s+r.stableford,0)/stbl18.length).toFixed(1) + ' pts' : '—';
 
   // Tendencia HCP (últimas 5 rondas)
+  // v1.34.162: comparar promedio de 2 primeras vs 2 ultimas (era diff[4] - diff[0], muy sensible a anomalias).
   let tendencia = '→';
   if (combined.length >= 5) {
     const sorted = [...combined].sort((a,b) => new Date(a.fecha||a.date) - new Date(b.fecha||b.date));
     const last5 = sorted.slice(-5).map(r => r.diff);
-    const trend = last5[last5.length-1] - last5[0];
+    const inicio = (last5[0] + last5[1]) / 2;   // promedio 2 mas antiguas
+    const final = (last5[3] + last5[4]) / 2;    // promedio 2 mas recientes
+    const trend = final - inicio;
     tendencia = trend < -0.5 ? '↘ ' + lbl('Mejorando','A melhorar') : trend > 0.5 ? '↗ ' + lbl('Subiendo','A subir') : '→ ' + lbl('Estable','Estável','Stable');
   }
 
@@ -8424,8 +8427,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.161' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.161\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.162' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.162\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
