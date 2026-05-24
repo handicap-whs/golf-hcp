@@ -35,6 +35,7 @@
 :root.light #page-rondas{background:#ffffff;border-radius:8px;padding:8px} /* v1.34.142: fondo blanco solo en pagina historial, modo claro */
 :root.light #page-inicio{background:#ffffff;border-radius:8px;padding:8px} /* v1.34.143: fondo blanco Inicio modo claro (contenedores intactos) */
 :root.light #page-stats{background:#ffffff;border-radius:8px;padding:8px} /* v1.34.143: fondo blanco Estadisticas modo claro (contenedores intactos) */
+:root.light #page-campos{background:#ffffff;border-radius:8px;padding:8px} /* v1.34.145: fondo blanco Mis Campos + Nuevo Campo (heredado, contenedores intactos) */
 input::placeholder,textarea::placeholder{color:var(--gold);opacity:0.20}
 input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{color:var(--gold);opacity:0.20}
 input::-moz-placeholder,textarea::-moz-placeholder{color:var(--gold);opacity:0.20}
@@ -173,7 +174,7 @@ nav button.active svg{stroke:var(--blue-adapt)} /* v1.34.144: dorado -> azul ada
 
 
 
-:root.light .modal{color:var(--text)}
+:root.light .modal{color:var(--text);background:#ffffff} /* v1.34.145: todos los modales fondo blanco modo claro */
 :root.light .modal label{color:var(--muted)}
 :root.light .modal .card-title{color:var(--muted)}
 
@@ -904,7 +905,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.144</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.145</div>
   </div>
 </div>
 
@@ -1145,7 +1146,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.144</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.145</div>
   </div>
 </div>
 
@@ -8236,8 +8237,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.144' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.144\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.145' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.145\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
