@@ -355,9 +355,9 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .tabla-hoyos td{padding:3px;text-align:center}
 
 /* ── BARRAS ── */
-.barra-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.barra-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;justify-content:center} /* v1.34.125: centrado en p&aacute;gina */
 .barra-dot-lg{width:12px;height:12px;border-radius:50%;flex-shrink:0;border:1px solid rgba(0,0,0,.15)}
-.barra-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1}
+.barra-fields{display:grid;grid-template-columns:auto auto;gap:16px} /* v1.34.125: columnas auto (ajustadas al contenido) + gap mayor en vez de 1fr 1fr expansivo */
 .barra-fields label{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold2)}
 #p-barra-aviso{display:none;margin-top:8px;padding:10px 13px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:5px;font-size:11px;color:var(--gold2);line-height:1.6}
 
@@ -456,7 +456,7 @@ nav.nav-hidden{transform:translateY(100%)}
 
 .barra-9h{margin-top:4px;padding:4px 6px;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15);border-radius:5px;margin-bottom:8px}
 .barra-9h-title{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:#3b82f6;margin-bottom:4px}
-.barra-9h-row{display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:4px;align-items:center;margin-bottom:3px}
+.barra-9h-row{display:grid;grid-template-columns:auto auto auto auto;gap:16px;align-items:center;margin-bottom:3px;justify-content:center} /* v1.34.125: columnas auto + centrado */
 .barra-9h-row label{font-size:7px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
 
 .nav-dropdown{display:none}
@@ -893,7 +893,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.124</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.125</div>
   </div>
 </div>
 
@@ -1134,7 +1134,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.124</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.125</div>
   </div>
 </div>
 
@@ -7620,7 +7620,8 @@ function buildBarrasEditor(containerId, prefix, existingBarras = []) {
   const activeBARRAS = showExtras ? BARRAS_FR : BARRAS;
   const nextColor = (color) => activeBARRAS[(activeBARRAS.indexOf(color)+1)%activeBARRAS.length];
   // v1.34.124: inputs CR/Slope/Par sin recuadro (estilo Fecha). Labels en hint 10px muted.
-  const iS = `background:none;border:none;border-radius:0;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:2px 0;width:100%;-webkit-appearance:none;outline:none;text-align:center`;
+  // v1.34.125: alineacion izquierda + ancho ajustado (5ch) en vez de 100% centrado.
+  const iS = `background:none;border:none;border-radius:0;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:2px 0;width:5ch;-webkit-appearance:none;outline:none;text-align:left`;
   const lS = `font-size:10px;color:var(--muted);letter-spacing:.2px;font-weight:normal`;
 
   // Toggle 9 hoyos: auto-activado si alguna barra existente ya tiene datos de 9h.
@@ -8178,8 +8179,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.124' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.124\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.125' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.125\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
