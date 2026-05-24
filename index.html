@@ -120,7 +120,7 @@ body.splash-active #safe-area-cover {
 .auth-title{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;text-align:center}
 .auth-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}.auth-input-wrap{position:relative;display:flex;align-items:center}.auth-input-wrap input{flex:1;padding-right:36px!important}.auth-input-wrap.has-eye input{padding-right:64px!important}.auth-clear{position:absolute;right:8px;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:rgba(255,255,255,.6);font-size:9px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;touch-action:manipulation;z-index:2}.auth-clear.visible{display:flex}.auth-eye{position:absolute;right:30px;background:none;border:none;color:rgba(255,255,255,.4);font-size:14px;cursor:pointer;padding:4px;z-index:2}
 .auth-field label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--green);opacity:.9}
-.auth-field input{background:rgba(255,255,255,.20);border:1px solid var(--border);border-radius:5px;color:var(--text,#fff);font-family:'DM Mono',monospace;font-size:16px;padding:12px;outline:none;width:100%;-webkit-appearance:none;box-sizing:border-box} /* v1.34.155: fondo .12 -> .20 para mejor contraste en modo oscuro (los prompts se confundian con el verde oscuro) */
+.auth-field input{background:rgba(255,255,255,.32);border:1px solid rgba(255,255,255,.25);border-radius:5px;color:var(--text,#fff);font-family:'DM Mono',monospace;font-size:16px;padding:12px;outline:none;width:100%;-webkit-appearance:none;box-sizing:border-box} /* v1.34.161: fondo .20 -> .32 + borde rgba(255,255,255,.25) en lugar de var(--border) verdoso, para mejor contraste y tono neutro en modo oscuro */
 .auth-field input::placeholder{color:rgba(255,255,255,.45)} /* v1.34.120: placeholder mas visible (era heredado muted) */
 .auth-field input:-webkit-autofill,.auth-field input:-webkit-autofill:hover,.auth-field input:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 1000px var(--input-bg,#1e3d1e) inset!important;-webkit-text-fill-color:var(--text,#fff)!important;border-color:var(--border)!important}
 .auth-field input:focus{border-color:var(--gold);background:rgba(201,168,76,.09)}
@@ -915,7 +915,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.160</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.161</div>
   </div>
 </div>
 
@@ -1156,7 +1156,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.160</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.161</div>
   </div>
 </div>
 
@@ -4386,7 +4386,7 @@ function getHCPRaw(rounds) {
   return { hcp: Math.round(Math.min(avg + adj, 54) * 10) / 10, numBest: nb };
 }
 
-// v1.34.160: Low Handicap Index (HCP minimo en los ultimos 365 dias). Itera todas las rondas en orden cronologico y guarda el HCP minimo registrado dentro de la ventana.
+// v1.34.158: Low Handicap Index (HCP minimo en los ultimos 365 dias). Itera todas las rondas en orden cronologico y guarda el HCP minimo registrado dentro de la ventana.
 // v1.34.159: solo cuenta puntos con HCP "Established" (>=20 diferenciales) segun WHS 2020 R&A Rule 5.7. Sin esto, HCPs provisionales artificialmente bajos de las primeras rondas falseaban el Low HI.
 function calcularLowHI(rounds) {
   if (!rounds || rounds.length < 20) return null; // Sin Low HI hasta tener 20 rondas
@@ -4948,14 +4948,15 @@ function renderMiniChart() {
   // v1.34.135: linea grafico en azul (era verde en claro, dorado en oscuro). Adapta tono al tema.
   // v1.34.147: modo oscuro vuelve a dorado (var(--gold2) y similares). Modo claro mantiene azul.
   // v1.34.153: modo claro azul -> amarillo intenso (#f9a825 / #ffb300).
+  // v1.34.161: modo claro amarillo -> rojo intenso (#c62828 / #e53935).
   const isLight = document.documentElement.classList.contains('light');
   const C = isLight ? {
-    lineFrom:    '#f9a825',  // amarillo intenso
-    lineTo:      '#ffb300',  // amarillo claro
-    dot:         '#f9a825',
-    valueText:   'rgba(249,168,37,0.95)',
-    fillFrom:    'rgba(249,168,37,0.25)',
-    fillTo:      'rgba(249,168,37,0.02)'
+    lineFrom:    '#c62828',  // rojo intenso
+    lineTo:      '#e53935',  // rojo claro
+    dot:         '#c62828',
+    valueText:   'rgba(198,40,40,0.95)',
+    fillFrom:    'rgba(198,40,40,0.25)',
+    fillTo:      'rgba(198,40,40,0.02)'
   } : {
     lineFrom:    '#c9a84c',  // dorado base
     lineTo:      '#e8c96a',  // dorado claro
@@ -8423,8 +8424,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.160' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.160\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.161' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.161\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
