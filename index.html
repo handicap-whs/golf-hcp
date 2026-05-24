@@ -223,7 +223,7 @@ nav button.active svg{stroke:var(--gold2)} /* v1.34.147: modo oscuro stroke dora
 .guia-card-media{width:100%;border-radius:8px;margin-bottom:10px;display:block}
 .guia-btn-dl{background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);border-radius:6px;color:var(--gold2);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;padding:7px 12px;cursor:pointer;display:flex;align-items:center;gap:6px;text-decoration:none}
 /* ── AJUSTES iOS STYLE ── */
-.ajuste-btn{width:100%;background:none;border:none;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;text-align:left;color:var(--text,#fff);font-size:14px;letter-spacing:.3px;min-height:52px}
+.ajuste-btn{width:100%;background:none;border:none;padding:10px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;text-align:left;color:var(--text,#fff);font-size:14px;letter-spacing:.3px;min-height:44px} /* v1.34.154: padding 13->10, min-height 52->44 */
 .ajuste-btn:active{background:rgba(255,255,255,.05)}
 .ajuste-icon{width:28px;height:28px;background:rgba(201,168,76,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:4px}
 .ajuste-icon svg{width:14px;height:14px;stroke:var(--gold2);fill:none;stroke-width:2}
@@ -915,7 +915,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.152</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.154</div>
   </div>
 </div>
 
@@ -1156,7 +1156,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.152</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.154</div>
   </div>
 </div>
 
@@ -1997,8 +1997,8 @@ nav.nav-hidden{transform:translateY(100%)}
 <div class="page" id="page-ajustes">
 
   <!-- SECTION: Campos y Juego -->
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 6px" data-i18n="sec_campos_juego">Campos y Juego</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:18px;border:1px solid var(--border)">
+  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_campos_juego">Campos y Juego</div>
+  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <button class="ajuste-btn" onclick="goTo('campos',null)">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
       <div class="ajuste-text"><div data-i18n="gestionar_campos">Gestionar Campos</div><div class="ajuste-sub" data-i18n="sub_campos">Añade y edita tus campos de golf</div></div>
@@ -2007,8 +2007,8 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 
   <!-- SECTION: Informes (v1.31.074) -->
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 6px" data-i18n="sec_informes">Informes</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:18px;border:1px solid var(--border)">
+  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_informes">Informes</div>
+  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <button class="ajuste-btn" onclick="abrirInformeMensualUltimo()">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
       <div class="ajuste-text"><div data-i18n="menu_informe_mensual">Informe Mensual</div><div class="ajuste-sub" data-i18n="sub_informe_mensual">Resumen de tu juego mes a mes</div></div>
@@ -2017,8 +2017,8 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 
   <!-- SECTION: Guías -->
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 6px" data-i18n="sec_guias">Guías</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:18px;border:1px solid var(--border)">
+  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_guias">Guías</div>
+  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <button class="ajuste-btn" onclick="localStorage.removeItem('golf_guide_seen');openGuide()">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
       <div class="ajuste-text"><div data-i18n="menu_guia">Guía de inicio</div><div class="ajuste-sub" data-i18n="sub_guia">Aprende a usar la app</div></div>
@@ -2039,8 +2039,8 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 
   <!-- SECTION: Cuenta -->
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 6px" data-i18n="sec_cuenta">Cuenta</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:18px;border:1px solid var(--border)">
+  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_cuenta">Cuenta</div>
+  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <button class="ajuste-btn" onclick="goTo('pwd',null)">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
       <div class="ajuste-text"><div data-i18n="menu_clave">Cambiar clave</div><div class="ajuste-sub" data-i18n="sub_clave">Actualiza tu contraseña</div></div>
@@ -2093,8 +2093,8 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 
   <!-- SECTION: Estilo App -->
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 6px" data-i18n="sec_estilo">Estilo App</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:18px;border:1px solid var(--border)">
+  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_estilo">Estilo App</div>
+  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <div class="ajuste-btn" style="cursor:default">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
       <div class="ajuste-text"><div data-i18n="menu_idioma">Idioma</div></div>
@@ -2134,8 +2134,8 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 
   <!-- SECTION: Compartir y Soporte -->
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 6px" data-i18n="sec_compartir">Compartir y Soporte</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:18px;border:1px solid var(--border)">
+  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_compartir">Compartir y Soporte</div>
+  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <button class="ajuste-btn" onclick="compartirApp()">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
       <div class="ajuste-text"><div data-i18n="menu_compartir_app">Compartir app</div><div class="ajuste-sub" data-i18n="sub_compartir">Comparte Golf HCP con tus compañeros</div></div>
@@ -2150,8 +2150,8 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 
   <!-- SECTION: Sobre la App -->
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 6px" data-i18n="sec_sobre">Sobre Golf HCP</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:18px;border:1px solid var(--border)">
+  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_sobre">Sobre Golf HCP</div>
+  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <button class="ajuste-btn" onclick="goTo('sobre',null)">
       <div class="ajuste-icon" style="margin-left:4px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
       <div class="ajuste-text"><div data-i18n="sec_sobre">Sobre Golf HCP</div><div class="ajuste-sub" data-i18n="sub_sobre">Versión, créditos y más</div></div>
@@ -2160,8 +2160,8 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 
   <!-- SECTION: Legal -->
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 6px" data-i18n="sec_legal">Legal</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:18px;border:1px solid var(--border)">
+  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_legal">Legal</div>
+  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <button class="ajuste-btn" onclick="goTo('legal',null)">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
       <div class="ajuste-text"><div data-i18n="menu_legal">Info Legal</div><div class="ajuste-sub" data-i18n="sub_legal">No afiliado a R&A / USGA</div></div>
@@ -4876,14 +4876,15 @@ function renderMiniChart() {
 
   // v1.34.135: linea grafico en azul (era verde en claro, dorado en oscuro). Adapta tono al tema.
   // v1.34.147: modo oscuro vuelve a dorado (var(--gold2) y similares). Modo claro mantiene azul.
+  // v1.34.153: modo claro azul -> amarillo intenso (#f9a825 / #ffb300).
   const isLight = document.documentElement.classList.contains('light');
   const C = isLight ? {
-    lineFrom:    '#0066cc',  // azul intenso
-    lineTo:      '#4da3ff',  // azul claro
-    dot:         '#0066cc',
-    valueText:   'rgba(0,102,204,0.9)',
-    fillFrom:    'rgba(0,102,204,0.20)',
-    fillTo:      'rgba(0,102,204,0.02)'
+    lineFrom:    '#f9a825',  // amarillo intenso
+    lineTo:      '#ffb300',  // amarillo claro
+    dot:         '#f9a825',
+    valueText:   'rgba(249,168,37,0.95)',
+    fillFrom:    'rgba(249,168,37,0.25)',
+    fillTo:      'rgba(249,168,37,0.02)'
   } : {
     lineFrom:    '#c9a84c',  // dorado base
     lineTo:      '#e8c96a',  // dorado claro
@@ -8320,8 +8321,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.152' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.152\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.154' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.154\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
