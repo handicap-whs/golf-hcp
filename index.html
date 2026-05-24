@@ -915,7 +915,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.155</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.156</div>
   </div>
 </div>
 
@@ -1156,7 +1156,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.155</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.156</div>
   </div>
 </div>
 
@@ -4363,10 +4363,14 @@ function combineNineHoleRounds(rounds) {
 
 function getHCP(rounds) {
   const { combined } = combineNineHoleRounds(rounds);
-  const n = Math.min(combined.length, 20);
+  // v1.34.156: BUG CRITICO arreglado. Ordenar combined por fecha de juego DESC y tomar las 20 mas recientes (no las 20 ultimas del array, que dependian del orden de creacion en BD y de como se concatenaban 18H + 9H combinadas).
+  // WHS 2020 R&A: "lowest 8 of the most recent 20 Score Differentials" - donde "most recent" = ultimas 20 por fecha de juego.
+  const sortedByDate = [...combined].sort((a, b) => (b.date || b.fecha || '').localeCompare(a.date || a.fecha || ''));
+  const recent20 = sortedByDate.slice(0, 20);
+  const n = recent20.length;
   if (!n) return null;
-  const sorted = combined.slice(-20).map(r => r.diff).sort((a, b) => a - b);
-  const [nb, adj] = WHS[n - 1];
+  const sorted = recent20.map(r => r.diff).sort((a, b) => a - b);
+  const [nb, adj] = WHS[Math.min(n, 20) - 1];
   const avg = sorted.slice(0, nb).reduce((s, v) => s + v, 0) / nb;
   // v1.34.141: eliminado multiplicador 0.95 (NO existe en WHS 2020 oficial R&A, regla 5.2b). Era herencia del sistema USGA pre-2020 (0.96 sobre 10 mejores). WHS 2020: solo "average lowest 8 of 20, round to nearest tenth".
   return { hcp: Math.round(Math.min(avg + adj, 54) * 10) / 10, numBest: nb };
@@ -4864,10 +4868,13 @@ function renderMiniChart() {
   const rounds = [...(state.rounds || [])].sort((a,b) => new Date(a.fecha||a.date) - new Date(b.fecha||b.date));
   if (rounds.length < 2) { wrap.style.display = 'none'; return; }
 
+  // v1.34.156: ordenar rounds por fecha de juego ASC antes de iterar el HCP historico
+  // (antes dependia del orden de state.rounds que viene de Supabase por created_at).
+  const roundsByDate = [...rounds].sort((a, b) => (a.date || a.fecha || '').localeCompare(b.date || b.fecha || ''));
   const points = [];
-  for (let i = 1; i <= rounds.length; i++) {
-    const res = getHCP(rounds.slice(0, i));
-    if (res) points.push({ hcp: res.hcp, fecha: rounds[i-1].fecha || rounds[i-1].date });
+  for (let i = 1; i <= roundsByDate.length; i++) {
+    const res = getHCP(roundsByDate.slice(0, i));
+    if (res) points.push({ hcp: res.hcp, fecha: roundsByDate[i-1].fecha || roundsByDate[i-1].date });
   }
   const last20 = points.slice(-20);
   if (last20.length < 2) { wrap.style.display = 'none'; return; }
@@ -6195,13 +6202,19 @@ function renderHistory() {
   // ── Calcular usedSet (rondas usadas en el calculo de HCP)
   // v1.34.137: pairMap para identificar parejas 9H combinadas
   // v1.34.138: simplificado a Set (sin colores). La presencia indica que la ronda es 9H combinada que cuenta.
+  // v1.34.156: aplicar mismo fix que getHCP: filtrar primero las 20 mas recientes por fecha de juego.
   const { combined, pending9Ids } = combineNineHoleRounds(state.rounds);
   const pending9Set = new Set(pending9Ids);
   const res = getHCP(state.rounds);
   const usedSet = new Set();
   const pairMap = new Set(); // ids de rondas 9H combinadas que cuentan para el HCP
   if (res) {
-    const sortedC = [...combined].sort((a, b) => a.diff - b.diff);
+    // Primero ordenar por fecha de juego DESC y tomar las 20 mas recientes
+    const recent20 = [...combined]
+      .sort((a, b) => (b.date || b.fecha || '').localeCompare(a.date || a.fecha || ''))
+      .slice(0, 20);
+    // Luego ordenar las 20 recientes por diff y tomar las 8 (o n) mejores
+    const sortedC = [...recent20].sort((a, b) => a.diff - b.diff);
     sortedC.slice(0, res.numBest).forEach(r => {
       if (r._combined9) {
         r._combined9.forEach(id => {
@@ -8321,8 +8334,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.155' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.155\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.156' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.156\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
