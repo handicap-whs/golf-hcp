@@ -117,7 +117,8 @@
 /* HERO (texto centrado en zona media-superior) */
 .login-hero{
   text-align:center;
-  margin-top:18vh;
+  /* v1.34.178: margen superior reducido para que titulo quede cerca de la Dynamic Island del iPhone */
+  margin-top:max(env(safe-area-inset-top, 0px), 12px);
   margin-bottom:auto;
 }
 .login-title{
@@ -214,11 +215,12 @@
 }
 .login-bottom .auth-msg{margin-bottom:8px;border-radius:6px}
 /* Politica de Privacidad debajo del Continuar */
-.login-priv-link{text-align:center;margin-top:4px}
+/* v1.34.178: politica de privacidad mas pequeña y bajada 5px (mas separada del boton) */
+.login-priv-link{text-align:center;margin-top:9px}
 .login-priv-link a{
   color:#ffffff;
   opacity:.85;
-  font-size:10px;
+  font-size:8px;
   letter-spacing:1px;
   text-decoration:underline;
   text-shadow:0 1px 4px rgba(0,0,0,.5);
@@ -1153,7 +1155,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link" style="margin-top:10px;font-size:10px"><span onclick="showAuth('reset')" data-i18n="olvidaste_pass">¿Olvidaste tu contraseña?</span></div>
     </div>
 
-    <div class="login-version">v1.34.177</div>
+    <div class="login-version">v1.34.178</div>
   </div>
 </div>
 
@@ -1394,7 +1396,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.177</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.178</div>
   </div>
 </div>
 
@@ -4940,7 +4942,7 @@ function aplicarFotoLogin() {
   const idx = elegirFotoLoginAleatoria();
   // v1.34.177: cache buster por version para forzar recarga tras deploy y evitar
   // que el Service Worker sirva fotos antiguas. El parametro cambia con cada release.
-  const cb = 'v177';
+  const cb = 'v178';
   const url = `login-bg-${idx}.jpg?${cb}`;
   // Precargar para detectar errores y no romper UI con foto rota
   const probe = new Image();
@@ -8863,8 +8865,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.177' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.177\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.178' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.178\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
