@@ -915,7 +915,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.163</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.164</div>
   </div>
 </div>
 
@@ -1156,7 +1156,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.163</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.164</div>
   </div>
 </div>
 
@@ -4933,11 +4933,13 @@ async function loadData() {
   if (rc.error) throw rc.error;
   if (cc.error) throw cc.error;
 
+  // v1.34.164: derivar 'par' de cada ronda del campo asociado (state.campos no se carga todavia aqu&iacute;, se aplica abajo). Fallback a 72 si no se encuentra.
   state.rounds = (rc.data || []).map(r => ({
     id: r.id, gross: r.gross, cr: r.cr, slope: r.slope,
     name: r.nombre_campo, date: r.fecha, diff: r.diferencial,
     stableford: r.stableford, campo_id: r.campo_id,
     hcp_idx: r.hcp_idx != null ? Number(r.hcp_idx) : null,
+    par: r.par != null ? Number(r.par) : null,  // v1.34.164: si la BD tiene par (futuras rondas), usarlo
     shots: (() => {
       if (!r.shots) return null;
       if (Array.isArray(r.shots)) return r.shots;
@@ -4971,6 +4973,31 @@ async function loadData() {
         cr_in:  b.cr_in||null,  slope_in:  b.slope_in||null,  par_in:  b.par_in||null
       }))
   }));
+
+  // v1.34.164: rellenar 'par' en state.rounds desde state.campos (necesario para EGA-RBA).
+  // Las rondas guardadas en BD no tienen el par; lo derivamos del campo asociado.
+  // Para rondas 9H usa el par de la vuelta correspondiente (par_out / par_in).
+  state.rounds = state.rounds.map(r => {
+    if (r.par != null) return r; // Ya tiene par (futuro: si BD se actualiza)
+    const campo = state.campos.find(c => c.id === r.campo_id);
+    let par = 72; // Fallback estandar
+    if (campo) {
+      if (r.num_hoyos === 9 && campo.barras) {
+        // Buscar par_out o par_in segun vuelta
+        const barra = campo.barras.find(b => b.color === r.barra_color);
+        if (barra) {
+          par = r.vuelta === 1 ? (barra.par_out || 36) : (barra.par_in || 36);
+        } else {
+          par = 36; // Fallback 9H
+        }
+      } else if (campo.hoyos && campo.hoyos.length > 0) {
+        // Sumar par de todos los hoyos del campo
+        const sumPar = campo.hoyos.reduce((s, h) => s + (h.par || 0), 0);
+        if (sumPar > 0) par = sumPar;
+      }
+    }
+    return { ...r, par };
+  });
 
   renderAll();
   renderCampos();
@@ -8504,8 +8531,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.163' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.163\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.164' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.164\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
