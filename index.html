@@ -1164,7 +1164,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.186</div>
+    <div class="login-version">v1.34.187</div>
   </div>
 </div>
 
@@ -1409,7 +1409,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.186</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.187</div>
   </div>
 </div>
 
@@ -4956,7 +4956,7 @@ function aplicarFotoLogin() {
   const idx = elegirFotoLoginAleatoria();
   // v1.34.177: cache buster por version para forzar recarga tras deploy y evitar
   // que el Service Worker sirva fotos antiguas. El parametro cambia con cada release.
-  const cb = 'v186';
+  const cb = 'v187';
   const url = `login-bg-${idx}.jpg?${cb}`;
   // Precargar para detectar errores y no romper UI con foto rota
   const probe = new Image();
@@ -6841,6 +6841,11 @@ function renderHistory() {
   const localMonth = (M) => (monthNames[lang] || monthNames.es)[parseInt(M,10)-1];
 
   // ── Helper: renderizar una fila de ronda (idéntico al formato anterior)
+  // v1.34.187: diferencial mostrado en columna "Dif." es dinamico segun metodo activo.
+  // Modo WHS (default): muestra r.diff (WHS estandar guardado en BD).
+  // Modo EGA-RBA: recalcula al vuelo con calcDiffEGA() que aplica -1.0 si torneo_rfeg.
+  // Fallback a r.diff si calcDiffEGA devuelve null (falta hcp_idx/par/stableford).
+  const metodoActivo = getMetodoCalculo();
   const renderRow = (r) => {
     const used = usedSet.has(r.id);
     const isPending9 = pending9Set.has(r.id);
@@ -6856,6 +6861,12 @@ function renderHistory() {
     const rfegBadge = r.torneo_rfeg
       ? `<span style="background:rgba(232,201,106,.15);border:1px solid rgba(232,201,106,.5);color:var(--gold2);font-size:7px;padding:1px 4px;border-radius:3px;margin-left:4px;vertical-align:middle;font-weight:600;letter-spacing:.3px">RFEG</span>`
       : '';
+    // v1.34.187: diferencial dinamico segun metodo activo
+    let diffMostrar = r.diff;
+    if (metodoActivo === 'ega') {
+      const egaDiff = calcDiffEGA(r);
+      if (egaDiff != null) diffMostrar = egaDiff;
+    }
     const stbl = r.stableford != null
       ? `<span class="stbl-badge">⛳ ${r.stableford}</span>` : '—';
     // v1.34.137: si es 9H combinada que cuenta, marca visual
@@ -6871,7 +6882,7 @@ function renderHistory() {
       <td class="col-fecha">${fmtDate(r.date)}</td>
       <td class="col-campo" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.name||'—'}${nineTag}${rfegBadge}</td>
       <td style="text-align:center">${r.gross}</td>
-      <td style="text-align:center">${fmtD(r.diff)}</td>
+      <td style="text-align:center">${fmtD(diffMostrar)}</td>
       <td style="text-align:center">${barraDot}</td>
       <td style="text-align:center">${stbl}</td>
       <td style="text-align:center">${usedBadge}</td>
@@ -8904,8 +8915,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.186' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.186\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.187' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.187\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
