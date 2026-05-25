@@ -75,13 +75,15 @@
 .auth-login-photo{
   background:#1a3a5f center center / cover no-repeat;
   padding:0 !important;
-  display:flex !important;
+  display:flex;
   flex-direction:column;
   min-height:100vh;
   min-height:100dvh;
   position:relative;
   overflow:hidden;
 }
+/* v1.34.174: Fix critico - .auth-login-photo no debe sobreescribir el .hidden con display:none.
+   Sin !important, .auth-screen.hidden gana correctamente al ocultarse tras login exitoso. */
 /* v1.34.173: la foto se asigna por JS desde un set aleatorio (login-bg-1..N.jpg) */
 /* Overlay degradado para legibilidad del texto blanco */
 .login-bg-overlay{
@@ -1146,7 +1148,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link" style="margin-top:10px;font-size:10px"><span onclick="showAuth('reset')" data-i18n="olvidaste_pass">¿Olvidaste tu contraseña?</span></div>
     </div>
 
-    <div class="login-version">v1.34.173</div>
+    <div class="login-version">v1.34.174</div>
   </div>
 </div>
 
@@ -1387,7 +1389,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.173</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.174</div>
   </div>
 </div>
 
@@ -8845,8 +8847,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.173' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.173\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.174' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.174\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
