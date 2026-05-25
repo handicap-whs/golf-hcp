@@ -915,7 +915,7 @@ nav.nav-hidden{transform:translateY(100%)}
     <button class="auth-btn" id="btn-login" onclick="doLogin()" data-i18n="btn_entrar">Entrar</button>
     <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     <div class="auth-link" style="margin-top:16px;font-size:10px;opacity:.6"><a href="privacy.html" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="politica_priv">Política de Privacidad</a></div>
-    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.164</div>
+    <div style="text-align:center;margin-top:8px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px">v1.34.165</div>
   </div>
 </div>
 
@@ -1156,7 +1156,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.164</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.165</div>
   </div>
 </div>
 
@@ -4354,8 +4354,9 @@ function setMetodoCalculo(m) {
   try { localStorage.setItem('metodo_calculo', m); } catch(e) {}
 }
 // Calcula diferencial seg&uacute;n f&oacute;rmula EGA-RBA: requiere stableford, hcp_idx, par, cr, slope guardados en la ronda.
-// RBA = Par + CourseHandicap + 36 - Stableford
-// Nivel = (RBA - CR) * 113 / Slope
+// 18H: RBA = Par + CourseHandicap + 36 - Stableford; Nivel = (RBA - CR) * 113 / Slope
+// 9H:  CourseHcp9 = 0.5 * hcp_idx * slope/113 + (CR - Par); RBA = Par + CourseHcp9 + 18 - Stableford; Nivel = (RBA - CR) * 113 / Slope
+// v1.34.165: a&ntilde;adida l&oacute;gica espec&iacute;fica para 9H (era 18H-only, daba diferenciales disparatados).
 function calcDiffEGA(round) {
   if (!round) return null;
   const stbl = round.stableford;
@@ -4364,9 +4365,12 @@ function calcDiffEGA(round) {
   const slope = round.slope;
   const par = round.par;
   if (stbl == null || hcpIdx == null || cr == null || slope == null || par == null) return null;
-  // Course Handicap derivado del HCP Index + CR + Slope + Par
-  const courseHcp = Math.round(hcpIdx * slope / 113 + (cr - par));
-  const rba = par + courseHcp + 36 - stbl;
+  const is9H = (round.num_hoyos === 9);
+  const stblBase = is9H ? 18 : 36;
+  // Course Handicap: 18H usa hcp_idx completo, 9H usa la mitad
+  const factor = is9H ? 0.5 : 1.0;
+  const courseHcp = Math.round(factor * hcpIdx * slope / 113 + (cr - par));
+  const rba = par + courseHcp + stblBase - stbl;
   const nivel = (rba - cr) * 113 / slope;
   return Math.round(nivel * 10) / 10;
 }
@@ -8531,8 +8535,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.164' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.164\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.165' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.165\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
