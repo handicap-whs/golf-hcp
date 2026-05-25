@@ -185,9 +185,46 @@
   }
   [data-lang] { display: none; }
   [data-lang].show { display: block; }
+  /* v1.34.175: Boton Volver al Login - fijo arriba a la izquierda */
+  .btn-volver-login {
+    position: fixed;
+    top: env(safe-area-inset-top, 16px);
+    left: 16px;
+    z-index: 100;
+    background: rgba(0, 102, 204, 0.95);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .btn-volver-login:active {
+    background: rgba(0, 82, 184, 1);
+    transform: scale(0.97);
+  }
+  .btn-volver-login .arrow {
+    display: inline-block;
+    margin-right: 4px;
+    font-size: 14px;
+  }
+  /* Espacio superior para que el contenido no quede tapado por el boton */
+  main { padding-top: 64px !important; }
 </style>
 </head>
 <body>
+
+<!-- v1.34.175: Boton Volver al Login - cierra pestaña si fue abierta con target=_blank, redirige al login si no -->
+<button class="btn-volver-login" id="btn-volver-login" type="button" aria-label="Volver al Login">
+  <span class="arrow">←</span><span data-volver-label>Volver al Login</span>
+</button>
+
 <main>
 
   <!-- LANGUAGE SWITCHER -->
@@ -448,12 +485,21 @@
   (function () {
     const buttons = document.querySelectorAll('[data-set-lang]');
     const blocks = document.querySelectorAll('[data-lang]');
+    // v1.34.175: textos traducidos del boton Volver
+    const TEXTOS_VOLVER = {
+      es: 'Volver al Login',
+      pt: 'Voltar ao Login',
+      fr: 'Retour au Login'
+    };
+    const labelVolver = document.querySelector('[data-volver-label]');
 
     function setLang(lang) {
       if (!['es', 'pt', 'fr'].includes(lang)) lang = 'es';
       blocks.forEach(b => b.classList.toggle('show', b.dataset.lang === lang));
       buttons.forEach(b => b.classList.toggle('active', b.dataset.setLang === lang));
       document.documentElement.lang = lang;
+      // v1.34.175: traducir label del boton Volver
+      if (labelVolver) labelVolver.textContent = TEXTOS_VOLVER[lang] || TEXTOS_VOLVER.es;
       try { localStorage.setItem('golfhcp-privacy-lang', lang); } catch (e) {}
     }
 
@@ -476,6 +522,26 @@
       const h = location.hash.replace('#', '').toLowerCase();
       if (['es', 'pt', 'fr'].includes(h)) setLang(h);
     });
+
+    // v1.34.175: Boton Volver al Login
+    // Intenta cerrar la pestaña (si fue abierta con target=_blank desde la app).
+    // Si window.close() no funciona (pestaña no abierta por JS), redirige al login como fallback.
+    const btnVolver = document.getElementById('btn-volver-login');
+    if (btnVolver) {
+      btnVolver.addEventListener('click', () => {
+        try {
+          window.close();
+          // Si window.close no funciona (la pestaña no se cerro), redirigir tras un breve delay
+          setTimeout(() => {
+            if (!window.closed) {
+              window.location.href = './';
+            }
+          }, 100);
+        } catch (e) {
+          window.location.href = './';
+        }
+      });
+    }
   })();
 </script>
 
