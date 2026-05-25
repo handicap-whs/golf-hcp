@@ -1250,7 +1250,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.197</div>
+    <div class="login-version">v1.34.200</div>
   </div>
 </div>
 
@@ -1495,7 +1495,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.197</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.200</div>
   </div>
 </div>
 
@@ -1730,7 +1730,7 @@ nav.nav-hidden{transform:translateY(100%)}
 
   <!-- v1.34.197: Fixed bottom action bar - boton + NUEVO CAMPO mismo formato que "+ Nueva" de page-rondas.
        Se muestra solo cuando page-campos esta activa (mediante CSS abajo) y cuando el formulario nuevo-campo-wrap esta cerrado. -->
-  <div id="campos-action-bar" style="position:fixed;bottom:88px;left:0;right:0;padding:8px 14px;background:var(--bg);border-top:1px solid var(--border);display:none;gap:8px;align-items:center;z-index:100">
+  <div id="campos-action-bar" style="position:fixed;bottom:88px;left:0;right:0;padding:8px 14px;background:transparent;display:none;gap:8px;align-items:center;z-index:100">
     <button class="btn" onclick="abrirNuevoCampo()" style="flex:3;height:36px;font-size:11px;border-radius:8px" data-i18n="nuevo_campo_btn">+ NUEVO CAMPO</button>
   </div>
 </div>
@@ -4584,19 +4584,24 @@ function mostrarInfoCampoToast(campoId) {
   const BARRA_LBL = lang==='fr' ? BARRA_LABELS_FR : lang==='pt' ? BARRA_LABELS_PT : BARRA_LABELS_PL;
   const lineasBarras = (campo.barras || []).map(b => {
     const colorDot = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${BARRA_COLORS[b.color]};margin-right:6px;border:1px solid rgba(0,0,0,.2);vertical-align:middle"></span>`;
-    const lbl = (BARRA_LBL[b.color] || b.color).padEnd(10, ' ');
+    const lbl = (BARRA_LBL[b.color] || b.color);
     const cr = (b.cr != null) ? b.cr : '—';
     const slope = (b.slope != null) ? b.slope : '—';
-    return `<div style="margin:3px 0;font-family:'DM Mono',monospace;font-size:10px;display:flex;align-items:center;gap:4px"><span style="display:inline-flex;align-items:center;width:90px">${colorDot}${lbl.trim()}</span><span style="color:var(--gold2);min-width:60px">CR ${cr}</span><span style="color:var(--blue-adapt)">Slope ${slope}</span></div>`;
+    // v1.34.199: white-space:nowrap en el label para evitar que se parta a 2 lineas (Amarilla, Naranja, etc.)
+    return `<div style="margin:3px 0;font-family:'DM Mono',monospace;font-size:10px;display:flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;min-width:100px;white-space:nowrap">${colorDot}${lbl}</span><span style="color:var(--gold2);min-width:60px;white-space:nowrap">CR ${cr}</span><span style="color:var(--blue-adapt);white-space:nowrap">Slope ${slope}</span></div>`;
   }).join('');
 
-  const html = `<div style="font-size:11px;font-weight:600;letter-spacing:1px;color:var(--cream);margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px">${limpiarNombreCampo(campo.nombre || '')} · Par ${campo.par_total || '—'}</div>${lineasBarras || `<div style="font-size:10px;color:var(--muted)">${t('sin_barras')}</div>`}`;
+  const html = `<div style="font-size:11px;font-weight:600;letter-spacing:1px;color:var(--cream);margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;white-space:nowrap">${limpiarNombreCampo(campo.nombre || '')} · Par ${campo.par_total || '—'}</div>${lineasBarras || `<div style="font-size:10px;color:var(--muted)">${t('sin_barras')}</div>`}`;
 
   const el = $('toast');
   el.innerHTML = html;
-  el.style.padding = '12px 16px';
-  el.style.maxWidth = '90%';
+  // v1.34.199: toast mas ancho (96% en lugar de 90%) y color mas claro (gris suave en lugar de verde oscuro)
+  el.style.padding = '12px 18px';
+  el.style.maxWidth = '96vw';
+  el.style.width = 'auto';
   el.style.textAlign = 'left';
+  el.style.background = 'rgba(60,65,72,0.96)';
+  el.style.borderColor = 'rgba(160,170,180,0.35)';
   el.className = 'toast show';
   clearTimeout(_toastTimer);
   _toastTimer = setTimeout(() => {
@@ -4605,7 +4610,10 @@ function mostrarInfoCampoToast(campoId) {
     setTimeout(() => {
       el.style.padding = '';
       el.style.maxWidth = '';
+      el.style.width = '';
       el.style.textAlign = '';
+      el.style.background = '';
+      el.style.borderColor = '';
       el.innerHTML = '';
     }, 300);
   }, 4000);
@@ -4616,7 +4624,10 @@ function toast(msg, err=false, ms=3000) {
   // v1.34.194: resetear estilos custom que puede haber dejado mostrarInfoCampoToast
   el.style.padding = '';
   el.style.maxWidth = '';
+  el.style.width = '';
   el.style.textAlign = '';
+  el.style.background = '';
+  el.style.borderColor = '';
   el.textContent = msg;
   el.className = 'toast show' + (err ? ' err' : '');
   clearTimeout(_toastTimer);
@@ -5086,7 +5097,7 @@ function aplicarFotoLogin() {
   const idx = elegirFotoLoginAleatoria();
   // v1.34.177: cache buster por version para forzar recarga tras deploy y evitar
   // que el Service Worker sirva fotos antiguas. El parametro cambia con cada release.
-  const cb = 'v197';
+  const cb = 'v200';
   const url = `login-bg-${idx}.jpg?${cb}`;
   // Precargar para detectar errores y no romper UI con foto rota
   const probe = new Image();
@@ -5532,14 +5543,15 @@ function renderMiniChart() {
   // v1.34.153: modo claro azul -> amarillo intenso (#f9a825 / #ffb300).
   // v1.34.161: modo claro amarillo -> rojo intenso (#c62828 / #e53935).
   // v1.34.180: modo claro rojo -> amarillo-dorado muy suave (#d4b860 / #e8d97a). Modo oscuro intacto.
+  // v1.34.198: modo claro amarillo -> NEGRO sin negrita (lineWidth normal). Modo oscuro intacto.
   const isLight = document.documentElement.classList.contains('light');
   const C = isLight ? {
-    lineFrom:    '#d4b860',  // amarillo-dorado suave
-    lineTo:      '#e8d97a',  // amarillo-dorado claro
-    dot:         '#d4b860',
-    valueText:   'rgba(180,140,50,0.85)',
-    fillFrom:    'rgba(212,184,96,0.20)',
-    fillTo:      'rgba(212,184,96,0.02)'
+    lineFrom:    '#000000',  // negro
+    lineTo:      '#000000',  // negro (mismo color, sin degradado)
+    dot:         '#000000',
+    valueText:   'rgba(0,0,0,0.85)',
+    fillFrom:    'rgba(0,0,0,0.10)',
+    fillTo:      'rgba(0,0,0,0.01)'
   } : {
     lineFrom:    '#c9a84c',  // dorado base
     lineTo:      '#e8c96a',  // dorado claro
@@ -7139,11 +7151,12 @@ function activarSwipeCampos() {
       if (!isHorizontal) return;
       e.preventDefault();
       // v1.34.197: limites ajustados a tamano nuevo botones cuadrados (40px + gap)
-      // Izquierda: -95 (Editar + Borrar). Derecha: +52 (Info).
+      // v1.34.200: limites ampliados simetricamente a ±180 para permitir gesto largo en ambas direcciones
+      // que dispara accion principal directamente (izq->Editar, der->Info).
       if (dx < 0) {
-        currentX = Math.max(-95, dx);
+        currentX = Math.max(-180, dx);
       } else {
-        currentX = Math.min(52, dx);
+        currentX = Math.min(180, dx);
       }
       content.style.transform = `translateX(${currentX}px)`;
     };
@@ -7154,12 +7167,30 @@ function activarSwipeCampos() {
       content.style.transition = 'transform .25s ease';
       content.style.transform = '';
       // v1.34.196: 3 estados con threshold de apertura
-      if (currentX < -50) {
-        // Swipe izquierda largo: abrir actions (Editar/Borrar)
+      // v1.34.199: swipe derecha LARGO (>120px) dispara Info toast directamente; corto (40-120px) solo abre boton
+      // v1.34.200: swipe izquierda LARGO (<-120px) dispara Editar directamente; corto (-95 a -50) abre botones
+      if (currentX < -120) {
+        // Swipe izquierda largo: ejecutar Editar directamente
+        item.classList.remove('swiped');
+        item.classList.remove('swiped-right');
+        const campoId = parseInt(item.dataset.campoId, 10);
+        if (!isNaN(campoId)) {
+          try { abrirEditCampo(campoId); } catch(e) { console.error('Editar directo error:', e); }
+        }
+      } else if (currentX < -50) {
+        // Swipe izquierda corto: abrir actions (Editar/Borrar)
         item.classList.remove('swiped-right');
         item.classList.add('swiped');
+      } else if (currentX > 120) {
+        // Swipe derecha largo: ejecutar Info directamente (toast con CR/Slope)
+        item.classList.remove('swiped');
+        item.classList.remove('swiped-right');
+        const campoId = parseInt(item.dataset.campoId, 10);
+        if (!isNaN(campoId)) {
+          try { mostrarInfoCampoToast(campoId); } catch(e) { console.error('Info toast error:', e); }
+        }
       } else if (currentX > 40) {
-        // Swipe derecha: abrir boton Info (verde)
+        // Swipe derecha corto: abrir boton Info (verde)
         item.classList.remove('swiped');
         item.classList.add('swiped-right');
       } else {
@@ -7218,11 +7249,11 @@ function renderCampos() {
         </div>
       </div>
       <div class="campo-item-actions">
-        <button class="swipe-edit" onclick="event.stopPropagation(); cerrarSwipeCampos(); abrirEditCampo(${campo.id})" aria-label="Editar" title="Editar">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        </button>
         <button class="swipe-del" onclick="event.stopPropagation(); cerrarSwipeCampos(); delCampo(${campo.id})" aria-label="Borrar" title="Borrar">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+        <button class="swipe-edit" onclick="event.stopPropagation(); cerrarSwipeCampos(); abrirEditCampo(${campo.id})" aria-label="Editar" title="Editar">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         </button>
       </div>
     </div>`;
@@ -9161,8 +9192,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.197' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.197\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.200' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.200\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
