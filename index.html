@@ -204,6 +204,8 @@
 .login-bottom .auth-eye{color:rgba(0,0,0,.5)}
 /* Enlaces "Sin cuenta?" / "Registrate" en blanco con sombra */
 /* v1.34.180: todo en blanco, mantiene subrayado para mostrar que "Registrate" es clickable */
+/* v1.34.181: regla generica .auth-link span (L340) pisaba "Sin cuenta?" con var(--text).
+   Anadimos regla todos-spans-blanco con misma especificidad pero contexto .login-bottom. */
 .login-bottom .auth-link{
   color:#ffffff;
   text-shadow:0 1px 4px rgba(0,0,0,.6);
@@ -211,8 +213,10 @@
   text-align:center;
   margin-top:8px;
 }
-.login-bottom .auth-link span:not([data-i18n="sin_cuenta"]){
+.login-bottom .auth-link span{
   color:#ffffff;
+}
+.login-bottom .auth-link span:not([data-i18n="sin_cuenta"]){
   text-decoration:underline;
   cursor:pointer;
   font-weight:600;
@@ -1158,7 +1162,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.181</div>
+    <div class="login-version">v1.34.183</div>
   </div>
 </div>
 
@@ -1403,7 +1407,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.181</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.183</div>
   </div>
 </div>
 
@@ -4916,7 +4920,7 @@ function calcStableford(hcpIndex, campo, shots, crOverride, slopeOverride, vuelt
 // v1.34.173: rotacion aleatoria de foto de fondo del login sin repetir hasta agotar el set
 // Set actual de fotos disponibles: login-bg-1.jpg ... login-bg-N.jpg (todas en raiz repo).
 // Para anadir mas fotos: subir el archivo + incrementar LOGIN_BG_TOTAL aqui.
-const LOGIN_BG_TOTAL = 6; // Numero total de fotos en el set (login-bg-1.jpg..login-bg-6.jpg)
+const LOGIN_BG_TOTAL = 10; // Numero total de fotos en el set (login-bg-1.jpg..login-bg-10.jpg)
 function elegirFotoLoginAleatoria() {
   try {
     // Recuperar las ya vistas (array de indices). Si no existe o esta corrupto, empezar de cero.
@@ -4950,7 +4954,7 @@ function aplicarFotoLogin() {
   const idx = elegirFotoLoginAleatoria();
   // v1.34.177: cache buster por version para forzar recarga tras deploy y evitar
   // que el Service Worker sirva fotos antiguas. El parametro cambia con cada release.
-  const cb = 'v181';
+  const cb = 'v183';
   const url = `login-bg-${idx}.jpg?${cb}`;
   // Precargar para detectar errores y no romper UI con foto rota
   const probe = new Image();
@@ -8893,8 +8897,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.181' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.181\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.183' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.183\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
