@@ -73,7 +73,7 @@
 /* Independiente del modo (claro/oscuro) - foto siempre visible.    */
 /* ════════════════════════════════════════════════════════════════ */
 .auth-login-photo{
-  background:#1a3a5f center 70% / cover no-repeat;
+  background:#1a3a5f center bottom / cover no-repeat;
   padding:0 !important;
   display:flex;
   flex-direction:column;
@@ -84,9 +84,8 @@
 }
 /* v1.34.174: Fix critico - .auth-login-photo no debe sobreescribir el .hidden con display:none.
    Sin !important, .auth-screen.hidden gana correctamente al ocultarse tras login exitoso. */
-/* v1.34.175: fotos en formato portrait 9:20 (1080x2400) optimizadas para iPhone.
-   background-position 'center 70%' prioriza mostrar la parte inferior de la foto
-   (greens, fairway, agua) por encima del cielo cuando hay que recortar. */
+/* v1.34.176: background-position 'center bottom' - cuando hay que recortar (cualquier pantalla
+   con ratio mas alto que la foto), recorta SIEMPRE del cielo (arriba), nunca del fairway/green. */
 /* v1.34.173: la foto se asigna por JS desde un set aleatorio (login-bg-1..N.jpg) */
 /* Overlay degradado para legibilidad del texto blanco */
 .login-bg-overlay{
@@ -1151,7 +1150,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link" style="margin-top:10px;font-size:10px"><span onclick="showAuth('reset')" data-i18n="olvidaste_pass">¿Olvidaste tu contraseña?</span></div>
     </div>
 
-    <div class="login-version">v1.34.175</div>
+    <div class="login-version">v1.34.176</div>
   </div>
 </div>
 
@@ -1392,7 +1391,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.175</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.176</div>
   </div>
 </div>
 
@@ -4936,7 +4935,10 @@ function aplicarFotoLogin() {
   const el = $('auth-login');
   if (!el) return;
   const idx = elegirFotoLoginAleatoria();
-  const url = `login-bg-${idx}.jpg`;
+  // v1.34.176: cache buster por version para forzar recarga tras deploy y evitar
+  // que el Service Worker sirva fotos antiguas. El parametro cambia con cada release.
+  const cb = 'v176';
+  const url = `login-bg-${idx}.jpg?${cb}`;
   // Precargar para detectar errores y no romper UI con foto rota
   const probe = new Image();
   probe.onload = () => {
@@ -4945,7 +4947,7 @@ function aplicarFotoLogin() {
   probe.onerror = () => {
     // Si la foto seleccionada no existe, intentar la #1 como fallback
     if (idx !== 1) {
-      el.style.backgroundImage = `url('login-bg-1.jpg')`;
+      el.style.backgroundImage = `url('login-bg-1.jpg?${cb}')`;
     }
     // Si tampoco existe la #1, queda el color de fondo solido del CSS
   };
@@ -8850,8 +8852,8 @@ function contactarGolfHCP() {
   const ios = ua.match(/iPhone OS ([\d_]+)/);
   const android = ua.match(/Android ([\d.]+)/);
   const sys = ios ? 'iOS ' + ios[1].replace(/_/g,'.') : android ? 'Android ' + android[1] : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.175' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.175\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.176' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.176\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
