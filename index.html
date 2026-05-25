@@ -571,8 +571,63 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .hist-actions button{background:none;border:1px solid var(--border);border-radius:4px;color:var(--muted);cursor:pointer;font-size:12px;padding:2px 6px}
 
 /* ── CAMPOS ── */
-.campo-item{display:flex;align-items:flex-start;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);gap:8px} /* v1.34.114: flex-start (botones arriba si nombre dobla) + gap */
+/* v1.34.193: swipe-to-reveal actions estilo iOS Mail/Notes para .campo-item */
+.campo-item{
+  position:relative;
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+  touch-action:pan-y; /* permite scroll vertical pero captura horizontal */
+}
 .campo-item:last-child{border-bottom:none}
+.campo-item-content{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  padding:12px 0;
+  gap:8px;
+  background:var(--bg);
+  position:relative;
+  z-index:2;
+  transition:transform .25s ease;
+  will-change:transform;
+}
+.campo-item.swiped .campo-item-content{
+  transform:translateX(-180px);
+}
+.campo-item-actions{
+  position:absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  display:flex;
+  align-items:stretch;
+  z-index:1;
+}
+.campo-item-actions button{
+  border:none;
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  cursor:pointer;
+  padding:0;
+  width:90px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  color:#fff;
+}
+.campo-item-actions .swipe-edit{
+  background:#0066cc; /* azul */
+}
+.campo-item-actions .swipe-edit:active{background:#0055aa}
+.campo-item-actions .swipe-del{
+  background:#d04545; /* rojo */
+}
+.campo-item-actions .swipe-del:active{background:#b03535}
+.campo-item-actions .swipe-icon{font-size:18px;line-height:1}
 .campo-name{font-size:12px;color:var(--cream);margin-bottom:3px;line-height:1.3;word-break:break-word} /* v1.34.114: 13->12px + line-height + word-break */
 .campo-meta{font-size:9px;color:var(--muted)}
 
@@ -1164,7 +1219,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.192</div>
+    <div class="login-version">v1.34.193</div>
   </div>
 </div>
 
@@ -1409,7 +1464,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.192</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.193</div>
   </div>
 </div>
 
@@ -4956,7 +5011,7 @@ function aplicarFotoLogin() {
   const idx = elegirFotoLoginAleatoria();
   // v1.34.177: cache buster por version para forzar recarga tras deploy y evitar
   // que el Service Worker sirva fotos antiguas. El parametro cambia con cada release.
-  const cb = 'v192';
+  const cb = 'v193';
   const url = `login-bg-${idx}.jpg?${cb}`;
   // Precargar para detectar errores y no romper UI con foto rota
   const probe = new Image();
@@ -6967,6 +7022,82 @@ function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
+// v1.34.193: gestos swipe-to-reveal para listado Mis Campos (estilo iOS Mail)
+function cerrarSwipeCampos() {
+  document.querySelectorAll('.campo-item.swiped').forEach(el => el.classList.remove('swiped'));
+}
+function activarSwipeCampos() {
+  const items = document.querySelectorAll('#campos-list .campo-item');
+  items.forEach(item => {
+    let startX = 0, startY = 0, currentX = 0, dragging = false, isHorizontal = false, decided = false;
+    const content = item.querySelector('.campo-item-content');
+    if (!content) return;
+
+    const onStart = (e) => {
+      const t = e.touches ? e.touches[0] : e;
+      startX = t.clientX;
+      startY = t.clientY;
+      currentX = 0;
+      dragging = true;
+      isHorizontal = false;
+      decided = false;
+      content.style.transition = 'none';
+    };
+
+    const onMove = (e) => {
+      if (!dragging) return;
+      const t = e.touches ? e.touches[0] : e;
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      // Decidir direccion solo despues de 8px de movimiento (evita falsos positivos)
+      if (!decided) {
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        isHorizontal = Math.abs(dx) > Math.abs(dy);
+        decided = true;
+        // Si es scroll vertical, cancelar gesto swipe
+        if (!isHorizontal) { dragging = false; return; }
+      }
+      if (!isHorizontal) return;
+      e.preventDefault();
+      // Solo permitir swipe a la izquierda (dx negativo)
+      currentX = Math.min(0, Math.max(-180, dx));
+      content.style.transform = `translateX(${currentX}px)`;
+    };
+
+    const onEnd = () => {
+      if (!dragging) return;
+      dragging = false;
+      content.style.transition = 'transform .25s ease';
+      content.style.transform = '';
+      // Si paso del threshold (-50px), abrir; si no, cerrar
+      if (currentX < -50) {
+        item.classList.add('swiped');
+      } else {
+        item.classList.remove('swiped');
+      }
+    };
+
+    // Limpiar listeners previos si ya estaban (re-render)
+    if (item._swipeAttached) return;
+    item._swipeAttached = true;
+
+    content.addEventListener('touchstart', onStart, { passive: true });
+    content.addEventListener('touchmove', onMove, { passive: false });
+    content.addEventListener('touchend', onEnd);
+    content.addEventListener('touchcancel', onEnd);
+    // Mouse para desktop testing
+    content.addEventListener('mousedown', (e) => { onStart(e); document.addEventListener('mousemove', onMove); document.addEventListener('mouseup', function up() { onEnd(); document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', up); }); });
+  });
+
+  // Click fuera de un item swiped lo cierra
+  if (!document._swipeOutsideAttached) {
+    document._swipeOutsideAttached = true;
+    document.addEventListener('touchstart', (e) => {
+      if (!e.target.closest('.campo-item.swiped')) cerrarSwipeCampos();
+    }, { passive: true });
+  }
+}
+
 function renderCampos() {
   const c = $('campos-list');
   if (!state.campos.length) {
@@ -6981,17 +7112,27 @@ function renderCampos() {
         ${has9H ? '<span style="font-size:7px;color:var(--gold2)">9H</span>' : ''}
       </span>`;
     }).join('');
-    return `<div class="campo-item">
-      <div>
-        <div class="campo-name">${limpiarNombreCampo(campo.nombre || '')}</div>
-        <div class="campo-meta">Par ${campo.par_total || '—'} · ${campo.hoyos?.length || 0} ${lang==='pt'?'buracos':'hoyos'} · ${dots || t('sin_barras')}</div>
+    return `<div class="campo-item" data-campo-id="${campo.id}">
+      <div class="campo-item-content">
+        <div>
+          <div class="campo-name">${limpiarNombreCampo(campo.nombre || '')}</div>
+          <div class="campo-meta">Par ${campo.par_total || '—'} · ${campo.hoyos?.length || 0} ${lang==='pt'?'buracos':'hoyos'} · ${dots || t('sin_barras')}</div>
+        </div>
       </div>
-      <div style="display:flex;gap:8px;flex-shrink:0">
-        <button class="btn-edit" onclick="abrirEditCampo(${campo.id})">✏ Editar</button>
-        <button class="del" onclick="delCampo(${campo.id})">×</button>
+      <div class="campo-item-actions">
+        <button class="swipe-edit" onclick="event.stopPropagation(); cerrarSwipeCampos(); abrirEditCampo(${campo.id})" aria-label="Editar">
+          <span class="swipe-icon">✏</span>
+          <span data-i18n="editar">Editar</span>
+        </button>
+        <button class="swipe-del" onclick="event.stopPropagation(); cerrarSwipeCampos(); delCampo(${campo.id})" aria-label="Borrar">
+          <span class="swipe-icon">🗑</span>
+          <span data-i18n="eliminar">Borrar</span>
+        </button>
       </div>
     </div>`;
   }).join('');
+  // v1.34.193: activar gestos swipe tras render
+  try { activarSwipeCampos(); } catch(e) {}
 }
 
 function renderSelectorCampos() {
@@ -8918,8 +9059,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.192' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.192\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.193' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.193\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
