@@ -583,40 +583,48 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
-  padding:12px 0;
+  /* v1.34.194: padding vertical reducido (12px->8px) para fila mas fina */
+  padding:8px 10px;
   gap:8px;
+  /* v1.34.194: fondo blanco modo claro, var(--bg) modo oscuro */
   background:var(--bg);
   position:relative;
   z-index:2;
   transition:transform .25s ease;
   will-change:transform;
 }
+:root.light .campo-item-content{background:#ffffff}
 .campo-item.swiped .campo-item-content{
-  transform:translateX(-180px);
+  /* v1.34.194: reducido de -180px a -140px (botones mas pequenos necesitan menos espacio) */
+  transform:translateX(-140px);
 }
 .campo-item-actions{
   position:absolute;
-  top:0;
-  right:0;
-  bottom:0;
+  /* v1.34.194: separacion del borde derecho + centrado vertical para que botones queden mas pequenos visualmente */
+  top:50%;
+  right:6px;
+  transform:translateY(-50%);
   display:flex;
-  align-items:stretch;
+  align-items:center;
+  gap:6px;
   z-index:1;
 }
 .campo-item-actions button{
   border:none;
   font-family:'DM Mono',monospace;
-  font-size:10px;
-  letter-spacing:1.5px;
+  /* v1.34.194: mas pequenos (10px->8px font, 90px->62px ancho), padding controlado, esquinas redondeadas */
+  font-size:8px;
+  letter-spacing:1px;
   text-transform:uppercase;
   cursor:pointer;
-  padding:0;
-  width:90px;
+  padding:6px 4px;
+  width:62px;
+  border-radius:8px;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:4px;
+  gap:2px;
   color:#fff;
 }
 .campo-item-actions .swipe-edit{
@@ -627,7 +635,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   background:#d04545; /* rojo */
 }
 .campo-item-actions .swipe-del:active{background:#b03535}
-.campo-item-actions .swipe-icon{font-size:18px;line-height:1}
+.campo-item-actions .swipe-icon{font-size:14px;line-height:1}
 .campo-name{font-size:12px;color:var(--cream);margin-bottom:3px;line-height:1.3;word-break:break-word} /* v1.34.114: 13->12px + line-height + word-break */
 .campo-meta{font-size:9px;color:var(--muted)}
 
@@ -1219,7 +1227,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.193</div>
+    <div class="login-version">v1.34.194</div>
   </div>
 </div>
 
@@ -1464,7 +1472,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.193</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.194</div>
   </div>
 </div>
 
@@ -1689,13 +1697,12 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
   <!-- Lista de campos — se oculta cuando el formulario está abierto -->
   <div id="campos-lista-wrap">
-    <div class="card">
-      <div class="card-row">
-        <div class="card-title" style="margin-bottom:0" data-i18n="mis_campos">Mis Campos</div>
-        <button class="btn-sm" onclick="abrirNuevoCampo()" data-i18n="nuevo_campo">+ Nuevo</button>
-      </div>
-      <div id="campos-list"><div class="empty">Cargando…</div></div>
+    <!-- v1.34.194: quitada card envolvente, titulo y boton +Nuevo sueltos sin recuadro -->
+    <div class="card-row" style="margin-bottom:10px">
+      <div class="card-title" style="margin-bottom:0" data-i18n="mis_campos">Mis Campos</div>
+      <button class="btn-sm" onclick="abrirNuevoCampo()" data-i18n="nuevo_campo">+ Nuevo</button>
     </div>
+    <div id="campos-list"><div class="empty">Cargando…</div></div>
   </div>
 </div>
 
@@ -4540,8 +4547,47 @@ window.acGuardarCampo = acGuardarCampo;
 const $ = id => document.getElementById(id);
 function setVal(id, v) { const el = $(id); if (el) el.value = (v == null ? '' : v); }
 let _toastTimer = null;
+// v1.34.194: mini-toast con info CR/Slope de cada barra (swipe derecha en Mis Campos)
+function mostrarInfoCampoToast(campoId) {
+  const campo = state.campos.find(c => c.id === campoId);
+  if (!campo) return;
+
+  const BARRA_LBL = lang==='fr' ? BARRA_LABELS_FR : lang==='pt' ? BARRA_LABELS_PT : BARRA_LABELS_PL;
+  const lineasBarras = (campo.barras || []).map(b => {
+    const colorDot = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${BARRA_COLORS[b.color]};margin-right:6px;border:1px solid rgba(0,0,0,.2);vertical-align:middle"></span>`;
+    const lbl = (BARRA_LBL[b.color] || b.color).padEnd(10, ' ');
+    const cr = (b.cr != null) ? b.cr : '—';
+    const slope = (b.slope != null) ? b.slope : '—';
+    return `<div style="margin:3px 0;font-family:'DM Mono',monospace;font-size:10px;display:flex;align-items:center;gap:4px"><span style="display:inline-flex;align-items:center;width:90px">${colorDot}${lbl.trim()}</span><span style="color:var(--gold2);min-width:60px">CR ${cr}</span><span style="color:var(--blue-adapt)">Slope ${slope}</span></div>`;
+  }).join('');
+
+  const html = `<div style="font-size:11px;font-weight:600;letter-spacing:1px;color:var(--cream);margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px">${limpiarNombreCampo(campo.nombre || '')} · Par ${campo.par_total || '—'}</div>${lineasBarras || `<div style="font-size:10px;color:var(--muted)">${t('sin_barras')}</div>`}`;
+
+  const el = $('toast');
+  el.innerHTML = html;
+  el.style.padding = '12px 16px';
+  el.style.maxWidth = '90%';
+  el.style.textAlign = 'left';
+  el.className = 'toast show';
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => {
+    el.className = 'toast';
+    // Limpiar estilos custom para que el siguiente toast sea normal
+    setTimeout(() => {
+      el.style.padding = '';
+      el.style.maxWidth = '';
+      el.style.textAlign = '';
+      el.innerHTML = '';
+    }, 300);
+  }, 4000);
+}
+
 function toast(msg, err=false, ms=3000) {
   const el = $('toast');
+  // v1.34.194: resetear estilos custom que puede haber dejado mostrarInfoCampoToast
+  el.style.padding = '';
+  el.style.maxWidth = '';
+  el.style.textAlign = '';
   el.textContent = msg;
   el.className = 'toast show' + (err ? ' err' : '');
   clearTimeout(_toastTimer);
@@ -5011,7 +5057,7 @@ function aplicarFotoLogin() {
   const idx = elegirFotoLoginAleatoria();
   // v1.34.177: cache buster por version para forzar recarga tras deploy y evitar
   // que el Service Worker sirva fotos antiguas. El parametro cambia con cada release.
-  const cb = 'v193';
+  const cb = 'v194';
   const url = `login-bg-${idx}.jpg?${cb}`;
   // Precargar para detectar errores y no romper UI con foto rota
   const probe = new Image();
@@ -7059,8 +7105,13 @@ function activarSwipeCampos() {
       }
       if (!isHorizontal) return;
       e.preventDefault();
-      // Solo permitir swipe a la izquierda (dx negativo)
-      currentX = Math.min(0, Math.max(-180, dx));
+      // v1.34.194: permitir swipe a izquierda (negativo, max -140) y a derecha (positivo, max +60 para preview)
+      // El swipe izquierdo abre actions Editar/Borrar. El derecho dispara mini-toast con info CR/Slope.
+      if (dx < 0) {
+        currentX = Math.max(-140, dx);
+      } else {
+        currentX = Math.min(60, dx); // limite visual derecho mas pequeno (solo feedback de gesto)
+      }
       content.style.transform = `translateX(${currentX}px)`;
     };
 
@@ -7069,10 +7120,19 @@ function activarSwipeCampos() {
       dragging = false;
       content.style.transition = 'transform .25s ease';
       content.style.transform = '';
-      // Si paso del threshold (-50px), abrir; si no, cerrar
+      // v1.34.194: 3 estados segun direccion y distancia
       if (currentX < -50) {
+        // Swipe izquierda largo: abrir actions (Editar/Borrar)
         item.classList.add('swiped');
+      } else if (currentX > 40) {
+        // Swipe derecha: mostrar mini-toast con info CR/Slope del campo
+        item.classList.remove('swiped');
+        const campoId = parseInt(item.dataset.campoId, 10);
+        if (!isNaN(campoId)) {
+          try { mostrarInfoCampoToast(campoId); } catch(e) { console.error('Info campo toast error:', e); }
+        }
       } else {
+        // Movimiento pequeno: snap back
         item.classList.remove('swiped');
       }
     };
@@ -7131,7 +7191,7 @@ function renderCampos() {
       </div>
     </div>`;
   }).join('');
-  // v1.34.193: activar gestos swipe tras render
+  // v1.34.194: activar gestos swipe tras render
   try { activarSwipeCampos(); } catch(e) {}
 }
 
@@ -9059,8 +9119,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.193' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.193\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.194' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.194\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
