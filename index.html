@@ -311,16 +311,29 @@ body.splash-active #safe-area-cover {
 
 /* ── SPLASH ── */
 /* v1.31.084: splash adaptable a modo claro/oscuro */
-#splash{position:fixed;inset:0;background:#1a2f1a;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .5s}
+/* v1.34.204: foto de fondo aleatoria (mismo set que login-bg-N.jpg) con overlay oscuro para legibilidad */
+#splash{position:fixed;inset:0;background:#1a2f1a;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .5s;overflow:hidden}
+/* Pseudo-elemento ::before -- capa de foto (se asigna via JS por --splash-foto). Empieza invisible y aparece con fade. */
+#splash::before{content:'';position:absolute;inset:0;background-image:var(--splash-foto,none);background-size:cover;background-position:center center;background-repeat:no-repeat;opacity:0;transition:opacity .4s ease;z-index:0}
+#splash.foto-cargada::before{opacity:1}
+/* Pseudo-elemento ::after -- overlay oscuro encima de la foto para asegurar legibilidad del texto en ambos modos */
+#splash::after{content:'';position:absolute;inset:0;background:rgba(10,20,15,0.62);opacity:0;transition:opacity .4s ease;z-index:1;pointer-events:none}
+#splash.foto-cargada::after{opacity:1}
+/* Los hijos directos del splash (titulo + subtitulo) por encima de la foto y del overlay */
+#splash > *{position:relative;z-index:2}
 #splash.hide{opacity:0;pointer-events:none}
-#splash-t{font-family:'Playfair Display',serif;font-size:42px;font-weight:900;color:#f5f0e8}
+#splash-t{font-family:'Playfair Display',serif;font-size:42px;font-weight:900;color:#f5f0e8;text-shadow:0 2px 8px rgba(0,0,0,.5)}
 #splash-t em{color:#c9a84c;font-style:italic}
-#splash-s{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#7bc67a;opacity:.7}
+#splash-s{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#7bc67a;opacity:.85;text-shadow:0 1px 4px rgba(0,0,0,.5)}
 /* Modo claro: fondo claro + colores adaptados manteniendo identidad Golf HCP */
 :root.light #splash{background:#f0f4f0}
-:root.light #splash-t{color:#1a2f1a}
+:root.light #splash-t{color:#1a2f1a;text-shadow:none}
 :root.light #splash-t em{color:#7a5a10}
-:root.light #splash-s{color:#1a4a1a}
+:root.light #splash-s{color:#1a4a1a;text-shadow:none}
+/* v1.34.204: si hay foto cargada, forzar texto blanco/cream tambien en modo claro (el overlay oscuro lo justifica) */
+:root.light #splash.foto-cargada #splash-t{color:#f5f0e8;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+:root.light #splash.foto-cargada #splash-t em{color:#c9a84c}
+:root.light #splash.foto-cargada #splash-s{color:#7bc67a;text-shadow:0 1px 4px rgba(0,0,0,.5)}
 
 /* v1.31.085: Tip "cerrar app" con enfasis maximo en ambos modos */
 .g-tip-cerrar { color: #f5f0e8; }                /* modo oscuro: crema brillante */
@@ -410,8 +423,7 @@ nav button.active svg{stroke:var(--gold2)} /* v1.34.147: modo oscuro stroke dora
 :root.light .r-stat{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.1)}
 :root.light .r-stats{display:grid}
 :root.light .target-box{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1)}
-:root.light .used-badge{background:rgba(40,120,40,.85);color:#ffffff;border-color:#287028} /* v1.34.203: cuadrado verde intenso tambien en modo claro */
-:root.light .used-badge-9h{background:rgba(0,102,204,.15);color:#0066cc;border-color:rgba(0,102,204,.4)} /* v1.34.136: rondas 9H combinadas en azul intenso (modo claro) */
+:root.light .used-badge{background:rgba(40,120,40,.85);color:#ffffff;border-color:#287028} /* v1.34.203: cuadrado verde intenso tambien en modo claro; v1.34.204: badge unico (.used-badge-9h eliminada) */
 :root.light .stbl-badge{color:var(--gold)}
 :root.light .stbl-dot{background:#f5a623}
 :root.light .barra-9h{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.2)}
@@ -563,8 +575,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .hist-table th{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);padding:3px 5px;text-align:left;border-bottom:1px solid var(--border);font-weight:normal} /* v1.34.137: muted -> text + sin negrita */
 .hist-table td{padding:6px 5px;border-bottom:1px solid var(--border);color:var(--text,var(--cream));vertical-align:middle}
 .hist-table tr:last-child td{border-bottom:none}
-.used-badge{background:rgba(46,139,62,.85);border:1px solid #2e8b3e;color:#ffffff;font-size:7px;padding:2px 5px;border-radius:3px;font-weight:700} /* v1.34.203: cuadrado verde intenso (antes redondeado verde claro) -- diferencia clara vs badges 9H redondeados */
-.used-badge-9h{background:rgba(77,163,255,.15);border-color:rgba(77,163,255,.4);color:#4da3ff} /* v1.34.136: rondas 9H combinadas en azul claro; v1.34.203: hereda border-radius:3px de .used-badge */
+.used-badge{background:rgba(46,139,62,.85);border:1px solid #2e8b3e;color:#ffffff;font-size:7px;padding:2px 5px;border-radius:3px;font-weight:700} /* v1.34.203: cuadrado verde intenso (antes redondeado verde claro) -- diferencia clara vs badges 9H redondeados; v1.34.204: badge unico para todas las rondas que cuentan (18H y 9H combinadas) */
 .stbl-badge{background:rgba(201,168,76,.15);border:1px solid var(--border);color:var(--gold2);font-size:7px;letter-spacing:1px;padding:2px 6px;border-radius:20px;white-space:nowrap}
 .barra-dot{display:inline-block;width:8px;height:8px;border-radius:50%;border:1px solid rgba(0,0,0,.2)}
 .hist-actions{display:flex;gap:4px}
@@ -679,7 +690,8 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
-  padding:8px 10px;
+  /* v1.34.204: padding reducido 8px 10px -> 5px 10px (filas mas compactas) */
+  padding:5px 10px;
   gap:8px;
   background:var(--bg);
   position:relative;
@@ -1329,7 +1341,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.203</div>
+    <div class="login-version">v1.34.204</div>
   </div>
 </div>
 
@@ -1574,7 +1586,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.203</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.204</div>
   </div>
 </div>
 
@@ -5152,7 +5164,9 @@ function calcStableford(hcpIndex, campo, shots, crOverride, slopeOverride, vuelt
 // v1.34.173: rotacion aleatoria de foto de fondo del login sin repetir hasta agotar el set
 // Set actual de fotos disponibles: login-bg-1.jpg ... login-bg-N.jpg (todas en raiz repo).
 // Para anadir mas fotos: subir el archivo + incrementar LOGIN_BG_TOTAL aqui.
+// v1.34.204: la foto se elige UNA sola vez por arranque y se reutiliza en splash y login (continuidad visual).
 const LOGIN_BG_TOTAL = 10; // Numero total de fotos en el set (login-bg-1.jpg..login-bg-10.jpg)
+let _fotoArranqueIdx = null; // cache de la foto elegida para este arranque (splash y login comparten)
 function elegirFotoLoginAleatoria() {
   try {
     // Recuperar las ya vistas (array de indices). Si no existe o esta corrupto, empezar de cero.
@@ -5180,10 +5194,42 @@ function elegirFotoLoginAleatoria() {
     return 1; // fallback en cualquier error
   }
 }
+// v1.34.204: punto unico de obtencion de foto. Cachea para que splash y login compartan.
+function obtenerFotoArranque() {
+  if (_fotoArranqueIdx !== null) return _fotoArranqueIdx;
+  _fotoArranqueIdx = elegirFotoLoginAleatoria();
+  return _fotoArranqueIdx;
+}
+// v1.34.204: aplica la foto al splash con fade-in (no bloquea: si tarda, el splash se ve con color solido y luego aparece la foto)
+function aplicarFotoSplash() {
+  const splash = document.getElementById('splash');
+  if (!splash) return;
+  const idx = obtenerFotoArranque();
+  const cb = 'v200';
+  const url = `login-bg-${idx}.jpg?${cb}`;
+  const probe = new Image();
+  probe.onload = () => {
+    splash.style.setProperty('--splash-foto', `url('${url}')`);
+    splash.classList.add('foto-cargada');
+  };
+  probe.onerror = () => {
+    // Sin foto: el splash queda con su color de fondo solido (sin ruido visual)
+    if (idx !== 1) {
+      const probe2 = new Image();
+      probe2.onload = () => {
+        splash.style.setProperty('--splash-foto', `url('login-bg-1.jpg?${cb}')`);
+        splash.classList.add('foto-cargada');
+      };
+      probe2.src = `login-bg-1.jpg?${cb}`;
+    }
+  };
+  probe.src = url;
+}
 function aplicarFotoLogin() {
   const el = $('auth-login');
   if (!el) return;
-  const idx = elegirFotoLoginAleatoria();
+  // v1.34.204: usa la misma foto que el splash (continuidad visual)
+  const idx = obtenerFotoArranque();
   // v1.34.177: cache buster por version para forzar recarga tras deploy y evitar
   // que el Service Worker sirva fotos antiguas. El parametro cambia con cada release.
   const cb = 'v200';
@@ -7095,13 +7141,13 @@ function renderHistory() {
       if (egaDiff != null) diffMostrar = egaDiff;
     }
     const stblTxt = r.stableford != null
-      ? `<span class="stat-stbl">⛳ ${r.stableford}</span>` : '';
+      ? `<span>Stbl: <span class="stat-stbl">${r.stableford}</span></span>` : '';
     const isPair = pairMap.has(r.id);
     const pairDot = isPair ? `<span style="font-size:10px;color:var(--blue-adapt)" title="9H combinada">🔗</span>` : '';
+    // v1.34.204: badge HCP✓ unificado al verde para todas las rondas que cuentan (18H y 9H combinadas).
+    // El circulo azul/rojo del nineTag ya distingue las 9H; no hace falta un segundo badge azul cuadrado.
     const usedBadge = used
-      ? (r.num_hoyos === 9
-          ? `<span class="used-badge used-badge-9h" title="HCP">✓</span>`
-          : `<span class="used-badge" title="HCP">✓</span>`)
+      ? `<span class="used-badge" title="HCP">✓</span>`
       : '';
     const rfegBadge = r.torneo_rfeg
       ? `<span style="background:rgba(232,201,106,.15);border:1px solid rgba(232,201,106,.5);color:var(--gold2);font-size:7px;padding:1px 4px;border-radius:3px;font-weight:600;letter-spacing:.3px">RFEG</span>`
@@ -9461,8 +9507,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.203' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.203\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.204' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.204\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -9921,6 +9967,8 @@ function refreshClearButtons() { attachClearButtons(); }
 
 async function init() {
   applyStoredTheme();
+  // v1.34.204: aplicar foto al splash lo antes posible (no bloquea, fade-in suave)
+  try { aplicarFotoSplash(); } catch(e) {}
   // Aplicar idioma guardado
   applyLangDOM();
   // X custom para inputs marcados con data-clearable (v1.31.080)
