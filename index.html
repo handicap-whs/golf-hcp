@@ -1348,7 +1348,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.208</div>
+    <div class="login-version">v1.34.209</div>
   </div>
 </div>
 
@@ -1593,7 +1593,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.208</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.209</div>
   </div>
 </div>
 
@@ -5274,16 +5274,30 @@ function aplicarFotoLogin() {
 
 // v1.34.179: ocultar splash en cuanto haya algo que mostrar (login o app),
 // en vez de timeout fijo 600ms que causaba parpadeo. Idempotente: se puede llamar varias veces.
+// v1.34.209: tiempo MINIMO de visibilidad del splash (1800ms desde arranque) para que el
+// usuario alcance a ver la foto. Si la conexion es muy rapida y la app esta lista antes,
+// se difiere la ocultacion hasta cumplir el minimo. Si tarda mas, se oculta cuando este lista.
+const _splashTsArranque = Date.now();
+const SPLASH_MIN_MS = 1800;
 function ocultarSplash() {
   const s = $('splash');
   if (!s || s._ocultando) return;
   s._ocultando = true;
-  s.classList.add('hide');
-  setTimeout(() => {
-    s.remove();
-    document.body.classList.remove('splash-active');
-    try { maybeShowGuide(); } catch(e) {}
-  }, 500);
+  const elapsed = Date.now() - _splashTsArranque;
+  const espera = Math.max(0, SPLASH_MIN_MS - elapsed);
+  const cerrar = () => {
+    s.classList.add('hide');
+    setTimeout(() => {
+      s.remove();
+      document.body.classList.remove('splash-active');
+      try { maybeShowGuide(); } catch(e) {}
+    }, 500);
+  };
+  if (espera > 0) {
+    setTimeout(cerrar, espera);
+  } else {
+    cerrar();
+  }
 }
 
 function showAuth(screen) {
@@ -9591,8 +9605,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.208' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.208\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.209' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.209\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
