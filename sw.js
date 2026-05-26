@@ -1,4 +1,4 @@
-// Golf HCP Service Worker v1.34.210
+// Golf HCP Service Worker v1.34.214
 //
 // REGLA CRITICA: actualizar APP_VERSION en CADA release. Eso renombra el cache
 // (golf-hcp-v<APP_VERSION>), lo que provoca que el navegador detecte SW nuevo,
@@ -6,7 +6,12 @@
 //
 // El bumpeo de APP_VERSION es OBLIGATORIO incluso aunque el sw.js no haya cambiado
 // en logica -- es lo que dispara la actualizacion en clientes ya instalados.
-const APP_VERSION = '1.34.213';
+//
+// v1.34.214: ELIMINADO self.skipWaiting() del 'install'. Asi el SW nuevo queda en
+// estado "waiting" hasta que el usuario pulse "Recargar" en el banner del index.html.
+// Patron estandar de PWAs profesionales (GitHub, Twitter, etc): el usuario decide
+// cuando aplicar la actualizacion, no se aplica automaticamente sin avisar.
+const APP_VERSION = '1.34.214';
 const CACHE = 'golf-hcp-v' + APP_VERSION;
 
 // Lista de assets a precachear durante la instalacion.
@@ -29,9 +34,10 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', event => {
-  // skipWaiting inmediato: el SW nuevo no espera a que se cierren todas las pestañas.
-  // Combinado con el toast del index.html, el usuario decide cuando aplicar la actualizacion.
-  self.skipWaiting();
+  // v1.34.214: NO llamar a self.skipWaiting() aqui.
+  // El SW nuevo queda en estado "waiting" hasta que el usuario pulse Recargar.
+  // El listener 'message' al final del archivo ejecuta skipWaiting() solo cuando
+  // recibe SKIP_WAITING desde el cliente (boton Recargar del banner).
   event.waitUntil(
     caches.open(CACHE).then(cache => {
       // addAll falla si CUALQUIER asset no carga -> usar Promise.allSettled para tolerar
