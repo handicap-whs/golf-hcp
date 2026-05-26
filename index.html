@@ -551,6 +551,18 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
 .modal-err{display:none;padding:10px 13px;background:rgba(224,85,85,.12);border:1px solid rgba(224,85,85,.3);border-radius:5px;font-size:11px;color:var(--red);margin-bottom:12px;line-height:1.5}
 .modal-err.show{display:block}
+/* v1.34.211: variante "tall" del modal -- ocupa toda la altura disponible desde arriba (debajo del notch/safe-area).
+   Util para formularios largos como Editar Ronda donde el modal estandar deja medio pantalla en blanco arriba.
+   Los botones Guardar/Cancelar siguen al final del contenido (con scroll), no fixed abajo. */
+.modal-overlay-tall{align-items:flex-start !important}
+.modal-tall{
+  max-height:100vh !important;
+  height:100vh;
+  border-radius:0 !important;
+  border-top:none !important;
+  padding-top:calc(env(safe-area-inset-top,0px) + 14px) !important;
+  padding-bottom:calc(env(safe-area-inset-bottom,0px) + 20px) !important;
+}
 
 /* ── RESULT ── */
 .result{background:linear-gradient(135deg,rgba(201,168,76,.13),rgba(74,140,63,.07));border:1px solid rgba(201,168,76,.28);border-radius:8px;padding:10px 12px;text-align:center;margin-bottom:16px} /* v1.34.108: 10px -> 16px = igual que .card */
@@ -1348,7 +1360,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.210</div>
+    <div class="login-version">v1.34.212</div>
   </div>
 </div>
 
@@ -1393,8 +1405,10 @@ nav.nav-hidden{transform:translateY(100%)}
 
 
 <!-- MODAL: EDITAR RONDA -->
-<div class="modal-overlay hidden" id="modal-ronda">
-  <div class="modal">
+<!-- v1.34.211: clase 'modal-tall' para que el modal arranque desde arriba (max-height 100vh)
+     en lugar de desde la mitad. Mas espacio util sin mover los botones Guardar/Cancelar. -->
+<div class="modal-overlay hidden modal-overlay-tall" id="modal-ronda">
+  <div class="modal modal-tall">
     <!-- v1.34.092: titulo centrado + 5px (coherente con Nueva Ronda) -->
     <div class="modal-title" style="margin-bottom:14px;text-align:center;font-size:14px;color:var(--text)" data-i18n="editar_ronda">Editar Ronda</div>
     <input type="hidden" id="edit-r-id">
@@ -1485,8 +1499,10 @@ nav.nav-hidden{transform:translateY(100%)}
 </div>
 
 <!-- MODAL: EDITAR CAMPO -->
-<div class="modal-overlay hidden" id="modal-campo">
-  <div class="modal">
+<!-- v1.34.212: clases 'modal-overlay-tall' + 'modal-tall' (igual que Editar Ronda)
+     para que el modal arranque desde arriba y ocupe toda la altura disponible. -->
+<div class="modal-overlay hidden modal-overlay-tall" id="modal-campo">
+  <div class="modal modal-tall">
     <!-- v1.34.115: titulo centrado, color tema, 14px (estilo Editar/Nueva Ronda) -->
     <div class="modal-title" style="margin-bottom:14px;text-align:center;font-size:14px;color:var(--text)">Editar Campo</div>
     <input type="hidden" id="edit-c-id">
@@ -1593,7 +1609,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.210</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.212</div>
   </div>
 </div>
 
@@ -4682,49 +4698,70 @@ function mostrarInfoCampoToast(campoId) {
   if (!campo) return;
 
   const BARRA_LBL = lang==='fr' ? BARRA_LABELS_FR : lang==='pt' ? BARRA_LABELS_PT : BARRA_LABELS_PL;
-  // v1.34.203: colores oscuros forzados (texto sobre fondo azul muy claro)
-  const TXT_DARK = '#1a2c44';
-  const TXT_LABEL = '#34556f';
-  const TXT_ACCENT = '#0b4a8a';
-  const SEP_LINE = 'rgba(80,120,170,0.35)';
+  const lbl = (es, pt, fr) => lang==='fr' ? (fr||es) : (lang==='pt' ? pt : es);
+  // v1.34.211: mismo esquema que mostrarInfoRondaToast (azul oscuro sobre azul muy claro)
+  const TXT_MAIN = '#0d1f3a';
+  const TXT_LABEL = '#1a3460';
+  const TXT_HINT = 'rgba(13,31,58,0.45)';
+  const SEP_LINE = 'rgba(13,31,58,0.25)';
   const lineasBarras = (campo.barras || []).map(b => {
-    const colorDot = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${BARRA_COLORS[b.color]};margin-right:6px;border:1px solid rgba(0,0,0,.3);vertical-align:middle"></span>`;
-    const lbl = (BARRA_LBL[b.color] || b.color);
+    const colorDot = `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${BARRA_COLORS[b.color]};margin-right:6px;border:1px solid rgba(13,31,58,.5);vertical-align:middle"></span>`;
+    const lblBarra = (BARRA_LBL[b.color] || b.color);
     const cr = (b.cr != null) ? b.cr : '—';
     const slope = (b.slope != null) ? b.slope : '—';
-    // v1.34.199: white-space:nowrap en el label para evitar que se parta a 2 lineas (Amarilla, Naranja, etc.)
-    // v1.34.203: colores hardcoded oscuros (texto sobre fondo azul claro)
-    return `<div style="margin:3px 0;font-family:'DM Mono',monospace;font-size:10px;display:flex;align-items:center;gap:6px;color:${TXT_LABEL}"><span style="display:inline-flex;align-items:center;min-width:100px;white-space:nowrap">${colorDot}${lbl}</span><span style="color:${TXT_ACCENT};min-width:60px;white-space:nowrap;font-weight:600">CR ${cr}</span><span style="color:${TXT_ACCENT};white-space:nowrap;font-weight:600">Slope ${slope}</span></div>`;
+    // v1.34.211: filas +2px (10->12), todas las letras en azul oscuro
+    return `<div style="margin:5px 0;font-family:'DM Mono',monospace;font-size:12px;display:flex;align-items:center;gap:8px;color:${TXT_LABEL}"><span style="display:inline-flex;align-items:center;min-width:110px;white-space:nowrap">${colorDot}${lblBarra}</span><span style="color:${TXT_MAIN};min-width:65px;white-space:nowrap;font-weight:600">CR ${cr}</span><span style="color:${TXT_MAIN};white-space:nowrap;font-weight:600">Slope ${slope}</span></div>`;
   }).join('');
 
-  const html = `<div style="font-size:11px;font-weight:600;letter-spacing:1px;color:${TXT_DARK};margin-bottom:6px;border-bottom:1px solid ${SEP_LINE};padding-bottom:4px;white-space:nowrap">${limpiarNombreCampo(campo.nombre || '')} · Par ${campo.par_total || '—'}</div>${lineasBarras || `<div style="font-size:10px;color:${TXT_LABEL}">${t('sin_barras')}</div>`}`;
+  const header = `<div style="font-size:13px;font-weight:700;letter-spacing:1px;color:${TXT_MAIN};margin-bottom:10px;border-bottom:1px solid ${SEP_LINE};padding-bottom:6px;white-space:nowrap">${limpiarNombreCampo(campo.nombre || '')} · Par ${campo.par_total || '—'}</div>`;
+  const cuerpo = lineasBarras || `<div style="font-size:12px;color:${TXT_LABEL};margin:5px 0">${t('sin_barras')}</div>`;
+  // v1.34.211: hint final "tocar para salir"
+  const hintTxt = lbl('tocar para salir', 'tocar para sair', 'toucher pour sortir');
+  const hint = `<div style="font-size:9px;color:${TXT_HINT};font-family:'DM Mono',monospace;letter-spacing:.5px;text-align:center;margin-top:10px;padding-top:6px;border-top:1px solid ${SEP_LINE};font-style:italic">${hintTxt}</div>`;
 
   const el = $('toast');
-  el.innerHTML = html;
-  // v1.34.199: toast mas ancho (96% en lugar de 90%)
-  // v1.34.201: tono azulado en lugar de gris oscuro
-  // v1.34.203: AZUL MUY CLARO con texto oscuro (legibilidad mejorada -- antes azul oscuro no se leia)
-  el.style.padding = '12px 18px';
-  el.style.maxWidth = '96vw';
+  el.innerHTML = header + cuerpo + hint;
+  // v1.34.211: mismo estilo que mostrarInfoRondaToast (centrado vertical, sin timeout, cierra al tocar)
+  el.style.padding = '18px 22px';
+  el.style.maxWidth = '92vw';
   el.style.width = 'auto';
+  el.style.minWidth = '280px';
   el.style.textAlign = 'left';
-  el.style.background = 'rgba(220,235,250,0.97)';
-  el.style.borderColor = 'rgba(120,160,210,0.65)';
+  el.style.background = 'rgba(220,232,248,0.98)';
+  el.style.borderColor = 'rgba(110,150,210,0.65)';
+  el.style.borderWidth = '1.5px';
+  el.style.top = '50%';
+  el.style.bottom = 'auto';
+  el.style.left = '50%';
+  el.style.transform = 'translate(-50%, -50%)';
+  el.style.boxShadow = '0 8px 32px rgba(0,30,90,0.25)';
   el.className = 'toast show';
   clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(() => {
+  const cerrarInfoCampoToast = () => {
     el.className = 'toast';
-    // Limpiar estilos custom para que el siguiente toast sea normal
+    document.removeEventListener('touchstart', cerrarInfoCampoToast, true);
+    document.removeEventListener('mousedown', cerrarInfoCampoToast, true);
     setTimeout(() => {
       el.style.padding = '';
       el.style.maxWidth = '';
       el.style.width = '';
+      el.style.minWidth = '';
       el.style.textAlign = '';
       el.style.background = '';
       el.style.borderColor = '';
+      el.style.borderWidth = '';
+      el.style.top = '';
+      el.style.bottom = '';
+      el.style.left = '';
+      el.style.transform = '';
+      el.style.boxShadow = '';
       el.innerHTML = '';
     }, 300);
-  }, 4000);
+  };
+  setTimeout(() => {
+    document.addEventListener('touchstart', cerrarInfoCampoToast, true);
+    document.addEventListener('mousedown', cerrarInfoCampoToast, true);
+  }, 250);
 }
 
 function toast(msg, err=false, ms=3000) {
@@ -5274,11 +5311,11 @@ function aplicarFotoLogin() {
 
 // v1.34.179: ocultar splash en cuanto haya algo que mostrar (login o app),
 // en vez de timeout fijo 600ms que causaba parpadeo. Idempotente: se puede llamar varias veces.
-// v1.34.209: tiempo MINIMO de visibilidad del splash (1800ms desde arranque) para que el
+// v1.34.211: tiempo MINIMO de visibilidad del splash (2300ms, era 1800ms) para que el
 // usuario alcance a ver la foto. Si la conexion es muy rapida y la app esta lista antes,
 // se difiere la ocultacion hasta cumplir el minimo. Si tarda mas, se oculta cuando este lista.
 const _splashTsArranque = Date.now();
-const SPLASH_MIN_MS = 1800;
+const SPLASH_MIN_MS = 2300;
 function ocultarSplash() {
   const s = $('splash');
   if (!s || s._ocultando) return;
@@ -7545,20 +7582,21 @@ function activarSwipeRondas() {
 }
 
 // v1.34.201: mini-toast con info detallada de una ronda (swipe derecha en Listado de Rondas)
-// v1.34.208: rediseno -> rectangulo grande centrado verticalmente, fondo azul intenso con texto blanco,
-//            letra +2px, sin tiempo maximo, se cierra al tocar cualquier parte de la pantalla.
+// v1.34.208: rediseno -> rectangulo grande centrado verticalmente, sin tiempo maximo, cierra al tocar.
+// v1.34.211: fondo AZUL MUY CLARO con TODAS las letras (cabecera y datos) en AZUL MUY OSCURO.
+//            Anadida linea final disimulada "Tocar para salir" como pista.
 function mostrarInfoRondaToast(rondaId) {
   const r = state.rounds.find(x => x.id === rondaId);
   if (!r) return;
   const BARRA_LBL = lang==='fr' ? BARRA_LABELS_FR : (lang==='pt' ? BARRA_LABELS_PT : BARRA_LABELS);
   const lbl = (es, pt, fr) => lang==='fr' ? (fr||es) : (lang==='pt' ? pt : es);
-  // v1.34.208: paleta azul intenso con texto claro (alto contraste sobre fondo azul saturado)
-  const TXT_MAIN = '#ffffff';       // titulo y datos clave
-  const TXT_LABEL = '#cce0ff';      // etiquetas a la izquierda
-  const TXT_ACCENT = '#ffeb99';     // valores destacados (amarillo claro vibra sobre azul)
-  const SEP_LINE = 'rgba(255,255,255,0.30)';
+  // v1.34.211: paleta azul oscuro sobre fondo azul muy claro (alto contraste y legibilidad).
+  const TXT_MAIN = '#0d1f3a';       // azul muy oscuro casi negro (cabecera y datos)
+  const TXT_LABEL = '#1a3460';      // azul oscuro (etiquetas izquierda)
+  const TXT_HINT = 'rgba(13,31,58,0.45)'; // azul oscuro muy tenue para hint
+  const SEP_LINE = 'rgba(13,31,58,0.25)';
   const dot = r.barra_color
-    ? `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${BARRA_COLORS[r.barra_color]};margin-right:6px;border:1px solid rgba(255,255,255,.6);vertical-align:middle"></span>`
+    ? `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${BARRA_COLORS[r.barra_color]};margin-right:6px;border:1px solid rgba(13,31,58,.5);vertical-align:middle"></span>`
     : '';
   const barraName = r.barra_color ? (BARRA_LBL[r.barra_color] || r.barra_color) : '—';
   const hoyosStr = r.num_hoyos === 9
@@ -7567,14 +7605,14 @@ function mostrarInfoRondaToast(rondaId) {
   const fmtLbl = (r.juego_fmt || 100) + '%';
   const hcpIdxTxt = r.hcp_idx != null ? r.hcp_idx.toFixed(1) : '—';
   const rfegTxt = r.torneo_rfeg
-    ? ` <span style="background:rgba(255,235,153,.20);border:1px solid rgba(255,235,153,.7);color:${TXT_ACCENT};font-size:11px;padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.3px">RFEG</span>`
+    ? ` <span style="background:rgba(232,201,106,.25);border:1px solid rgba(180,135,30,.7);color:#5a4310;font-size:11px;padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.3px">RFEG</span>`
     : '';
   const stblTxt = r.stableford != null ? r.stableford + ' ' + lbl('pts','pts','pts') : '—';
 
-  // v1.34.208: filas +2px (10->12) con texto claro sobre azul intenso
-  const row = (k, v) => `<div style="margin:5px 0;font-family:'DM Mono',monospace;font-size:12px;display:flex;align-items:center;gap:8px"><span style="color:${TXT_LABEL};min-width:95px;white-space:nowrap">${k}</span><span style="color:${TXT_ACCENT};white-space:nowrap;font-weight:600">${v}</span></div>`;
+  // v1.34.211: TODAS las letras en TXT_MAIN (azul muy oscuro). Labels mismo azul pero menos peso.
+  const row = (k, v) => `<div style="margin:5px 0;font-family:'DM Mono',monospace;font-size:12px;display:flex;align-items:center;gap:8px"><span style="color:${TXT_LABEL};min-width:95px;white-space:nowrap">${k}</span><span style="color:${TXT_MAIN};white-space:nowrap;font-weight:600">${v}</span></div>`;
 
-  const header = `<div style="font-size:13px;font-weight:600;letter-spacing:1px;color:${TXT_MAIN};margin-bottom:10px;border-bottom:1px solid ${SEP_LINE};padding-bottom:6px;white-space:nowrap">${fmtDate(r.date)} · ${(r.name||'—')}${rfegTxt}</div>`;
+  const header = `<div style="font-size:13px;font-weight:700;letter-spacing:1px;color:${TXT_MAIN};margin-bottom:10px;border-bottom:1px solid ${SEP_LINE};padding-bottom:6px;white-space:nowrap">${fmtDate(r.date)} · ${(r.name||'—')}${rfegTxt}</div>`;
   const body = ''
     + row(lbl('Barra','Tee','Départ'), `${dot}${barraName}`)
     + row(lbl('Hoyos','Buracos','Trous'), hoyosStr)
@@ -7584,34 +7622,34 @@ function mostrarInfoRondaToast(rondaId) {
     + row(lbl('HCP Index','HCP Index','HCP Index'), hcpIdxTxt)
     + row(lbl('Formato','Formato','Format'), fmtLbl)
     + row('CR / Slope', (r.cr != null ? r.cr : '—') + ' / ' + (r.slope != null ? r.slope : '—'));
+  // v1.34.211: hint final disimulado "tocar para salir"
+  const hintTxt = lbl('tocar para salir', 'tocar para sair', 'toucher pour sortir');
+  const hint = `<div style="font-size:9px;color:${TXT_HINT};font-family:'DM Mono',monospace;letter-spacing:.5px;text-align:center;margin-top:10px;padding-top:6px;border-top:1px solid ${SEP_LINE};font-style:italic">${hintTxt}</div>`;
 
   const el = $('toast');
-  el.innerHTML = header + body;
-  // v1.34.208: rectangulo grande centrado verticalmente con fondo azul intenso.
+  el.innerHTML = header + body + hint;
+  // v1.34.211: AZUL MUY CLARO con texto azul oscuro
   el.style.padding = '18px 22px';
   el.style.maxWidth = '92vw';
   el.style.width = 'auto';
   el.style.minWidth = '280px';
   el.style.textAlign = 'left';
-  el.style.background = 'rgba(28,90,180,0.97)';  // azul intenso (bien azul, no apagado)
-  el.style.borderColor = 'rgba(150,190,240,0.7)';
+  el.style.background = 'rgba(220,232,248,0.98)';  // azul muy claro tipo cielo despejado
+  el.style.borderColor = 'rgba(110,150,210,0.65)';
   el.style.borderWidth = '1.5px';
-  // Centrado vertical: sobrescribir bottom y transform del .toast por defecto
+  // Centrado vertical
   el.style.top = '50%';
   el.style.bottom = 'auto';
   el.style.left = '50%';
   el.style.transform = 'translate(-50%, -50%)';
-  el.style.boxShadow = '0 8px 32px rgba(0,30,90,0.5)';
+  el.style.boxShadow = '0 8px 32px rgba(0,30,90,0.25)';
   el.className = 'toast show';
-  // v1.34.208: sin setTimeout -- el toast queda fijo hasta que el usuario toque la pantalla
   clearTimeout(_toastTimer);
-  // Funcion de cierre + cleanup completo
   const cerrarInfoToast = () => {
     el.className = 'toast';
     document.removeEventListener('touchstart', cerrarInfoToast, true);
     document.removeEventListener('mousedown', cerrarInfoToast, true);
     setTimeout(() => {
-      // Reset estilos custom para que el siguiente toast normal funcione bien
       el.style.padding = '';
       el.style.maxWidth = '';
       el.style.width = '';
@@ -7628,7 +7666,6 @@ function mostrarInfoRondaToast(rondaId) {
       el.innerHTML = '';
     }, 300);
   };
-  // Pequeno delay para no capturar el mismo touch que abrio el toast (swipe largo derecha)
   setTimeout(() => {
     document.addEventListener('touchstart', cerrarInfoToast, true);
     document.addEventListener('mousedown', cerrarInfoToast, true);
@@ -9605,8 +9642,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.210' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.210\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.212' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.212\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
