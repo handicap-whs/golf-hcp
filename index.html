@@ -1427,7 +1427,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.222</div>
+    <div class="login-version">v1.34.224</div>
   </div>
 </div>
 
@@ -1676,7 +1676,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.222</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.224</div>
   </div>
 </div>
 
@@ -5453,11 +5453,13 @@ function aplicarFotoLogin() {
 
 // v1.34.179: ocultar splash en cuanto haya algo que mostrar (login o app),
 // en vez de timeout fijo 600ms que causaba parpadeo. Idempotente: se puede llamar varias veces.
-// v1.34.211: tiempo MINIMO de visibilidad del splash (2300ms, era 1800ms) para que el
-// usuario alcance a ver la foto. Si la conexion es muy rapida y la app esta lista antes,
-// se difiere la ocultacion hasta cumplir el minimo. Si tarda mas, se oculta cuando este lista.
+// v1.34.211: tiempo MINIMO de visibilidad del splash (era 1800ms, subido a 2300ms para
+// que el usuario alcance a ver la foto).
+// v1.34.224: bajado a 1500ms — el splash se sentia un poco lento entrar a la foto.
+// Si la conexion es muy rapida y la app esta lista antes, se difiere la ocultacion hasta
+// cumplir el minimo. Si tarda mas, se oculta cuando este lista.
 const _splashTsArranque = Date.now();
-const SPLASH_MIN_MS = 2300;
+const SPLASH_MIN_MS = 1500;
 function ocultarSplash() {
   const s = $('splash');
   if (!s || s._ocultando) return;
@@ -9817,8 +9819,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.222' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.222\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.224' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.224\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -10505,113 +10507,33 @@ async function init() {
 }
 
 // ── SERVICE WORKER ────────────────────────────────────────────────────────
-// v1.34.210: refactor con deteccion de actualizacion automatica.
+// v1.34.223: actualizacion SILENCIOSA. Eliminado el banner "Nueva version disponible /
+// Recargar" porque era redundante: el HTML cacheado se sirve via network-first, asi
+// que el usuario ya ve el numero de version nuevo en Inicio cuando aparecia el banner.
 //
-// Como funciona:
-// 1. Al cargar la app, el navegador comprueba si sw.js ha cambiado (compara byte a byte).
-// 2. Si cambia, el navegador instala el SW nuevo en estado "waiting" -> dispara 'updatefound'.
-// 3. Mostramos un toast persistente con boton "Recargar" para que el usuario actualice cuando quiera.
-// 4. Si pulsa Recargar: enviamos SKIP_WAITING al SW nuevo, el SW activa, y 'controllerchange'
-//    detecta el cambio -> recarga la pagina automaticamente.
-// 5. Si el usuario ignora, en la proxima apertura completa de la app el SW nuevo se activa solo.
+// Estrategia ahora:
+// 1. SW se registra al cargar la app.
+// 2. Si el navegador detecta sw.js cambiado -> instala SW nuevo, hace skipWaiting()
+//    automaticamente (definido en sw.js).
+// 3. El SW nuevo toma el control y dispara 'controllerchange' en el cliente.
+// 4. El cliente recarga la pagina UNA SOLA VEZ para que la app cargue con el SW nuevo.
+//    Si el HTML ya era el nuevo (caso comun con network-first), el reload es transparente
+//    porque el contenido es el mismo. Si era el viejo cacheado, el reload actualiza todo.
 //
-// Importante: la PRIMERA vez que un usuario pasa del SW antiguo (v19, sin esta logica) al
-// nuevo (v1.34.210), el toast no aparece porque el index.html viejo no tiene este codigo.
-// El SW se actualizara silenciosamente en la siguiente apertura. A partir de v1.34.210
-// en adelante, el toast aparecera automaticamente en cada release.
-let _swNuevoListo = false;
+// _swReloading evita bucles de recarga: una vez recargado, no se vuelve a disparar
+// en esta sesion.
 let _swReloading = false;
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').then(reg => {
-      // Si ya hay un SW esperando al registrarse (caso raro: el usuario abrio la app
-      // tras un deploy y un SW nuevo ya esta en waiting desde una sesion anterior), avisar.
-      if (reg.waiting && navigator.serviceWorker.controller) {
-        mostrarToastActualizacion(reg.waiting);
-      }
-      // Escuchar cuando el navegador detecta un sw.js nuevo (cada vez que se compara y cambia).
-      reg.addEventListener('updatefound', () => {
-        const nuevoSw = reg.installing;
-        if (!nuevoSw) return;
-        nuevoSw.addEventListener('statechange', () => {
-          // Cuando el SW nuevo pasa a "installed" y ya habia uno controlando -> hay actualizacion
-          if (nuevoSw.state === 'installed' && navigator.serviceWorker.controller) {
-            mostrarToastActualizacion(nuevoSw);
-          }
-        });
-      });
-    }).catch(() => {});
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
 
-    // Cuando el SW nuevo activa (tras SKIP_WAITING), recargamos para que la app use la version nueva.
+    // Cuando el SW nuevo activa, recargar la pagina una sola vez (silenciosamente).
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       if (_swReloading) return;
       _swReloading = true;
       window.location.reload();
     });
   });
-}
-
-// v1.34.210: toast persistente con boton "Recargar" cuando hay version nueva del SW.
-// v1.34.215: rediseño visual -- centrado en pantalla (a la altura de la mirada del usuario),
-//            mismo fondo azul muy claro que el toast Info Campo/Ronda, texto azul muy oscuro,
-//            boton blanco con texto negro para maximo contraste y "llamada a la accion".
-function mostrarToastActualizacion(swEsperando) {
-  if (_swNuevoListo) return; // evitar duplicados
-  _swNuevoListo = true;
-
-  // Crear el banner si no existe
-  let banner = document.getElementById('sw-update-banner');
-  if (!banner) {
-    banner = document.createElement('div');
-    banner.id = 'sw-update-banner';
-    // v1.34.215: centrado vertical en pantalla (top:50%, translate -50% -50%).
-    //            Fondo y bordes igual que mostrarInfoRondaToast/mostrarInfoCampoToast.
-    //            Sombra mas marcada para destacarlo como elemento prioritario.
-    banner.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);'
-      + 'background:rgba(220,232,248,0.98);'  // azul muy claro tipo cielo (igual que toast Info)
-      + 'color:#0d1f3a;'                       // azul muy oscuro casi negro
-      + 'padding:18px 22px;border-radius:12px;'
-      + 'font-family:\'DM Mono\',monospace;font-size:13px;font-weight:600;letter-spacing:.3px;'
-      + 'display:flex;flex-direction:column;align-items:center;gap:14px;'
-      + 'z-index:9998;'
-      + 'box-shadow:0 12px 48px rgba(0,30,90,0.35);'
-      + 'border:1.5px solid rgba(110,150,210,0.65);'
-      + 'max-width:88vw;min-width:240px;text-align:center;line-height:1.4';
-    document.body.appendChild(banner);
-  }
-  const lblTexto = lang === 'fr' ? 'Nouvelle version disponible'
-                 : lang === 'pt' ? 'Nova versão disponível'
-                 : 'Nueva versión disponible';
-  const lblBoton = lang === 'fr' ? 'Recharger'
-                 : lang === 'pt' ? 'Recarregar'
-                 : 'Recargar';
-  // v1.34.215: boton blanco con texto negro -- alto contraste sobre el fondo azul claro,
-  //            destaca claramente como llamada a la accion principal.
-  banner.innerHTML = '<span>' + lblTexto + '</span>' +
-    '<button id="sw-update-btn" style="background:#ffffff;color:#000000;border:1px solid rgba(0,0,0,0.15);'
-      + 'padding:10px 28px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;'
-      + 'cursor:pointer;letter-spacing:1px;text-transform:uppercase;'
-      + 'box-shadow:0 2px 6px rgba(0,0,0,0.12)">' + lblBoton + '</button>';
-  document.getElementById('sw-update-btn').onclick = () => {
-    // Pedir al SW nuevo que active -- esto disparara 'controllerchange' -> reload automatico
-    if (swEsperando) {
-      try { swEsperando.postMessage({ type: 'SKIP_WAITING' }); } catch(e) {}
-    }
-    // Fallback si por alguna razon 'controllerchange' no se dispara en 3 segundos
-    setTimeout(() => {
-      if (!_swReloading) {
-        _swReloading = true;
-        window.location.reload();
-      }
-    }, 3000);
-    // Cambiar visual del boton para feedback inmediato
-    const btn = document.getElementById('sw-update-btn');
-    if (btn) {
-      btn.textContent = '...';
-      btn.disabled = true;
-      btn.style.opacity = '.6';
-    }
-  };
 }
 
 function drawStatsChart(canvasId, labelsId, data, color, minVal, maxVal, labelFn, valueFn, barMode) {
