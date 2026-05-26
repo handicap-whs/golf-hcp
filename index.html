@@ -1348,7 +1348,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.209</div>
+    <div class="login-version">v1.34.210</div>
   </div>
 </div>
 
@@ -1593,7 +1593,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.209</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.210</div>
   </div>
 </div>
 
@@ -9605,8 +9605,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.209' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.209\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.210' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.210\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -10132,10 +10132,94 @@ async function init() {
 }
 
 // ── SERVICE WORKER ────────────────────────────────────────────────────────
+// v1.34.210: refactor con deteccion de actualizacion automatica.
+//
+// Como funciona:
+// 1. Al cargar la app, el navegador comprueba si sw.js ha cambiado (compara byte a byte).
+// 2. Si cambia, el navegador instala el SW nuevo en estado "waiting" -> dispara 'updatefound'.
+// 3. Mostramos un toast persistente con boton "Recargar" para que el usuario actualice cuando quiera.
+// 4. Si pulsa Recargar: enviamos SKIP_WAITING al SW nuevo, el SW activa, y 'controllerchange'
+//    detecta el cambio -> recarga la pagina automaticamente.
+// 5. Si el usuario ignora, en la proxima apertura completa de la app el SW nuevo se activa solo.
+//
+// Importante: la PRIMERA vez que un usuario pasa del SW antiguo (v19, sin esta logica) al
+// nuevo (v1.34.210), el toast no aparece porque el index.html viejo no tiene este codigo.
+// El SW se actualizara silenciosamente en la siguiente apertura. A partir de v1.34.210
+// en adelante, el toast aparecera automaticamente en cada release.
+let _swNuevoListo = false;
+let _swReloading = false;
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+      // Si ya hay un SW esperando al registrarse (caso raro: el usuario abrio la app
+      // tras un deploy y un SW nuevo ya esta en waiting desde una sesion anterior), avisar.
+      if (reg.waiting && navigator.serviceWorker.controller) {
+        mostrarToastActualizacion(reg.waiting);
+      }
+      // Escuchar cuando el navegador detecta un sw.js nuevo (cada vez que se compara y cambia).
+      reg.addEventListener('updatefound', () => {
+        const nuevoSw = reg.installing;
+        if (!nuevoSw) return;
+        nuevoSw.addEventListener('statechange', () => {
+          // Cuando el SW nuevo pasa a "installed" y ya habia uno controlando -> hay actualizacion
+          if (nuevoSw.state === 'installed' && navigator.serviceWorker.controller) {
+            mostrarToastActualizacion(nuevoSw);
+          }
+        });
+      });
+    }).catch(() => {});
+
+    // Cuando el SW nuevo activa (tras SKIP_WAITING), recargamos para que la app use la version nueva.
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (_swReloading) return;
+      _swReloading = true;
+      window.location.reload();
+    });
   });
+}
+
+// v1.34.210: toast persistente con boton "Recargar" cuando hay version nueva del SW.
+// No usa el toast normal -- es un mini-banner fijo en la parte inferior, no desaparece solo.
+function mostrarToastActualizacion(swEsperando) {
+  if (_swNuevoListo) return; // evitar duplicados
+  _swNuevoListo = true;
+
+  // Crear el banner si no existe
+  let banner = document.getElementById('sw-update-banner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'sw-update-banner';
+    banner.style.cssText = 'position:fixed;bottom:90px;left:14px;right:14px;background:rgba(28,90,180,0.97);color:#ffffff;padding:12px 16px;border-radius:10px;font-family:\'DM Mono\',monospace;font-size:12px;display:flex;align-items:center;gap:12px;z-index:9998;box-shadow:0 4px 20px rgba(0,30,90,0.4);border:1px solid rgba(150,190,240,0.6);max-width:520px;margin:0 auto;line-height:1.4';
+    document.body.appendChild(banner);
+  }
+  const lblTexto = lang === 'fr' ? 'Nouvelle version disponible'
+                 : lang === 'pt' ? 'Nova versão disponível'
+                 : 'Nueva versión disponible';
+  const lblBoton = lang === 'fr' ? 'Recharger'
+                 : lang === 'pt' ? 'Recarregar'
+                 : 'Recargar';
+  banner.innerHTML = '<span style="flex:1">' + lblTexto + '</span>' +
+    '<button id="sw-update-btn" style="background:#ffeb99;color:#1a2c44;border:none;padding:7px 14px;border-radius:6px;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.5px">' + lblBoton + '</button>';
+  document.getElementById('sw-update-btn').onclick = () => {
+    // Pedir al SW nuevo que active -- esto disparara 'controllerchange' -> reload automatico
+    if (swEsperando) {
+      try { swEsperando.postMessage({ type: 'SKIP_WAITING' }); } catch(e) {}
+    }
+    // Fallback si por alguna razon 'controllerchange' no se dispara en 3 segundos
+    setTimeout(() => {
+      if (!_swReloading) {
+        _swReloading = true;
+        window.location.reload();
+      }
+    }, 3000);
+    // Cambiar visual del boton para feedback inmediato
+    const btn = document.getElementById('sw-update-btn');
+    if (btn) {
+      btn.textContent = '...';
+      btn.disabled = true;
+      btn.style.opacity = '.6';
+    }
+  };
 }
 
 function drawStatsChart(canvasId, labelsId, data, color, minVal, maxVal, labelFn, valueFn, barMode) {
