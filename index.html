@@ -321,10 +321,18 @@ body.splash-active #safe-area-cover {
 #splash.foto-cargada::after{opacity:1}
 /* Los hijos directos del splash (titulo + subtitulo) por encima de la foto y del overlay */
 #splash > *{position:relative;z-index:2}
+/* v1.34.220: Los hijos del splash (SVG icono, titulo "Golf HCP" y subtitulo "Cargando...")
+   permanecen INVISIBLES hasta que la foto se ha cargado. Asi durante el momento previo
+   solo se ve el fondo plano (verde oscuro / claro), sin texto fantasma que se ve mal.
+   Cuando la clase 'foto-cargada' se anade, los hijos hacen fade-in junto con la foto. */
+#splash > *{opacity:0;transition:opacity .4s ease}
+#splash.foto-cargada > *{opacity:1}
 #splash.hide{opacity:0;pointer-events:none}
 #splash-t{font-family:'Playfair Display',serif;font-size:42px;font-weight:900;color:#f5f0e8;text-shadow:0 2px 8px rgba(0,0,0,.5)}
 #splash-t em{color:#c9a84c;font-style:italic}
-#splash-s{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#7bc67a;opacity:.85;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+#splash-s{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#7bc67a;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+/* v1.34.220: opacity:.85 solo cuando foto cargada (antes era opacity:.85 directo, lo que ganaba en specificity y mostraba "Cargando..." al 85% incluso sin foto). */
+#splash.foto-cargada #splash-s{opacity:.85}
 /* Modo claro: fondo claro + colores adaptados manteniendo identidad Golf HCP */
 :root.light #splash{background:#f0f4f0}
 :root.light #splash-t{color:#1a2f1a;text-shadow:none}
@@ -1409,7 +1417,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.219</div>
+    <div class="login-version">v1.34.220</div>
   </div>
 </div>
 
@@ -1658,7 +1666,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.219</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.220</div>
   </div>
 </div>
 
@@ -9799,8 +9807,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.219' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.219\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.220' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.220\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
