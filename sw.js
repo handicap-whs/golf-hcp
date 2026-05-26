@@ -6,7 +6,7 @@
 //
 // El bumpeo de APP_VERSION es OBLIGATORIO incluso aunque el sw.js no haya cambiado
 // en logica -- es lo que dispara la actualizacion en clientes ya instalados.
-const APP_VERSION = '1.34.212';
+const APP_VERSION = '1.34.213';
 const CACHE = 'golf-hcp-v' + APP_VERSION;
 
 // Lista de assets a precachear durante la instalacion.
