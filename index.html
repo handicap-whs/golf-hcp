@@ -455,6 +455,13 @@ nav button.active svg{stroke:var(--gold2)} /* v1.34.147: modo oscuro stroke dora
 .ajuste-btn:active{background:rgba(255,255,255,.05)}
 .ajuste-icon{width:28px;height:28px;background:rgba(201,168,76,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:4px}
 .ajuste-icon svg{width:14px;height:14px;stroke:var(--gold2);fill:none;stroke-width:2}
+/* v1.34.207: modo claro -> iconos normales en azul muy claro coherente con paleta de la app.
+   El selector :not([style*="color"]) excluye los iconos con color inline:
+   - "Eliminar cuenta" (style="color:var(--red)") mantiene rojo
+   - Items Admin (style="color:var(--gold2)") mantienen dorado
+   Solo afecta a los cards estandar (Campos, Informes, Guias, Cambiar clave, HCP Oficial, Compartir, etc.) */
+:root.light .ajuste-icon:not([style*="color"]){background:rgba(0,102,204,.10)}
+:root.light .ajuste-icon:not([style*="color"]) svg{stroke:#5b8fc7}
 .ajuste-text{flex:1;min-width:0}
 .ajuste-sub{font-size:12px;color:var(--muted);margin-top:2px}
 .ajuste-chevron{width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0}
@@ -1341,7 +1348,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.206</div>
+    <div class="login-version">v1.34.207</div>
   </div>
 </div>
 
@@ -1586,7 +1593,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.206</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.207</div>
   </div>
 </div>
 
@@ -9548,8 +9555,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.206' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.206\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.207' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.207\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
