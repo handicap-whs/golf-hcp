@@ -705,7 +705,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   z-index:2;
   transition:transform .25s ease;
   will-change:transform;
-  cursor:pointer;
+  /* v1.34.208: sin cursor:pointer -- la fila ya no es clickeable (info via swipe derecha). */
 }
 :root.light .ronda-item-content{background:#ffffff}
 .ronda-item.swiped .ronda-item-content{transform:translateX(-95px)}
@@ -1348,7 +1348,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.207</div>
+    <div class="login-version">v1.34.208</div>
   </div>
 </div>
 
@@ -1593,7 +1593,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.207</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.208</div>
   </div>
 </div>
 
@@ -4730,12 +4730,20 @@ function mostrarInfoCampoToast(campoId) {
 function toast(msg, err=false, ms=3000) {
   const el = $('toast');
   // v1.34.194: resetear estilos custom que puede haber dejado mostrarInfoCampoToast
+  // v1.34.208: ampliado para limpiar tambien los estilos de mostrarInfoRondaToast (centrado, sombra, borde grueso)
   el.style.padding = '';
   el.style.maxWidth = '';
   el.style.width = '';
+  el.style.minWidth = '';
   el.style.textAlign = '';
   el.style.background = '';
   el.style.borderColor = '';
+  el.style.borderWidth = '';
+  el.style.top = '';
+  el.style.bottom = '';
+  el.style.left = '';
+  el.style.transform = '';
+  el.style.boxShadow = '';
   el.textContent = msg;
   el.className = 'toast show' + (err ? ' err' : '');
   clearTimeout(_toastTimer);
@@ -7218,7 +7226,8 @@ function renderHistory() {
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
         </button>
       </div>
-      <div class="ronda-item-content" onclick="abrirDetalleRonda(${r.id})">
+      <!-- v1.34.208: eliminado onclick="abrirDetalleRonda" -- la info ahora solo via swipe derecha (toast Info). -->
+      <div class="ronda-item-content">
         <div style="min-width:0;flex:1">
           <div class="ronda-row1">
             <span class="ronda-date">${fmtDate(r.date)}</span>
@@ -7522,18 +7531,20 @@ function activarSwipeRondas() {
 }
 
 // v1.34.201: mini-toast con info detallada de una ronda (swipe derecha en Listado de Rondas)
+// v1.34.208: rediseno -> rectangulo grande centrado verticalmente, fondo azul intenso con texto blanco,
+//            letra +2px, sin tiempo maximo, se cierra al tocar cualquier parte de la pantalla.
 function mostrarInfoRondaToast(rondaId) {
   const r = state.rounds.find(x => x.id === rondaId);
   if (!r) return;
   const BARRA_LBL = lang==='fr' ? BARRA_LABELS_FR : (lang==='pt' ? BARRA_LABELS_PT : BARRA_LABELS);
   const lbl = (es, pt, fr) => lang==='fr' ? (fr||es) : (lang==='pt' ? pt : es);
-  // v1.34.203: colores oscuros forzados (texto sobre fondo azul muy claro)
-  const TXT_DARK = '#1a2c44';
-  const TXT_LABEL = '#34556f';
-  const TXT_ACCENT = '#0b4a8a';
-  const SEP_LINE = 'rgba(80,120,170,0.35)';
+  // v1.34.208: paleta azul intenso con texto claro (alto contraste sobre fondo azul saturado)
+  const TXT_MAIN = '#ffffff';       // titulo y datos clave
+  const TXT_LABEL = '#cce0ff';      // etiquetas a la izquierda
+  const TXT_ACCENT = '#ffeb99';     // valores destacados (amarillo claro vibra sobre azul)
+  const SEP_LINE = 'rgba(255,255,255,0.30)';
   const dot = r.barra_color
-    ? `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${BARRA_COLORS[r.barra_color]};margin-right:6px;border:1px solid rgba(0,0,0,.3);vertical-align:middle"></span>`
+    ? `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${BARRA_COLORS[r.barra_color]};margin-right:6px;border:1px solid rgba(255,255,255,.6);vertical-align:middle"></span>`
     : '';
   const barraName = r.barra_color ? (BARRA_LBL[r.barra_color] || r.barra_color) : '—';
   const hoyosStr = r.num_hoyos === 9
@@ -7542,14 +7553,14 @@ function mostrarInfoRondaToast(rondaId) {
   const fmtLbl = (r.juego_fmt || 100) + '%';
   const hcpIdxTxt = r.hcp_idx != null ? r.hcp_idx.toFixed(1) : '—';
   const rfegTxt = r.torneo_rfeg
-    ? ` <span style="background:rgba(180,135,30,.18);border:1px solid rgba(180,135,30,.6);color:#7a5a10;font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600;letter-spacing:.3px">RFEG</span>`
+    ? ` <span style="background:rgba(255,235,153,.20);border:1px solid rgba(255,235,153,.7);color:${TXT_ACCENT};font-size:11px;padding:2px 6px;border-radius:3px;font-weight:600;letter-spacing:.3px">RFEG</span>`
     : '';
   const stblTxt = r.stableford != null ? r.stableford + ' ' + lbl('pts','pts','pts') : '—';
 
-  // v1.34.203: filas con texto oscuro (label gris-azulado, valor azul intenso)
-  const row = (k, v) => `<div style="margin:3px 0;font-family:'DM Mono',monospace;font-size:10px;display:flex;align-items:center;gap:6px"><span style="color:${TXT_LABEL};min-width:80px;white-space:nowrap">${k}</span><span style="color:${TXT_ACCENT};white-space:nowrap;font-weight:600">${v}</span></div>`;
+  // v1.34.208: filas +2px (10->12) con texto claro sobre azul intenso
+  const row = (k, v) => `<div style="margin:5px 0;font-family:'DM Mono',monospace;font-size:12px;display:flex;align-items:center;gap:8px"><span style="color:${TXT_LABEL};min-width:95px;white-space:nowrap">${k}</span><span style="color:${TXT_ACCENT};white-space:nowrap;font-weight:600">${v}</span></div>`;
 
-  const header = `<div style="font-size:11px;font-weight:600;letter-spacing:1px;color:${TXT_DARK};margin-bottom:6px;border-bottom:1px solid ${SEP_LINE};padding-bottom:4px;white-space:nowrap">${fmtDate(r.date)} · ${(r.name||'—')}${rfegTxt}</div>`;
+  const header = `<div style="font-size:13px;font-weight:600;letter-spacing:1px;color:${TXT_MAIN};margin-bottom:10px;border-bottom:1px solid ${SEP_LINE};padding-bottom:6px;white-space:nowrap">${fmtDate(r.date)} · ${(r.name||'—')}${rfegTxt}</div>`;
   const body = ''
     + row(lbl('Barra','Tee','Départ'), `${dot}${barraName}`)
     + row(lbl('Hoyos','Buracos','Trous'), hoyosStr)
@@ -7562,27 +7573,52 @@ function mostrarInfoRondaToast(rondaId) {
 
   const el = $('toast');
   el.innerHTML = header + body;
-  // v1.34.203: AZUL MUY CLARO con texto oscuro (mismo esquema que mostrarInfoCampoToast)
-  el.style.padding = '12px 18px';
-  el.style.maxWidth = '96vw';
+  // v1.34.208: rectangulo grande centrado verticalmente con fondo azul intenso.
+  el.style.padding = '18px 22px';
+  el.style.maxWidth = '92vw';
   el.style.width = 'auto';
+  el.style.minWidth = '280px';
   el.style.textAlign = 'left';
-  el.style.background = 'rgba(220,235,250,0.97)';
-  el.style.borderColor = 'rgba(120,160,210,0.65)';
+  el.style.background = 'rgba(28,90,180,0.97)';  // azul intenso (bien azul, no apagado)
+  el.style.borderColor = 'rgba(150,190,240,0.7)';
+  el.style.borderWidth = '1.5px';
+  // Centrado vertical: sobrescribir bottom y transform del .toast por defecto
+  el.style.top = '50%';
+  el.style.bottom = 'auto';
+  el.style.left = '50%';
+  el.style.transform = 'translate(-50%, -50%)';
+  el.style.boxShadow = '0 8px 32px rgba(0,30,90,0.5)';
   el.className = 'toast show';
+  // v1.34.208: sin setTimeout -- el toast queda fijo hasta que el usuario toque la pantalla
   clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(() => {
+  // Funcion de cierre + cleanup completo
+  const cerrarInfoToast = () => {
     el.className = 'toast';
+    document.removeEventListener('touchstart', cerrarInfoToast, true);
+    document.removeEventListener('mousedown', cerrarInfoToast, true);
     setTimeout(() => {
+      // Reset estilos custom para que el siguiente toast normal funcione bien
       el.style.padding = '';
       el.style.maxWidth = '';
       el.style.width = '';
+      el.style.minWidth = '';
       el.style.textAlign = '';
       el.style.background = '';
       el.style.borderColor = '';
+      el.style.borderWidth = '';
+      el.style.top = '';
+      el.style.bottom = '';
+      el.style.left = '';
+      el.style.transform = '';
+      el.style.boxShadow = '';
       el.innerHTML = '';
     }, 300);
-  }, 4500);
+  };
+  // Pequeno delay para no capturar el mismo touch que abrio el toast (swipe largo derecha)
+  setTimeout(() => {
+    document.addEventListener('touchstart', cerrarInfoToast, true);
+    document.addEventListener('mousedown', cerrarInfoToast, true);
+  }, 250);
 }
 
 function renderCampos() {
@@ -9555,8 +9591,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.207' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.207\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.208' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.208\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
