@@ -11,7 +11,7 @@
 // estado "waiting" hasta que el usuario pulse "Recargar" en el banner del index.html.
 // Patron estandar de PWAs profesionales (GitHub, Twitter, etc): el usuario decide
 // cuando aplicar la actualizacion, no se aplica automaticamente sin avisar.
-const APP_VERSION = '1.34.215';
+const APP_VERSION = '1.34.216';
 const CACHE = 'golf-hcp-v' + APP_VERSION;
 
 // Lista de assets a precachear durante la instalacion.
@@ -20,6 +20,7 @@ const CACHE = 'golf-hcp-v' + APP_VERSION;
 const ASSETS = [
   './',
   './index.html',
+  './404.html',
   './manifest.json',
   './login-bg-1.jpg',
   './login-bg-2.jpg',

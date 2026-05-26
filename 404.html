@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a2f1a">
+<title>Golf HCP — Página no encontrada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; }
+body {
+  font-family:'DM Mono', monospace;
+  background:#1a2f1a;
+  color:#f5f0e8;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+/* Foto de fondo aleatoria del set login-bg con overlay oscuro */
+body::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:var(--bg-foto, none);
+  background-size:cover;
+  background-position:center center;
+  background-repeat:no-repeat;
+  opacity:0;
+  transition:opacity .5s ease;
+  z-index:0;
+}
+body.foto-cargada::before { opacity:1; }
+body::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(10,20,15,0.68);
+  opacity:0;
+  transition:opacity .5s ease;
+  z-index:1;
+}
+body.foto-cargada::after { opacity:1; }
+body > * { position:relative; z-index:2; }
+
+.titulo {
+  font-family:'Playfair Display', serif;
+  font-size:48px;
+  font-weight:900;
+  color:#f5f0e8;
+  text-shadow:0 2px 8px rgba(0,0,0,0.5);
+  margin-bottom:8px;
+}
+.titulo em { color:#c9a84c; font-style:italic; }
+
+.codigo {
+  font-family:'Playfair Display', serif;
+  font-size:96px;
+  font-weight:900;
+  color:#c9a84c;
+  line-height:1;
+  margin-bottom:8px;
+  text-shadow:0 2px 12px rgba(0,0,0,0.5);
+}
+
+.mensaje {
+  font-size:14px;
+  letter-spacing:.5px;
+  color:#f5f0e8;
+  max-width:340px;
+  line-height:1.5;
+  margin-bottom:6px;
+  text-shadow:0 1px 4px rgba(0,0,0,0.5);
+}
+
+.submensaje {
+  font-size:10px;
+  letter-spacing:.3px;
+  color:rgba(245,240,232,0.65);
+  max-width:340px;
+  line-height:1.6;
+  margin-bottom:28px;
+  text-shadow:0 1px 4px rgba(0,0,0,0.4);
+}
+
+.btn-volver {
+  background:#ffffff;
+  color:#000000;
+  border:1px solid rgba(0,0,0,0.15);
+  padding:12px 32px;
+  border-radius:8px;
+  font-family:'DM Mono', monospace;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  text-decoration:none;
+  display:inline-block;
+}
+.btn-volver:hover { background:#f0f0f0; }
+.btn-volver:active { transform:translateY(1px); }
+
+.footer-version {
+  position:absolute;
+  bottom:16px;
+  left:0;
+  right:0;
+  font-size:9px;
+  letter-spacing:2px;
+  color:rgba(255,255,255,0.3);
+  text-align:center;
+}
+</style>
+</head>
+<body>
+  <div class="codigo">404</div>
+  <div class="titulo">Golf <em>HCP</em></div>
+  <div class="mensaje" id="msg-main">Página no encontrada</div>
+  <div class="submensaje" id="msg-sub">La página que buscas no existe o ha sido movida. Pulsa el botón para volver a la app.</div>
+  <a href="./" class="btn-volver" id="btn-volver">Ir a Golf HCP</a>
+  <div class="footer-version">Golf HCP</div>
+
+<script>
+// Aplicar foto aleatoria del set login-bg (1..10) usando el mismo sistema que index.html.
+// Si la foto no carga (red mala), el body queda con su color verde de fondo (sin ruido visual).
+(function() {
+  var LOGIN_BG_TOTAL = 10;
+  // Intentar leer la foto ya elegida por la app (si el usuario llego aqui desde dentro de la PWA)
+  var idx = 0;
+  try {
+    var vistas = JSON.parse(localStorage.getItem('login_bg_seen') || '[]');
+    if (Array.isArray(vistas) && vistas.length > 0) {
+      idx = vistas[vistas.length - 1]; // ultima foto vista en la app
+    }
+  } catch(e) {}
+  // Si no hay foto previa elegida, escoger una al azar
+  if (!idx || idx < 1 || idx > LOGIN_BG_TOTAL) {
+    idx = Math.floor(Math.random() * LOGIN_BG_TOTAL) + 1;
+  }
+  var cb = 'v200';
+  var url = 'login-bg-' + idx + '.jpg?' + cb;
+  var probe = new Image();
+  probe.onload = function() {
+    document.body.style.setProperty('--bg-foto', "url('" + url + "')");
+    document.body.classList.add('foto-cargada');
+  };
+  probe.onerror = function() {
+    // Intentar fallback a login-bg-1.jpg
+    if (idx !== 1) {
+      var p2 = new Image();
+      p2.onload = function() {
+        document.body.style.setProperty('--bg-foto', "url('login-bg-1.jpg?" + cb + "')");
+        document.body.classList.add('foto-cargada');
+      };
+      p2.src = 'login-bg-1.jpg?' + cb;
+    }
+  };
+  probe.src = url;
+})();
+
+// i18n basico segun navegador
+(function() {
+  var l = (navigator.language || 'es').toLowerCase().slice(0, 2);
+  var dict = {
+    es: { main:'Página no encontrada', sub:'La página que buscas no existe o ha sido movida. Pulsa el botón para volver a la app.', btn:'Ir a Golf HCP' },
+    pt: { main:'Página não encontrada', sub:'A página que procuras não existe ou foi movida. Carrega no botão para voltar à aplicação.', btn:'Ir para Golf HCP' },
+    fr: { main:'Page non trouvée', sub:'La page que vous cherchez n\'existe pas ou a été déplacée. Appuyez sur le bouton pour retourner à l\'application.', btn:'Aller à Golf HCP' }
+  };
+  var d = dict[l] || dict.es;
+  document.getElementById('msg-main').textContent = d.main;
+  document.getElementById('msg-sub').textContent = d.sub;
+  document.getElementById('btn-volver').textContent = d.btn;
+  document.documentElement.lang = l;
+})();
+</script>
+</body>
+</html>

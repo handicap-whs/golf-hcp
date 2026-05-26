@@ -1360,7 +1360,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.215</div>
+    <div class="login-version">v1.34.216</div>
   </div>
 </div>
 
@@ -1609,7 +1609,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.215</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.216</div>
   </div>
 </div>
 
@@ -9642,8 +9642,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.215' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.215\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.216' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.216\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -12474,5 +12474,133 @@ function toggleGuiaCard(id) {
 
 init();
 </script>
+
+<!-- v1.34.216: Overlay "Sin conexion" no destructivo -->
+<!-- Se superpone a la app sin destruir el estado. Cuando vuelve la conexion se quita
+     automaticamente y el usuario sigue donde estaba. -->
+<div id="offline-overlay" style="display:none;position:fixed;inset:0;background:rgba(15,28,18,0.97);z-index:9997;flex-direction:column;align-items:center;justify-content:center;padding:24px;gap:18px;text-align:center;font-family:'Playfair Display',serif;color:#f5f0e8">
+  <!-- Icono SVG simple: nube tachada -->
+  <svg viewBox="0 0 100 100" style="width:80px;height:80px;opacity:.85" xmlns="http://www.w3.org/2000/svg">
+    <path d="M 25 60 Q 15 60, 15 50 Q 15 40, 25 40 Q 28 30, 40 30 Q 55 25, 60 38 Q 75 40, 75 52 Q 75 62, 65 62" fill="none" stroke="#c9a84c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="20" y1="20" x2="80" y2="80" stroke="#e05555" stroke-width="3.5" stroke-linecap="round"/>
+  </svg>
+  <div style="font-size:32px;font-weight:900">Golf <em style="color:#c9a84c;font-style:italic">HCP</em></div>
+  <div id="offline-msg-main" style="font-family:'DM Mono',monospace;font-size:14px;letter-spacing:.5px;color:#f5f0e8;max-width:320px;line-height:1.5">Sin conexión a internet</div>
+  <div id="offline-msg-sub" style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.3px;color:rgba(245,240,232,.55);max-width:320px;line-height:1.7">La app sigue funcionando, pero los datos requieren conexión a internet.</div>
+  <button id="offline-retry-btn" type="button" style="background:#ffffff;color:#000000;border:1px solid rgba(0,0,0,0.15);padding:10px 28px;border-radius:8px;font-family:'DM Mono',monospace;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px;text-transform:uppercase;box-shadow:0 2px 6px rgba(0,0,0,0.2);margin-top:4px">Reintentar</button>
+</div>
+
+<script>
+// v1.34.216: Sistema de deteccion offline + overlay no destructivo.
+//
+// Como funciona:
+// - Escucha eventos 'online' / 'offline' del navegador.
+// - Comprueba navigator.onLine en momentos clave.
+// - El overlay se superpone (no reemplaza) -> la app sigue debajo con su estado intacto.
+// - Cuando la conexion vuelve, se quita el overlay automaticamente.
+// - Boton "Reintentar" hace un fetch ligero a la URL del repo para confirmar conexion real
+//   (no solo navigator.onLine, que a veces miente).
+
+(function() {
+  var _offlineShown = false;
+  var _offlineCheckBusy = false;
+
+  function i18nOffline() {
+    var l = (typeof lang !== 'undefined') ? lang : 'es';
+    if (l === 'fr') return { main:'Pas de connexion Internet', sub:'L\'application fonctionne, mais les données nécessitent une connexion.', btn:'Réessayer' };
+    if (l === 'pt') return { main:'Sem ligação à internet', sub:'A aplicação funciona, mas os dados requerem ligação à internet.', btn:'Tentar novamente' };
+    return { main:'Sin conexión a internet', sub:'La app sigue funcionando, pero los datos requieren conexión a internet.', btn:'Reintentar' };
+  }
+
+  function applyOfflineI18n() {
+    try {
+      var dict = i18nOffline();
+      var m = document.getElementById('offline-msg-main');
+      var s = document.getElementById('offline-msg-sub');
+      var b = document.getElementById('offline-retry-btn');
+      if (m) m.textContent = dict.main;
+      if (s) s.textContent = dict.sub;
+      if (b) b.textContent = dict.btn;
+    } catch(e) {}
+  }
+
+  function mostrarOffline() {
+    if (_offlineShown) return;
+    _offlineShown = true;
+    applyOfflineI18n();
+    var ov = document.getElementById('offline-overlay');
+    if (ov) ov.style.display = 'flex';
+  }
+
+  function ocultarOffline() {
+    _offlineShown = false;
+    var ov = document.getElementById('offline-overlay');
+    if (ov) ov.style.display = 'none';
+  }
+
+  // Comprobacion real de conexion -- no fiarse solo de navigator.onLine, que a veces
+  // dice "true" cuando en realidad no hay datos (modo avion mal detectado, captive portals).
+  function comprobarConexionReal() {
+    if (_offlineCheckBusy) return Promise.resolve(navigator.onLine);
+    _offlineCheckBusy = true;
+    // Fetch HEAD ligero al manifest del propio repo (cache: 'no-store' para forzar red real).
+    // No depende de Supabase (queremos saber si hay INTERNET, no si Supabase responde).
+    return fetch('./manifest.json', { method: 'HEAD', cache: 'no-store' })
+      .then(function(res) {
+        _offlineCheckBusy = false;
+        return res && res.ok;
+      })
+      .catch(function() {
+        _offlineCheckBusy = false;
+        return false;
+      });
+  }
+
+  // Listeners de eventos del navegador
+  window.addEventListener('offline', function() {
+    mostrarOffline();
+  });
+  window.addEventListener('online', function() {
+    // Doble verificacion: navegador puede dar 'online' antes de tener red real
+    comprobarConexionReal().then(function(ok) {
+      if (ok) ocultarOffline();
+    });
+  });
+
+  // Boton Reintentar
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('offline-retry-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+      var b = this;
+      var origText = b.textContent;
+      b.textContent = '...';
+      b.disabled = true;
+      b.style.opacity = '.6';
+      comprobarConexionReal().then(function(ok) {
+        b.textContent = origText;
+        b.disabled = false;
+        b.style.opacity = '';
+        if (ok) {
+          ocultarOffline();
+          // Recargar para reanudar Supabase con sesion fresca
+          setTimeout(function() { window.location.reload(); }, 200);
+        }
+      });
+    });
+  });
+
+  // Al arrancar la app, si ya esta offline, mostrar el overlay tras un breve delay
+  // (dar tiempo al splash y al init para que no choquen visualmente).
+  setTimeout(function() {
+    if (!navigator.onLine) mostrarOffline();
+  }, 2500);
+
+  // Exponer globalmente para que cualquier llamada Supabase con error de red pueda invocarlo
+  window.mostrarOffline = mostrarOffline;
+  window.ocultarOffline = ocultarOffline;
+})();
+</script>
+
 </body>
 </html>
