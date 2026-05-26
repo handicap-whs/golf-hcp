@@ -588,7 +588,8 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   align-items:flex-start;
   justify-content:space-between;
   /* v1.34.194: padding vertical reducido (12px->8px) para fila mas fina */
-  padding:8px 10px;
+  /* v1.34.202: ampliado padding (8px->16px vertical, 10px->14px horizontal) -- usuarios suelen tener pocos campos, mejor mas aire */
+  padding:16px 14px;
   gap:8px;
   /* v1.34.194: fondo blanco modo claro, var(--bg) modo oscuro */
   background:var(--bg);
@@ -1326,7 +1327,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.201</div>
+    <div class="login-version">v1.34.202</div>
   </div>
 </div>
 
@@ -1571,7 +1572,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.201</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.202</div>
   </div>
 </div>
 
@@ -1714,12 +1715,14 @@ nav.nav-hidden{transform:translateY(100%)}
 <!-- PAGE: RONDAS -->
 <div class="page" id="page-rondas">
   <!-- v1.34.097: titulo centrado estilo modal-title + boton Nueva izq + kebab dcha (menu Exportar/Borrar) -->
-  <!-- v1.34.201: replica patron Mis Campos. Boton "+ Nueva" movido a barra inferior fixed. Hint estilo swipe. -->
+  <!-- v1.34.201: replica patron Mis Campos. Hint estilo swipe. -->
+  <!-- v1.34.202: boton "+ Nueva" devuelto al header (la barra fixed tapaba informacion). -->
   <div class="modal-title" style="margin:0 0 12px 0;text-align:center;font-size:14px;color:var(--text)" data-i18n="historial">Historial de Rondas</div>
   <!-- v1.34.201: hint estilo Mis Campos -->
   <div style="text-align:center;font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.5px;margin-bottom:8px;opacity:.75" data-i18n="rondas_swipe_hint">‹‹ ── Deslizar para opciones de la ronda ── ››</div>
-  <!-- v1.34.201: fila de controles sin boton + Nueva. Solo expandir/colapsar + kebab. -->
+  <!-- v1.34.202: fila controles con + Nueva (izq) + Expandir/Colapsar + kebab (dcha) -->
   <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+    <button class="btn" onclick="goTo('nueva',null)" style="margin:0;font-size:8px;padding:5px 8px;height:26px;border-radius:6px;letter-spacing:.3px;white-space:nowrap;width:auto" data-i18n="nueva_ronda">+ Nueva</button>
     <div style="flex:1"></div>
     <!-- v1.34.142: boton visible para expandir/colapsar todos los meses -->
     <button id="btn-toggle-all-months" type="button" onclick="toggleAllHistMonths()" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:9px;line-height:1;padding:0 8px;height:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;margin-right:6px" aria-label="Expandir/Colapsar todos los meses">
@@ -1745,13 +1748,9 @@ nav.nav-hidden{transform:translateY(100%)}
     <div id="hist-counter" style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.3px;white-space:nowrap"></div>
   </div>
   <!-- v1.34.138: eliminado el <div class="card"> envolvente -->
-  <div style="margin-bottom:70px">
+  <!-- v1.34.202: margin-bottom 70px -> 12px (ya no hay barra fixed que tape el ultimo item) -->
+  <div style="margin-bottom:12px">
     <div id="hist-container"><div class="empty">Cargando…</div></div>
-  </div>
-
-  <!-- v1.34.201: Fixed bottom action bar - boton + NUEVA RONDA (mismo patron que + NUEVO CAMPO de page-campos). -->
-  <div id="rondas-action-bar" style="position:fixed;bottom:88px;left:0;right:0;padding:8px 14px;background:transparent;display:none;gap:8px;align-items:center;z-index:100">
-    <button class="btn" onclick="goTo('nueva',null)" style="flex:3;height:36px;font-size:11px;border-radius:8px" data-i18n="nueva_ronda_btn_fixed">+ NUEVA RONDA</button>
   </div>
 </div>
 
@@ -9442,8 +9441,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.201' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.201\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.202' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.202\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -9679,11 +9678,7 @@ function goTo(id, btn) {
     const formAbierto = $('nuevo-campo-wrap') && $('nuevo-campo-wrap').style.display !== 'none';
     cab.style.display = (id === 'campos' && !formAbierto) ? 'flex' : 'none';
   }
-  // v1.34.201: control visibilidad barra inferior + NUEVA RONDA (solo en page-rondas)
-  const rab = $('rondas-action-bar');
-  if (rab) {
-    rab.style.display = (id === 'rondas') ? 'flex' : 'none';
-  }
+  // v1.34.202: barra inferior fixed de Rondas eliminada (boton "+ Nueva" devuelto al header).
   if (id === 'sobre') {
     const vEl = document.getElementById('sobre-version');
     // Find version from the version div in Inicio
