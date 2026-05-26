@@ -1341,7 +1341,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.204</div>
+    <div class="login-version">v1.34.206</div>
   </div>
 </div>
 
@@ -1586,7 +1586,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.204</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.206</div>
   </div>
 </div>
 
@@ -5679,13 +5679,14 @@ function renderMiniChart() {
   // v1.34.161: modo claro amarillo -> rojo intenso (#c62828 / #e53935).
   // v1.34.180: modo claro rojo -> amarillo-dorado muy suave (#d4b860 / #e8d97a). Modo oscuro intacto.
   // v1.34.198: modo claro amarillo -> NEGRO sin negrita (lineWidth normal). Modo oscuro intacto.
+  // v1.34.205: modo claro NEGRO 100% -> gris medio oscuro #5a5a5a (intensidad reducida ~65%, mas suave a la vista).
   const isLight = document.documentElement.classList.contains('light');
   const C = isLight ? {
-    lineFrom:    '#000000',  // negro
-    lineTo:      '#000000',  // negro (mismo color, sin degradado)
-    dot:         '#000000',
-    valueText:   'rgba(0,0,0,0.85)',
-    fillFrom:    'rgba(0,0,0,0.10)',
+    lineFrom:    '#5a5a5a',  // gris medio oscuro (antes #000000 negro)
+    lineTo:      '#5a5a5a',
+    dot:         '#5a5a5a',
+    valueText:   'rgba(0,0,0,0.55)',  // antes 0.85
+    fillFrom:    'rgba(0,0,0,0.07)',  // antes 0.10
     fillTo:      'rgba(0,0,0,0.01)'
   } : {
     lineFrom:    '#c9a84c',  // dorado base
@@ -6117,6 +6118,14 @@ function renderStatsFilters() {
 }
 
 // v1.34.150: tabla comparativa HCP App (calculado WHS 2020) vs HCP Oficial (federacion)
+// v1.34.206: estado de expansion del bloque Comparativa HCP. Por defecto PLEGADO.
+// No persiste entre sesiones: cada entrada a Estadisticas empieza plegado.
+let _hcpCompExpanded = false;
+function toggleHcpComparison() {
+  _hcpCompExpanded = !_hcpCompExpanded;
+  try { renderHcpComparison(); } catch(e) {}
+}
+
 function renderHcpComparison() {
   const el = $('stats-hcp-comparison');
   if (!el) return;
@@ -6155,6 +6164,8 @@ function renderHcpComparison() {
   el.style.display = 'block';
   // v1.34.152: sin .card. Fondo blanco modo claro / verde oscuro modo oscuro. Borde muy fino segun tema (gris/amarillo).
   // v1.34.158: ampliada con Low HI + HCP sin cap + cap aplicado (WHS 2020 R&A Rule 5.8).
+  // v1.34.206: bloque plegable. Header siempre visible con resumen (HCP App, Oficial, Diferencia).
+  //            Tabla detallada (WHS Cap + metodo calculo + nota) solo si expandido.
   const lowHI = res.lowHI;
   const hcpRaw = res.hcpRaw;
   const capApplied = res.capApplied || 'none';
@@ -6162,9 +6173,37 @@ function renderHcpComparison() {
   const lowHIStr = lowHI != null ? lowHI.toFixed(1) : '—';
   const hcpRawStr = hcpRaw != null ? hcpRaw.toFixed(1) : '—';
 
-  el.innerHTML = `
-    <div class="prompt-inicio" style="margin-bottom:16px;padding:12px 14px">
-      <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);text-align:center;margin-bottom:4px" data-i18n="stats_hcp_comp_titulo">${t('stats_hcp_comp_titulo') || 'Comparativa HCP'}</div>
+  // Etiquetas i18n para el resumen
+  const lblApp = t('stats_hcp_app') || 'App';
+  const lblOficialLong = t('stats_hcp_oficial') || 'Oficial';
+  // v1.34.206: en el resumen plegado abreviamos "HCP App" -> "App" y "HCP Oficial" -> "Oficial" para que quepa en 1 linea
+  const lblAppShort = lblApp.replace(/^HCP\s+/i, '');
+  const lblOfShort = lblOficialLong.replace(/^HCP\s+/i, '');
+
+  // Chevron SVG: down si plegado, up si expandido
+  const chevSvg = _hcpCompExpanded
+    ? '<svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5"><polyline points="18 15 12 9 6 15"/></svg>'
+    : '<svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5"><polyline points="6 9 12 15 18 9"/></svg>';
+
+  // ── Cabecera siempre visible: titulo + resumen 1 linea + chevron
+  // Clickeable en cualquier parte de la fila.
+  const header = `
+    <div onclick="toggleHcpComparison()" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;font-family:'DM Mono',monospace;user-select:none">
+      <span style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);flex-shrink:0">${t('stats_hcp_comp_titulo') || 'Comparativa HCP'}</span>
+      <span style="flex:1;text-align:right;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+        ${lblAppShort} <span style="color:var(--text)">${hcpApp.toFixed(1)}</span>
+        <span style="opacity:.45;margin:0 3px">·</span>
+        ${lblOfShort} <span style="color:var(--text)">${Number(hcpOficial).toFixed(1)}</span>
+        <span style="opacity:.45;margin:0 3px">·</span>
+        Δ <span style="color:${diffColor};font-weight:600">${diffStr}</span>
+      </span>
+      <span style="color:var(--muted);flex-shrink:0;display:inline-flex;align-items:center">${chevSvg}</span>
+    </div>
+  `;
+
+  // ── Tabla detallada (solo si expandido)
+  const detalle = _hcpCompExpanded ? `
+    <div class="prompt-inicio" style="margin-top:6px;padding:10px 14px">
       <table style="width:100%;border-collapse:collapse;font-family:'DM Mono',monospace;font-size:12px">
         <tr style="border-bottom:1px solid var(--border)">
           <td style="padding:2px 4px;color:var(--muted);font-size:10px;letter-spacing:.5px" data-i18n="stats_hcp_app">${t('stats_hcp_app') || 'HCP App'}</td>
@@ -6213,7 +6252,9 @@ function renderHcpComparison() {
       <!-- v1.34.160: texto explicativo sobre diferencias con federacion -->
       <div style="font-size:9px;color:var(--muted);line-height:1.5;letter-spacing:.2px;margin-top:6px;padding-top:5px;border-top:1px solid var(--border);text-align:justify" data-i18n="stats_hcp_nota">${t('stats_hcp_nota') || 'Diferencias con tu HCP federativo pueden existir si tu federación tiene rondas no registradas en la app, o aplica el ajuste PCC (condiciones de juego diarias) que requiere datos de todos los jugadores de cada campo. Golf HCP calcula el WHS 2020 oficial con los datos que tú registras.'}</div>
     </div>
-  `;
+  ` : '';
+
+  el.innerHTML = `<div style="margin-bottom:14px">${header}${detalle}</div>`;
 }
 
 function renderStats() {
@@ -9507,8 +9548,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.204' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.204\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.206' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.206\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
