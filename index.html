@@ -410,8 +410,8 @@ nav button.active svg{stroke:var(--gold2)} /* v1.34.147: modo oscuro stroke dora
 :root.light .r-stat{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.1)}
 :root.light .r-stats{display:grid}
 :root.light .target-box{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1)}
-:root.light .used-badge{background:rgba(40,120,40,.15);color:#1a5c1a}
-:root.light .used-badge-9h{background:rgba(0,102,204,.15);color:#0066cc} /* v1.34.136: rondas 9H combinadas en azul intenso (modo claro) */
+:root.light .used-badge{background:rgba(40,120,40,.85);color:#ffffff;border-color:#287028} /* v1.34.203: cuadrado verde intenso tambien en modo claro */
+:root.light .used-badge-9h{background:rgba(0,102,204,.15);color:#0066cc;border-color:rgba(0,102,204,.4)} /* v1.34.136: rondas 9H combinadas en azul intenso (modo claro) */
 :root.light .stbl-badge{color:var(--gold)}
 :root.light .stbl-dot{background:#f5a623}
 :root.light .barra-9h{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.2)}
@@ -563,8 +563,8 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .hist-table th{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);padding:3px 5px;text-align:left;border-bottom:1px solid var(--border);font-weight:normal} /* v1.34.137: muted -> text + sin negrita */
 .hist-table td{padding:6px 5px;border-bottom:1px solid var(--border);color:var(--text,var(--cream));vertical-align:middle}
 .hist-table tr:last-child td{border-bottom:none}
-.used-badge{background:rgba(76,175,80,.18);border:1px solid var(--border);color:var(--green);font-size:7px;padding:2px 5px;border-radius:10px} /* v1.34.140: fondo coherente con nuevo --green #4caf50 */
-.used-badge-9h{background:rgba(77,163,255,.15);border-color:rgba(77,163,255,.4);color:#4da3ff} /* v1.34.136: rondas 9H combinadas en azul claro */
+.used-badge{background:rgba(46,139,62,.85);border:1px solid #2e8b3e;color:#ffffff;font-size:7px;padding:2px 5px;border-radius:3px;font-weight:700} /* v1.34.203: cuadrado verde intenso (antes redondeado verde claro) -- diferencia clara vs badges 9H redondeados */
+.used-badge-9h{background:rgba(77,163,255,.15);border-color:rgba(77,163,255,.4);color:#4da3ff} /* v1.34.136: rondas 9H combinadas en azul claro; v1.34.203: hereda border-radius:3px de .used-badge */
 .stbl-badge{background:rgba(201,168,76,.15);border:1px solid var(--border);color:var(--gold2);font-size:7px;letter-spacing:1px;padding:2px 6px;border-radius:20px;white-space:nowrap}
 .barra-dot{display:inline-block;width:8px;height:8px;border-radius:50%;border:1px solid rgba(0,0,0,.2)}
 .hist-actions{display:flex;gap:4px}
@@ -731,13 +731,15 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .ronda-item-actions .swipe-del:active{background:#b03535}
 .ronda-item-actions-left .swipe-info{background:#2a9d4a}
 .ronda-item-actions-left .swipe-info:active{background:#207a38}
-.ronda-row1{font-size:11px;color:var(--cream);margin-bottom:3px;line-height:1.3;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
-.ronda-row1 .ronda-date{font-family:'DM Mono',monospace;color:var(--muted);font-size:10px}
-.ronda-row1 .ronda-name{font-weight:600;color:var(--cream);max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ronda-row2{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;display:flex;align-items:center;flex-wrap:wrap;gap:6px}
-.ronda-row2 .stat-strong{color:var(--text);font-weight:600}
-.ronda-row2 .stat-diff{color:var(--gold2);font-weight:600}
+.ronda-row1{font-size:12px;color:var(--cream);margin-bottom:5px;line-height:1.3;display:flex;align-items:center;flex-wrap:wrap;gap:6px} /* v1.34.203: +1px (11->12) y mas gap (4->6) */
+.ronda-row1 .ronda-date{font-family:'DM Mono',monospace;color:var(--muted);font-size:11px} /* v1.34.203: +1px (10->11) */
+.ronda-row1 .ronda-name{color:var(--cream);max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} /* v1.34.203: quitada negrita (font-weight:600), tipografia normal */
+.ronda-row1 .ronda-sep{color:var(--muted);opacity:.6;margin:0 2px} /* v1.34.203: separador "·" entre fecha y nombre */
+.ronda-row2{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;display:flex;align-items:center;flex-wrap:wrap;gap:8px} /* v1.34.203: +1px (10->11) y mas gap (6->8) */
+.ronda-row2 .stat-strong{color:var(--text)} /* v1.34.203: sin negrita */
+.ronda-row2 .stat-diff{color:var(--gold2)} /* v1.34.203: sin negrita */
 .ronda-row2 .stat-stbl{color:var(--blue-adapt)}
+.ronda-row2 .stat-sep{color:var(--muted);opacity:.45} /* v1.34.203: separadores "·" entre stats */
 
 /* ── HOYOS ── */
 .hoyo-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:6px;margin-bottom:10px}
@@ -1327,7 +1329,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.202</div>
+    <div class="login-version">v1.34.203</div>
   </div>
 </div>
 
@@ -1572,7 +1574,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.202</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.203</div>
   </div>
 </div>
 
@@ -1717,20 +1719,21 @@ nav.nav-hidden{transform:translateY(100%)}
   <!-- v1.34.097: titulo centrado estilo modal-title + boton Nueva izq + kebab dcha (menu Exportar/Borrar) -->
   <!-- v1.34.201: replica patron Mis Campos. Hint estilo swipe. -->
   <!-- v1.34.202: boton "+ Nueva" devuelto al header (la barra fixed tapaba informacion). -->
+  <!-- v1.34.203: boton "+ NUEVA RONDA" mas ancho (flex:1) + Expandir/Colapsar meses movido al kebab. -->
   <div class="modal-title" style="margin:0 0 12px 0;text-align:center;font-size:14px;color:var(--text)" data-i18n="historial">Historial de Rondas</div>
   <!-- v1.34.201: hint estilo Mis Campos -->
   <div style="text-align:center;font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.5px;margin-bottom:8px;opacity:.75" data-i18n="rondas_swipe_hint">‹‹ ── Deslizar para opciones de la ronda ── ››</div>
-  <!-- v1.34.202: fila controles con + Nueva (izq) + Expandir/Colapsar + kebab (dcha) -->
+  <!-- v1.34.203: fila con + NUEVA RONDA (flex:1) y kebab (incluye Expandir/Colapsar) -->
   <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-    <button class="btn" onclick="goTo('nueva',null)" style="margin:0;font-size:8px;padding:5px 8px;height:26px;border-radius:6px;letter-spacing:.3px;white-space:nowrap;width:auto" data-i18n="nueva_ronda">+ Nueva</button>
-    <div style="flex:1"></div>
-    <!-- v1.34.142: boton visible para expandir/colapsar todos los meses -->
-    <button id="btn-toggle-all-months" type="button" onclick="toggleAllHistMonths()" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:9px;line-height:1;padding:0 8px;height:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;margin-right:6px" aria-label="Expandir/Colapsar todos los meses">
-      <span id="btn-toggle-all-months-label" data-i18n="hist_expandir_todos">Expandir meses</span>
-    </button>
+    <button class="btn" onclick="goTo('nueva',null)" style="margin:0;font-size:10px;padding:6px 12px;height:30px;border-radius:6px;letter-spacing:.5px;white-space:nowrap;flex:1" data-i18n="nueva_ronda_btn_fixed">+ NUEVA RONDA</button>
     <div id="hist-kebab-wrap" style="position:relative">
-      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1;padding:0;width:26px;height:26px;cursor:pointer;display:flex;align-items:center;justify-content:center" aria-label="Más opciones">⋮</button>
-      <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:30px;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:4px;min-width:180px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.15);font-family:'DM Mono',monospace">
+      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1;padding:0;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center" aria-label="Más opciones">⋮</button>
+      <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:34px;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:4px;min-width:200px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.15);font-family:'DM Mono',monospace">
+        <!-- v1.34.203: Expandir/Colapsar meses integrado en el menu kebab -->
+        <button id="btn-toggle-all-months" type="button" onclick="hideHistKebab();toggleAllHistMonths()" style="display:flex;align-items:center;gap:8px;width:100%;background:none;border:none;border-radius:4px;color:var(--text);font-family:inherit;font-size:11px;padding:8px 10px;cursor:pointer;text-align:left">
+          <span style="font-size:13px">⇅</span>
+          <span id="btn-toggle-all-months-label" data-i18n="hist_expandir_todos">Expandir meses</span>
+        </button>
         <button id="btn-hist-exportar" type="button" onclick="hideHistKebab();doExportData()" style="display:flex;align-items:center;gap:8px;width:100%;background:none;border:none;border-radius:4px;color:var(--text);font-family:inherit;font-size:11px;padding:8px 10px;cursor:pointer;text-align:left">
           <span style="font-size:13px">⬇</span>
           <span data-i18n="hist_exportar_csv">Exportar Rondas a CSV</span>
@@ -4660,27 +4663,34 @@ function mostrarInfoCampoToast(campoId) {
   if (!campo) return;
 
   const BARRA_LBL = lang==='fr' ? BARRA_LABELS_FR : lang==='pt' ? BARRA_LABELS_PT : BARRA_LABELS_PL;
+  // v1.34.203: colores oscuros forzados (texto sobre fondo azul muy claro)
+  const TXT_DARK = '#1a2c44';
+  const TXT_LABEL = '#34556f';
+  const TXT_ACCENT = '#0b4a8a';
+  const SEP_LINE = 'rgba(80,120,170,0.35)';
   const lineasBarras = (campo.barras || []).map(b => {
-    const colorDot = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${BARRA_COLORS[b.color]};margin-right:6px;border:1px solid rgba(0,0,0,.2);vertical-align:middle"></span>`;
+    const colorDot = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${BARRA_COLORS[b.color]};margin-right:6px;border:1px solid rgba(0,0,0,.3);vertical-align:middle"></span>`;
     const lbl = (BARRA_LBL[b.color] || b.color);
     const cr = (b.cr != null) ? b.cr : '—';
     const slope = (b.slope != null) ? b.slope : '—';
     // v1.34.199: white-space:nowrap en el label para evitar que se parta a 2 lineas (Amarilla, Naranja, etc.)
-    return `<div style="margin:3px 0;font-family:'DM Mono',monospace;font-size:10px;display:flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;min-width:100px;white-space:nowrap">${colorDot}${lbl}</span><span style="color:var(--gold2);min-width:60px;white-space:nowrap">CR ${cr}</span><span style="color:var(--blue-adapt);white-space:nowrap">Slope ${slope}</span></div>`;
+    // v1.34.203: colores hardcoded oscuros (texto sobre fondo azul claro)
+    return `<div style="margin:3px 0;font-family:'DM Mono',monospace;font-size:10px;display:flex;align-items:center;gap:6px;color:${TXT_LABEL}"><span style="display:inline-flex;align-items:center;min-width:100px;white-space:nowrap">${colorDot}${lbl}</span><span style="color:${TXT_ACCENT};min-width:60px;white-space:nowrap;font-weight:600">CR ${cr}</span><span style="color:${TXT_ACCENT};white-space:nowrap;font-weight:600">Slope ${slope}</span></div>`;
   }).join('');
 
-  const html = `<div style="font-size:11px;font-weight:600;letter-spacing:1px;color:var(--cream);margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;white-space:nowrap">${limpiarNombreCampo(campo.nombre || '')} · Par ${campo.par_total || '—'}</div>${lineasBarras || `<div style="font-size:10px;color:var(--muted)">${t('sin_barras')}</div>`}`;
+  const html = `<div style="font-size:11px;font-weight:600;letter-spacing:1px;color:${TXT_DARK};margin-bottom:6px;border-bottom:1px solid ${SEP_LINE};padding-bottom:4px;white-space:nowrap">${limpiarNombreCampo(campo.nombre || '')} · Par ${campo.par_total || '—'}</div>${lineasBarras || `<div style="font-size:10px;color:${TXT_LABEL}">${t('sin_barras')}</div>`}`;
 
   const el = $('toast');
   el.innerHTML = html;
-  // v1.34.199: toast mas ancho (96% en lugar de 90%) y color mas claro
-  // v1.34.201: tono azulado en lugar de gris oscuro (mejor legibilidad y diferenciacion del toast normal)
+  // v1.34.199: toast mas ancho (96% en lugar de 90%)
+  // v1.34.201: tono azulado en lugar de gris oscuro
+  // v1.34.203: AZUL MUY CLARO con texto oscuro (legibilidad mejorada -- antes azul oscuro no se leia)
   el.style.padding = '12px 18px';
   el.style.maxWidth = '96vw';
   el.style.width = 'auto';
   el.style.textAlign = 'left';
-  el.style.background = 'rgba(52,100,165,0.95)';
-  el.style.borderColor = 'rgba(140,180,230,0.45)';
+  el.style.background = 'rgba(220,235,250,0.97)';
+  el.style.borderColor = 'rgba(120,160,210,0.65)';
   el.className = 'toast show';
   clearTimeout(_toastTimer);
   _toastTimer = setTimeout(() => {
@@ -7077,9 +7087,7 @@ function renderHistory() {
     const nineTag = r.num_hoyos === 9
       ? `<span style="${isPending9?nine_style_pend:nine_style_ok}">✓</span>`
       : '';
-    const barraDot = r.barra_color
-      ? `<span class="barra-dot" style="background:${BARRA_COLORS[r.barra_color]}"></span>`
-      : '';
+    // v1.34.203: barraDot eliminado de row2 (la barra de salida se ve en el toast Info y en abrirDetalleRonda).
     // v1.34.187: diferencial dinamico segun metodo activo
     let diffMostrar = r.diff;
     if (metodoActivo === 'ega') {
@@ -7100,6 +7108,15 @@ function renderHistory() {
       : '';
     const golpesLbl = lang==='fr' ? 'coups' : (lang==='pt' ? 'pancadas' : 'golpes');
     const difLbl = lang==='fr' ? 'Dif' : 'Dif';
+    // v1.34.203: separador "·" entre stats. Construyo array de fragmentos y los uno con sep.
+    const sep = `<span class="stat-sep">·</span>`;
+    const statsFrags = [
+      `<span><span class="stat-strong">${r.gross}</span> ${golpesLbl}</span>`,
+      `<span>${difLbl}: <span class="stat-diff">${fmtD(diffMostrar)}</span></span>`
+    ];
+    if (stblTxt) statsFrags.push(stblTxt);
+    if (rfegBadge) statsFrags.push(rfegBadge);
+    const statsLine = statsFrags.join(sep);
 
     return `<div class="ronda-item" data-ronda-id="${r.id}">
       <div class="ronda-item-actions-left">
@@ -7111,14 +7128,11 @@ function renderHistory() {
         <div style="min-width:0;flex:1">
           <div class="ronda-row1">
             <span class="ronda-date">${fmtDate(r.date)}</span>
+            <span class="ronda-sep">·</span>
             <span class="ronda-name">${r.name||'—'}</span>${nineTag}${pairDot}${usedBadge}
           </div>
           <div class="ronda-row2">
-            ${barraDot}
-            <span><span class="stat-strong">${r.gross}</span> ${golpesLbl}</span>
-            <span>${difLbl}: <span class="stat-diff">${fmtD(diffMostrar)}</span></span>
-            ${stblTxt}
-            ${rfegBadge}
+            ${statsLine}
           </div>
         </div>
       </div>
@@ -7419,8 +7433,13 @@ function mostrarInfoRondaToast(rondaId) {
   if (!r) return;
   const BARRA_LBL = lang==='fr' ? BARRA_LABELS_FR : (lang==='pt' ? BARRA_LABELS_PT : BARRA_LABELS);
   const lbl = (es, pt, fr) => lang==='fr' ? (fr||es) : (lang==='pt' ? pt : es);
+  // v1.34.203: colores oscuros forzados (texto sobre fondo azul muy claro)
+  const TXT_DARK = '#1a2c44';
+  const TXT_LABEL = '#34556f';
+  const TXT_ACCENT = '#0b4a8a';
+  const SEP_LINE = 'rgba(80,120,170,0.35)';
   const dot = r.barra_color
-    ? `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${BARRA_COLORS[r.barra_color]};margin-right:6px;border:1px solid rgba(0,0,0,.2);vertical-align:middle"></span>`
+    ? `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${BARRA_COLORS[r.barra_color]};margin-right:6px;border:1px solid rgba(0,0,0,.3);vertical-align:middle"></span>`
     : '';
   const barraName = r.barra_color ? (BARRA_LBL[r.barra_color] || r.barra_color) : '—';
   const hoyosStr = r.num_hoyos === 9
@@ -7429,13 +7448,14 @@ function mostrarInfoRondaToast(rondaId) {
   const fmtLbl = (r.juego_fmt || 100) + '%';
   const hcpIdxTxt = r.hcp_idx != null ? r.hcp_idx.toFixed(1) : '—';
   const rfegTxt = r.torneo_rfeg
-    ? ` <span style="background:rgba(232,201,106,.2);border:1px solid rgba(232,201,106,.6);color:var(--gold2);font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600;letter-spacing:.3px">RFEG</span>`
+    ? ` <span style="background:rgba(180,135,30,.18);border:1px solid rgba(180,135,30,.6);color:#7a5a10;font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600;letter-spacing:.3px">RFEG</span>`
     : '';
   const stblTxt = r.stableford != null ? r.stableford + ' ' + lbl('pts','pts','pts') : '—';
 
-  const row = (k, v) => `<div style="margin:3px 0;font-family:'DM Mono',monospace;font-size:10px;display:flex;align-items:center;gap:6px"><span style="color:var(--cream);min-width:80px;white-space:nowrap">${k}</span><span style="color:var(--gold2);white-space:nowrap">${v}</span></div>`;
+  // v1.34.203: filas con texto oscuro (label gris-azulado, valor azul intenso)
+  const row = (k, v) => `<div style="margin:3px 0;font-family:'DM Mono',monospace;font-size:10px;display:flex;align-items:center;gap:6px"><span style="color:${TXT_LABEL};min-width:80px;white-space:nowrap">${k}</span><span style="color:${TXT_ACCENT};white-space:nowrap;font-weight:600">${v}</span></div>`;
 
-  const header = `<div style="font-size:11px;font-weight:600;letter-spacing:1px;color:var(--cream);margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;white-space:nowrap">${fmtDate(r.date)} · ${(r.name||'—')}${rfegTxt}</div>`;
+  const header = `<div style="font-size:11px;font-weight:600;letter-spacing:1px;color:${TXT_DARK};margin-bottom:6px;border-bottom:1px solid ${SEP_LINE};padding-bottom:4px;white-space:nowrap">${fmtDate(r.date)} · ${(r.name||'—')}${rfegTxt}</div>`;
   const body = ''
     + row(lbl('Barra','Tee','Départ'), `${dot}${barraName}`)
     + row(lbl('Hoyos','Buracos','Trous'), hoyosStr)
@@ -7448,13 +7468,13 @@ function mostrarInfoRondaToast(rondaId) {
 
   const el = $('toast');
   el.innerHTML = header + body;
-  // Mismo estilo azulado que mostrarInfoCampoToast (v1.34.201)
+  // v1.34.203: AZUL MUY CLARO con texto oscuro (mismo esquema que mostrarInfoCampoToast)
   el.style.padding = '12px 18px';
   el.style.maxWidth = '96vw';
   el.style.width = 'auto';
   el.style.textAlign = 'left';
-  el.style.background = 'rgba(52,100,165,0.95)';
-  el.style.borderColor = 'rgba(140,180,230,0.45)';
+  el.style.background = 'rgba(220,235,250,0.97)';
+  el.style.borderColor = 'rgba(120,160,210,0.65)';
   el.className = 'toast show';
   clearTimeout(_toastTimer);
   _toastTimer = setTimeout(() => {
@@ -9441,8 +9461,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.202' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.202\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.203' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.203\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
