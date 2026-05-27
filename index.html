@@ -1517,7 +1517,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.240</div>
+    <div class="login-version">v1.34.241</div>
   </div>
 </div>
 
@@ -1750,7 +1750,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.240</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.241</div>
   </div>
 </div>
 
@@ -3252,7 +3252,6 @@ function applyLangDOM() {
 
     // Menú desplegable
     document.querySelectorAll('.nav-dd-item').forEach(el => {
-      const svgs = el.querySelectorAll('svg');
       const span = el.querySelector('span#lang-btn-label');
       if (span) return; // ya actualizado
       const tn = [...el.childNodes].filter(n => n.nodeType === 3 && n.textContent.trim());
@@ -3352,7 +3351,6 @@ const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 const WHS = [[1,-2],[1,-2],[1,-2],[1,-1],[1,0],[2,-1],[2,0],[2,0],[3,0],[3,0],[3,0],[4,0],[4,0],[4,0],[5,0],[5,0],[6,0],[6,0],[7,0],[8,0]];
 const BARRAS = ['blanca','amarilla','azul','roja'];
 const BARRAS_FR = ['blanca','amarilla','azul','roja','violeta','naranja','negra'];
-const BARRA_COLORS_EXT = {violeta:'#8b5cf6',naranja:'#f97316',negra:'#1a1a1a'};
 const BARRA_COLORS = {blanca:'#e8e8e8',amarilla:'#f5c518',azul:'#3b82f6',roja:'#e05555',violeta:'#8b5cf6',naranja:'#f97316',negra:'#1a1a1a'};
 const BARRA_LABELS = {blanca:'Blanca',amarilla:'Amarilla',azul:'Azul',roja:'Roja',violeta:'Violeta',naranja:'Naranja',negra:'Negra'};
 const BARRA_LABELS_PL = {blanca:'Blancas',amarilla:'Amarillas',azul:'Azules',roja:'Rojas',violeta:'Violetas',naranja:'Naranjas',negra:'Negras'};
@@ -5300,8 +5298,6 @@ function requireHcpJugadorNueva(inputHoyo) {
 function calcStableford(hcpIndex, campo, shots, crOverride, slopeOverride, vuelta, juegoFmt) {
   if (!campo?.hoyos || campo.hoyos.length < 9) return null;
   const allHoyos = [...campo.hoyos].sort((a, b) => a.numero - b.numero);
-  // Detectar si es ronda de 9 hoyos por los shots válidos
-  const validShots = shots.filter(s => s != null && !isNaN(s) && s > 0);
   const is9 = shots.length <= 9 && allHoyos.length >= 18;
   const startIdx = (is9 && vuelta === 2) ? 9 : 0;
   const hoyos = allHoyos.slice(startIdx, startIdx + shots.length);
@@ -9683,8 +9679,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.240' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.240\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.241\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -12399,10 +12394,8 @@ function renderInforme() {
 
   // Calcular metricas
   const inf = getInformeMes(y, m);
-  const lbl = (es, pt, fr) => lang==='fr' ? (fr||es) : lang==='pt' ? pt : es;
 
   const fmtH = h => (h == null) ? '—' : h.toFixed(1).replace('.',',');
-  const fmtN = n => (n == null) ? '—' : Math.round(n).toString();
   const fmtN1= n => (n == null) ? '—' : n.toFixed(1).replace('.',',');
   const fmtDif = v => (v == null) ? '—' : ((v >= 0 ? '+' : '') + v.toFixed(1).replace('.',','));
 
@@ -12722,15 +12715,6 @@ function exportarInformePDF() {
   setTimeout(() => { try { window.print(); } catch(e) { console.error('print:', e); } }, 100);
 }
 
-// ─── Hooks ───
-// Render del informe al navegar a la pagina
-const __origGoTo_informe = window.goTo;
-// (El hook real esta en goTo() mas abajo via if (id === 'informe') renderInforme())
-
-
-// Para añadir contenido: editar GUIA_CONTENIDOS
-// Tipos: 'texto' | 'video' | 'pdf' | 'imagen'
-const GUIA_CONTENIDOS = []; // (LEGACY) Ya no se usa — se carga de Supabase tabla guia_contenidos
 
 // Cache simple en memoria (evita refetch al alternar pantallas en la misma sesion)
 let _guiaCache = { data: null, ts: 0 };
