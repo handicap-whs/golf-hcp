@@ -490,7 +490,17 @@ nav button.active svg{stroke:var(--gold2)} /* v1.34.147: modo oscuro stroke dora
    - En modo edicion: secciones tiemblan (jiggle), boton "Listo" flotante arriba derecha,
      ajuste-btn inertes, se puede arrastrar cualquier seccion con el dedo.
    - Pulsar "Listo" -> guarda orden en localStorage y sale del modo edicion. */
-.ajustes-section{position:relative;transition:transform .25s ease}
+.ajustes-section{
+  position:relative;
+  transition:transform .25s ease;
+  /* v1.34.227: deshabilitar seleccion de texto nativa y menu contextual de iOS.
+     Evita la mancha azul de seleccion al hacer long-press sobre las secciones. */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
 body.modo-edicion-ajustes #page-ajustes .ajustes-section{
   border:1px dashed var(--gold2);
   border-radius:14px;
@@ -1456,7 +1466,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.226</div>
+    <div class="login-version">v1.34.227</div>
   </div>
 </div>
 
@@ -1705,7 +1715,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.226</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.227</div>
   </div>
 </div>
 
@@ -9846,8 +9856,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.226' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.226\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.227' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.227\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
