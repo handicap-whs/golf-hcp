@@ -1517,7 +1517,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.239</div>
+    <div class="login-version">v1.34.240</div>
   </div>
 </div>
 
@@ -1750,7 +1750,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.239</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.240</div>
   </div>
 </div>
 
@@ -1987,7 +1987,7 @@ nav.nav-hidden{transform:translateY(100%)}
       </button>
       <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
         <button id="ac-btn-nuevo" onclick="acAbrirEditorNuevo()" style="padding:4px 8px;border:1px solid var(--gold2);border-radius:5px;background:rgba(201,168,76,.06);color:var(--gold2);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.5px;cursor:pointer;text-transform:uppercase;font-weight:600;white-space:nowrap" data-i18n="ac_nuevo_campo">+ Nuevo</button>
-        <button id="ac-btn-borrar" onclick="acAbrirBuscadorBorrar()" style="padding:4px 8px;border:1px solid var(--red-intenso);border-radius:5px;background:rgba(204,0,0,.06);color:var(--red-intenso);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.5px;cursor:pointer;text-transform:uppercase;font-weight:600;white-space:nowrap">🗑️ Borrar</button>
+        <button id="ac-btn-borrar" onclick="acAbrirBuscadorBorrar()" style="padding:4px 8px;border:1px solid var(--red-intenso);border-radius:5px;background:rgba(204,0,0,.06);color:var(--red-intenso);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.5px;cursor:pointer;text-transform:uppercase;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:5px;justify-content:center"><svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>Borrar</button>
       </div>
     </div>
     <div style="text-align:center;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:18px;font-family:'DM Mono',monospace" data-i18n="admin_cat_sub">Editar catálogo Online de campos</div>
@@ -2039,7 +2039,7 @@ nav.nav-hidden{transform:translateY(100%)}
         <span>VOLVER A LA LISTA</span>
       </button>
     </div>
-    <div style="font-size:16px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red-intenso);padding:0 4px 4px;font-family:'DM Mono',monospace;text-align:center">🗑️ Borrar Campo</div>
+    <div style="font-size:16px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red-intenso);padding:0 4px 4px;font-family:'DM Mono',monospace;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg><span>Borrar Campo</span></div>
     <div style="text-align:center;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:14px;font-family:'DM Mono',monospace">Selecciona el campo desactivado a eliminar</div>
     <div style="background:rgba(204,0,0,.05);border:1px solid var(--red-intenso);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:10px;color:var(--cream);line-height:1.5;font-family:'DM Mono',monospace">
       <strong style="color:var(--red-intenso)">Borrado definitivo.</strong> El campo desaparece de la base de datos y no se puede recuperar.<br>
@@ -9683,8 +9683,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.239' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.239\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.240' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.240\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
