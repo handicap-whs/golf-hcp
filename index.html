@@ -313,7 +313,7 @@ body.splash-active #safe-area-cover {
   bottom: 0;
   left: 0;
   right: 0;
-  height: calc(70px + env(safe-area-inset-bottom, 0px));
+  height: calc(60px + env(safe-area-inset-bottom, 0px));
   background: var(--bg);
   z-index: 99;
   pointer-events: none;
@@ -399,7 +399,7 @@ nav button{flex:1;background:none;border:none;color:#1a1a1a;padding:5px 4px 4px;
 nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 nav button.active{color:var(--blue-intenso);background:rgba(0,102,204,.10)} /* v1.34.243: activa azul (mismo esquema modo claro) */
 nav button.active svg{stroke:var(--blue-intenso)} /* v1.34.243: activa azul */
-:root.light nav{background:rgba(240,244,240,0.95);border-top:1px solid rgba(0,0,0,.1)}
+:root.light nav{border-top:1px solid rgba(0,0,0,.1)} /* v1.34.246: eliminado background verdoso rgba(240,244,240,.95); ahora hereda el #ffffff de la regla general */
 :root.light nav button{color:rgba(0,0,0,.5)}
 :root.light nav button.active{color:var(--blue-adapt);background:rgba(0,102,204,.10)} /* v1.34.144: verde -> azul adaptativo */
 :root.light nav button.active svg{stroke:var(--blue-adapt)} /* v1.34.144: verde -> azul adaptativo */
@@ -650,7 +650,7 @@ body.modo-edicion-ajustes #btn-edit-done{
   padding:10px 4px;
   border-bottom:1px solid var(--border);
 }
-:root.light .ajustes-section-header{color:#0d1f3a}
+:root.light .ajustes-section-header{color:#1e3a8a} /* v1.34.245: #0d1f3a (casi negro) -> #1e3a8a (azul oscuro reconocible) */
 .ajustes-section:first-of-type .ajustes-section-header{
   border-top:1px solid var(--border);
 }
@@ -1019,7 +1019,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 
 
 
-nav.nav-hidden{transform:translateY(100%)}
+/* v1.34.246: eliminada regla nav.nav-hidden (ocultaba nav al hacer scroll). */
 
 
 /* Símbolos de resultado por hoyo */
@@ -1336,9 +1336,10 @@ nav.nav-hidden{transform:translateY(100%)}
 
 /* ── BCP: Buscar Campo OnLine (Fase 2C) ──────────────────────────── */
 .bcp-search-wrap{position:relative;margin-bottom:10px}
-.bcp-search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:11px;pointer-events:none;opacity:.6}
-.bcp-search-input{width:100%;background:var(--input-bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:6px 32px 6px 28px;-webkit-appearance:none;appearance:none;outline:none;transition:border-color .15s}
-.bcp-search-input::placeholder{color:var(--gold);opacity:0.20}
+.bcp-search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:11px;pointer-events:none;opacity:.6}
+/* v1.34.246: fondo azul claro + letras azules + cantos pill (radius 999px = 180 grados) */
+.bcp-search-input{width:100%;background:rgba(220,232,248,0.98);border:1px solid rgba(110,150,210,0.45);border-radius:999px;color:#1e3a8a;font-family:'DM Mono',monospace;font-size:11px;padding:8px 36px 8px 32px;-webkit-appearance:none;appearance:none;outline:none;transition:border-color .15s}
+.bcp-search-input::placeholder{color:#1e3a8a;opacity:0.45}
 .dot-status{display:inline-block;width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .dot-completo{background:#ffd11a}
 :root.light .dot-completo{background:#1a8a1a}
@@ -1347,7 +1348,7 @@ nav.nav-hidden{transform:translateY(100%)}
 .dot-vacio{background:#cc0000}
 .bcp-already-badge{display:inline-block;font-size:7px;padding:2px 5px;border-radius:3px;background:rgba(123,198,122,.15);color:var(--green);border:1px solid rgba(123,198,122,.4);margin-left:6px;font-family:'DM Mono',monospace;letter-spacing:.3px;vertical-align:middle;text-transform:uppercase}
 :root.light .bcp-already-badge{background:rgba(26,138,26,.10);color:#1a8a1a;border-color:rgba(26,138,26,.35)}
-.bcp-search-input:focus{border-color:var(--gold)}
+.bcp-search-input:focus{border-color:#1e3a8a}
 .bcp-clear-btn{position:absolute;right:5px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:var(--muted);font-size:13px;cursor:pointer;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:background .15s,color .15s;padding:0}
 .bcp-clear-btn:hover,.bcp-clear-btn:active{background:var(--bg2);color:var(--text)}
 .bcp-count{font-size:8px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;font-family:'DM Mono',monospace}
@@ -1562,7 +1563,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.244</div>
+    <div class="login-version">v1.34.246</div>
   </div>
 </div>
 
@@ -1790,12 +1791,12 @@ nav.nav-hidden{transform:translateY(100%)}
     <canvas id="mini-hcp-chart" height="100" style="width:100%;display:block"></canvas>
     <div id="mini-chart-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-size:8px;color:var(--muted);font-family:'DM Mono',monospace"></div>
   </div>
-  <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+  <div style="display:flex;align-items:center;gap:8px;margin-top:2px">
     <button onclick="goTo('campos',null)" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;touch-action:manipulation">
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.244</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.246</div>
   </div>
 </div>
 
@@ -1936,7 +1937,7 @@ nav.nav-hidden{transform:translateY(100%)}
   <!-- v1.34.237: input + contador + kebab en una sola fila -->
   <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
     <input type="text" data-clearable id="hist-search" placeholder="🔍 campo, mes/año (11/2025), día (25/04)…" oninput="onHistSearch(this.value)"
-      style="flex:1;background:var(--input-bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:6px 10px;-webkit-appearance:none;outline:none">
+      style="flex:1;background:var(--input-bg);border:1px solid var(--border);border-radius:999px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:8px 14px;-webkit-appearance:none;outline:none">
     <div id="hist-counter" style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.3px;white-space:nowrap"></div>
     <div id="hist-kebab-wrap" style="position:relative">
       <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:var(--blue-adapt);border:none;border-radius:50%;color:#ffffff;padding:0;width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,30,90,0.18)" aria-label="Más opciones"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#ffffff;display:block"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
@@ -9724,7 +9725,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.244\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.246\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -10067,31 +10068,9 @@ function goTo(id, btn) {
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────
-// ── OCULTAR NAV EN SCROLL (touch) ────────────────────────────────────────
-(function() {
-  let startY = 0;
-  const nav = () => document.getElementById('main-nav');
-  document.addEventListener('touchstart', function(e) {
-    startY = e.touches[0].clientY;
-  }, {passive: true});
-  document.addEventListener('touchmove', function(e) {
-    const n = nav(); if (!n) return;
-    const dy = e.touches[0].clientY - startY;
-    if (dy < -10) {
-      // Dedo sube → scroll hacia abajo → ocultar nav
-      n.classList.add('nav-hidden');
-    } else if (dy > 10) {
-      // Dedo baja → scroll hacia arriba → mostrar nav
-      n.classList.remove('nav-hidden');
-    }
-  }, {passive: true});
-  document.addEventListener('touchend', function() {
-    // Al soltar, si estamos cerca del inicio mostrar siempre
-    if ((window.scrollY || window.pageYOffset) <= 60) {
-      const n = nav(); if (n) n.classList.remove('nav-hidden');
-    }
-  }, {passive: true});
-})();
+// v1.34.246: eliminada IIFE que ocultaba el nav inferior al hacer scroll
+// (anadia clase .nav-hidden con transform translateY(100%) al hacer touchmove
+// hacia arriba). Ahora el nav se queda fijo en su posicion sin moverse.
 
 
 
