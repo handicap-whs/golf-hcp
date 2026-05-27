@@ -1466,7 +1466,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.227</div>
+    <div class="login-version">v1.34.228</div>
   </div>
 </div>
 
@@ -1715,7 +1715,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.227</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.228</div>
   </div>
 </div>
 
@@ -9856,8 +9856,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.227' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.227\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.228' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.228\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -10289,27 +10289,38 @@ function aplicarOrdenAjustes() {
   if (!orden) return;
   const page = document.getElementById('page-ajustes');
   if (!page) return;
+  // Mapa de secciones por data-sec-id
   const secciones = {};
   page.querySelectorAll('.ajustes-section').forEach(el => {
     const id = el.getAttribute('data-sec-id');
     if (id) secciones[id] = el;
   });
-  const primera = page.querySelector('.ajustes-section');
-  if (!primera) return;
+  // v1.34.228: usar el card "Salir" como ancla estable de insertBefore.
+  // Antes (v1.34.226): se usaba la primera seccion del HTML, lo que provocaba
+  // que esa misma seccion (campos_juego) acabara siempre arrinconada al final
+  // tras admin, porque insertBefore(sec, primera) con sec==primera es no-op
+  // y el resto se acumulaba delante.
+  const salirCard = Array.from(page.children).find(el => el.querySelector && el.querySelector('button[onclick*="doLogout"]'));
+  if (!salirCard) {
+    console.warn('aplicarOrdenAjustes: no se encontro card Salir, no se reordena');
+    return;
+  }
+  // Reinsertar secciones en el orden guardado, cada una ANTES del card Salir.
+  // Como se procesan en orden y todas van al mismo "hueco" antes de Salir,
+  // el resultado final es el orden exacto que tenia el usuario.
   const yaPuestas = new Set();
   orden.forEach(secId => {
     const sec = secciones[secId];
     if (sec) {
-      page.insertBefore(sec, primera);
+      page.insertBefore(sec, salirCard);
       yaPuestas.add(secId);
     }
   });
-  // Secciones nuevas no guardadas -> dejarlas antes del card Salir
+  // Secciones nuevas (no presentes en el orden guardado) -> tambien antes de Salir,
+  // al final del grupo, para no perderlas si en el futuro anadimos una nueva.
   Object.keys(secciones).forEach(secId => {
     if (!yaPuestas.has(secId)) {
-      const sec = secciones[secId];
-      const salirCard = Array.from(page.children).find(el => el.querySelector && el.querySelector('button[onclick*="doLogout"]'));
-      if (salirCard) page.insertBefore(sec, salirCard);
+      page.insertBefore(secciones[secId], salirCard);
     }
   });
 }
@@ -10516,7 +10527,19 @@ function instalarListenersAjustes() {
   if (btnDone) {
     btnDone.addEventListener('click', () => {
       salirModoEdicionAjustes();
-      try { toast(t('ajustes_orden_guardado') || '✓ Orden guardado'); } catch(e) {}
+      try {
+        toast(t('ajustes_orden_guardado') || '✓ Orden guardado');
+        // v1.34.228: estilo azul claro (mismo esquema que mostrarInfoCampoToast / mostrarInfoRondaToast).
+        // El siguiente toast() normal resetea estos estilos via su limpieza inicial.
+        const elt = document.getElementById('toast');
+        if (elt) {
+          elt.style.background = 'rgba(220,232,248,0.98)';
+          elt.style.color = '#0d1f3a';
+          elt.style.borderColor = 'rgba(110,150,210,0.65)';
+          elt.style.borderWidth = '1.5px';
+          elt.style.boxShadow = '0 8px 32px rgba(0,30,90,0.25)';
+        }
+      } catch(e) {}
     });
   }
 }
