@@ -482,12 +482,15 @@ nav button.active svg{stroke:var(--gold2)} /* v1.34.147: modo oscuro stroke dora
 .ajuste-text{flex:1;min-width:0}
 .ajuste-sub{font-size:12px;color:var(--muted);margin-top:2px}
 .ajuste-chevron{width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0}
-.ajuste-sep{height:1px;background:var(--border);margin:0 16px}
-/* v1.34.219: Reordenado de secciones de Ajustes.
-   En modo edicion: cada .ajustes-section se posiciona relative + tiene borde dashed dorado
-   + botones ↑/↓ flotantes a la derecha. Los .ajuste-btn dentro quedan inertes (pointer-events:none)
-   para que pulsar no navegue. */
-.ajustes-section{position:relative}
+/* v1.34.226: Reordenado de secciones de Ajustes con LONG-PRESS + drag.
+   Reemplaza el sistema de v1.34.219 (boton "Editar orden" + flechas ↑↓).
+   
+   Comportamiento:
+   - Long-press 700ms sobre cualquier seccion -> entra en modo edicion.
+   - En modo edicion: secciones tiemblan (jiggle), boton "Listo" flotante arriba derecha,
+     ajuste-btn inertes, se puede arrastrar cualquier seccion con el dedo.
+   - Pulsar "Listo" -> guarda orden en localStorage y sale del modo edicion. */
+.ajustes-section{position:relative;transition:transform .25s ease}
 body.modo-edicion-ajustes #page-ajustes .ajustes-section{
   border:1px dashed var(--gold2);
   border-radius:14px;
@@ -496,39 +499,65 @@ body.modo-edicion-ajustes #page-ajustes .ajustes-section{
 }
 body.modo-edicion-ajustes #page-ajustes .ajustes-section .ajuste-btn{
   pointer-events:none;
-  opacity:.75;
+  opacity:.78;
 }
 body.modo-edicion-ajustes #page-ajustes .ajustes-section .toggle-switch{
   pointer-events:none;
 }
-.ajustes-section-handles{
-  display:none;
-  position:absolute;
-  top:50%;
-  right:6px;
-  transform:translateY(-50%);
-  flex-direction:column;
-  gap:4px;
-  z-index:5;
+
+/* Animacion jiggle: rotacion ±1.5° en loop infinito.
+   Cada seccion lleva un --jiggle-delay distinto (asignado por JS) para desincronizar. */
+@keyframes ajustes-jiggle {
+  0%   { transform: rotate(-1.5deg); }
+  50%  { transform: rotate(1.5deg); }
+  100% { transform: rotate(-1.5deg); }
 }
-body.modo-edicion-ajustes #page-ajustes .ajustes-section-handles{display:flex}
-.ajustes-section-handle{
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  background:var(--gold2);
-  color:#1a2c44;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:900;
-  font-size:16px;
-  border:none;
-  cursor:pointer;
-  box-shadow:0 2px 6px rgba(0,0,0,.3);
+body.modo-edicion-ajustes #page-ajustes .ajustes-section{
+  animation: ajustes-jiggle .42s linear infinite;
+  animation-delay: var(--jiggle-delay, 0s);
+  transform-origin: center center;
+  transition: none; /* desactivar transition cuando hay animation */
 }
-.ajustes-section-handle:disabled{opacity:.35;cursor:not-allowed}
-.ajustes-section-handle:active{transform:scale(.92)}
+
+/* Seccion siendo arrastrada: sin jiggle, con sombra y elevacion */
+body.modo-edicion-ajustes #page-ajustes .ajustes-section.dragging{
+  animation: none;
+  transform: var(--drag-transform, none) scale(1.03);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+  z-index: 100;
+  opacity: .95;
+  border-color: var(--gold);
+}
+
+/* Boton flotante "Listo" arriba derecha, visible solo en modo edicion */
+#btn-edit-done{
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top, 0px));
+  right: 14px;
+  background: var(--gold2);
+  color: #1a2c44;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 22px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  z-index: 200;
+  display: none;
+}
+body.modo-edicion-ajustes #btn-edit-done{
+  display: block;
+  animation: fade-in-edit-btn .3s ease forwards;
+}
+@keyframes fade-in-edit-btn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ajuste-sep{height:1px;background:var(--border);margin:0 16px}
 /* Toggle switch */
 .toggle-switch{position:relative;display:inline-block;width:44px;height:26px;flex-shrink:0}
 .toggle-switch input{opacity:0;width:0;height:0}
@@ -1427,7 +1456,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.225</div>
+    <div class="login-version">v1.34.226</div>
   </div>
 </div>
 
@@ -1676,7 +1705,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.225</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.226</div>
   </div>
 </div>
 
@@ -2534,13 +2563,9 @@ nav.nav-hidden{transform:translateY(100%)}
 <!-- PAGE: AJUSTES -->
 <div class="page" id="page-ajustes">
 
-  <!-- v1.34.219: barra superior de modo edicion. Por defecto se muestra el boton "Editar orden".
-       Al pulsarlo, los botones cambian a "Guardar" y "Cancelar" y aparecen handles ↑↓ en cada seccion. -->
-  <div id="ajustes-edit-bar" style="display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:0 4px 12px;min-height:34px">
-    <button id="btn-ajustes-edit" type="button" onclick="entrarModoEdicionOrden()" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:6px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer" data-i18n="ajustes_editar_orden">Editar orden</button>
-    <button id="btn-ajustes-guardar" type="button" onclick="salirModoEdicionOrden(true)" style="display:none;background:var(--gold2);border:none;color:#1a2c44;padding:6px 14px;border-radius:6px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:700;cursor:pointer" data-i18n="ajustes_guardar_orden">Guardar</button>
-    <button id="btn-ajustes-cancelar" type="button" onclick="salirModoEdicionOrden(false)" style="display:none;background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:6px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer" data-i18n="ajustes_cancelar_orden">Cancelar</button>
-  </div>
+  <!-- v1.34.226: barra superior con boton "Editar orden" ELIMINADA.
+       Ahora se entra a modo edicion con long-press de 700ms sobre cualquier seccion.
+       Se sale con el boton flotante "Listo" que aparece arriba a la derecha. -->
 
   <!-- SECTION: Campos y Juego -->
   <div class="ajustes-section" data-sec-id="campos_juego">
@@ -3066,7 +3091,7 @@ const i18n = {
     'g_fmt_100':'100% — Juego informal entre amigos.',
     'g_fmt_95':'95% — Medal play o Stableford oficial.',
     'g_fmt_85':'85% — Four Ball (juego en parejas).',
-    'sin_barras':'sin barras','err_sin_conexion':'Sin conexión a internet. Comprueba tu conexión e inténtalo de nuevo.','ajustes_editar_orden':'Editar orden','ajustes_guardar_orden':'Guardar','ajustes_cancelar_orden':'Cancelar','ajustes_orden_guardado':'✓ Orden guardado','g_sub':'Calculadora WHS 2020 · actualizada 2024','g_tagline':'Tu hándicap siempre actualizado',
+    'sin_barras':'sin barras','err_sin_conexion':'Sin conexión a internet. Comprueba tu conexión e inténtalo de nuevo.','ajustes_editar_orden':'Editar orden','ajustes_guardar_orden':'Guardar','ajustes_cancelar_orden':'Cancelar','ajustes_orden_guardado':'✓ Orden guardado','ajustes_listo':'Listo','g_sub':'Calculadora WHS 2020 · actualizada 2024','g_tagline':'Tu hándicap siempre actualizado',
     'g_como_empezar':'Cómo empezar','g_hcp_index':'📊 Hándicap Index (WHS 2024)',
     'g_formatos':'🏌️ Formatos de juego','g_simbolos':'💡 Símbolos en cada hoyo','g_simbolo_retirada':'Recuadro rojo R = Bola Retirada (levantada antes de embocar)',
     'g_nav':'🧭 Navegación','f_titulo':'Fórmula WHS (actualizado 2024)','fi_aviso_titulo':'ℹ️ FERRAMENTA INFORMATIVA','fi_aviso_texto':'Golf HCP calcula o teu Handicap Index segundo a metodologia oficial do World Handicap System (WHS 2020), publicado conjuntamente pela R&A e USGA.<br><br>Este cálculo é orientativo e de uso pessoal. Golf HCP é uma aplicação independente, não afiliada nem apoiada pela R&A, USGA nem por nenhuma federação oficial de golfe.<br><br>Para Handicap oficial homologado, contacta a tua federação ou clube de golfe.','fi_aviso_titulo':'ℹ️ HERRAMIENTA INFORMATIVA','fi_aviso_texto':'Golf HCP calcula tu Hándicap Index según la metodología oficial del World Handicap System (WHS 2020), publicado conjuntamente por R&A y USGA.<br><br>Este cálculo es orientativo y de uso personal. Golf HCP es una aplicación independiente, no afiliada ni respaldada por R&A, USGA ni ninguna federación oficial de golf.<br><br>Para Hándicap oficial homologado, contacta con tu federación o club de golf.',
@@ -3186,7 +3211,7 @@ const i18n = {
     'g_fmt_100':'100% — Jogo informal entre amigos.',
     'g_fmt_95':'95% — Medal play ou Stableford oficial.',
     'g_fmt_85':'85% — Four Ball (jogo em pares).',
-    'sin_barras':'sem barras','err_sin_conexion':'Sem ligação à internet. Verifica a tua ligação e tenta novamente.','ajustes_editar_orden':'Editar ordem','ajustes_guardar_orden':'Guardar','ajustes_cancelar_orden':'Cancelar','ajustes_orden_guardado':'✓ Ordem guardada','g_sub':'Calculadora WHS 2020 · atualizada 2024','g_tagline':'O teu handicap sempre atualizado',
+    'sin_barras':'sem barras','err_sin_conexion':'Sem ligação à internet. Verifica a tua ligação e tenta novamente.','ajustes_editar_orden':'Editar ordem','ajustes_guardar_orden':'Guardar','ajustes_cancelar_orden':'Cancelar','ajustes_orden_guardado':'✓ Ordem guardada','ajustes_listo':'Pronto','g_sub':'Calculadora WHS 2020 · atualizada 2024','g_tagline':'O teu handicap sempre atualizado',
     'g_como_empezar':'Como começar','g_hcp_index':'📊 Handicap Index (WHS 2024)',
     'g_formatos':'🏌️ Formatos de jogo','g_simbolos':'💡 Símbolos em cada buraco','g_simbolo_retirada':'Quadrado vermelho R = Bola Levantada (antes de embocar)',
     'g_nav':'🧭 Navegação','f_titulo':'Fórmula WHS (actualizado 2024)','fi_aviso_titulo':'ℹ️ FERRAMENTA INFORMATIVA','fi_aviso_texto':'Golf HCP calcula o teu Handicap Index segundo a metodologia oficial do World Handicap System (WHS 2020), publicado conjuntamente pela R&A e USGA.<br><br>Este cálculo é orientativo e de uso pessoal. Golf HCP é uma aplicação independente, não afiliada nem apoiada pela R&A, USGA nem por nenhuma federação oficial de golfe.<br><br>Para Handicap oficial homologado, contacta a tua federação ou clube de golfe.','fi_aviso_titulo':'ℹ️ HERRAMIENTA INFORMATIVA','fi_aviso_texto':'Golf HCP calcula tu Hándicap Index según la metodología oficial del World Handicap System (WHS 2020), publicado conjuntamente por R&A y USGA.<br><br>Este cálculo es orientativo y de uso personal. Golf HCP es una aplicación independiente, no afiliada ni respaldada por R&A, USGA ni ninguna federación oficial de golf.<br><br>Para Hándicap oficial homologado, contacta con tu federación o club de golf.',
@@ -3194,7 +3219,7 @@ const i18n = {
   },
   fr: {'nav_inicio':'Accueil','nav_ronda':'Partie','nav_rondas':'Parties','nav_historial':'Historique','nav_campos':'Parcours','nav_info':'Info','nav_stats':'Statistiques','nav_ajustes':'Réglages','ajustes_titulo':'Réglages','estadisticas':'Statistiques','historial':'Historique des parties','nueva_ronda':'+ Nouvelle partie','borrar_todo':'Tout supprimer','hist_expandir_todos':'Afficher mois','hist_colapsar_todos':'Masquer mois','hist_exportar_csv':'Exporter Parties en CSV','cancelar':'Annuler','guardar':'Enregistrer','cambiar':'Modifier','salir':'Quitter','campo':'Parcours','barra':'Départ','hoyos':'Trous','golpes':'Coups','diferencial':'Différentiel','stableford':'Stableford','handicap':'Handicap','hcp_campo':'HCP du parcours','hcp_index':'HCP Index','fecha':'Date','edit_click_hint':"(Cliquer)",'edit_hint_label':'(modifier date)','par':'Par','cr':'CR','slope':'Slope','nombre':'Nom','confirmar':'Confirmer','eliminar':'Supprimer','editar':'Modifier','compartir':'Partager','ajustes':'Réglages','inicio':'Accueil','rondas':'Parties','campos':'Parcours','vuelta':'Tour','primera_vuelta':'1ère sortie','segunda_vuelta':'2ème sortie','ronda_completa':'Partie complète','hoyo':'Trou','golpes_hoyo':'Coups par trou','total_golpes':'Total coups','sin_rondas':'Aucune partie enregistrée','campo_requerido':'Parcours requis','barra_requerida':'Départ requis','hoyos_requeridos':'Trous requis','golpes_requeridos':'Coups requis','cambiar_clave':'Changer le mot de passe','contrasena_actual':'Mot de passe actuel','nueva_contrasena':'Nouveau mot de passe','confirmar_pass':'Confirmer le mot de passe','contrasenas_no_coinciden':'Les mots de passe ne correspondent pas','contrasena_corta':'Mot de passe trop court (6 caractères min)','clave_cambiada':'Mot de passe modifié','error_clave':'Erreur lors du changement','email':'Email','password':'Mot de passe','btn_entrar':'Connexion','sin_cuenta':'Pas de compte ?','registrate':'Inscription','politica_priv':'Politique de confidentialité','login_subtitle':'Votre calculateur de handicap','continuar':'Continuer','acepta_privacidad':'En vous inscrivant, vous acceptez notre <a href="privacy.html" target="_blank" style="color:var(--gold2);text-decoration:underline">Politique de Confidentialité</a>','ya_cuenta':'Déjà un compte ?','inicia_sesion':'Se connecter','restablecer_pass':'Réinitialiser le mot de passe','enviar':'Envoyer','volver_login':'Retour connexion','email_enviado':'Email envoyé','nueva_ronda_titulo':'Nouvelle partie','detalle_ronda':'Détail de la partie','editar_ronda':'Modifier la partie','borrar_ronda':'Supprimer la partie','confirmar_borrar':'Confirmer la suppression','confirmar_borrar_msg':'Supprimer cette partie ?','confirmar_borrar_todo':'Supprimer toutes les parties ?','si':'Oui','no':'Non','guardado':'Enregistré','error_guardado':'Erreur lors de l\'enregistrement','cargando':'Chargement…','sin_campos':'Aucun parcours enregistré','nuevo_campo':'Nouveau parcours','nuevo_campo_btn':'+ NOUVEAU PARCOURS','editar_campo':'Modifier le parcours','borrar_campo':'Supprimer le parcours','campo_borrado':'Parcours supprimé','campo_guardado':'Parcours enregistré','campo_actualizado':'Parcours mis à jour','barras_salida':'Départs','blanca':'Blanc','amarilla':'Jaune','azul':'Bleu','roja':'Rouge','violeta':'Violet','naranja':'Orange','negra':'Noir','info_hcp':'Info Handicap','formula_whs':'Formule WHS','guia_inicio':'Guide de démarrage','sobre':'À propos de Golf HCP','legal':'Mentions légales','privacidad':'Confidentialité','contacto':'Contact','version':'Version','plataforma':'Plateforme','compartir_app':'Partager Golf HCP','idioma':'Langue','tema':'Apparence','modo_oscuro':'Mode sombre','modo_claro':'Mode clair','menu_campos':'Gérer les parcours','menu_info_hcp':'Info Handicap','menu_guia_didactica':'Classe du Joueur','sub_guia_didactica':'Apprenez à gérer votre handicap','menu_guia':'Guide de démarrage','menu_clave':'Changer le mot de passe','sec_campos_juego':'Parcours et jeu','sec_guias':'Guides','sec_cuenta':'Compte','sec_estilo':'Style App','sec_compartir':'Partager et support','sec_sobre':'À propos de Golf HCP','sub_sobre':'Version, crédits et plus','sobre_desc':'Calculateur de Handicap WHS mis à jour 2024 pour usage personnel.','sobre_sistema':'Système','sobre_plataforma':'Plateforme','sec_legal':'Légal','menu_idioma':'Langue','menu_tema':'Apparence','sub_campos':'Ajoutez et modifiez vos parcours','sub_guia':'Apprenez à utiliser l\'app','sub_info_hcp':'Comment le HCP WHS est calculé','sub_clave':'Mettez à jour votre mot de passe','sub_compartir':'Partagez Golf HCP avec vos amis','sub_contacto':'Envoyez-nous vos suggestions','sub_legal':'Non affilié à R&A / USGA','sub_privacidad':'Comment nous utilisons vos données','sub_salir':'Fermer la session','sub_tema':'','menu_salir':'Quitter','menu_eliminar_cuenta':'Supprimer le compte','sub_eliminar_cuenta':'Supprimer le compte et toutes les donnees','eliminar_aviso':'Cette action supprimera definitivement votre compte et TOUTES vos donnees Golf HCP: parties, parcours, departs, statistiques et profil.','eliminar_irreversible':'Cette action est irreversible. Vous ne pourrez pas recuperer vos donnees.','eliminar_export_titulo':'Avant de supprimer, telechargez vos donnees','eliminar_export_btn':'Telecharger mes donnees (2 fichiers CSV)','eliminar_checkbox':'Je comprends que cette action est irreversible et que je perdrai toutes mes donnees definitivement.','eliminar_btn':'Supprimer mon compte','legal_p1':'Golf HCP est un outil de calcul de Handicap à usage personnel et informatif.','legal_p2':'Cette application <strong style="font-weight:normal;color:var(--cream)">n\'est pas affiliée, associée ni soutenue</strong> par The R&A ni par l\'USGA.','legal_p3':'Le système WHS est la propriété de The R&A et de l\'USGA. Les calculs sont approximatifs et informatifs.','legal_p4':'Pour les compétitions officielles, consultez toujours votre fédération ou club de golf.','priv_p1':'Golf HCP stocke vos données de jeu dans une base de données sécurisée (Supabase) liée à votre compte email.','priv_p2':'Nous ne partageons pas vos données avec des tiers. Pas de publicité.','priv_p3':'Vous pouvez supprimer votre compte à tout moment en nous contactant.','priv_p4':'Cette application ne collecte pas de données de localisation.','menu_legal':'Info légale','menu_privacidad':'Politique de confidentialité','menu_compartir_app':'Partager Golf HCP','menu_contacto':'Contact Golf HCP','email_ph':'votre@email.com','pass_ph':'••••••••','f_titulo':'Formule WHS (mise à jour 2024)','fi_dif':'Différentiel','fi_dif_f':'(Coups − CR) × 113 / Slope','fi_hcp_jug':'HCP Joueur','fi_hcp_jug_f':'Moyenne des 8 meilleurs différentiels des 20 plus récents','fi_r14':'1–4 parties','fi_mejor_dif2':'Meilleur différentiel − 2,0','fi_r56':'5–6 parties','fi_mejor_dif1':'Meilleur différentiel − 1,0','fi_r78':'7–8 parties','fi_mejor_dif':'Meilleur différentiel','fi_r911':'9–11 parties','fi_2best':'2 meilleurs · sans ajustement','fi_r1214':'12–14 parties','fi_3best':'3 meilleurs · sans ajustement','fi_r1516':'15–16 parties','fi_4best':'4 meilleurs · sans ajustement','fi_r1718':'17–18 parties','fi_5best':'5 meilleurs · sans ajustement','fi_r1920':'19–20 parties','fi_6best':'6 meilleurs · sans ajustement','fi_max':'Maximum','fi_max_f':'Différentiel Net Double Bogey','fi_aviso_titulo':'ℹ️ OUTIL INFORMATIF','fi_aviso_texto':'Golf HCP calcule votre Handicap Index selon la méthodologie officielle WHS 2020, mise à jour 2024. Cet outil est indicatif et non officiel.','fi_hi_label':'HI','fi_hi_desc':'Handicap Index = Niveau de Jeu','fi_chcp':'Course HCP','fi_chcp_f':'HI × SR/113 + CR − Par','fi_chcp9':'Course HCP 9T','fi_chcp9_f':'0,5 × HI × SR/113 + CR − Par','fi_chcp_old':'Avant 2024','fi_chcp_old_f':'HI × SR/113 (sans CR−Par)','g_continuar':'Continuer','g_sub':'Calculateur WHS 2020 · mis à jour 2024','g_tagline':'Votre handicap toujours à jour','g_como_empezar':'Comment commencer','g_inicio_txt1':'Allez dans Réglages → Gérer les parcours et créez votre parcours avec les 18 trous, par et index, et les départs avec CR et Slope.','g_inicio_txt2':'Dans ACCUEIL, vous choisissez le Parcours et le Départ, puis vous saisissez votre HCP de jeu réel. Votre Handicap de Jeu pour ce parcours est calculé instantanément. Dès que vous enregistrez votre première partie, l\'application calcule automatiquement votre nouveau HCP Index en appliquant la formule WHS 2020. À partir de là, vous n\'avez pas besoin de le modifier manuellement : à chaque nouvelle partie enregistrée, votre HCP se met à jour avec les derniers résultats. Sur l\'écran ACCUEIL, vous pouvez continuer à consulter votre Handicap de Jeu et simuler comment il évoluerait avec d\'autres valeurs de HCP, mais c\'est toujours la valeur officielle calculée par l\'application qui est transférée lors d\'une NOUVELLE PARTIE.','g_inicio_txt_hcp_oficial':"💡 Si tu as une licence fédérale avec HCP officiel, tu peux l'ajouter dans Réglages → HCP Officiel. Un texte avec ton HCP officiel apparaîtra et tu pourras l'utiliser en cliquant dessus, dans Accueil, Nouvelle partie et Modifier partie. Cela modifie seulement le HCP du parcours et les points Stableford de cette partie, mais <strong>N'AFFECTE PAS ton HCP Index futur</strong> : l'app continue de le calculer selon le WHS 2020 à partir de tes différentiels historiques.",
     'g_inicio_txt_grabar_todas':"📊 As-tu joué un tournoi et ton HCP officiel a-t-il baissé ? Pour que le HCP calculé de l'app le reflète aussi, <strong>enregistre le tournoi dans l'app</strong>. L'app ne peut pas importer de résultats externes : seuls les différentiels de tes parties enregistrées entrent dans le calcul WHS 2020.",'g_inicio_txt3':'Appuyez sur Nouvelle partie, sélectionnez parcours, trous et départ, et entrez les coups trou par trou.','g_inicio_txt4':'Vous pouvez enregistrer des parties de 9 trous : elles sont combinées par paires pour le calcul du handicap.','g_inicio_txt_cap':'🛡️ Cette app applique les plafonds WHS 2020 (R&A Règle 5.8) qui évitent les hausses brusques du HCP : <strong>Soft Cap</strong> (réduit de moitié le dépassement au-dessus de +3 strokes vs votre meilleur HCP des 365 derniers jours) et <strong>Hard Cap</strong> (plafond absolu à +5 strokes). Vous pouvez voir le détail dans Statistiques → Comparatif HCP.','g_inicio_txt_rfeg':'🏆 Si vous jouez des tournois fédérés avec la R.F.E.G., lors de l enregistrement de la partie activez le toggle <strong>"Tournoi R.F.E.G."</strong>. Cela applique le ajustement -1.0 (Résultat Extraordinaire) du protocole officiel espagnol. Cela a un effet uniquement si vous activez la méthode <strong>EGA-RBA</strong> dans Statistiques → Comparatif HCP (toggle à côté de "Méthode calcul"). Les parties marquées apparaîtront avec létiquette <strong>RFEG</strong> dans Historique.','g_que_es_titulo':'Qu\'est-ce que Golf HCP ?','g_que_es_no':'Golf HCP n\'est pas','g_que_es_no_txt':'une app pour jouer au golf, ni un GPS de parcours, ni un marqueur de partie en temps réel, ni un caddie virtuel, ni un visualiseur de parcours ou de trous.','g_que_es_si':'Golf HCP est','g_que_es_si_txt':'votre calculateur de handicap WHS : il vous indique le handicap réel que vous avez après chaque partie. Vous pouvez saisir les coups en jouant (non recommandé), mais l\'idéal est de consacrer 1 minute après la partie pour enregistrer la sortie. À ce moment-là, vous connaîtrez votre HCP mis à jour pour la prochaine fois.','g_que_es_final':'Si le calcul donne un handicap différent du précédent, vous pourrez le saisir dans votre app habituelle de marqueur et jouer votre prochaine partie avec le résultat adapté à votre niveau réel.','sobre_proposito_titulo':'Objectif de l\'app','g_barras_titulo':'🎯 Départs','g_barras_txt1':'Les départs sont les points où commence le jeu sur chaque trou. Chaque départ a son propre CR et Slope, ce qui affecte le calcul de votre Handicap de Jeu.','g_barras_txt2':'En Espagne et au Portugal, les parcours utilisent généralement 4 couleurs standard : Blanc, Jaune, Bleu et Rouge.','g_barras_txt3':'En France et dans d\'autres pays européens, il est courant de trouver jusqu\'à 7 départs ajoutant : Violet, Orange et Noir.','g_barras_txt4':'Lors de la création ou modification d\'un parcours, activez l\'option « Inclure les départs supplémentaires » et les 3 départs extra apparaîtront. Vous n\'avez qu\'à remplir ceux que ce parcours utilise.','g_barras_txt5':'💡 Si vous jouez habituellement en France ou sur des parcours avec plus de 4 départs, créez le parcours avec tous les départs dès le départ. Vous pourrez ainsi choisir n\'importe lequel lors de nouvelles parties.','g_hcp_index':'📊 Handicap Index (WHS 2024)','g_hcp_txt1':'Calculé avec les 20 dernières parties selon le système WHS, mis à jour 2024.','g_hcp_txt2':'Plus vous enregistrez de parties, plus votre handicap sera précis.','g_hcp_txt3':'Les parties de 9 trous sont combinées par paires avant le calcul.','g_hcp_txt4':'Le HCP du parcours inclut l\'ajustement CR et Slope du départ choisi.','g_formatos':'🏌️ Formats de jeu','g_fmt_100':'100% — Jeu informel entre amis.','g_fmt_95':'95% — Medal play ou Stableford officiel.','g_fmt_85':'85% — Four Ball (jeu en équipes).','g_simbolos':'💡 Symboles par trou','g_simbolo_retirada':'Carré rouge R = Balle Relevée (avant de holer)','g_nav':'🧭 Navigation','g_nav_inicio':'Accueil — HCP Index, parcours et départ, HCP du parcours et coups objectif.','g_nav_ronda':'Parties — Historique des parties. Touchez-en une pour voir les détails, modifier ou supprimer.','g_nav_hist':'Nouvelle partie — Accédez via le bouton ✏️ sur l\'écran Accueil ou Parties.','g_nav_campos':'Statistiques — Graphiques d\'évolution et métriques de votre jeu.','g_nav_clave':'Réglages — Parcours, guides, langue, apparence, compte et plus.','g_nav_salir':'Partager — Partagez votre HCP Index depuis l\'écran d\'Accueil.','g_tip_cerrar':'💡 Il est fortement recommandé de fermer complètement l\'application en glissant vers le haut lorsque vous ne l\'utilisez plus, vous protégez votre compte et garantissez des redémarrages plus propres et complets.','e_9h_incompleto':'Données incomplètes pour les 9 trous - ','e_barras':'Au moins un départ (Blanc ou Jaune) est requis','e_barras_min':'Au moins un départ avec CR et Slope est requis','barras_extra_label':'Départs supplémentaires','barras_extra_sub':'Violet · Orange · Noir','barras_9h_label':'Départs pour 9 trous','e_nombre':'Le nom du parcours est requis','e_sin_sesion':'Session expirée, reconnectez-vous','e_golpes':'Entrez les coups pour tous les trous','c_cancelar_edit_campo':'Annuler les modifications ?','t_completa_hoyos':'Complétez tous les trous','t_campo_no_encontrado':'Parcours introuvable','t_campo_actualizado':'Parcours mis à jour','t_campo_guardado':'Parcours enregistré','t_campo_borrado':'Parcours supprimé','t_ronda_guardada':'Partie enregistrée','t_ronda_borrada':'Partie supprimée','sub_campos_juego':'Gérez vos parcours de golf','sem_voltas':'Aucune partie enregistrée','nueva_ronda_btn':'Nouvelle partie','sec_informes':'Rapports','menu_informe_mensual':'Rapport Mensuel','sub_informe_mensual':'Résumé de votre jeu mois par mois','inf_descargar_pdf':'Télécharger PDF','inf_sin_actividad':'Aucune activité ce mois','inf_sin_actividad_sub':"Vous n'avez enregistré aucune partie sur cette période",'inf_hcp_inicio':'HCP Index début','inf_hcp_fin':'HCP Index fin','inf_rondas':'Parties jouées','inf_mejor_dif':'Meilleur différentiel','inf_hcp_medio':'HCP moyen du mois','inf_golpes_prom':'Coups moyens','inf_tendencia':'Tendance HCP','inf_mejor_golpes':'Meilleur résultat','inf_peor_golpes':'Pire résultat','inf_mejor_stbl':'Meilleur Stableford','inf_media_golpes':'Moyenne résultat','inf_evolucion_hcp':'Évolution HCP du mois','inf_pts':'pts','inf_golpes_unit':'coups','inf_mejorando':'En amélioration','inf_subiendo':'En hausse','inf_estable':'Stable','inf_no_calc':'Non calculable','fi_barras_extra':'COULEURS SUPPLÉMENTAIRES (PARCOURS INTERNATIONAUX)','fi_blanca_desc':'Professionnels et messieurs handicap bas','fi_amarilla_desc':'Messieurs amateurs, niveau moyen et général','fi_azul_desc':'Professionnelles dames, juniors ou seniors','fi_roja_desc':'Dames, débutants et enfants','fi_violeta_desc':'Messieurs handicap bas (alternative au Blanc)','fi_naranja_desc':'Messieurs niveau moyen ou seniors (entre Jaune et Bleu)','fi_negra_desc':'Tee de championnat professionnel (le plus éloigné du green)'
- ,'compartir_hcp':'Partager mon HCP','gestionar_campos':'Gérer les parcours','evolucion_hcp':'ÉVOLUTION HCP','ultimas_20':'20 dernières parties','ultimas_10':'10 dernières parties','crear_cuenta':'Créer un compte','enviar_enlace':'Envoyer le lien','volver':'← Retour','volver_btn':'RETOUR','recuperar_pass':'Récupérer le mot de passe','selecciona_campo':'— Sélectionner parcours —','selecciona_campo_calc':'Sélectionnez un parcours pour calculer.','fi_dif_formula':'Différentiel = (Coups − CR) × 113 / Slope','selecciona_barra':'— Sélectionner départ —','selecciona_hoyos':'— Trous —','hcp_jugador':'HCP Joueur','handicap_jugador':'Handicap Joueur','course_rating':'Course Rating','slope_rating':'Slope Rating','formato':'Format de jeu','salida_19':'Aller 1–9','vuelta_1018':'Retour 10–18','golpe_ventaja':'Coup de handicap (HCP parcours)','punto_stbl':'Point Stableford','fmt_100_lbl':'100%<br>Informel','fmt_100':'100% — Informel','fmt_95_lbl':'95%<br>Stroke/Stblf','fmt_95':'95% — Stroke / Stblf','fmt_85_lbl':'85%<br>Four Ball','fmt_85':'85% — Four Ball','total_label':'Total:','stbl_label':'Stableford:','ida':'Aller (1–9)','vuelta2':'Retour (10–18)','hoyos_18':'18 trous','hoyos_9':'9 trous','barra_salida':'Départ','hcp_idx':'HCP Index','registrar_ronda':'+ Enregistrer partie','torneo_rfeg_label':'Tournoi R.F.E.G.','torneo_rfeg_sub':'Ajustement Extraordinaire −1.0 (méthode EGA seulement)','rfeg_short':'RFEG','guardando':'Enregistrement…','entrando':'Connexion…','creando':'Création…','enviando':'Envoi…','reemplazando':'Remplacement…','e_cargar_catalogo':'Erreur lors du chargement du catalogue.','e_cargar_datos':'Erreur lors du chargement des données : ','error_prefijo':'Erreur : ','desconocido':'inconnu','menu_hcp_oficial':'HCP Officiel','sub_hcp_oficial':'Ton hándicap de la fédération','hcp_oficial_titulo':'Ton HCP Officiel','hcp_oficial_toggle':'Afficher HCP officiel de la fédération','hcp_oficial_valor':'Valeur','hcp_oficial_fecha':'Dernière mise à jour : {fecha}','hcp_oficial_info':"Informatif uniquement. N'affecte pas les calculs de l'app (WHS 2020).",'ho_err_valor':'Valeur invalide. Utilise un nombre entre -10 et 54.','t_hcp_oficial_ok':'HCP officiel enregistré','hcp_oficial_btn_usar':'Hcp F.G. :','stats_hcp_comp_titulo':'Comparatif HCP','stats_hcp_app':'HCP App','stats_hcp_oficial':'HCP Officiel','stats_hcp_dif':'Différence','stats_hcp_fecha':'Mise à jour officielle','stats_whs_cap':'WHS 2020 CAP (R&A 5.8)','stats_low_hi':'Meilleur HI 365 jours (Niveau de Jeu)','stats_hcp_sin_cap':'HCP sans CAP','stats_cap_aplicado':'CAP appliqué','stats_metodo_calc':'Méthode calcul','stats_hcp_nota':'Des différences avec votre HCP fédéral peuvent exister si votre fédération a des parties non enregistrées dans cette app, ou applique le PCC (ajustement quotidien des conditions de jeu) qui nécessite les données de tous les joueurs de chaque parcours. Golf HCP calcule le WHS 2020 officiel avec les données que vous enregistrez.','toca_ronda':'Touchez une partie pour plus de détails<br>Glissez ← une partie → pour voir options','fecha_col':'Date','campo_col':'Parcours','golpes_col':'Coups','dif_col':'Dif.','barra_col':'Départ','stbl_col':'Stbl','mis_campos':'Mes Parcours','campos_swipe_hint':'‹‹ ── Glisser pour les options du parcours ── ››','rondas_swipe_hint':'‹‹ ── Glisser pour les options de la partie ── ››','nueva_ronda_btn_fixed':'+ NOUVELLE PARTIE','nuevo_campo_title':'Nouveau Parcours','nombre_campo':'Nom du parcours','max15':'(max. 20 caractères)','par_indice':'Par et Handicap par Trou','golpes_brutos':'Coups bruts','par_campo':'Par du parcours','stbl_label_f':'Stableford','nombre_label':'Nom','par_label':'Par','slope_label':'Slope','cr_18h':'CR 18T','slope_18h':'Slope 18T','confirmar_label':'Confirmer','hcp_campo':'HCP Parcours','handicap_campo':'Handicap du Parcours','hcp_campo_title':'Handicap du Parcours','guardar_campo':'Enregistrer Parcours','ida_label':'ALLER','vuelta_label':'RETOUR','opcional_9h':'OPTIONNEL: 9 TROUS','ind_label':'Hcp','nueva_pass':'Nouveau mot de passe','min6':'minimum 6 caractères','repite_pass':'répétez le mot de passe','t_campo_eliminado':'✓ Parcours supprimé','t_historial_borrado':'✓ Historique effacé','t_ronda_eliminada':'✓ Partie supprimée','t_ronda_no_encontrada':'Partie introuvable','t_sin_sesion':'Aucune session active','t_completa_golpes':'⚠️ Complétez les coups de tous les trous','t_falta_hcp_jugador':'⚠️ Saisissez d\'abord votre HCP Joueur','t_selecciona_campo':'⚠️ Sélectionnez un parcours avant d\'enregistrer la partie.','t_pass_actualizada':'✓ Mot de passe mis à jour','t_ronda_actualizada':'✓ Partie mise à jour','t_error_borrar':'❌ Erreur lors de la suppression','t_error_eliminar':'❌ Erreur lors de la suppression','t_error_guardar':'❌ Erreur lors de l\'enregistrement: ','t_error':'❌ Erreur: ','c_sin_campos':'Tu n\'as pas encore créé de parcours.\n\nPour commencer à utiliser Golf HCP :\n1) Crée ton premier parcours dans Réglages\n2) Enregistre ta 1ère partie dans Nouvelle partie\n3) Optionnel : si tu as une licence fédérale, ajoute ton HCP officiel dans Réglages → HCP Officiel\n\nAller maintenant aux Réglages ?','c_borrar_rondas':'Supprimer TOUTES les parties ? Cette action est irréversible.','c_borrar_rondas_n':'⚠️ Vous allez supprimer VOS {n} PARTIES enregistrées.\n\nCette action NE peut PAS être annulée.','c_borrar_palabra':'SUPPRIMER','c_borrar_rondas_prompt':'Pour confirmer, tapez {p} (en majuscules) :','t_borrar_cancelado':'Annulé : mot incorrect','c_cancelar_edit_ronda':'Annuler la modification ? Les changements ne seront pas sauvegardés.','c_cancelar_nueva_ronda':'Annuler la partie ? Les données saisies seront perdues.','c_cancelar_nuevo_campo':'Annuler le parcours ? Les données saisies seront perdues.','c_cerrar_sesion':'Fermer la session ?','c_salir':'⚠️ QUITTER L\'APPLICATION ?\n\nVotre session sera fermée.','e_nombre_campo':'Complétez le nom du parcours.','e_pass_min':'Le mot de passe doit contenir au moins 6 caractères.','e_pass_match':'Les mots de passe ne correspondent pas.','e_hoyos_completos':'⚠️ Complétez les 18 trous avec par et index avant de sauvegarder.','pts':' pts','ver_guia':'📖 Voir le guide de démarrage','fi_eagle':'Eagle ou mieux','fi_bogey':'Bogey','fi_dbogey':'Double bogey +','fi_stbl_title':'Stableford','fi_barras_title':'Départs','fi_7best':'7 meilleurs · sans ajustement','fi_8best':'8 meilleurs · sans ajustement','fi_4pts':'4 points','fi_birdie':'Birdie','fi_3pts':'3 points','fi_par':'Par','fi_2pts':'2 points','fi_1pt':'1 point','fi_0pts':'0 point','leyenda_retirada':'Balle relevée (0pts · NDB)','btn_marcar_r':'Marquer balle relevée','r_banner':'Touche un trou pour marquer/dé-marquer comme balle relevée','info_dau':'DAU (Daily Active Users): utilisateurs uniques actifs dans les dernières 24 heures (fenêtre glissante, pas jour calendaire).','info_wau':'WAU (Weekly Active Users): utilisateurs uniques actifs dans les 7 derniers jours.','info_mau':'MAU (Monthly Active Users): utilisateurs uniques actifs dans les 30 derniers jours.','info_sticky':'Stickiness: ratio DAU/MAU en %. Indique quelle proportion des utilisateurs mensuels revient quotidiennement. 20% est bien, 50% excellent.','fi_retirada_title':'Balle Relevée','fi_retirada_p1':'Lorsqu\'un joueur <strong>relève la balle</strong> sur un trou (sans terminer en holant), on note <strong style="color:var(--red-intenso)">R</strong> dans le champ des coups de ce trou.','fi_retirada_p2':'Selon le système WHS 2020, ce trou reçoit automatiquement :','fi_retirada_stbl':'Stableford','fi_retirada_stbl_v':'0 point','fi_retirada_golpes':'Coups (NDB)','fi_retirada_golpes_v':'Par + 2 + coups reçus du HCP','fi_retirada_p3':'<strong>NDB</strong> (Net Double Bogey) est le résultat maximum autorisé sur n\'importe quel trou pour le calcul du HCP Index. Il garantit qu\'un mauvais trou isolé n\'affecte pas de façon disproportionnée le différentiel de la partie.','fi_blanca_desc':'Professionnels et joueurs de bas handicap','fi_amarilla_desc':'Amateurs, niveau moyen et général','fi_azul_desc':'Professionnelles, juniors ou seniors','fi_roja_desc':'Dames, débutants et enfants','fi_r17':'17 parties','fi_r18':'18 parties','fi_r19':'19 parties','fi_r20':'20 parties','sin_barras':'sans départs','err_sin_conexion':'Pas de connexion internet. Vérifiez votre connexion et réessayez.','ajustes_editar_orden':'Modifier l\'ordre','ajustes_guardar_orden':'Enregistrer','ajustes_cancelar_orden':'Annuler','ajustes_orden_guardado':'✓ Ordre enregistré','bcp_titulo':'Rechercher parcours en ligne (Phase 1) ... Phase 2 prochainement','bcp_volver_campos':'Mes Parcours','bcp_placeholder':'Tapez le nom du parcours...','bcp_cargando':'Chargement du catalogue...','bcp_n_disponibles':'{n} parcours disponibles','bcp_n_resultados':'{n} résultat(s) pour "{q}"','bcp_sin_resultados':'Aucun résultat pour "{q}"','bcp_sin_campos':'Aucun parcours disponible','bcp_vacio_titulo':'Aucun résultat.','bcp_vacio_hint':"Si votre parcours n'est pas dans le catalogue, revenez en arrière et créez-le manuellement.",'bcp_hoyos':'trous','bcp_par':'Par','bcp_btn_buscar_online':'🔍 Rechercher Parcours en Ligne','bcp_confirmar_sobrescribir':"Êtes-vous sûr de vouloir remplacer les données actuelles du formulaire ?",'admin_cat_titulo':'Admin BD publique','admin_cat_sub':'Modifier catalogue en ligne','admin_cat_editar':'Modifier Parcours','admin_cat_volver_lista':'← Retour à la liste','admin_cat_n_hoyos':'Nb Trous','admin_cat_par_total':'Par total','bcp_ya_importado':'Déjà importé','bcp_dup_confirmar':"Vous avez déjà un parcours nommé \"{n}\" dans votre catalogue.\n\nAppuyez sur OK pour REMPLACER ses données par les nouvelles (les parties historiques ne seront pas supprimées).\nAppuyez sur Annuler pour CHANGER le nom avant d'enregistrer.",'bcp_dup_reemplazado':'✓ Parcours remplacé','bcp_dup_edit_bloqueo':'Vous avez déjà un autre parcours avec ce nom. Changez le nom avant d\'enregistrer.','bcp_barras_ignoradas':'⚠️ {n} départ(s) du catalogue non compatible(s) avec l\'app : {l} (ignorés)','ac_desactivar':'Désactiver','ac_reactivar':'Réactiver','ac_confirmar_desactivar':'Désactiver "{n}" ?\n\nN\'apparaîtra plus dans la recherche en ligne mais les données sont conservées.\nVous pourrez le réactiver quand vous voulez.','ac_confirmar_reactivar':'Réactiver "{n}" ?\n\nIl réapparaîtra dans la recherche en ligne pour tous les utilisateurs.','ac_desactivado':'✓ Parcours désactivé','ac_reactivado':'✓ Parcours réactivé','aviso_9h_no_importado':'⚠️ Les données du catalogue en ligne sont pour 18 trous. Pour jouer 9 trous (Aller ou Retour), complétez les CR/Slope manuellement ici.','ac_nuevo_campo':'+ Nouveau','ac_titulo_nuevo':'Nouveau Parcours Public','ac_creado':'✓ Parcours créé dans la BDD publique','ac_err_par_incompleto':'⚠️ Complétez le par des {n} trous (valeurs 3-6)','ac_err_idx_incompleto':'⚠️ Complétez l\'index des {n} trous (valeurs 1-{n})','ac_err_idx_repetidos':'⚠️ Les index doivent aller de 1 à {n} sans répétition','ac_err_sin_barras':'⚠️ Au moins 1 départ avec CR et Slope remplis','ac_err_nombre_existe':'⚠️ Un parcours avec ce nom existe déjà. Changez le nom ou éditez l\'existant.','ac_filtro_titulo':'Filtrer par état','ac_filtro_todos':'Tous','ac_filtro_completos':'Complets','ac_filtro_parciales':'Partiels','ac_filtro_sindatos':'Sans données','aviso_cr_sospechoso':'⚠️ Le CR du départ {b} semble très bas pour 18 trous (l\'avez-vous confondu avec le CR de 9 trous ?).\n\nEnregistrer quand même ?','aviso_cr_sospechoso_toast':'⚠️ Départ {b} : CR très bas. Vérifiez les données du parcours.','bcp_aviso_9h':'ℹ️ Les données du catalogue sont pour 18 trous. Pour jouer 9 trous, complétez les CR/Slope manuellement.' },
+ ,'compartir_hcp':'Partager mon HCP','gestionar_campos':'Gérer les parcours','evolucion_hcp':'ÉVOLUTION HCP','ultimas_20':'20 dernières parties','ultimas_10':'10 dernières parties','crear_cuenta':'Créer un compte','enviar_enlace':'Envoyer le lien','volver':'← Retour','volver_btn':'RETOUR','recuperar_pass':'Récupérer le mot de passe','selecciona_campo':'— Sélectionner parcours —','selecciona_campo_calc':'Sélectionnez un parcours pour calculer.','fi_dif_formula':'Différentiel = (Coups − CR) × 113 / Slope','selecciona_barra':'— Sélectionner départ —','selecciona_hoyos':'— Trous —','hcp_jugador':'HCP Joueur','handicap_jugador':'Handicap Joueur','course_rating':'Course Rating','slope_rating':'Slope Rating','formato':'Format de jeu','salida_19':'Aller 1–9','vuelta_1018':'Retour 10–18','golpe_ventaja':'Coup de handicap (HCP parcours)','punto_stbl':'Point Stableford','fmt_100_lbl':'100%<br>Informel','fmt_100':'100% — Informel','fmt_95_lbl':'95%<br>Stroke/Stblf','fmt_95':'95% — Stroke / Stblf','fmt_85_lbl':'85%<br>Four Ball','fmt_85':'85% — Four Ball','total_label':'Total:','stbl_label':'Stableford:','ida':'Aller (1–9)','vuelta2':'Retour (10–18)','hoyos_18':'18 trous','hoyos_9':'9 trous','barra_salida':'Départ','hcp_idx':'HCP Index','registrar_ronda':'+ Enregistrer partie','torneo_rfeg_label':'Tournoi R.F.E.G.','torneo_rfeg_sub':'Ajustement Extraordinaire −1.0 (méthode EGA seulement)','rfeg_short':'RFEG','guardando':'Enregistrement…','entrando':'Connexion…','creando':'Création…','enviando':'Envoi…','reemplazando':'Remplacement…','e_cargar_catalogo':'Erreur lors du chargement du catalogue.','e_cargar_datos':'Erreur lors du chargement des données : ','error_prefijo':'Erreur : ','desconocido':'inconnu','menu_hcp_oficial':'HCP Officiel','sub_hcp_oficial':'Ton hándicap de la fédération','hcp_oficial_titulo':'Ton HCP Officiel','hcp_oficial_toggle':'Afficher HCP officiel de la fédération','hcp_oficial_valor':'Valeur','hcp_oficial_fecha':'Dernière mise à jour : {fecha}','hcp_oficial_info':"Informatif uniquement. N'affecte pas les calculs de l'app (WHS 2020).",'ho_err_valor':'Valeur invalide. Utilise un nombre entre -10 et 54.','t_hcp_oficial_ok':'HCP officiel enregistré','hcp_oficial_btn_usar':'Hcp F.G. :','stats_hcp_comp_titulo':'Comparatif HCP','stats_hcp_app':'HCP App','stats_hcp_oficial':'HCP Officiel','stats_hcp_dif':'Différence','stats_hcp_fecha':'Mise à jour officielle','stats_whs_cap':'WHS 2020 CAP (R&A 5.8)','stats_low_hi':'Meilleur HI 365 jours (Niveau de Jeu)','stats_hcp_sin_cap':'HCP sans CAP','stats_cap_aplicado':'CAP appliqué','stats_metodo_calc':'Méthode calcul','stats_hcp_nota':'Des différences avec votre HCP fédéral peuvent exister si votre fédération a des parties non enregistrées dans cette app, ou applique le PCC (ajustement quotidien des conditions de jeu) qui nécessite les données de tous les joueurs de chaque parcours. Golf HCP calcule le WHS 2020 officiel avec les données que vous enregistrez.','toca_ronda':'Touchez une partie pour plus de détails<br>Glissez ← une partie → pour voir options','fecha_col':'Date','campo_col':'Parcours','golpes_col':'Coups','dif_col':'Dif.','barra_col':'Départ','stbl_col':'Stbl','mis_campos':'Mes Parcours','campos_swipe_hint':'‹‹ ── Glisser pour les options du parcours ── ››','rondas_swipe_hint':'‹‹ ── Glisser pour les options de la partie ── ››','nueva_ronda_btn_fixed':'+ NOUVELLE PARTIE','nuevo_campo_title':'Nouveau Parcours','nombre_campo':'Nom du parcours','max15':'(max. 20 caractères)','par_indice':'Par et Handicap par Trou','golpes_brutos':'Coups bruts','par_campo':'Par du parcours','stbl_label_f':'Stableford','nombre_label':'Nom','par_label':'Par','slope_label':'Slope','cr_18h':'CR 18T','slope_18h':'Slope 18T','confirmar_label':'Confirmer','hcp_campo':'HCP Parcours','handicap_campo':'Handicap du Parcours','hcp_campo_title':'Handicap du Parcours','guardar_campo':'Enregistrer Parcours','ida_label':'ALLER','vuelta_label':'RETOUR','opcional_9h':'OPTIONNEL: 9 TROUS','ind_label':'Hcp','nueva_pass':'Nouveau mot de passe','min6':'minimum 6 caractères','repite_pass':'répétez le mot de passe','t_campo_eliminado':'✓ Parcours supprimé','t_historial_borrado':'✓ Historique effacé','t_ronda_eliminada':'✓ Partie supprimée','t_ronda_no_encontrada':'Partie introuvable','t_sin_sesion':'Aucune session active','t_completa_golpes':'⚠️ Complétez les coups de tous les trous','t_falta_hcp_jugador':'⚠️ Saisissez d\'abord votre HCP Joueur','t_selecciona_campo':'⚠️ Sélectionnez un parcours avant d\'enregistrer la partie.','t_pass_actualizada':'✓ Mot de passe mis à jour','t_ronda_actualizada':'✓ Partie mise à jour','t_error_borrar':'❌ Erreur lors de la suppression','t_error_eliminar':'❌ Erreur lors de la suppression','t_error_guardar':'❌ Erreur lors de l\'enregistrement: ','t_error':'❌ Erreur: ','c_sin_campos':'Tu n\'as pas encore créé de parcours.\n\nPour commencer à utiliser Golf HCP :\n1) Crée ton premier parcours dans Réglages\n2) Enregistre ta 1ère partie dans Nouvelle partie\n3) Optionnel : si tu as une licence fédérale, ajoute ton HCP officiel dans Réglages → HCP Officiel\n\nAller maintenant aux Réglages ?','c_borrar_rondas':'Supprimer TOUTES les parties ? Cette action est irréversible.','c_borrar_rondas_n':'⚠️ Vous allez supprimer VOS {n} PARTIES enregistrées.\n\nCette action NE peut PAS être annulée.','c_borrar_palabra':'SUPPRIMER','c_borrar_rondas_prompt':'Pour confirmer, tapez {p} (en majuscules) :','t_borrar_cancelado':'Annulé : mot incorrect','c_cancelar_edit_ronda':'Annuler la modification ? Les changements ne seront pas sauvegardés.','c_cancelar_nueva_ronda':'Annuler la partie ? Les données saisies seront perdues.','c_cancelar_nuevo_campo':'Annuler le parcours ? Les données saisies seront perdues.','c_cerrar_sesion':'Fermer la session ?','c_salir':'⚠️ QUITTER L\'APPLICATION ?\n\nVotre session sera fermée.','e_nombre_campo':'Complétez le nom du parcours.','e_pass_min':'Le mot de passe doit contenir au moins 6 caractères.','e_pass_match':'Les mots de passe ne correspondent pas.','e_hoyos_completos':'⚠️ Complétez les 18 trous avec par et index avant de sauvegarder.','pts':' pts','ver_guia':'📖 Voir le guide de démarrage','fi_eagle':'Eagle ou mieux','fi_bogey':'Bogey','fi_dbogey':'Double bogey +','fi_stbl_title':'Stableford','fi_barras_title':'Départs','fi_7best':'7 meilleurs · sans ajustement','fi_8best':'8 meilleurs · sans ajustement','fi_4pts':'4 points','fi_birdie':'Birdie','fi_3pts':'3 points','fi_par':'Par','fi_2pts':'2 points','fi_1pt':'1 point','fi_0pts':'0 point','leyenda_retirada':'Balle relevée (0pts · NDB)','btn_marcar_r':'Marquer balle relevée','r_banner':'Touche un trou pour marquer/dé-marquer comme balle relevée','info_dau':'DAU (Daily Active Users): utilisateurs uniques actifs dans les dernières 24 heures (fenêtre glissante, pas jour calendaire).','info_wau':'WAU (Weekly Active Users): utilisateurs uniques actifs dans les 7 derniers jours.','info_mau':'MAU (Monthly Active Users): utilisateurs uniques actifs dans les 30 derniers jours.','info_sticky':'Stickiness: ratio DAU/MAU en %. Indique quelle proportion des utilisateurs mensuels revient quotidiennement. 20% est bien, 50% excellent.','fi_retirada_title':'Balle Relevée','fi_retirada_p1':'Lorsqu\'un joueur <strong>relève la balle</strong> sur un trou (sans terminer en holant), on note <strong style="color:var(--red-intenso)">R</strong> dans le champ des coups de ce trou.','fi_retirada_p2':'Selon le système WHS 2020, ce trou reçoit automatiquement :','fi_retirada_stbl':'Stableford','fi_retirada_stbl_v':'0 point','fi_retirada_golpes':'Coups (NDB)','fi_retirada_golpes_v':'Par + 2 + coups reçus du HCP','fi_retirada_p3':'<strong>NDB</strong> (Net Double Bogey) est le résultat maximum autorisé sur n\'importe quel trou pour le calcul du HCP Index. Il garantit qu\'un mauvais trou isolé n\'affecte pas de façon disproportionnée le différentiel de la partie.','fi_blanca_desc':'Professionnels et joueurs de bas handicap','fi_amarilla_desc':'Amateurs, niveau moyen et général','fi_azul_desc':'Professionnelles, juniors ou seniors','fi_roja_desc':'Dames, débutants et enfants','fi_r17':'17 parties','fi_r18':'18 parties','fi_r19':'19 parties','fi_r20':'20 parties','sin_barras':'sans départs','err_sin_conexion':'Pas de connexion internet. Vérifiez votre connexion et réessayez.','ajustes_editar_orden':'Modifier l\'ordre','ajustes_guardar_orden':'Enregistrer','ajustes_cancelar_orden':'Annuler','ajustes_orden_guardado':'✓ Ordre enregistré','ajustes_listo':'Terminé','bcp_titulo':'Rechercher parcours en ligne (Phase 1) ... Phase 2 prochainement','bcp_volver_campos':'Mes Parcours','bcp_placeholder':'Tapez le nom du parcours...','bcp_cargando':'Chargement du catalogue...','bcp_n_disponibles':'{n} parcours disponibles','bcp_n_resultados':'{n} résultat(s) pour "{q}"','bcp_sin_resultados':'Aucun résultat pour "{q}"','bcp_sin_campos':'Aucun parcours disponible','bcp_vacio_titulo':'Aucun résultat.','bcp_vacio_hint':"Si votre parcours n'est pas dans le catalogue, revenez en arrière et créez-le manuellement.",'bcp_hoyos':'trous','bcp_par':'Par','bcp_btn_buscar_online':'🔍 Rechercher Parcours en Ligne','bcp_confirmar_sobrescribir':"Êtes-vous sûr de vouloir remplacer les données actuelles du formulaire ?",'admin_cat_titulo':'Admin BD publique','admin_cat_sub':'Modifier catalogue en ligne','admin_cat_editar':'Modifier Parcours','admin_cat_volver_lista':'← Retour à la liste','admin_cat_n_hoyos':'Nb Trous','admin_cat_par_total':'Par total','bcp_ya_importado':'Déjà importé','bcp_dup_confirmar':"Vous avez déjà un parcours nommé \"{n}\" dans votre catalogue.\n\nAppuyez sur OK pour REMPLACER ses données par les nouvelles (les parties historiques ne seront pas supprimées).\nAppuyez sur Annuler pour CHANGER le nom avant d'enregistrer.",'bcp_dup_reemplazado':'✓ Parcours remplacé','bcp_dup_edit_bloqueo':'Vous avez déjà un autre parcours avec ce nom. Changez le nom avant d\'enregistrer.','bcp_barras_ignoradas':'⚠️ {n} départ(s) du catalogue non compatible(s) avec l\'app : {l} (ignorés)','ac_desactivar':'Désactiver','ac_reactivar':'Réactiver','ac_confirmar_desactivar':'Désactiver "{n}" ?\n\nN\'apparaîtra plus dans la recherche en ligne mais les données sont conservées.\nVous pourrez le réactiver quand vous voulez.','ac_confirmar_reactivar':'Réactiver "{n}" ?\n\nIl réapparaîtra dans la recherche en ligne pour tous les utilisateurs.','ac_desactivado':'✓ Parcours désactivé','ac_reactivado':'✓ Parcours réactivé','aviso_9h_no_importado':'⚠️ Les données du catalogue en ligne sont pour 18 trous. Pour jouer 9 trous (Aller ou Retour), complétez les CR/Slope manuellement ici.','ac_nuevo_campo':'+ Nouveau','ac_titulo_nuevo':'Nouveau Parcours Public','ac_creado':'✓ Parcours créé dans la BDD publique','ac_err_par_incompleto':'⚠️ Complétez le par des {n} trous (valeurs 3-6)','ac_err_idx_incompleto':'⚠️ Complétez l\'index des {n} trous (valeurs 1-{n})','ac_err_idx_repetidos':'⚠️ Les index doivent aller de 1 à {n} sans répétition','ac_err_sin_barras':'⚠️ Au moins 1 départ avec CR et Slope remplis','ac_err_nombre_existe':'⚠️ Un parcours avec ce nom existe déjà. Changez le nom ou éditez l\'existant.','ac_filtro_titulo':'Filtrer par état','ac_filtro_todos':'Tous','ac_filtro_completos':'Complets','ac_filtro_parciales':'Partiels','ac_filtro_sindatos':'Sans données','aviso_cr_sospechoso':'⚠️ Le CR du départ {b} semble très bas pour 18 trous (l\'avez-vous confondu avec le CR de 9 trous ?).\n\nEnregistrer quand même ?','aviso_cr_sospechoso_toast':'⚠️ Départ {b} : CR très bas. Vérifiez les données du parcours.','bcp_aviso_9h':'ℹ️ Les données du catalogue sont pour 18 trous. Pour jouer 9 trous, complétez les CR/Slope manuellement.' },
 };
 let lang = localStorage.getItem('golf_lang') || 'es';
 function t(key) { return (i18n[lang] && i18n[lang][key]) || (i18n.es[key]) || key; }
@@ -5761,6 +5786,8 @@ async function onLogin(user) {
 
   // v1.34.219: aplicar orden personalizado de secciones de Ajustes (si el usuario lo configuro)
   try { aplicarOrdenAjustes(); } catch(e) { console.warn('aplicarOrdenAjustes:', e); }
+  // v1.34.226: instalar listeners de long-press + drag (idempotente, una sola vez)
+  try { instalarListenersAjustes(); } catch(e) { console.warn('instalarListenersAjustes:', e); }
 
   try {
     await loadData();
@@ -9819,8 +9846,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.225' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.225\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.226' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.226\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -10213,13 +10240,30 @@ function maybeShowGuide() {
 }
 
 // ═════════════════════════════════════════════════════════════════════
-// v1.34.219: Reordenado de secciones de Ajustes.
-// Permite al usuario personalizar el orden de las secciones de page-ajustes.
-// Persistencia en localStorage 'ajustes_orden' (array de data-sec-id en orden).
-// La seccion Admin solo aparece si is_admin. Card Salir queda FIJO al final (no se reordena).
+// v1.34.226: Reordenado de secciones de Ajustes con LONG-PRESS + drag.
+// Reemplaza completamente el sistema de v1.34.219 (boton "Editar orden" + flechas).
+//
+// Flujo de usuario:
+// 1. Long-press 700ms sobre cualquier seccion -> entra en modo edicion.
+// 2. En modo edicion: secciones tiemblan (jiggle), boton "Listo" flotante visible,
+//    se puede arrastrar cualquier seccion con el dedo (touch events).
+// 3. Pulsar "Listo" -> guarda orden en localStorage y sale del modo edicion.
+//
+// Persistencia: localStorage 'ajustes_orden' (array de data-sec-id en orden).
+// La seccion Admin solo aparece si is_admin. Card Salir queda FIJO al final.
 // ═════════════════════════════════════════════════════════════════════
 const AJUSTES_ORDEN_KEY = 'ajustes_orden';
-let _ajustesOrdenBackup = null; // copia para "Cancelar"
+const AJUSTES_LONGPRESS_MS = 700;
+const AJUSTES_MOVE_TOLERANCE = 10; // px de movimiento permitido durante long-press
+const AJUSTES_AUTOSCROLL_EDGE = 80; // px desde el borde para activar auto-scroll
+const AJUSTES_AUTOSCROLL_SPEED = 8; // px por frame de auto-scroll
+
+let _ajustesListenersInstalados = false;
+let _lpTimer = null;
+let _lpStartY = 0;
+let _lpStartX = 0;
+let _lpSection = null;
+let _drag = null; // { sec, startY, currentY, offsetY, autoScrollTimer }
 
 function getAjustesOrdenGuardado() {
   try {
@@ -10232,146 +10276,244 @@ function getAjustesOrdenGuardado() {
 
 function aplicarOrdenAjustes() {
   const orden = getAjustesOrdenGuardado();
-  if (!orden) return; // sin orden guardado, mantener el del HTML
+  if (!orden) return;
   const page = document.getElementById('page-ajustes');
   if (!page) return;
-  // Localizar todas las secciones existentes
   const secciones = {};
   page.querySelectorAll('.ajustes-section').forEach(el => {
     const id = el.getAttribute('data-sec-id');
     if (id) secciones[id] = el;
   });
-  // El "ancla" donde reinsertaremos: justo antes del card Salir.
-  // Buscamos el primer .ajustes-section para saber donde empezar a reinsertar.
   const primera = page.querySelector('.ajustes-section');
   if (!primera) return;
-  // Reinsertar en el orden guardado.
-  // Cualquier seccion NUEVA que no este en el orden guardado se mantiene al final (antes de Salir).
   const yaPuestas = new Set();
-  let referencia = primera;
   orden.forEach(secId => {
     const sec = secciones[secId];
     if (sec) {
-      page.insertBefore(sec, referencia);
+      page.insertBefore(sec, primera);
       yaPuestas.add(secId);
     }
   });
-  // Secciones no guardadas (nuevas) -> dejarlas justo antes del card Salir
+  // Secciones nuevas no guardadas -> dejarlas antes del card Salir
   Object.keys(secciones).forEach(secId => {
     if (!yaPuestas.has(secId)) {
       const sec = secciones[secId];
-      // Buscar el card Salir (ultimo div con boton class=ajuste-btn que llame a doLogout)
       const salirCard = Array.from(page.children).find(el => el.querySelector && el.querySelector('button[onclick*="doLogout"]'));
       if (salirCard) page.insertBefore(sec, salirCard);
     }
   });
 }
 
-// Inyecta los botones ↑↓ en cada seccion. Idempotente.
-function inyectarHandlesAjustes() {
+// Asigna delays aleatorios a la animacion jiggle para que las secciones
+// no tiemblen sincronizadas (look natural tipo iPhone).
+function asignarDelaysJiggle() {
   document.querySelectorAll('#page-ajustes .ajustes-section').forEach(sec => {
-    if (sec.querySelector('.ajustes-section-handles')) return; // ya inyectado
-    const wrap = document.createElement('div');
-    wrap.className = 'ajustes-section-handles';
-    wrap.innerHTML =
-      '<button class="ajustes-section-handle btn-up" type="button" onclick="moverSeccion(this,-1)" aria-label="Subir">▲</button>' +
-      '<button class="ajustes-section-handle btn-down" type="button" onclick="moverSeccion(this,1)" aria-label="Bajar">▼</button>';
-    sec.appendChild(wrap);
-  });
-  refrescarEstadoHandles();
-}
-
-// Actualiza disabled de los botones ↑↓ en los extremos
-function refrescarEstadoHandles() {
-  const visibles = Array.from(document.querySelectorAll('#page-ajustes .ajustes-section'))
-    .filter(s => s.offsetParent !== null || s.id === 'admin-section-wrap');
-  // Filtrar admin si esta oculta
-  const reordenables = visibles.filter(s => {
-    if (s.id === 'admin-section-wrap' && s.style.display === 'none') return false;
-    return true;
-  });
-  reordenables.forEach((sec, idx) => {
-    const up = sec.querySelector('.btn-up');
-    const down = sec.querySelector('.btn-down');
-    if (up) up.disabled = (idx === 0);
-    if (down) down.disabled = (idx === reordenables.length - 1);
+    // delay aleatorio entre -.3s y 0s (negativo = ya empezado, mas natural)
+    const d = -(Math.random() * 0.3).toFixed(3);
+    sec.style.setProperty('--jiggle-delay', d + 's');
   });
 }
 
-function moverSeccion(btn, direccion) {
-  const sec = btn.closest('.ajustes-section');
-  if (!sec) return;
-  const page = sec.parentElement;
-  // Lista de secciones reordenables visibles en orden actual
-  const reordenables = Array.from(page.querySelectorAll('.ajustes-section')).filter(s => {
-    if (s.id === 'admin-section-wrap' && s.style.display === 'none') return false;
-    return true;
-  });
-  const idx = reordenables.indexOf(sec);
-  const target = idx + direccion;
-  if (target < 0 || target >= reordenables.length) return;
-  if (direccion === -1) {
-    page.insertBefore(sec, reordenables[target]);
-  } else {
-    // direccion +1: insertar despues del siguiente
-    const refNode = reordenables[target].nextSibling;
-    if (refNode) page.insertBefore(sec, refNode);
-    else page.appendChild(sec);
-  }
-  refrescarEstadoHandles();
-}
-
-function entrarModoEdicionOrden() {
-  // Guardar copia del orden actual para "Cancelar"
-  _ajustesOrdenBackup = Array.from(document.querySelectorAll('#page-ajustes .ajustes-section'))
-    .map(s => s.getAttribute('data-sec-id'));
-  inyectarHandlesAjustes();
+function entrarModoEdicionAjustes() {
+  if (document.body.classList.contains('modo-edicion-ajustes')) return;
+  asignarDelaysJiggle();
   document.body.classList.add('modo-edicion-ajustes');
-  const btnEdit = $('btn-ajustes-edit');
-  const btnSave = $('btn-ajustes-guardar');
-  const btnCancel = $('btn-ajustes-cancelar');
-  if (btnEdit) btnEdit.style.display = 'none';
-  if (btnSave) btnSave.style.display = '';
-  if (btnCancel) btnCancel.style.display = '';
 }
 
-function salirModoEdicionOrden(guardar) {
-  if (guardar) {
-    // Persistir el orden actual del DOM
-    const orden = Array.from(document.querySelectorAll('#page-ajustes .ajustes-section'))
-      .map(s => s.getAttribute('data-sec-id'))
-      .filter(Boolean);
-    try { localStorage.setItem(AJUSTES_ORDEN_KEY, JSON.stringify(orden)); } catch(e) {}
-    try { toast(t('ajustes_orden_guardado') || '✓ Orden guardado'); } catch(e) {}
-  } else {
-    // Restaurar orden de backup
-    if (_ajustesOrdenBackup && _ajustesOrdenBackup.length) {
-      const page = document.getElementById('page-ajustes');
-      const secciones = {};
-      page.querySelectorAll('.ajustes-section').forEach(el => {
-        const id = el.getAttribute('data-sec-id');
-        if (id) secciones[id] = el;
-      });
-      // Reinsertar en orden backup (mismo metodo que aplicarOrdenAjustes)
-      const primera = page.querySelector('.ajustes-section');
-      _ajustesOrdenBackup.forEach(secId => {
-        const sec = secciones[secId];
-        if (sec) page.insertBefore(sec, primera);
-      });
+function salirModoEdicionAjustes() {
+  if (!document.body.classList.contains('modo-edicion-ajustes')) return;
+  // Persistir orden actual
+  const orden = Array.from(document.querySelectorAll('#page-ajustes .ajustes-section'))
+    .map(s => s.getAttribute('data-sec-id'))
+    .filter(Boolean);
+  try { localStorage.setItem(AJUSTES_ORDEN_KEY, JSON.stringify(orden)); } catch(e) {}
+  document.body.classList.remove('modo-edicion-ajustes');
+  // Limpiar custom properties de jiggle (no estrictamente necesario pero ordenado)
+  document.querySelectorAll('#page-ajustes .ajustes-section').forEach(sec => {
+    sec.style.removeProperty('--jiggle-delay');
+    sec.style.removeProperty('--drag-transform');
+  });
+}
+
+// Cancelar long-press timer si estaba en marcha (movimiento o touchend antes de tiempo)
+function cancelarLongPress() {
+  if (_lpTimer) { clearTimeout(_lpTimer); _lpTimer = null; }
+  _lpSection = null;
+}
+
+// ── DRAG: arrastrar una seccion con el dedo durante modo edicion ──────
+function iniciarDrag(sec, touchY) {
+  const rect = sec.getBoundingClientRect();
+  _drag = {
+    sec: sec,
+    startY: touchY,
+    currentY: touchY,
+    offsetY: 0,             // desplazamiento visual respecto a la posicion del DOM
+    sectionStartTop: rect.top,
+    autoScrollDir: 0        // -1 = arriba, 0 = nada, 1 = abajo
+  };
+  sec.classList.add('dragging');
+}
+
+function actualizarDrag(touchY) {
+  if (!_drag) return;
+  _drag.currentY = touchY;
+  // Offset visual = cuanto ha movido el dedo desde el inicio
+  _drag.offsetY = touchY - _drag.startY;
+  _drag.sec.style.setProperty('--drag-transform', 'translateY(' + _drag.offsetY + 'px)');
+
+  // Detectar si el centro Y del dragged cruza el centro Y de algun vecino
+  // y reordenar el DOM en ese momento.
+  const draggedRect = _drag.sec.getBoundingClientRect();
+  const draggedCenterY = draggedRect.top + draggedRect.height / 2;
+
+  const page = _drag.sec.parentElement;
+  const hermanas = Array.from(page.querySelectorAll('.ajustes-section')).filter(s => s !== _drag.sec);
+  for (const h of hermanas) {
+    const hRect = h.getBoundingClientRect();
+    const hCenterY = hRect.top + hRect.height / 2;
+    // Si el centro del dragged supera el centro de un vecino hacia abajo
+    if (draggedCenterY > hCenterY && _drag.sec.compareDocumentPosition(h) & Node.DOCUMENT_POSITION_PRECEDING === 0) {
+      // h esta antes en el DOM pero el dragged ahora esta visualmente por debajo de h
+    }
+    // Caso 1: dragged ARRIBA de h en DOM, pero centro visual SUPERA centro de h hacia abajo
+    //         -> mover dragged DESPUES de h
+    if ((_drag.sec.compareDocumentPosition(h) & Node.DOCUMENT_POSITION_FOLLOWING) && draggedCenterY > hCenterY) {
+      // h va despues del dragged en DOM, y el dragged se ha movido por debajo del centro de h
+      // -> insertar dragged despues de h
+      const next = h.nextElementSibling;
+      page.insertBefore(_drag.sec, next);
+      // Ajustar offset visual para que el dedo "siga" tocando la misma posicion relativa
+      const nuevoRect = _drag.sec.getBoundingClientRect();
+      const cambio = nuevoRect.top - draggedRect.top;
+      _drag.startY += cambio;
+      _drag.offsetY = _drag.currentY - _drag.startY;
+      _drag.sec.style.setProperty('--drag-transform', 'translateY(' + _drag.offsetY + 'px)');
+      return;
+    }
+    // Caso 2: dragged DEBAJO de h en DOM, pero centro visual SUPERA centro de h hacia arriba
+    //         -> mover dragged ANTES de h
+    if ((_drag.sec.compareDocumentPosition(h) & Node.DOCUMENT_POSITION_PRECEDING) && draggedCenterY < hCenterY) {
+      page.insertBefore(_drag.sec, h);
+      const nuevoRect = _drag.sec.getBoundingClientRect();
+      const cambio = nuevoRect.top - draggedRect.top;
+      _drag.startY += cambio;
+      _drag.offsetY = _drag.currentY - _drag.startY;
+      _drag.sec.style.setProperty('--drag-transform', 'translateY(' + _drag.offsetY + 'px)');
+      return;
     }
   }
-  _ajustesOrdenBackup = null;
-  document.body.classList.remove('modo-edicion-ajustes');
-  const btnEdit = $('btn-ajustes-edit');
-  const btnSave = $('btn-ajustes-guardar');
-  const btnCancel = $('btn-ajustes-cancelar');
-  if (btnEdit) btnEdit.style.display = '';
-  if (btnSave) btnSave.style.display = 'none';
-  if (btnCancel) btnCancel.style.display = 'none';
+
+  // Auto-scroll cuando el dedo se acerca a los bordes
+  const vh = window.innerHeight;
+  if (touchY < AJUSTES_AUTOSCROLL_EDGE) {
+    _drag.autoScrollDir = -1;
+    iniciarAutoScroll();
+  } else if (touchY > vh - AJUSTES_AUTOSCROLL_EDGE) {
+    _drag.autoScrollDir = 1;
+    iniciarAutoScroll();
+  } else {
+    _drag.autoScrollDir = 0;
+  }
 }
 
-// Aplicar al cargar (despues de que onLogin haya configurado admin-section visibility)
-// Lo llamamos desde onLogin tras setear admin-section-wrap.
+let _autoScrollRaf = null;
+function iniciarAutoScroll() {
+  if (_autoScrollRaf) return;
+  const tick = () => {
+    if (!_drag || _drag.autoScrollDir === 0) {
+      _autoScrollRaf = null;
+      return;
+    }
+    window.scrollBy(0, _drag.autoScrollDir * AJUSTES_AUTOSCROLL_SPEED);
+    // Como hemos scrolleado, el dedo "se ha movido" relativamente -> recalcular offset
+    _drag.startY -= _drag.autoScrollDir * AJUSTES_AUTOSCROLL_SPEED;
+    _drag.offsetY = _drag.currentY - _drag.startY;
+    if (_drag.sec) _drag.sec.style.setProperty('--drag-transform', 'translateY(' + _drag.offsetY + 'px)');
+    _autoScrollRaf = requestAnimationFrame(tick);
+  };
+  _autoScrollRaf = requestAnimationFrame(tick);
+}
+
+function finalizarDrag() {
+  if (!_drag) return;
+  _drag.sec.style.removeProperty('--drag-transform');
+  _drag.sec.classList.remove('dragging');
+  _drag = null;
+  if (_autoScrollRaf) { cancelAnimationFrame(_autoScrollRaf); _autoScrollRaf = null; }
+}
+
+// ── EVENT LISTENERS: instalados UNA VEZ por sesion ────────────────────
+function instalarListenersAjustes() {
+  if (_ajustesListenersInstalados) return;
+  _ajustesListenersInstalados = true;
+  const page = document.getElementById('page-ajustes');
+  if (!page) return;
+
+  // touchstart en una seccion -> iniciar timer long-press OR iniciar drag (si ya en modo edicion)
+  page.addEventListener('touchstart', (e) => {
+    const sec = e.target.closest('.ajustes-section');
+    if (!sec) return;
+    const t = e.touches[0];
+    if (document.body.classList.contains('modo-edicion-ajustes')) {
+      // Ya en modo edicion -> empezar drag directo
+      iniciarDrag(sec, t.clientY);
+      e.preventDefault();
+    } else {
+      // Iniciar timer long-press
+      _lpStartY = t.clientY;
+      _lpStartX = t.clientX;
+      _lpSection = sec;
+      _lpTimer = setTimeout(() => {
+        _lpTimer = null;
+        if (_lpSection) {
+          entrarModoEdicionAjustes();
+          // Iniciar drag inmediatamente sobre la seccion del long-press
+          iniciarDrag(_lpSection, _lpStartY);
+        }
+      }, AJUSTES_LONGPRESS_MS);
+    }
+  }, { passive: false });
+
+  page.addEventListener('touchmove', (e) => {
+    const t = e.touches[0];
+    if (_drag) {
+      // Estamos arrastrando -> mover
+      actualizarDrag(t.clientY);
+      e.preventDefault();
+    } else if (_lpTimer) {
+      // Esperando long-press -> si el dedo se mueve demasiado, cancelar (era scroll)
+      const dx = Math.abs(t.clientX - _lpStartX);
+      const dy = Math.abs(t.clientY - _lpStartY);
+      if (dx > AJUSTES_MOVE_TOLERANCE || dy > AJUSTES_MOVE_TOLERANCE) {
+        cancelarLongPress();
+      }
+    }
+  }, { passive: false });
+
+  page.addEventListener('touchend', () => {
+    cancelarLongPress();
+    if (_drag) finalizarDrag();
+  });
+
+  page.addEventListener('touchcancel', () => {
+    cancelarLongPress();
+    if (_drag) finalizarDrag();
+  });
+
+  // Boton flotante "Listo"
+  const btnDone = document.getElementById('btn-edit-done');
+  if (btnDone) {
+    btnDone.addEventListener('click', () => {
+      salirModoEdicionAjustes();
+      try { toast(t('ajustes_orden_guardado') || '✓ Orden guardado'); } catch(e) {}
+    });
+  }
+}
+
+// Llamado desde onLogin tras configurar admin-section-wrap.
+// aplicarOrdenAjustes() ya existia en v219; se mantiene.
+// instalarListenersAjustes() es nuevo: se llama una vez tras login.
 
 // ═════════════════════════════════════════════════════════════════════
 // CLEAR BUTTONS (v1.31.080)
@@ -12859,6 +13001,10 @@ init();
   window.ocultarOffline = ocultarOffline;
 })();
 </script>
+
+<!-- v1.34.226: boton flotante "Listo" para salir del modo edicion de Ajustes.
+     Visible solo cuando body tiene clase 'modo-edicion-ajustes'. -->
+<button id="btn-edit-done" type="button" data-i18n="ajustes_listo">Listo</button>
 
 </body>
 </html>
