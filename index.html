@@ -523,6 +523,18 @@ body.modo-edicion-ajustes #page-ajustes .ajustes-section{
   border-radius:14px;
   padding:4px;
   margin-bottom:14px;
+  /* v1.34.239: touch-action:none es CRITICO para que pointer events funcione el drag
+     en moviles. Sin esto, iOS Safari intercepta el gesto como scroll antes de que JS
+     pueda reaccionar con e.preventDefault() en pointermove. Resultado: la seccion
+     tiembla (modo edicion OK) pero el drag no funciona porque el navegador hace scroll.
+     Lo aplicamos SOLO cuando esta en modo edicion para no afectar el scroll normal. */
+  touch-action: none;
+}
+/* Secciones FIJAS (admin, salir): NO drag → mantener touch-action por defecto
+   para que el scroll vertical sobre ellas funcione normal. */
+body.modo-edicion-ajustes #page-ajustes .ajustes-section[data-sec-id="admin"],
+body.modo-edicion-ajustes #page-ajustes .ajustes-section[data-sec-id="salir"]{
+  touch-action: auto;
 }
 body.modo-edicion-ajustes #page-ajustes .ajustes-section .ajuste-btn{
   pointer-events:none;
@@ -1505,7 +1517,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.238</div>
+    <div class="login-version">v1.34.239</div>
   </div>
 </div>
 
@@ -1738,7 +1750,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.238</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.239</div>
   </div>
 </div>
 
@@ -9671,8 +9683,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.238' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.238\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.239' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.239\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -10360,6 +10372,9 @@ function instalarListenersAjustes() {
       // En modo edicion: drag directo, salvo en secciones fijas
       if (!esFija) {
         iniciarDrag(sec, e.clientY);
+        // v1.34.239: capturar el puntero para que pointermove/up sigan llegando aunque
+        // el dedo salga del elemento. Critico para drag fiable en moviles.
+        try { page.setPointerCapture(e.pointerId); } catch(err) {}
         e.preventDefault();
       }
     } else if (header) {
@@ -10375,6 +10390,8 @@ function instalarListenersAjustes() {
           if (_lpSection) {
             entrarModoEdicionAjustes();
             iniciarDrag(_lpSection, _lpStartY);
+            // v1.34.239: captura puntero tambien al disparar drag por long-press
+            try { page.setPointerCapture(_lpPointerId); } catch(err) {}
           }
         }, AJUSTES_LONGPRESS_MS);
       }
@@ -10394,7 +10411,7 @@ function instalarListenersAjustes() {
         _lpEnHeader = false;
       }
     }
-  });
+  }, { passive: false });
 
   const finalizarPointer = () => {
     // v1.34.231: el toggle plegado debe ejecutarse en TAPS/CLICKS cortos en header,
