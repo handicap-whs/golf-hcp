@@ -398,25 +398,6 @@ nav button.active svg{stroke:var(--gold2)} /* v1.34.147: modo oscuro stroke dora
 .page{display:none;padding:16px 14px calc(70px + env(safe-area-inset-bottom,0px));max-width:700px;margin:0 auto;width:100%;min-height:100dvh;box-sizing:border-box} /* v1.34.134: min-height:100dvh + box-sizing para que cada pagina ocupe siempre el viewport */
 .page.active{display:block}
 
-/* v1.34.235: cabecera fija arriba-izquierda usada por Mis Campos e Historial.
-   Sticky bajo la safe-area-top, alineada a la izquierda, fuente DM Mono pequeña
-   en mayusculas para no robar protagonismo visual. */
-.page-fixed-header{
-  position:sticky;
-  top:0;
-  z-index:50;
-  background:var(--bg);
-  margin:0 -14px 8px -14px;
-  padding:8px 14px 10px 14px;
-  font-family:'DM Mono', monospace;
-  font-size:11px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  color:var(--text);
-  border-bottom:1px solid var(--border);
-  text-align:left;
-}
-
 /* v1.34.235: Floating Action Button (FAB) estilo WhatsApp.
    Circulo azul fijo abajo-derecha. Reemplaza los botones "+ Nueva Ronda" y
    "+ Nuevo Campo" en page-historial y page-campos respectivamente.
@@ -1570,7 +1551,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.235</div>
+    <div class="login-version">v1.34.236</div>
   </div>
 </div>
 
@@ -1819,7 +1800,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.235</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.236</div>
   </div>
 </div>
 
@@ -1965,13 +1946,13 @@ nav.nav-hidden{transform:translateY(100%)}
   <!-- v1.34.201: replica patron Mis Campos. Hint estilo swipe. -->
   <!-- v1.34.202: boton "+ Nueva" devuelto al header (la barra fixed tapaba informacion). -->
   <!-- v1.34.203: boton "+ NUEVA RONDA" mas ancho (flex:1) + Expandir/Colapsar meses movido al kebab. -->
-  <!-- v1.34.235: titulo arriba-izquierda FIJO debajo de safe-area. Boton "+ NUEVA RONDA" reemplazado por FAB redondo abajo-derecha. -->
-  <div class="page-fixed-header"><span data-i18n="historial">Historial de Rondas</span></div>
+  <!-- v1.34.235: + NUEVA RONDA reemplazado por FAB circular azul fijo abajo-derecha. -->
+  <!-- v1.34.236: revertido titulo a centrado. Kebab vuelve a su posicion anterior (derecha). -->
+  <div class="modal-title" style="margin:0 0 12px 0;text-align:center;font-size:14px;color:var(--text)" data-i18n="historial">Historial de Rondas</div>
   <!-- v1.34.201: hint estilo Mis Campos -->
   <div style="text-align:center;font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.5px;margin-bottom:8px;opacity:.75" data-i18n="rondas_swipe_hint">‹‹ ── Deslizar para opciones de la ronda ── ››</div>
-  <!-- v1.34.203: fila con + NUEVA RONDA (flex:1) y kebab (incluye Expandir/Colapsar) -->
-  <!-- v1.34.235: + NUEVA RONDA reemplazado por FAB circular azul fijo abajo-derecha -->
-  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+  <!-- v1.34.236: kebab solo (sin boton Nueva Ronda, ahora es FAB) en su posicion derecha original -->
+  <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-bottom:8px">
     <div id="hist-kebab-wrap" style="position:relative">
       <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1;padding:0;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center" aria-label="Más opciones">⋮</button>
       <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:34px;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:4px;min-width:200px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.15);font-family:'DM Mono',monospace">
@@ -2046,8 +2027,9 @@ nav.nav-hidden{transform:translateY(100%)}
   <!-- Lista de campos — se oculta cuando el formulario está abierto -->
   <div id="campos-lista-wrap">
     <!-- v1.34.197: titulo centrado grande (formato igual al de Historial), boton "+ Nuevo" eliminado de aqui y movido a barra inferior fixed estilo "+ Nueva" -->
-    <!-- v1.34.235: titulo arriba-izquierda FIJO debajo de safe-area (no scrollea). + NUEVO CAMPO sustituido por FAB redondo abajo-derecha. -->
-    <div class="page-fixed-header"><span data-i18n="mis_campos">Mis Campos</span></div>
+    <!-- v1.34.235: + NUEVO CAMPO sustituido por FAB redondo abajo-derecha. -->
+    <!-- v1.34.236: titulo revertido a centrado (igual que antes). -->
+    <div class="modal-title" style="margin:0 0 12px 0;text-align:center;font-size:14px;color:var(--text)" data-i18n="mis_campos">Mis Campos</div>
     <!-- v1.34.195: hint informando del gesto swipe en filas -->
     <div style="text-align:center;font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.5px;margin-bottom:8px;opacity:.75" data-i18n="campos_swipe_hint">‹‹ ── Deslizar para opciones del campo ── ››</div>
     <!-- v1.34.197: margin-bottom 70px para que ultimo campo no quede bajo barra inferior fixed -->
@@ -7715,11 +7697,12 @@ function activarSwipeCampos() {
       // v1.34.197: limites ajustados a tamano nuevo botones cuadrados (40px + gap)
       // v1.34.200: limites ampliados simetricamente a ±180 para permitir gesto largo en ambas direcciones
       //   que dispara accion principal directamente (izq->Editar, der->Info).
-      // v1.34.235: subido limite izquierdo a -220 (era -180) para dar mas margen de
-      //   movimiento al usuario sin disparar el "directo". El umbral de accion directa
-      //   izquierda tambien subio a -180 (era -120).
+      // v1.34.235: subido limite izquierdo a -220 (era -180) para dar mas margen.
+      //   Umbral accion directa izquierdo subio a -180 (era -120).
+      // v1.34.236: limite izquierdo -260, umbral directo -220. Mas margen aun para fijar
+      //   sin disparar accion directa accidentalmente.
       if (dx < 0) {
-        currentX = Math.max(-220, dx);
+        currentX = Math.max(-260, dx);
       } else {
         currentX = Math.min(180, dx);
       }
@@ -7734,9 +7717,9 @@ function activarSwipeCampos() {
       // v1.34.196: 3 estados con threshold de apertura
       // v1.34.199: swipe derecha LARGO (>120px) dispara Info toast directamente; corto (40-120px) solo abre boton
       // v1.34.200: swipe izquierda LARGO (<-120px) dispara Editar directamente; corto (-95 a -50) abre botones
-      // v1.34.235: umbral izquierdo directo subido a -180 (era -120). Asi es mas dificil
-      //   pasarse al "Editar directo" cuando el usuario solo quiere fijar los botones Editar/Borrar.
-      if (currentX < -180) {
+      // v1.34.235: umbral izquierdo directo subido a -180 (era -120).
+      // v1.34.236: umbral subido a -220 para que sea aun mas dificil pasarse al directo.
+      if (currentX < -220) {
         // Swipe izquierda largo: ejecutar Editar directamente
         item.classList.remove('swiped');
         item.classList.remove('swiped-right');
@@ -7829,8 +7812,9 @@ function activarSwipeRondas() {
       e.preventDefault();
       // Limites simetricos ±180 (igual que campos v1.34.200)
       // v1.34.235: limite izquierdo a -220 (mas margen para fijar sin disparar directo)
+      // v1.34.236: limite a -260, umbral directo subio de -180 a -220
       if (dx < 0) {
-        currentX = Math.max(-220, dx);
+        currentX = Math.max(-260, dx);
       } else {
         currentX = Math.min(180, dx);
       }
@@ -7849,7 +7833,8 @@ function activarSwipeRondas() {
       //   40 a 120        -> swipe derecha CORTO  -> abre boton Info
       // v1.34.235: umbral izquierdo directo subido a -180 (era -120) para que sea
       //   mas dificil pasarse al "directo" cuando se quiere fijar solo los botones.
-      if (currentX < -180) {
+      // v1.34.236: umbral subido a -220 (era -180). Aun mas margen.
+      if (currentX < -220) {
         item.classList.remove('swiped');
         item.classList.remove('swiped-right');
         const rondaId = parseInt(item.dataset.rondaId, 10);
@@ -9948,8 +9933,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.235' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.235\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.236' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.236\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -10174,8 +10159,10 @@ function goTo(id, btn) {
   closeNavMenu();
   if (id === 'guia-didactica') { setTimeout(loadGuiaDidactica, 30); }
   // v1.34.235: control visibilidad FAB Nuevo Campo (solo en page-campos con form cerrado)
-  //   y FAB Nueva Ronda (solo en page-historial).
+  //   y FAB Nueva Ronda (solo en page-rondas que es el historial).
   //   Ambos son fixed abajo-derecha. No coexisten porque son paginas distintas.
+  // v1.34.236: el ID de la pagina de historial es 'rondas' (page-rondas), no 'historial'.
+  //   Antes se comprobaba id==='historial' que nunca matcheaba y el FAB no se mostraba.
   const fabCampo = $('fab-nuevo-campo');
   if (fabCampo) {
     const formCampoAbierto = $('nuevo-campo-wrap') && $('nuevo-campo-wrap').style.display !== 'none';
@@ -10183,7 +10170,7 @@ function goTo(id, btn) {
   }
   const fabRonda = $('fab-nueva-ronda');
   if (fabRonda) {
-    fabRonda.style.display = (id === 'historial') ? 'flex' : 'none';
+    fabRonda.style.display = (id === 'rondas') ? 'flex' : 'none';
   }
   // v1.34.202: barra inferior fixed de Rondas eliminada (boton "+ Nueva" devuelto al header).
   if (id === 'sobre') {
