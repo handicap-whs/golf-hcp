@@ -39,13 +39,10 @@
 :root.light #page-inicio{background:#ffffff;border-radius:8px;padding:8px} /* v1.34.143: fondo blanco Inicio modo claro (contenedores intactos) */
 :root.light #page-stats{background:#ffffff;border-radius:8px;padding:8px} /* v1.34.143: fondo blanco Estadisticas modo claro (contenedores intactos) */
 :root.light .informe-title{color:#000000 !important} /* v1.34.168: titulo "Informe Mensual" negro solo modo claro */
-/* v1.34.170: COLORES ADICIONALES - dorado en modo oscuro, negro en modo claro, sin fondo, sin negrita */
 .fi-barras-extra-label{color:var(--gold2)}
 :root.light .fi-barras-extra-label{color:#000000}
-/* v1.34.171: g-tip-cerrar - modo oscuro original dorado, modo claro rojo suave + negro */
 .g-tip-cerrar{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.15);font-weight:600}
 :root.light .g-tip-cerrar{background:rgba(220,53,69,.08);border:1px solid rgba(220,53,69,.25);color:#000000;font-weight:400}
-/* v1.34.171: Sobre Golf HCP - fondo blanco + letras negras modo claro (contenedores intactos) */
 :root.light #page-sobre{background:#ffffff;border-radius:8px;padding:8px}
 :root.light #page-sobre,
 :root.light #page-sobre p,
@@ -55,7 +52,6 @@
 :root.light #page-sobre h2,
 :root.light #page-sobre h3,
 :root.light #page-sobre li{color:#000000 !important}
-/* v1.34.171: Info Legal - fondo blanco + letras negras modo claro */
 :root.light #page-legal{background:#ffffff;border-radius:8px;padding:8px}
 :root.light #page-legal,
 :root.light #page-legal p,
@@ -66,13 +62,11 @@
 :root.light #page-legal h3,
 :root.light #page-legal li,
 :root.light #page-legal strong{color:#000000 !important}
-/* v1.34.171: Politica de Privacidad - fondo blanco + letreros de seccion negros (contenedores intactos) */
 :root.light #page-privacidad{background:#ffffff;border-radius:8px;padding:8px}
 /* Los letreros de seccion son los span con color:var(--gold2) - se vuelven negros en modo claro */
 :root.light #page-privacidad span[style*="color:var(--gold2)"]{color:#000000 !important}
 
 /* ════════════════════════════════════════════════════════════════ */
-/* v1.34.172: NUEVO LOGIN CON FOTO DE FONDO (Pebble Beach hoyo 7)   */
 /* Independiente del modo (claro/oscuro) - foto siempre visible.    */
 /* ════════════════════════════════════════════════════════════════ */
 .auth-login-photo{
@@ -92,7 +86,6 @@
    Sin !important, .auth-screen.hidden gana correctamente al ocultarse tras login exitoso. */
 /* v1.34.177: separar background-* en propiedades individuales para evitar que el inline
    style.backgroundImage del JS rompa background-size y background-position. */
-/* v1.34.173: la foto se asigna por JS desde un set aleatorio (login-bg-1..N.jpg) */
 /* Overlay degradado para legibilidad del texto blanco */
 .login-bg-overlay{
   position:absolute;
@@ -208,7 +201,6 @@
 .login-bottom .auth-clear{color:rgba(0,0,0,.5)}
 .login-bottom .auth-eye{color:rgba(0,0,0,.5)}
 /* Enlaces "Sin cuenta?" / "Registrate" en blanco con sombra */
-/* v1.34.180: todo en blanco, mantiene subrayado para mostrar que "Registrate" es clickable */
 /* v1.34.181: regla generica .auth-link span (L340) pisaba "Sin cuenta?" con var(--text).
    Anadimos regla todos-spans-blanco con misma especificidad pero contexto .login-bottom. */
 .login-bottom .auth-link{
@@ -228,7 +220,6 @@
 }
 .login-bottom .auth-msg{margin-bottom:8px;border-radius:6px}
 /* Politica de Privacidad debajo del Continuar */
-/* v1.34.178: politica de privacidad mas pequeña y bajada 5px (mas separada del boton) */
 .login-priv-link{text-align:center;margin-top:9px}
 .login-priv-link a{
   color:#ffffff;
@@ -284,7 +275,6 @@ input::-moz-placeholder,textarea::-moz-placeholder{color:var(--gold);opacity:0.2
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--bg);color:var(--cream);font-family:'DM Mono',monospace;overflow-x:hidden}
 body{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:env(safe-area-inset-top,0px)}
-/* v1.34.151: en modo claro, overscroll bounce (tirar arriba/abajo) debe ser blanco */
 :root.light, :root.light body{background:#ffffff}
 
 /* ═════════════════════════════════════════════════════════════
@@ -305,7 +295,6 @@ body{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:env(safe-area-
   z-index: 8000;
   pointer-events: none;
 }
-/* v1.34.143: safe-area-cover blanco en modo claro (isla iPhone) */
 :root.light #safe-area-cover { background: #ffffff; }
 /* Ocultar la banda durante el splash — el splash ocupa toda la pantalla */
 body.splash-active #safe-area-cover {
@@ -313,8 +302,6 @@ body.splash-active #safe-area-cover {
 }
 
 /* ── SPLASH ── */
-/* v1.31.084: splash adaptable a modo claro/oscuro */
-/* v1.34.204: foto de fondo aleatoria (mismo set que login-bg-N.jpg) con overlay oscuro para legibilidad */
 /* v1.34.222: fondo splash negro (antes #1a2f1a verde) para coincidir con apple-splash.png
    y dar continuidad visual completa. Cuando la foto se carga, la foto cubre el fondo y se ve
    con su color natural. El splash-bg variable mantiene #1a2f1a para otras posibles referencias. */
@@ -347,12 +334,10 @@ body.splash-active #safe-area-cover {
 :root.light #splash-t{color:#1a2f1a;text-shadow:none}
 :root.light #splash-t em{color:#7a5a10}
 :root.light #splash-s{color:#1a4a1a;text-shadow:none}
-/* v1.34.204: si hay foto cargada, forzar texto blanco/cream tambien en modo claro (el overlay oscuro lo justifica) */
 :root.light #splash.foto-cargada #splash-t{color:#f5f0e8;text-shadow:0 2px 8px rgba(0,0,0,.5)}
 :root.light #splash.foto-cargada #splash-t em{color:#c9a84c}
 :root.light #splash.foto-cargada #splash-s{color:#7bc67a;text-shadow:0 1px 4px rgba(0,0,0,.5)}
 
-/* v1.31.085: Tip "cerrar app" con enfasis maximo en ambos modos */
 .g-tip-cerrar { color: #f5f0e8; }                /* modo oscuro: crema brillante */
 :root.light .g-tip-cerrar { color: #000000; }    /* modo claro: negro intenso */
 
@@ -486,7 +471,6 @@ nav button.active svg{stroke:var(--gold2)} /* v1.34.147: modo oscuro stroke dora
   -webkit-text-fill-color:#000000!important;
   border-color:rgba(0,0,0,.2)!important;
 }
-/* v1.34.120: override modo claro para .auth-field input (el cambio rgba blanco no aplica en fondo crema) */
 :root.light .auth-field input{background:#ffffff;border:1px solid rgba(0,0,0,.2);color:#000}
 :root.light .auth-field input::placeholder{color:rgba(0,0,0,.4)}
 /* ── GUÍA DIDÁCTICA ── */
@@ -675,8 +659,6 @@ input:checked+.toggle-slider{background:#2e7d32}
 :root.light input:checked+.toggle-slider{background:#1b5e20}
 input:checked+.toggle-slider:before{transform:translateX(18px)}
 
-/* v1.34.050: boton "Usar oficial" debajo de inputs HCP */
-/* v1.34.056: boton "HCP oficial" sin recuadro, solo texto clicable (v1.34.057: color tema + nowrap, v1.34.065: unificado 13px sin subrayado) */
 .hcp-oficial-btn{margin-top:4px;background:none;border:none;padding:2px 0;font-family:'DM Mono',monospace;font-size:13px;color:var(--text);cursor:pointer;text-align:left;width:auto;letter-spacing:.2px;white-space:nowrap;transition:opacity .15s}
 .hcp-oficial-btn:active{opacity:.6}
 .hcp-oficial-btn:hover{opacity:.8}
@@ -771,9 +753,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 /* ── CHCP ── */
 .chcp-box{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:6px 10px;text-align:center;margin-top:6px} /* v1.34.089: padding reducido tras quitar nombre */
 .chcp-num{font-family:'DM Mono',monospace;font-size:40px;font-weight:500;color:var(--cream);line-height:1} /* v1.34.089: 48px -> 40px */
-/* v1.34.148: ETIQUETAS HCP Jugador y H&aacute;ndicap de Campo en dorado claro; VALORES en blanco. Solo modo oscuro. */
 :root:not(.light) .hcp-label-dorado{color:var(--gold2) !important}
-/* v1.34.149: prompts Campo/Barra/HCP Jugador con borde muy sutil segun tema (gris en claro, amarillo en oscuro) */
 .prompt-inicio{border:1px solid rgba(255,255,255,0.05);border-radius:6px;padding:6px 8px}
 :root.light .prompt-inicio{border-color:rgba(0,0,0,0.06)} /* gris MUY suave modo claro */
 :root:not(.light) .prompt-inicio{border-color:rgba(232,201,106,0.10)} /* amarillo MUY suave modo oscuro */
@@ -794,14 +774,12 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .hist-actions button{background:none;border:1px solid var(--border);border-radius:4px;color:var(--muted);cursor:pointer;font-size:12px;padding:2px 6px}
 
 /* ── CAMPOS ── */
-/* v1.34.193: swipe-to-reveal actions estilo iOS Mail/Notes para .campo-item */
 .campo-item{
   position:relative;
   border-bottom:1px solid var(--border);
   overflow:hidden;
   touch-action:pan-y; /* permite scroll vertical pero captura horizontal */
 }
-/* v1.34.196: primer item con borde superior, ultimo mantiene borde inferior (encierra la lista) */
 .campo-item:first-child{border-top:1px solid var(--border)}
 
 /* v1.34.197: barra inferior con + NUEVO CAMPO. Control de visibilidad via JS desde
@@ -810,11 +788,8 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
-  /* v1.34.194: padding vertical reducido (12px->8px) para fila mas fina */
-  /* v1.34.202: ampliado padding (8px->16px vertical, 10px->14px horizontal) -- usuarios suelen tener pocos campos, mejor mas aire */
   padding:16px 14px;
   gap:8px;
-  /* v1.34.194: fondo blanco modo claro, var(--bg) modo oscuro */
   background:var(--bg);
   position:relative;
   z-index:2;
@@ -823,12 +798,9 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 }
 :root.light .campo-item-content{background:#ffffff}
 .campo-item.swiped .campo-item-content{
-  /* v1.34.197: reducido de -140px a -95px (botones cuadrados mas pequenos: 40+6+40+6=92) */
   transform:translateX(-95px);
 }
-/* v1.34.196: estado swiped-right - revela boton Info a la izquierda */
 .campo-item.swiped-right .campo-item-content{
-  /* v1.34.197: reducido de +78px a +52px (boton cuadrado mas pequeno: 40+6+6=52) */
   transform:translateX(52px);
 }
 .campo-item-actions{
@@ -842,7 +814,6 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   gap:6px;
   z-index:1;
 }
-/* v1.34.196: actions a la izquierda para gesto swipe derecha (Info) */
 .campo-item-actions-left{
   position:absolute;
   top:50%;
@@ -857,7 +828,6 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .campo-item-actions-left button{
   border:none;
   font-family:'DM Mono',monospace;
-  /* v1.34.197: solo iconos sin texto - botones cuadrados 40x40 */
   cursor:pointer;
   padding:0;
   width:40px;
@@ -876,7 +846,6 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   background:#d04545; /* rojo */
 }
 .campo-item-actions .swipe-del:active{background:#b03535}
-/* v1.34.196: boton Info verde (swipe derecha) */
 .campo-item-actions-left .swipe-info{
   background:#2a9d4a;
 }
@@ -886,7 +855,6 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .campo-name{font-size:12px;color:var(--cream);margin-bottom:3px;line-height:1.3;word-break:break-word} /* v1.34.114: 13->12px + line-height + word-break */
 .campo-meta{font-size:9px;color:var(--muted)}
 
-/* v1.34.201: estilos .ronda-item (replica patron Mis Campos para Listado de Rondas) */
 .ronda-item{
   position:relative;
   overflow:hidden;
@@ -902,7 +870,6 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
-  /* v1.34.204: padding reducido 8px 10px -> 5px 10px (filas mas compactas) */
   padding:5px 10px;
   gap:8px;
   background:var(--bg);
@@ -910,7 +877,6 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   z-index:2;
   transition:transform .25s ease;
   will-change:transform;
-  /* v1.34.208: sin cursor:pointer -- la fila ya no es clickeable (info via swipe derecha). */
 }
 :root.light .ronda-item-content{background:#ffffff}
 .ronda-item.swiped .ronda-item-content{transform:translateX(-95px)}
@@ -1032,7 +998,6 @@ nav.nav-hidden{transform:translateY(100%)}
 .ndb-overlay:empty{display:none}
 .btn-modor{display:inline-flex;align-items:center;padding:3px 8px;border-radius:3px;background:transparent;color:var(--text);border:1px solid var(--red-intenso);font-family:inherit;font-size:9px;cursor:pointer;line-height:1.2;transition:background .12s,color .12s} /* v1.34.079: color:var(--text) en vez de rgba blanquecino */
 .btn-modor.active{background:var(--red-intenso);color:#fff}
-/* v1.34.083: forzar color tema en estado normal del label (gana al heredado de boton) */
 .btn-modor-label{color:var(--text)!important;-webkit-text-fill-color:var(--text)!important}
 .btn-modor.active .btn-modor-label,.btn-modor.active{color:#fff!important;-webkit-text-fill-color:#fff!important}
 .info-tip{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;background:rgba(123,198,122,.18);color:var(--green);font-size:9px;font-weight:600;font-family:'DM Mono',monospace;cursor:pointer;margin-left:4px;vertical-align:middle;user-select:none;line-height:1}
@@ -1061,7 +1026,6 @@ nav.nav-hidden{transform:translateY(100%)}
 
 #guide-screen{position:fixed;inset:0;background:var(--bg);z-index:8400;display:flex;flex-direction:column;padding:env(safe-area-inset-top,0px) 0 0}
 #guide-screen.hidden{display:none}
-/* v1.34.168: Guia de inicio modo claro fondo blanco */
 :root.light #guide-screen{background:#ffffff}
 .guide-hero{text-align:center;padding:32px 24px 24px}
 .guide-logo{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--cream);line-height:1}
@@ -1102,7 +1066,6 @@ nav.nav-hidden{transform:translateY(100%)}
 .nav-dropdown-item svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 .nav-dropdown-item.danger{color:var(--red)}
 
-/* ── INFORME MENSUAL (v1.31.074) ── */
 
 .inf-nav-bar{display:flex;align-items:center;justify-content:space-between;gap:6px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:6px 8px;margin-bottom:12px}
 .inf-nav-btn{background:none;border:none;color:var(--gold2);font-family:'DM Mono',monospace;font-size:13px;cursor:pointer;padding:6px 10px;border-radius:6px;touch-action:manipulation;min-width:36px;-webkit-tap-highlight-color:transparent}
@@ -1134,9 +1097,7 @@ nav.nav-hidden{transform:translateY(100%)}
 
 .inf-pdf-btn{width:100%;background:rgba(0,102,204,.12);border:1px solid rgba(0,102,204,.4);border-radius:10px;color:var(--blue-adapt);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation;margin-bottom:24px;-webkit-tap-highlight-color:transparent} /* v1.34.168: dorado -> azul adaptativo */
 .inf-pdf-btn:active{background:rgba(0,102,204,.22)} /* v1.34.168: dorado -> azul adaptativo */
-/* v1.34.170: eliminado override modo claro verde que tapaba el azul */
 .inf-pdf-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
-/* v1.34.170: eliminado override modo claro verde - boton hereda el azul del .inf-pdf-btn base */
 
 @media print{
   body *{visibility:hidden !important}
@@ -1161,7 +1122,6 @@ nav.nav-hidden{transform:translateY(100%)}
 }
 .inf-print-header{display:none}
 
-/* ── ADMIN GUIA (v1.31.076) ── */
 .adm-list-item{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
 .adm-list-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0}
 .adm-list-meta{flex:1;min-width:0}
@@ -1196,7 +1156,6 @@ nav.nav-hidden{transform:translateY(100%)}
 
 .adm-form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
-/* Toggle switch iOS-style (v1.31.077: reemplaza checkbox que no se veia en iOS PWA) */
 .adm-toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:11px 14px;margin-bottom:10px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 .adm-toggle-row:active{background:rgba(255,255,255,.07)}
 .adm-toggle-label{font-size:12px;color:var(--cream);letter-spacing:.3px;flex:1}
@@ -1393,8 +1352,6 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="guide-tagline" data-i18n="g_tagline">Tu handicap siempre actualizado</div>
     </div>
     <div class="guide-sections">
-      <!-- v1.31.096: Tarjeta inicial sobre el propósito de la app -->
-      <!-- v1.34.168: estilo igual al resto de guide-card (sin override dorado) -->
       <div class="guide-card">
         <div class="guide-card-title" data-i18n="g_que_es_titulo">¿Qué es Golf HCP?</div>
         <div style="font-size:11px;color:var(--muted);line-height:1.7;padding:2px 0">
@@ -1412,12 +1369,10 @@ nav.nav-hidden{transform:translateY(100%)}
           <li><span data-i18n="g_inicio_txt_grabar_todas">📊 ¿Has jugado un torneo y tu HCP oficial ha bajado? Para que el HCP calculado de la app también lo refleje, <strong>graba el torneo en la app</strong>. La app no puede importar resultados externos: solo los diferenciales de tus rondas registradas entran en el cálculo WHS 2020.</span></li>
           <li><span data-i18n="g_inicio_txt3">Pulsa Nueva Ronda, selecciona campo, hoyos y barra, e introduce los golpes hoyo a hoyo. La app calcula diferencial y Stableford en tiempo real.</span></li>
           <li><span data-i18n="g_inicio_txt4">Puedes registrar rondas de 9 hoyos: se combinan en parejas para el cálculo del hándicap.</span></li>
-          <!-- v1.34.169: 2 puntos nuevos para Soft/Hard Cap + Torneo RFEG/EGA -->
           <li><span data-i18n="g_inicio_txt_cap">🛡️ La app aplica los topes WHS 2020 (R&A Regla 5.8) que evitan subidas bruscas del HCP: <strong>Soft Cap</strong> (reduce a la mitad el exceso sobre +3 strokes vs tu mejor HCP de los últimos 365 días) y <strong>Hard Cap</strong> (techo absoluto en +5 strokes). Puedes ver el detalle en Estadísticas → Comparativa HCP.</span></li>
           <li><span data-i18n="g_inicio_txt_rfeg">🏆 Si juegas torneos federados con la R.F.E.G., al registrar la ronda activa el toggle <strong>"Torneo R.F.E.G."</strong>. Aplica el ajuste -1.0 (Resultado Extraordinario) del protocolo oficial español. Solo tiene efecto si activas el método <strong>EGA-RBA</strong> en Estadísticas → Comparativa HCP (toggle al lado de "Método cálculo"). Las rondas marcadas aparecerán con la etiqueta <strong>RFEG</strong> en el Historial.</span></li>
         </ul>
       </div>
-      <!-- v1.31.090: Tarjeta sobre barras de salida (incluye colores extendidos campos franceses) -->
       <div class="guide-card">
         <div class="guide-card-title" data-i18n="g_barras_titulo">🎯 Barras de salida</div>
         <ul class="guide-card-body">
@@ -1514,7 +1469,6 @@ nav.nav-hidden{transform:translateY(100%)}
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- AUTH: LOGIN (v1.34.172 - foto fondo Pebble Beach + flujo en 2 estados) -->
 <div class="auth-screen hidden auth-login-photo" id="auth-login">
   <div class="login-bg-overlay"></div>
   <div class="login-content">
@@ -1551,7 +1505,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.237</div>
+    <div class="login-version">v1.34.238</div>
   </div>
 </div>
 
@@ -1600,12 +1554,10 @@ nav.nav-hidden{transform:translateY(100%)}
      en lugar de desde la mitad. Mas espacio util sin mover los botones Guardar/Cancelar. -->
 <div class="modal-overlay hidden modal-overlay-tall" id="modal-ronda">
   <div class="modal modal-tall">
-    <!-- v1.34.092: titulo centrado + 5px (coherente con Nueva Ronda) -->
     <div class="modal-title" style="margin-bottom:14px;text-align:center;font-size:14px;color:var(--text)" data-i18n="editar_ronda">Editar Ronda</div>
     <input type="hidden" id="edit-r-id">
     <input type="hidden" id="edit-r-campo-id">
     <div class="modal-err" id="edit-r-err"></div>
-    <!-- v1.34.075: Editar Ronda solo permite editar Fecha + golpes hoyo a hoyo. Todo lo demas es lectura. -->
     <!-- Inputs hidden (mantienen valores para el JS de guardado) -->
     <input type="hidden" id="edit-r-barra">
     <input type="hidden" id="edit-r-cr">
@@ -1621,11 +1573,9 @@ nav.nav-hidden{transform:translateY(100%)}
     <span id="edit-r-stbl-disp" style="display:none"></span>
 
     <!-- BLOQUE LECTURA: nombre del campo (grande) + datos del campo -->
-    <!-- v1.34.076: encabezados en azul+negrita, datos color tema; input fecha sin recuadro -->
     <div id="edit-r-nombre" style="font-size:15px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.5px;margin-bottom:8px">—</div>
     <div style="display:flex;flex-direction:column;gap:4px;margin:0 0 10px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
       <div id="edit-r-barra-disp" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">—</div>
-      <!-- v1.34.079: Par + CR + Slope: labels en azul, valores en color tema (negro/blanco) -->
       <div id="edit-r-campo-info" style="display:flex;flex-wrap:nowrap;gap:6px;align-items:center;white-space:nowrap;overflow:hidden">
         <span><span style="color:var(--text);font-weight:600">Par</span> <span id="edit-r-par-disp" style="color:var(--text)">—</span></span>
         <span style="color:var(--muted)">·</span>
@@ -1641,7 +1591,6 @@ nav.nav-hidden{transform:translateY(100%)}
       <div>
         <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hcp_campo">HCP de Campo</span>: <span id="edit-chcp-val" style="color:var(--text)">—</span>
       </div>
-      <!-- v1.34.079: HCP Index y Formato de juego en linea separada, labels en azul -->
       <div>
         <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hcp_idx">HCP Index</span>: <span id="edit-r-hcp-disp" style="color:var(--text)">—</span>
       </div>
@@ -1667,7 +1616,6 @@ nav.nav-hidden{transform:translateY(100%)}
     <div id="edit-hoyos-wrap" style="display:none">
       <!-- Separador fino antes del panel de hoyos -->
       <hr style="border:none;border-top:1px solid var(--border);opacity:.35;margin:10px 0 8px">
-      <!-- v1.34.079: Total y Stableford labels y valores en color tema -->
       <div style="font-size:11px;color:var(--text);margin-bottom:6px"><span style="color:var(--text);font-weight:600">Total</span>: <strong id="edit-total" style="color:var(--text);font-weight:700">—</strong> · <span style="color:var(--text);font-weight:600">Stableford</span>: <strong id="edit-stbl-prev" style="color:var(--text);font-weight:700">—</strong></div>
       <div style="display:flex;gap:14px;margin-top:6px;font-size:9px;color:var(--muted);flex-wrap:wrap">
         <span><span class="red-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#e05555;margin-right:4px;vertical-align:middle"></span><span data-i18n="golpe_ventaja">Golpe de ventaja (HCP campo)</span></span>
@@ -1694,22 +1642,18 @@ nav.nav-hidden{transform:translateY(100%)}
      para que el modal arranque desde arriba y ocupe toda la altura disponible. -->
 <div class="modal-overlay hidden modal-overlay-tall" id="modal-campo">
   <div class="modal modal-tall">
-    <!-- v1.34.115: titulo centrado, color tema, 14px (estilo Editar/Nueva Ronda) -->
     <div class="modal-title" style="margin-bottom:14px;text-align:center;font-size:14px;color:var(--text)">Editar Campo</div>
     <input type="hidden" id="edit-c-id">
     <div class="modal-err" id="edit-c-err"></div>
-    <!-- v1.34.115: Nombre del campo estilo Fecha. v1.34.117: centrado + sin ":". v1.34.144: alineado izquierda. -->
     <div style="display:flex;align-items:center;justify-content:flex-start;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
       <span style="color:var(--blue-adapt);font-weight:600" data-i18n="nombre_campo">Nombre</span>
       <input id="edit-c-nombre" type="text" data-clearable placeholder="CLUB DE GOLF" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;text-transform:uppercase;touch-action:manipulation;text-align:left;flex:1;min-width:0" oninput="this.value=this.value.toUpperCase()">
     </div>
     <div class="section-title" data-i18n="barras_salida">Barras de Salida</div>
     <div id="edit-barras-wrap"></div>
-    <!-- v1.34.115: Par total sin recuadro -> v1.34.116: subido a 16px y movido arriba -> v1.34.120: centrado + 18px -> v1.34.121: 2 lineas finas grises -->
     <div id="edit-c-par-total" style="display:none;padding:8px 0;font-size:18px;color:var(--text);margin:16px 0 4px 0;font-family:'DM Mono',monospace;letter-spacing:.3px;text-align:center;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
       <span style="color:var(--blue-adapt);font-weight:600">Par total</span>: <strong id="edit-c-par-num" style="color:var(--text);font-size:18px;font-weight:700">—</strong>
     </div>
-    <!-- v1.34.116: section title "Par y Hándicap por Hoyo" alineado izquierda, sin negrita, -3px (8px) -->
     <div class="section-title" data-i18n="par_indice" style="text-align:left;font-weight:normal;font-size:8px;margin:0 0 8px 0">Par y Hándicap por Hoyo</div>
     <div id="edit-hoyos-campo"></div>
     <div class="modal-actions">
@@ -1736,7 +1680,6 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
   <div class="card">
     <div class="card-title hcp-label-dorado" style="font-size:17px;text-align:center" data-i18n="hcp_campo_title">Hándicap de Campo</div>
-    <!-- v1.34.101: Campo, Barra y HCP Jugador estilo Nueva Ronda (sin recuadro, labels azul). v1.34.102: alineados a izquierda. v1.34.149: recuadro muy sutil. -->
     <div class="prompt-inicio" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
       <span style="color:var(--text);font-weight:600" data-i18n="campo">Campo</span>:
       <select id="p-campo" onchange="onCampoAntes()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;flex:1;min-width:0">
@@ -1752,7 +1695,6 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
       <div id="p-barra-aviso" style="margin-top:4px">${lang==='pt'?'⚠️ Este campo não tem barras definidas.<br><span style="color:var(--muted)">Vá a <strong style="color:var(--cream)">Campos → ✏ Editar</strong> para adicionar barras com CR e Slope.</span>':'⚠️ Este campo no tiene barras definidas.<br><span style="color:var(--muted)">Ve a <strong style="color:var(--cream)">Campos → ✏ Editar</strong> para añadir barras con su CR y Slope.</span>'}</div>
     </div>
-    <!-- v1.34.101: HCP Jugador estilo Nueva Ronda (sin recuadro, input 50px, boton Hcp F.G. al lado). v1.34.149: recuadro muy sutil. -->
     <div class="prompt-inicio" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
       <span class="hcp-label-dorado" style="color:var(--text);font-weight:600" data-i18n="hcp_jugador">HCP Jugador</span>:
       <input id="p-hcp" type="number" placeholder="18.4" step="0.1" inputmode="decimal"
@@ -1763,7 +1705,6 @@ nav.nav-hidden{transform:translateY(100%)}
     <input type="hidden" id="p-par">
     <input type="hidden" id="p-cr">
     <input type="hidden" id="p-slope">
-    <!-- v1.34.056: PAR/CR/Slope en una sola línea, sin recuadros ni etiquetas (v1.34.057: color tema + nowrap, v1.34.058: +3px tamaño, v1.34.104: margin-left 0 para alinear con HCP Jugador) -->
     <div id="p-campo-info" style="display:flex;flex-wrap:nowrap;gap:6px;align-items:center;margin:0 0 10px 0;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;white-space:nowrap;overflow:hidden">
       <span>Par <span id="p-par-disp">—</span></span>
       <span style="color:var(--muted)">·</span>
@@ -1778,8 +1719,6 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
       <div class="chcp-detail" id="chcp-detail">Selecciona un campo para calcular.</div>
     </div>
-    <!-- v1.34.060: 3 formatos en una sola línea inline, sin recuadros (v1.34.063: abreviado para iPhones pequeños) -->
-    <!-- v1.34.106: PHP markers todo en color tema (negro), separadores en azul -->
     <div id="php-wrap" style="display:none;flex-wrap:nowrap;gap:6px;align-items:center;justify-content:center;margin-top:8px;padding:0 4px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text);letter-spacing:.2px;white-space:nowrap;overflow:hidden">
       <span><span>100%:Inf:</span> <span id="php-100">—</span></span>
       <span style="color:var(--blue-adapt);font-weight:600">/</span>
@@ -1794,13 +1733,12 @@ nav.nav-hidden{transform:translateY(100%)}
     <canvas id="mini-hcp-chart" height="100" style="width:100%;display:block"></canvas>
     <div id="mini-chart-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-size:8px;color:var(--muted);font-family:'DM Mono',monospace"></div>
   </div>
-  <!-- v1.34.108: fila Gestionar Campos (izquierda) + version (derecha) -->
   <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
     <button onclick="goTo('campos',null)" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;touch-action:manipulation">
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.237</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.238</div>
   </div>
 </div>
 
@@ -1823,16 +1761,13 @@ nav.nav-hidden{transform:translateY(100%)}
 <!-- PAGE: NUEVA RONDA -->
 <div class="page" id="page-nueva">
   <div class="card">
-    <!-- v1.34.092: titulo centrado + 5px (sin boton volver, usar Cancelar/Guardar abajo) -->
     <div class="modal-title" style="margin:0 0 14px 0;text-align:center;font-size:14px;color:var(--text)" data-i18n="nueva_ronda">Nueva Ronda</div>
     <input type="hidden" id="f-par-total">
-    <!-- v1.34.086: Fecha al estilo Editar Ronda (inline sin recuadro + hint clicable) -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
       <span style="color:var(--blue-adapt);font-weight:600" data-i18n="fecha">Fecha</span>:
       <input id="f-date" type="date" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
       
     </div>
-    <!-- v1.34.093: Campo y Hoyos estilo Fecha (sin recuadro, con hint). En lineas separadas. -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
       <span style="color:var(--blue-adapt);font-weight:600" data-i18n="campo">Campo</span>:
       <select id="f-campo" onchange="onCampoChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
@@ -1857,7 +1792,6 @@ nav.nav-hidden{transform:translateY(100%)}
         </select>
       </span>
     </div>
-    <!-- v1.34.091: Barra grid -> v1.34.094: estilo Fecha -> v1.34.095: Vuelta movida a Hoyos, Barra con (Click) -->
     <div id="barra-selector" style="display:none;margin-bottom:6px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
         <span style="color:var(--blue-adapt);font-weight:600" data-i18n="barra_salida">Barra de salida</span>:
@@ -1867,7 +1801,6 @@ nav.nav-hidden{transform:translateY(100%)}
         
       </div>
     </div>
-    <!-- v1.34.085: CR/Slope sin recuadro, labels en azul (estilo Editar Ronda) -->
     <input type="hidden" id="f-cr">
     <input type="hidden" id="f-slope">
     <div id="f-cr-slope-info" style="display:none;flex-wrap:nowrap;gap:6px;align-items:center;margin:0 0 10px 8px;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;white-space:nowrap;overflow:hidden">
@@ -1877,7 +1810,6 @@ nav.nav-hidden{transform:translateY(100%)}
     </div>
     <div id="manual-fields" style="display:none">
     </div>
-    <!-- v1.34.094: HCP Jugador estilo Fecha (sin recuadro, sin hint) + Hcp F.G. al lado -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
       <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hcp_jugador">HCP Jugador</span>:
       <input id="f-hcp-idx" type="number" placeholder="18.4" step="0.1" inputmode="decimal"
@@ -1885,7 +1817,6 @@ nav.nav-hidden{transform:translateY(100%)}
         oninput="calcNuevaChcp()">
       <button type="button" id="f-hcp-idx-usar-oficial" onclick="usarHcpOficial('f-hcp-idx','calcNuevaChcp')" class="hcp-oficial-btn" style="display:none;margin-top:0;min-width:0;overflow:hidden;text-overflow:ellipsis"></button>
     </div>
-    <!-- v1.34.085: Formato (editable) + HCP Campo - v1.34.092: Formato estilo Fecha (sin recuadro) -->
     <div id="nueva-chcp-wrap" style="display:none;margin-bottom:12px">
       <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:0 0 6px 0;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
         <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
@@ -1902,7 +1833,6 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
     <div id="hoyos-wrap" style="display:none;margin-bottom:12px">
-      <!-- v1.34.085: eliminado titulo "GOLPES POR HOYO". Total/Stableford labels en azul, valores en color tema -->
       <hr style="border:none;border-top:1px solid var(--border);opacity:.35;margin:10px 0 8px">
       <div style="font-size:11px;color:var(--text);margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:.3px"><span style="color:var(--blue-adapt);font-weight:600">Total</span>: <strong id="total-golpes" style="color:var(--text);font-weight:700">—</strong> · <span style="color:var(--blue-adapt);font-weight:600">Stableford</span>: <strong id="preview-stbl" style="color:var(--text);font-weight:700">—</strong></div>
       <div style="display:flex;gap:14px;margin-top:6px;font-size:9px;color:var(--muted);flex-wrap:wrap">
@@ -1913,14 +1843,12 @@ nav.nav-hidden{transform:translateY(100%)}
         <button type="button" id="btn-modor-nueva" class="btn-modor" onclick="toggleModoR('nueva')"><span class="btn-modor-icon">R</span><span class="btn-modor-label" data-i18n="btn_marcar_r">Marcar bola retirada</span></button>
       </div>
       <div class="hoyo-section"><div class="hoyo-label" id="grid-out-label" data-i18n="salida_19">Ida 1–9</div><div class="hoyo-grid" id="grid-out"></div></div>
-      <!-- v1.34.085: subtotales IDA/VUELTA en color tema (sin negrita desde v1.34.086) -->
       <div id="grid-out-subtotal" style="display:none;text-align:right;font-size:11px;color:var(--text);margin:2px 2px 0 0;font-family:'DM Mono',monospace;letter-spacing:.3px"></div>
       <div class="hoyo-separator"></div>
       <div class="hoyo-section"><div class="hoyo-label" id="grid-in-label" data-i18n="vuelta_1018">Vuelta 10–18</div><div class="hoyo-grid" id="grid-in"></div></div>
       <div id="grid-in-subtotal" style="display:none;text-align:right;font-size:11px;color:var(--text);margin:2px 2px 0 0;font-family:'DM Mono',monospace;letter-spacing:.3px"></div>
     </div>
 
-    <!-- v1.34.167: Toggle "Torneo R.F.E.G." - aplica ajuste -1.0 (Resultado Extraordinario) en cálculo EGA. Default OFF. -->
     <div class="prompt-inicio" style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
       <div style="display:flex;flex-direction:column;gap:2px">
         <span style="color:var(--text);font-weight:600" data-i18n="torneo_rfeg_label">Torneo R.F.E.G.</span>
@@ -1942,16 +1870,11 @@ nav.nav-hidden{transform:translateY(100%)}
 
 <!-- PAGE: RONDAS -->
 <div class="page" id="page-rondas">
-  <!-- v1.34.097: titulo centrado estilo modal-title + boton Nueva izq + kebab dcha (menu Exportar/Borrar) -->
-  <!-- v1.34.201: replica patron Mis Campos. Hint estilo swipe. -->
-  <!-- v1.34.202: boton "+ Nueva" devuelto al header (la barra fixed tapaba informacion). -->
-  <!-- v1.34.203: boton "+ NUEVA RONDA" mas ancho (flex:1) + Expandir/Colapsar meses movido al kebab. -->
   <!-- v1.34.235: + NUEVA RONDA reemplazado por FAB circular azul fijo abajo-derecha. -->
   <!-- v1.34.236: revertido titulo a centrado. Kebab vuelve a su posicion anterior. -->
   <!-- v1.34.237: kebab integrado en la linea del input de busqueda. Iconos planos SVG iOS,
        coherentes con los iconos de Ajustes. Fuente y tamano del menu igualados. -->
   <div class="modal-title" style="margin:0 0 12px 0;text-align:center;font-size:14px;color:var(--text)" data-i18n="historial">Historial de Rondas</div>
-  <!-- v1.34.201: hint estilo Mis Campos -->
   <div style="text-align:center;font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.5px;margin-bottom:8px;opacity:.75" data-i18n="rondas_swipe_hint">‹‹ ── Deslizar para opciones de la ronda ── ››</div>
   <!-- v1.34.237: input + contador + kebab en una sola fila -->
   <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
@@ -1961,7 +1884,6 @@ nav.nav-hidden{transform:translateY(100%)}
     <div id="hist-kebab-wrap" style="position:relative">
       <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1;padding:0;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center" aria-label="Más opciones">⋮</button>
       <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:34px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:6px;min-width:220px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.18);font-family:'DM Mono',monospace">
-        <!-- v1.34.203: Expandir/Colapsar meses integrado en el menu kebab -->
         <!-- v1.34.237: iconos SVG line-style iOS (coherentes con Ajustes), reemplazan emojis ⇅ ⬇ 🗑 -->
         <button id="btn-toggle-all-months" type="button" onclick="hideHistKebab();toggleAllHistMonths()" style="display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.5px;padding:10px 12px;cursor:pointer;text-align:left">
           <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
@@ -1978,8 +1900,6 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
     </div>
   </div>
-  <!-- v1.34.138: eliminado el <div class="card"> envolvente -->
-  <!-- v1.34.202: margin-bottom 70px -> 12px (ya no hay barra fixed que tape el ultimo item) -->
   <div style="margin-bottom:12px">
     <div id="hist-container"><div class="empty">Cargando…</div></div>
   </div>
@@ -1988,7 +1908,6 @@ nav.nav-hidden{transform:translateY(100%)}
 <!-- PAGE: ESTADÍSTICAS -->
 <div class="page" id="page-stats">
   <div style="font-size:20px;letter-spacing:2px;text-transform:uppercase;color:var(--gold2);padding:4px 2px 16px;font-family:'DM Mono',monospace;text-align:center" data-i18n="estadisticas">Estadísticas</div>
-  <!-- v1.34.150: tabla comparativa HCP App vs HCP Oficial -->
   <div id="stats-hcp-comparison" style="display:none"></div>
   <div id="stats-filters-container"></div>
   <div id="stats-content"><div class="empty">Cargando…</div></div>
@@ -1996,7 +1915,6 @@ nav.nav-hidden{transform:translateY(100%)}
 
 <!-- PAGE: CAMPOS -->
 <div class="page" id="page-campos">
-  <!-- v1.34.197: quitado boton volver a Ajustes (ya esta el nav inferior) -->
   <!-- v1.34.148: bot&oacute;n volver cierra nuevo-campo-wrap antes de navegar (evita que al regresar aparezca el formulario en vez del listado) -->
   <!-- Formulario Nuevo Campo — aparece primero cuando est&aacute; abierto -->
   <div id="nuevo-campo-wrap" style="display:none">
@@ -2018,7 +1936,6 @@ nav.nav-hidden{transform:translateY(100%)}
       </div>
       <div id="nc-hoyos-wrap"></div>
       <div class="modal-err" id="nc-err" style="margin-top:10px"></div>
-      <!-- v1.34.180: ambos botones con mismo padding/margin para igualar altura visual -->
       <div style="display:flex;gap:10px;margin-top:12px">
         <button class="btn" id="btn-guardar-nc" style="flex:1;margin-top:0;padding:13px 16px" data-i18n="guardar_campo">Guardar Campo</button>
         <button class="btn-danger" onclick="cancelarNuevoCampo()" style="flex:1;margin-top:0;padding:13px 16px;letter-spacing:2px" data-i18n="cancelar">Cancelar</button>
@@ -2027,11 +1944,9 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
   <!-- Lista de campos — se oculta cuando el formulario está abierto -->
   <div id="campos-lista-wrap">
-    <!-- v1.34.197: titulo centrado grande (formato igual al de Historial), boton "+ Nuevo" eliminado de aqui y movido a barra inferior fixed estilo "+ Nueva" -->
     <!-- v1.34.235: + NUEVO CAMPO sustituido por FAB redondo abajo-derecha. -->
     <!-- v1.34.236: titulo revertido a centrado (igual que antes). -->
     <div class="modal-title" style="margin:0 0 12px 0;text-align:center;font-size:14px;color:var(--text)" data-i18n="mis_campos">Mis Campos</div>
-    <!-- v1.34.195: hint informando del gesto swipe en filas -->
     <div style="text-align:center;font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.5px;margin-bottom:8px;opacity:.75" data-i18n="campos_swipe_hint">‹‹ ── Deslizar para opciones del campo ── ››</div>
     <!-- v1.34.197: margin-bottom 70px para que ultimo campo no quede bajo barra inferior fixed -->
     <div id="campos-list" style="margin-bottom:70px"><div class="empty">Cargando…</div></div>
@@ -2058,7 +1973,6 @@ nav.nav-hidden{transform:translateY(100%)}
         <span class="dot-status" id="ac-filtro-dot" style="width:8px;height:8px"></span>
         <span style="font-size:10px">▼</span>
       </button>
-      <!-- v1.34.028: columna con +Nuevo arriba y Borrar debajo, ambos compactos -->
       <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
         <button id="ac-btn-nuevo" onclick="acAbrirEditorNuevo()" style="padding:4px 8px;border:1px solid var(--gold2);border-radius:5px;background:rgba(201,168,76,.06);color:var(--gold2);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.5px;cursor:pointer;text-transform:uppercase;font-weight:600;white-space:nowrap" data-i18n="ac_nuevo_campo">+ Nuevo</button>
         <button id="ac-btn-borrar" onclick="acAbrirBuscadorBorrar()" style="padding:4px 8px;border:1px solid var(--red-intenso);border-radius:5px;background:rgba(204,0,0,.06);color:var(--red-intenso);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.5px;cursor:pointer;text-transform:uppercase;font-weight:600;white-space:nowrap">🗑️ Borrar</button>
@@ -2106,7 +2020,6 @@ nav.nav-hidden{transform:translateY(100%)}
     </div>
   </div>
 
-  <!-- BORRAR: aparece al pulsar el botón 🗑️ Borrar — v1.34.029 -->
   <div id="ac-borrar-wrap" style="display:none">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
       <button onclick="acVolverDesdeBorrar()" style="background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:12px;cursor:pointer;padding:0;display:flex;align-items:center;gap:5px;height:32px">
@@ -2121,7 +2034,6 @@ nav.nav-hidden{transform:translateY(100%)}
       Solo aparecen campos <strong>desactivados</strong>. Para borrar uno activo, vuelve a la lista, ábrelo y pulsa <strong>"Desactivar"</strong> primero.
     </div>
     <div class="card">
-      <!-- v1.34.033: buscador eliminado (innecesario al haber pocos desactivados) -->
       <div class="bcp-count" id="ac-borrar-count">Cargando catálogo...</div>
       <div class="bcp-results" id="ac-borrar-results"></div>
       <div class="bcp-empty" id="ac-borrar-empty" style="display:none">
@@ -2241,7 +2153,6 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="formula-row"><span class="fk" data-i18n="fi_dbogey">Doble bogey +</span><span class="fv" data-i18n="fi_0pts">0 puntos</span></div>
     </div>
   </div>
-  <!-- v1.33.000: Bola Retirada (R) — explicación WHS de levantar bola -->
   <div class="card" style="margin-bottom:8px">
     <div class="card-title" style="margin-bottom:6px;display:flex;align-items:center;gap:8px">
       <span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--red-intenso);color:#fff;border-radius:3px;font-weight:bold;font-size:11px;font-family:'DM Mono',monospace">R</span>
@@ -2280,7 +2191,6 @@ nav.nav-hidden{transform:translateY(100%)}
         <span style="color:var(--cream);min-width:62px;font-size:10px;letter-spacing:.5px" data-i18n="roja">Roja</span>
         <span style="color:var(--cream)" data-i18n="fi_roja_desc">Damas, principiantes y niños</span>
       </div>
-      <!-- v1.31.090: divisor + 3 barras adicionales para campos franceses -->
       <div class="fi-barras-extra-label" style="margin:10px 0 6px;padding:6px 8px;font-size:9px;text-align:center;letter-spacing:.5px" data-i18n="fi_barras_extra">COLORES ADICIONALES (CAMPOS INTERNACIONALES)</div>
       <div style="display:flex;align-items:center;gap:10px;padding:2px 0;border-bottom:1px solid var(--border);font-size:11px">
         <span class="barra-dot" style="background:#8b5cf6;flex-shrink:0"></span>
@@ -2337,7 +2247,6 @@ nav.nav-hidden{transform:translateY(100%)}
   <div id="privacidad-content"></div>
 </div>
 
-<!-- PAGE: INFORME MENSUAL (v1.31.074) -->
 <div class="page" id="page-informe">
   <div id="informe-print-area">
     <!-- Cabecera solo para impresión -->
@@ -2373,7 +2282,6 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 </div>
 
-<!-- PAGE: ADMIN GUIA (v1.31.076) — solo accesible vía gesto secreto + is_admin -->
 <div class="page" id="page-admin-guia">
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
     <button onclick="goTo('ajustes',$('nav-ajustes'))" style="background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:14px;cursor:pointer;padding:0;display:flex;align-items:center;gap:5px;height:40px">
@@ -2401,7 +2309,6 @@ nav.nav-hidden{transform:translateY(100%)}
   <div id="adm-form-wrap" style="display:none"></div>
 </div>
 
-<!-- PAGE: ADMIN USO (v1.31.094) — Panel de tracking, solo ES, accesible solo si is_admin -->
 <div class="page" id="page-admin-uso">
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
     <button onclick="goTo('ajustes',$('nav-ajustes'))" style="background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:14px;cursor:pointer;padding:0;display:flex;align-items:center;gap:5px;height:40px">
@@ -2413,7 +2320,6 @@ nav.nav-hidden{transform:translateY(100%)}
   <div style="text-align:center;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;font-family:'DM Mono',monospace">Estadísticas internas de actividad</div>
   <div style="text-align:center;font-size:9px;color:var(--gold2);letter-spacing:0.5px;margin-bottom:14px;font-family:'DM Mono',monospace;font-style:italic">Admins y testers excluidos · solo usuarios reales</div>
 
-  <!-- v1.33.008: botón Refrescar para recargar datos sin salir del panel -->
   <div style="text-align:center;margin-bottom:14px">
     <button onclick="renderAdminUso()" style="background:transparent;color:var(--gold2);border:1px solid var(--gold);border-radius:4px;padding:6px 14px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer">🔄 Refrescar</button>
   </div>
@@ -2486,7 +2392,6 @@ nav.nav-hidden{transform:translateY(100%)}
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- v1.31.099 — 10 SECCIONES NUEVAS                             -->
     <!-- Fase 1: engagement (5) + Fase 2: golf-específico (5)        -->
     <!-- ═══════════════════════════════════════════════════════════ -->
 
@@ -2612,7 +2517,6 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 </div>
 
-<!-- PAGE: ADMIN GESTION (v1.34.027) — solo accesible si is_admin -->
 <!-- Gestión interna admin: permisos (admin), exclusión stats, borrados -->
 <div class="page" id="page-admin-gestion">
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
@@ -2675,7 +2579,6 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
   </div>
 
-  <!-- SECTION: Informes (v1.31.074) -->
   <div class="ajustes-section ajustes-section-collapsible" data-sec-id="informes">
   <div class="ajustes-section-header"><span data-i18n="sec_informes">Informes</span><svg class="chevron-collapse" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
   <div class="ajustes-section-body" style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
@@ -2721,7 +2624,6 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg class="ajuste-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
     </button>
     <div class="ajuste-sep"></div>
-    <!-- v1.34.049: HCP Oficial Federación -->
     <button class="ajuste-btn" onclick="goTo('hcp-oficial',null)">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="6"/><path d="M15.5 13l1.5 9-5-3-5 3 1.5-9"/></svg></div>
       <div class="ajuste-text"><div data-i18n="menu_hcp_oficial">HCP Oficial</div><div class="ajuste-sub" data-i18n="sub_hcp_oficial">Tu hándicap de la federación</div></div>
@@ -2829,7 +2731,6 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
   </div>
 
-  <!-- SECTION: Admin (v1.31.094) — visible solo si state.user.is_admin -->
   <!-- v1.34.218: MOVIDA al final, justo antes del card Salir. v1.34.219: clase ajustes-section anadida. -->
   <div id="admin-section-wrap" class="ajustes-section ajustes-section-collapsible" data-sec-id="admin" style="display:none">
     <div class="ajustes-section-header"><span>🔧 Administración</span><svg class="chevron-collapse" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
@@ -2846,7 +2747,6 @@ nav.nav-hidden{transform:translateY(100%)}
         <svg class="ajuste-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
       <div class="ajuste-sep"></div>
-      <!-- v1.34.027: nuevo acceso a Gestión Interna Admin (permisos, exclusión stats, borrados) -->
       <button class="ajuste-btn" onclick="goTo('admin-gestion',null)">
         <div class="ajuste-icon" style="color:var(--gold2)"><svg viewBox="0 0 24 24" style="stroke:currentColor;fill:none;stroke-width:2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
         <div class="ajuste-text"><div style="color:var(--gold2)">GESTIÓN ADMIN</div><div class="ajuste-sub">Permisos, exclusión stats, borrados</div></div>
@@ -2902,7 +2802,6 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 </div>
 
-<!-- PAGE: HCP OFICIAL FEDERACIÓN (v1.34.049, refactor v1.34.051) -->
 <div class="page" id="page-hcp-oficial">
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
     <button onclick="goTo('ajustes',$('nav-ajustes'))" style="background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:14px;cursor:pointer;padding:0;display:flex;align-items:center;gap:5px;height:40px">
@@ -3008,7 +2907,6 @@ nav.nav-hidden{transform:translateY(100%)}
       <span data-i18n="volver_btn">VOLVER</span>
     </button>
   </div>
-  <!-- v1.34.180: quitado icono central, GOLF HCP + version dentro de card como las demas -->
   <div class="card" style="margin-bottom:8px;text-align:center">
     <div style="font-size:22px;letter-spacing:3px;color:var(--gold2);font-family:'DM Mono',monospace">GOLF HCP</div>
     <div id="sobre-version" style="font-size:10px;color:var(--muted);margin-top:6px;letter-spacing:1px"></div>
@@ -3016,7 +2914,6 @@ nav.nav-hidden{transform:translateY(100%)}
   <div class="card" style="margin-bottom:8px">
     <div style="font-size:11px;color:var(--muted);line-height:1.9" data-i18n="sobre_desc">Calculadora de Hándicap WHS 2020 para uso personal. Diseñada para jugadores de golf que quieren conocer su Hándicap Index de forma rápida y sencilla.</div>
   </div>
-  <!-- v1.34.191: card "Propósito de la app" con mismo estilo que las demás (sin borde dorado destacado) -->
   <div class="card" style="margin-bottom:8px">
     <div style="font-size:9px;letter-spacing:1px;color:var(--gold2);margin-bottom:10px;text-transform:uppercase" data-i18n="sobre_proposito_titulo">Propósito de la app</div>
     <div style="font-size:11px;color:var(--muted);line-height:1.7">
@@ -3440,7 +3337,6 @@ function setLang(l) {
 // ── CONSTANTES ──────────────────────────────────────────────────────────
 const SB_URL = 'https://buuphupprlvtngkcyyur.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1dXBodXBwcmx2dG5na2N5eXVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5MDA3NTcsImV4cCI6MjA5MDQ3Njc1N30.sHi-UnaStyz1G-S1wSYrZYZA0TReClvlZvYdAbuejaI';
-// v1.34.139: corregida tabla WHS segun regulacion oficial 2020. Errores en WHS[3] (4 rondas) y WHS[4] (5 rondas).
 const WHS = [[1,-2],[1,-2],[1,-2],[1,-1],[1,0],[2,-1],[2,0],[2,0],[3,0],[3,0],[3,0],[4,0],[4,0],[4,0],[5,0],[5,0],[6,0],[6,0],[7,0],[8,0]];
 const BARRAS = ['blanca','amarilla','azul','roja'];
 const BARRAS_FR = ['blanca','amarilla','azul','roja','violeta','naranja','negra'];
@@ -3521,7 +3417,6 @@ let state = {
   loading: false    // flag anti-doble-llamada
 };
 
-// ── STATS FILTER STATE (v1.31.038) ───────────────────────────────────────
 // Filtro APLICADO (afecta a las stats visibles).
 // No persiste tras recarga (por diseno: arranque siempre limpio).
 const statsFilter = {
@@ -4447,7 +4342,6 @@ async function acAbrirEditor(id) {
 }
 
 function acVolverALista(force) {
-  // v1.34.034: parametro force omite el confirm de cambios sin guardar.
   // Lo usan acGuardarCampo (tras INSERT/UPDATE ok) y acToggleActivo.
   // En modo CREAR (_acCampoEditando = null) preguntar si hay datos rellenos.
   // En modo EDITAR no preguntar: los datos ya están en BD.
@@ -4465,7 +4359,6 @@ function acVolverALista(force) {
   $('ac-borrar-wrap').style.display = 'none';  // v1.34.029
   _acCampoEditando = null;
 
-  // v1.34.035: resetear buscador de la lista (texto, var y boton limpiar)
   // y re-renderizar para que la vista no quede filtrada por una busqueda vieja.
   const input = $('ac-search-input');
   if (input) input.value = '';
@@ -4631,7 +4524,6 @@ async function acGuardarCampo() {
   const payload = _acRecogerPayload();
   if (!payload) return; // Error mostrado en _acRecogerPayload
 
-  // v1.34.047: validaciones estrictas SIEMPRE (crear Y editar)
   // - par y indices de los hoyos completos
   // - indices 1..nHoyos sin repetir
   // - al menos 1 barra con CR + Slope
@@ -4642,7 +4534,6 @@ async function acGuardarCampo() {
     const idx = payload.indice_hoyos_jsonb;
     const err = $('ac-err');
     const showErr = msg => { err.textContent = msg; err.classList.add('show'); return false; };
-    // v1.34.048: ayudante para reemplazar {n} por el numero de hoyos real
     const _tn = (key, fallback) => {
       const txt = (typeof t==='function' && t(key)) || fallback;
       return txt.replace(/\{n\}/g, nh);
@@ -4699,7 +4590,6 @@ async function acGuardarCampo() {
       toast((typeof t==='function' && t('t_campo_actualizado')) || '✓ Campo actualizado');
     }
     // Volver a la lista (refresca al re-abrir)
-    // v1.34.034: force=true para evitar confirm de "cambios sin guardar"
     // tras un INSERT/UPDATE exitoso (el formulario aún tiene datos).
     acVolverALista(true);
     // Recargar lista en background
@@ -4760,11 +4650,9 @@ async function acAbrirEditorNuevo() {
 }
 window.acAbrirEditorNuevo = acAbrirEditorNuevo;
 
-// ─── v1.34.029-033: BORRADO FISICO DE CAMPO PUBLICO ───────────────────
 // El admin abre la vista, ve la lista de campos DESACTIVADOS y selecciona
 // uno. confirm() nativo. Llama a admin_delete_campo_publico_by_id.
 // Distinto del Desactivar (UPDATE activo=false, reversible).
-// v1.34.033: buscador eliminado (los campos desactivados suelen ser pocos).
 
 async function acAbrirBuscadorBorrar() {
   if (!state.user?.is_admin) { toast('Sin permisos', true); return; }
@@ -4780,7 +4668,6 @@ async function acAbrirBuscadorBorrar() {
   $('ac-borrar-count').textContent = t('bcp_cargando')||'Cargando catálogo...';
   $('ac-borrar-results').innerHTML = '';
 
-  // v1.34.033: cargar y filtrar solo desactivados, sin buscador
   try {
     if (typeof limpiarCacheCamposPublicos === 'function') limpiarCacheCamposPublicos();
     const todos = await listarTodosCamposPublicosAdmin();
@@ -4804,7 +4691,6 @@ function acVolverDesdeBorrar() {
 }
 window.acVolverDesdeBorrar = acVolverDesdeBorrar;
 
-// v1.34.033: eliminadas _acBorrarOnInput, acBorrarLimpiarBusqueda
 // y las variables _acBorrarUltimaQuery / _acBorrarDebounceTimer
 // (el buscador del wrapper de borrar fue retirado).
 
@@ -4825,7 +4711,6 @@ function _acRenderResultadosBorrar(items, q) {
   countEl.textContent = items.length + (items.length === 1 ? ' campo' : ' campos');
 
   // Render simple: cada item es un botón clickable con nombre + id
-  // v1.34.031: el listado ya viene filtrado a solo desactivados, no hace falta el sufijo
   const safe = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   let html = '';
   items.forEach(item => {
@@ -4856,7 +4741,6 @@ async function acConfirmarBorrarCampoPorId(id, nombre) {
     if (error) throw error;
     if (data && data.ok) {
       toast('✓ Campo "' + (data.deleted_nombre || nombre) + '" (id=' + data.deleted_id + ') borrado', false, 5000);
-      // Refrescar la lista (sin salir) — v1.34.033: ya no hay buscador
       try {
         if (typeof limpiarCacheCamposPublicos === 'function') limpiarCacheCamposPublicos();
         const todos = await listarTodosCamposPublicosAdmin();
@@ -4912,7 +4796,6 @@ async function acToggleActivo() {
     toast(okMsg);
 
     // Volver a la lista y refrescar
-    // v1.34.034: force=true por defensa (_acCampoEditando esta poblado aqui,
     // asi que no se dispararia el confirm de todos modos, pero por simetria).
     acVolverALista(true);
     const todos = await listarTodosCamposPublicosAdmin();
@@ -4959,14 +4842,12 @@ window.acGuardarCampo = acGuardarCampo;
 const $ = id => document.getElementById(id);
 function setVal(id, v) { const el = $(id); if (el) el.value = (v == null ? '' : v); }
 let _toastTimer = null;
-// v1.34.194: mini-toast con info CR/Slope de cada barra (swipe derecha en Mis Campos)
 function mostrarInfoCampoToast(campoId) {
   const campo = state.campos.find(c => c.id === campoId);
   if (!campo) return;
 
   const BARRA_LBL = lang==='fr' ? BARRA_LABELS_FR : lang==='pt' ? BARRA_LABELS_PT : BARRA_LABELS_PL;
   const lbl = (es, pt, fr) => lang==='fr' ? (fr||es) : (lang==='pt' ? pt : es);
-  // v1.34.211: mismo esquema que mostrarInfoRondaToast (azul oscuro sobre azul muy claro)
   const TXT_MAIN = '#0d1f3a';
   const TXT_LABEL = '#1a3460';
   const TXT_HINT = 'rgba(13,31,58,0.45)';
@@ -4976,19 +4857,16 @@ function mostrarInfoCampoToast(campoId) {
     const lblBarra = (BARRA_LBL[b.color] || b.color);
     const cr = (b.cr != null) ? b.cr : '—';
     const slope = (b.slope != null) ? b.slope : '—';
-    // v1.34.211: filas +2px (10->12), todas las letras en azul oscuro
     return `<div style="margin:5px 0;font-family:'DM Mono',monospace;font-size:12px;display:flex;align-items:center;gap:8px;color:${TXT_LABEL}"><span style="display:inline-flex;align-items:center;min-width:110px;white-space:nowrap">${colorDot}${lblBarra}</span><span style="color:${TXT_MAIN};min-width:65px;white-space:nowrap;font-weight:600">CR ${cr}</span><span style="color:${TXT_MAIN};white-space:nowrap;font-weight:600">Slope ${slope}</span></div>`;
   }).join('');
 
   const header = `<div style="font-size:13px;font-weight:700;letter-spacing:1px;color:${TXT_MAIN};margin-bottom:10px;border-bottom:1px solid ${SEP_LINE};padding-bottom:6px;white-space:nowrap">${limpiarNombreCampo(campo.nombre || '')} · Par ${campo.par_total || '—'}</div>`;
   const cuerpo = lineasBarras || `<div style="font-size:12px;color:${TXT_LABEL};margin:5px 0">${t('sin_barras')}</div>`;
-  // v1.34.211: hint final "tocar para salir"
   const hintTxt = lbl('tocar para salir', 'tocar para sair', 'toucher pour sortir');
   const hint = `<div style="font-size:9px;color:${TXT_HINT};font-family:'DM Mono',monospace;letter-spacing:.5px;text-align:center;margin-top:10px;padding-top:6px;border-top:1px solid ${SEP_LINE};font-style:italic">${hintTxt}</div>`;
 
   const el = $('toast');
   el.innerHTML = header + cuerpo + hint;
-  // v1.34.211: mismo estilo que mostrarInfoRondaToast (centrado vertical, sin timeout, cierra al tocar)
   el.style.padding = '18px 22px';
   el.style.maxWidth = '92vw';
   el.style.width = 'auto';
@@ -5033,8 +4911,6 @@ function mostrarInfoCampoToast(campoId) {
 
 function toast(msg, err=false, ms=3000) {
   const el = $('toast');
-  // v1.34.194: resetear estilos custom que puede haber dejado mostrarInfoCampoToast
-  // v1.34.208: ampliado para limpiar tambien los estilos de mostrarInfoRondaToast (centrado, sombra, borde grueso)
   el.style.padding = '';
   el.style.maxWidth = '';
   el.style.width = '';
@@ -5083,10 +4959,8 @@ function fmtSlope(el, nextId) {
 
 function golfShot(el, nextId) {
   const v = parseInt(el.value);
-  // v1.32.002: avance solo con 2 dígitos o dígito único 2-9. El "1" no avanza
   // automáticamente para permitir teclear 10-18. Hoyo-en-uno (golpe=1) requiere
   // toque manual al siguiente hoyo (caso poco frecuente).
-  // v1.33.000: la "R" (bola retirada) avanza inmediatamente al hoyo siguiente.
   if (el.value === 'R' || el.value.length >= 2 || (el.value.length === 1 && v >= 2 && v <= 9)) {
     if (nextId) {
       const next = $(nextId);
@@ -5150,7 +5024,6 @@ function calcDiff(gross, cr, slope, numHoyos, crIs9H) {
 
 
 
-// v1.34.163: metodo de calculo EGA-RBA opcional (federacion espa&ntilde;ola RFEG / EGA / pa&iacute;ses asociados).
 // El metodo se guarda en localStorage como 'metodo_calculo' = 'whs' (default) o 'ega'.
 function getMetodoCalculo() {
   try { return localStorage.getItem('metodo_calculo') || 'whs'; }
@@ -5162,8 +5035,6 @@ function setMetodoCalculo(m) {
 // Calcula diferencial seg&uacute;n f&oacute;rmula EGA-RBA: requiere stableford, hcp_idx, par, cr, slope guardados en la ronda.
 // 18H: RBA = Par + CourseHandicap + 36 - Stableford; Nivel = (RBA - CR) * 113 / Slope
 // 9H:  CourseHcp9 = 0.5 * hcp_idx * slope/113 + (CR - Par); RBA = Par + CourseHcp9 + 18 - Stableford; Nivel = (RBA - CR) * 113 / Slope
-// v1.34.165: añadida lógica específica para 9H (era 18H-only, daba diferenciales disparatados).
-// v1.34.167: si round.torneo_rfeg = true, aplicar ajuste -1.0 (Resultado Extraordinario RFEG).
 function calcDiffEGA(round) {
   if (!round) return null;
   const stbl = round.stableford;
@@ -5179,13 +5050,10 @@ function calcDiffEGA(round) {
   const courseHcp = Math.round(factor * hcpIdx * slope / 113 + (cr - par));
   const rba = par + courseHcp + stblBase - stbl;
   let nivel = (rba - cr) * 113 / slope;
-  // v1.34.167: ajuste -1.0 por Resultado Extraordinario RFEG (solo si la ronda esta marcada)
   if (round.torneo_rfeg) nivel -= 1.0;
   return Math.round(nivel * 10) / 10;
 }
 
-// v1.34.163: toggle del metodo de calculo + actualizacion UI
-// v1.34.167: el toggle ahora vive en Estadisticas -> Comparativa HCP (no en Ajustes)
 function toggleMetodoCalculo() {
   const cb = $('toggle-metodo-ega');
   const nuevo = cb && cb.checked ? 'ega' : 'whs';
@@ -5197,7 +5065,6 @@ function toggleMetodoCalculo() {
 }
 
 function combineNineHoleRounds(rounds) {
-  // v1.34.163: si metodo de calculo = 'ega', recalcular cada diff con f&oacute;rmula RBA. Si falta stableford o hcp_idx, fallback al diff guardado (WHS gross-based).
   const metodo = getMetodoCalculo();
   const procesarDiff = (r) => {
     if (metodo === 'ega') {
@@ -5243,13 +5110,11 @@ function combineNineHoleRounds(rounds) {
   return { combined, pending9Ids: pending9.map(r => r.id) };
 }
 
-// v1.34.158: WHS 2020 Soft Cap + Hard Cap (R&A Rule 5.8) implementado.
 // getHCPRaw = calculo base sin caps (lo que era getHCP antes).
 // calcularLowHI = HCP minimo en los ultimos 365 dias (iterando todas las rondas en orden cronologico).
 // getHCP = aplica Soft Cap (>3 strokes vs Low HI: excedente al 50%) + Hard Cap (+5 strokes max vs Low HI).
 function getHCPRaw(rounds) {
   const { combined } = combineNineHoleRounds(rounds);
-  // v1.34.156: ordenar combined por fecha de juego DESC y tomar las 20 mas recientes (WHS 2020 R&A: "lowest 8 of the most recent 20 Score Differentials").
   const sortedByDate = [...combined].sort((a, b) => (b.date || b.fecha || '').localeCompare(a.date || a.fecha || ''));
   const recent20 = sortedByDate.slice(0, 20);
   const n = recent20.length;
@@ -5257,12 +5122,9 @@ function getHCPRaw(rounds) {
   const sorted = recent20.map(r => r.diff).sort((a, b) => a - b);
   const [nb, adj] = WHS[Math.min(n, 20) - 1];
   const avg = sorted.slice(0, nb).reduce((s, v) => s + v, 0) / nb;
-  // v1.34.141: SIN multiplicador 0.95 (NO existe en WHS 2020 oficial R&A, regla 5.2b).
   return { hcp: Math.round(Math.min(avg + adj, 54) * 10) / 10, numBest: nb };
 }
 
-// v1.34.158: Low Handicap Index (HCP minimo en los ultimos 365 dias). Itera todas las rondas en orden cronologico y guarda el HCP minimo registrado dentro de la ventana.
-// v1.34.159: solo cuenta puntos con HCP "Established" (>=20 diferenciales) segun WHS 2020 R&A Rule 5.7. Sin esto, HCPs provisionales artificialmente bajos de las primeras rondas falseaban el Low HI.
 function calcularLowHI(rounds) {
   if (!rounds || rounds.length < 20) return null; // Sin Low HI hasta tener 20 rondas
   // Ordenar por fecha de juego ASC
@@ -5340,7 +5202,6 @@ function calcNDBForHole(hoyo, playingHCP) {
   return (hoyo.par || 4) + 2 + ex1 + ex2;
 }
 
-// v1.33.006: Toast dedicado para el modo Bola Retirada — colores rojos translúcidos
 // y posición centrada en zona intermedia de la pantalla (no toca el toast() global).
 let _toastRTimer = null;
 function showToastR(msg) {
@@ -5360,7 +5221,6 @@ function showToastR(msg) {
   _toastRTimer = setTimeout(() => el.classList.remove('show'), 3000);
 }
 
-// v1.33.004: Modo "Marcar Bola Retirada" — botón que pone los inputs de hoyos
 // en readonly y, al tocar uno, lo marca/desmarca como R y sale del modo.
 // Resuelve el problema de iOS donde el teclado numérico no permite teclear letras.
 let modoR_nueva = false;
@@ -5383,13 +5243,11 @@ function applyModoRUI(scope, active) {
     const lbl = btn.querySelector('.btn-modor-label');
     if (lbl) lbl.textContent = active ? t('leyenda_retirada') : t('btn_marcar_r');
   }
-  // v1.33.006: aviso flotante rojo dedicado en zona intermedia de la pantalla
   if (active) showToastR(t('r_banner'));
 }
 function checkModoRClick(input, scope) {
   const isActive = scope === 'nueva' ? modoR_nueva : modoR_edit;
   if (!isActive) return; // En modo normal: comportamiento original (teclado)
-  // v1.34.087: Android Chrome rechaza la R en inputs con inputmode=numeric si está el teclado abierto.
   // Solución: blur primero (cierra teclado), luego asignar value, luego disparar input event.
   input.blur();
   // Toggle "R" en este hoyo
@@ -5446,7 +5304,6 @@ function calcStableford(hcpIndex, campo, shots, crOverride, slopeOverride, vuelt
   const cr18H  = crOverride && !is9 ? crOverride : (campo.barras?.[0]?.cr || crOverride);
   const sl18H  = slopeOverride && !is9 ? slopeOverride : (campo.barras?.[0]?.slope || slopeOverride);
   const courseHCPraw = Math.round(hcpIndex * ((is9 ? sl18H : useSlope) / 113) + ((is9 ? cr18H : useCR) - parRef));
-  // v1.31.088: aplicar formato de juego (100/95/85%) al playing HCP usado para repartir golpes
   // Esto afecta a strokes rojos por hoyo y al total Stableford. NO afecta al diferencial WHS oficial.
   const fmt = (juegoFmt != null && !isNaN(juegoFmt)) ? juegoFmt : 100;
   const courseHCP = Math.round(courseHCPraw * fmt / 100);
@@ -5472,10 +5329,8 @@ function calcStableford(hcpIndex, campo, shots, crOverride, slopeOverride, vuelt
 }
 
 // ── AUTH ──────────────────────────────────────────────────────────────────
-// v1.34.173: rotacion aleatoria de foto de fondo del login sin repetir hasta agotar el set
 // Set actual de fotos disponibles: login-bg-1.jpg ... login-bg-N.jpg (todas en raiz repo).
 // Para anadir mas fotos: subir el archivo + incrementar LOGIN_BG_TOTAL aqui.
-// v1.34.204: la foto se elige UNA sola vez por arranque y se reutiliza en splash y login (continuidad visual).
 const LOGIN_BG_TOTAL = 10; // Numero total de fotos en el set (login-bg-1.jpg..login-bg-10.jpg)
 let _fotoArranqueIdx = null; // cache de la foto elegida para este arranque (splash y login comparten)
 function elegirFotoLoginAleatoria() {
@@ -5511,7 +5366,6 @@ function obtenerFotoArranque() {
   _fotoArranqueIdx = elegirFotoLoginAleatoria();
   return _fotoArranqueIdx;
 }
-// v1.34.204: aplica la foto al splash con fade-in (no bloquea: si tarda, el splash se ve con color solido y luego aparece la foto)
 function aplicarFotoSplash() {
   const splash = document.getElementById('splash');
   if (!splash) return;
@@ -5539,9 +5393,7 @@ function aplicarFotoSplash() {
 function aplicarFotoLogin() {
   const el = $('auth-login');
   if (!el) return;
-  // v1.34.204: usa la misma foto que el splash (continuidad visual)
   const idx = obtenerFotoArranque();
-  // v1.34.177: cache buster por version para forzar recarga tras deploy y evitar
   // que el Service Worker sirva fotos antiguas. El parametro cambia con cada release.
   const cb = 'v200';
   const url = `login-bg-${idx}.jpg?${cb}`;
@@ -5568,9 +5420,7 @@ function aplicarFotoLogin() {
   probe.src = url;
 }
 
-// v1.34.179: ocultar splash en cuanto haya algo que mostrar (login o app),
 // en vez de timeout fijo 600ms que causaba parpadeo. Idempotente: se puede llamar varias veces.
-// v1.34.211: tiempo MINIMO de visibilidad del splash (era 1800ms, subido a 2300ms para
 // que el usuario alcance a ver la foto).
 // v1.34.224: bajado a 1500ms — el splash se sentia un poco lento entrar a la foto.
 // Si la conexion es muy rapida y la app esta lista antes, se difiere la ocultacion hasta
@@ -5618,20 +5468,16 @@ function showAuth(screen) {
   document.querySelectorAll('.auth-msg').forEach(el => {
     el.classList.remove('show'); el.textContent = '';
   });
-  // v1.34.172: al volver a login, resetear al estado inicial (boton Continuar visible, campos ocultos)
   if (screen === 'login') {
     const initial = $('login-state-initial');
     const fields  = $('login-state-fields');
     if (initial) initial.classList.remove('hidden');
     if (fields)  fields.classList.add('hidden');
-    // v1.34.173: aplicar foto aleatoria del set
     try { aplicarFotoLogin(); } catch(e) {}
-    // v1.34.179: ocultar splash en cuanto el login este listo (sustituye al setTimeout fijo)
     try { ocultarSplash(); } catch(e) {}
   }
 }
 
-// v1.34.172: alterna del estado inicial (boton Continuar + privacidad) al estado de campos email/password
 function loginShowFields() {
   const initial = $('login-state-initial');
   const fields  = $('login-state-fields');
@@ -5651,7 +5497,6 @@ function authMsg(id, text, type) {
 }
 
 // ═════════════════════════════════════════════════════════════════════
-// SESSION TRACKING — Estadisticas de uso (v1.31.036)
 // Registra eventos en tabla 'sesiones' de Supabase para analitica.
 // Tipos: login (credenciales), visita (sesion guardada o vuelta del bg),
 //        salida (boton Salir), heartbeat (cada 5 min app activa)
@@ -5809,14 +5654,12 @@ function doLogout() {
   logSession('salida');
   stopHeartbeat();
   state.user = null; state.rounds = []; state.campos = [];
-  // v1.31.094: ocultar sección admin al salir
   const adminWrap = $('admin-section-wrap');
   if (adminWrap) adminWrap.style.display = 'none';
   renderAll(); renderCampos(); renderSelectorCampos();
   $('player-bar').classList.add('hidden');
   $('main-nav').style.display = 'none';
   limpiarInicio();
-  // v1.31.079: vaciar campos del login al salir para evitar autofill
   // residual de iOS Safari que provoca fondos amarillos ilegibles
   ['login-email','login-pass','reg-nombre','reg-email','reg-pass','reg-pass2','reset-email'].forEach(id => {
     const el = $(id);
@@ -5865,14 +5708,12 @@ async function onLogin(user) {
       if ($('p-name'))  $('p-name').value = data.nombre;
     }
     state.user.is_admin = !!data?.is_admin;
-    // v1.34.049: HCP oficial federación
     state.user.hcp_oficial = data?.hcp_oficial != null ? Number(data.hcp_oficial) : null;
     state.user.hcp_oficial_fecha = data?.hcp_oficial_fecha || null;
     state.user.hcp_oficial_activo = !!data?.hcp_oficial_activo;
     try { refrescarBtnsHcpOficial(); } catch(e) {}
   } catch(e) { state.user.is_admin = false; }
 
-  // v1.31.094: mostrar sección admin en Ajustes solo si es admin
   const adminWrap = $('admin-section-wrap');
   if (adminWrap) adminWrap.style.display = state.user.is_admin ? 'block' : 'none';
 
@@ -5929,7 +5770,6 @@ async function loadData() {
       return null;
     })(),
     bola_retirada: (() => {
-      // v1.33.000: array paralelo a shots con true en hoyos donde se levantó la bola.
       if (!r.bola_retirada) return null;
       if (Array.isArray(r.bola_retirada)) return r.bola_retirada;
       if (typeof r.bola_retirada === 'string') { try { return JSON.parse(r.bola_retirada); } catch(e) { return null; } }
@@ -5955,7 +5795,6 @@ async function loadData() {
       }))
   }));
 
-  // v1.34.164: rellenar 'par' en state.rounds desde state.campos (necesario para EGA-RBA).
   // Las rondas guardadas en BD no tienen el par; lo derivamos del campo asociado.
   // Para rondas 9H usa el par de la vuelta correspondiente (par_out / par_in).
   state.rounds = state.rounds.map(r => {
@@ -6026,13 +5865,6 @@ function renderMiniChart() {
 
   wrap.style.display = 'block';
 
-  // v1.34.135: linea grafico en azul (era verde en claro, dorado en oscuro). Adapta tono al tema.
-  // v1.34.147: modo oscuro vuelve a dorado (var(--gold2) y similares). Modo claro mantiene azul.
-  // v1.34.153: modo claro azul -> amarillo intenso (#f9a825 / #ffb300).
-  // v1.34.161: modo claro amarillo -> rojo intenso (#c62828 / #e53935).
-  // v1.34.180: modo claro rojo -> amarillo-dorado muy suave (#d4b860 / #e8d97a). Modo oscuro intacto.
-  // v1.34.198: modo claro amarillo -> NEGRO sin negrita (lineWidth normal). Modo oscuro intacto.
-  // v1.34.205: modo claro NEGRO 100% -> gris medio oscuro #5a5a5a (intensidad reducida ~65%, mas suave a la vista).
   const isLight = document.documentElement.classList.contains('light');
   const C = isLight ? {
     lineFrom:    '#5a5a5a',  // gris medio oscuro (antes #000000 negro)
@@ -6175,7 +6007,6 @@ function renderMiniChart() {
 
 
 // ═════════════════════════════════════════════════════════════════════
-// STATS FILTERS (v1.31.038 — diseño compacto con Aplicar)
 // Filtro APLICADO (statsFilter): afecta a las stats visibles.
 // Filtro PENDIENTE (statsFilterPending): lo que se edita en el panel.
 // Pulsar "Aplicar" copia pending -> applied y colapsa el panel.
@@ -6470,8 +6301,6 @@ function renderStatsFilters() {
   cont.innerHTML = html;
 }
 
-// v1.34.150: tabla comparativa HCP App (calculado WHS 2020) vs HCP Oficial (federacion)
-// v1.34.206: estado de expansion del bloque Comparativa HCP. Por defecto PLEGADO.
 // No persiste entre sesiones: cada entrada a Estadisticas empieza plegado.
 let _hcpCompExpanded = false;
 function toggleHcpComparison() {
@@ -6515,9 +6344,6 @@ function renderHcpComparison() {
   }
 
   el.style.display = 'block';
-  // v1.34.152: sin .card. Fondo blanco modo claro / verde oscuro modo oscuro. Borde muy fino segun tema (gris/amarillo).
-  // v1.34.158: ampliada con Low HI + HCP sin cap + cap aplicado (WHS 2020 R&A Rule 5.8).
-  // v1.34.206: bloque plegable. Header siempre visible con resumen (HCP App, Oficial, Diferencia).
   //            Tabla detallada (WHS Cap + metodo calculo + nota) solo si expandido.
   const lowHI = res.lowHI;
   const hcpRaw = res.hcpRaw;
@@ -6602,7 +6428,6 @@ function renderHcpComparison() {
           </td>
         </tr>
       </table>
-      <!-- v1.34.160: texto explicativo sobre diferencias con federacion -->
       <div style="font-size:9px;color:var(--muted);line-height:1.5;letter-spacing:.2px;margin-top:6px;padding-top:5px;border-top:1px solid var(--border);text-align:justify" data-i18n="stats_hcp_nota">${t('stats_hcp_nota') || 'Diferencias con tu HCP federativo pueden existir si tu federación tiene rondas no registradas en la app, o aplica el ajuste PCC (condiciones de juego diarias) que requiere datos de todos los jugadores de cada campo. Golf HCP calcula el WHS 2020 oficial con los datos que tú registras.'}</div>
     </div>
   ` : '';
@@ -6613,7 +6438,6 @@ function renderHcpComparison() {
 function renderStats() {
   // Asegurar que el panel de filtros este pintado (idempotente)
   try { renderStatsFilters(); } catch(e) {}
-  // v1.34.150: pintar tabla comparativa HCP App vs Oficial
   try { renderHcpComparison(); } catch(e) {}
   const el = $('stats-content');
   if (!el) return;
@@ -6641,7 +6465,6 @@ function renderStats() {
   }
   const fmtD = v => (v >= 0 ? '+' : '') + v.toFixed(1);
 
-  // v1.33.011: solo 18H reales para Media Stableford y Media últ. 5.
   // Excluye 9H (sueltas y combinadas). El resto de métricas siguen usando "combined".
   const only18 = (filteredRaw || []).filter(r => (r.num_hoyos || 18) === 18);
   // Conteo real de rondas por tipo (no combinadas) para la tarjeta "Rondas jugadas"
@@ -6651,7 +6474,6 @@ function renderStats() {
   // Calcular métricas
   const rounWithScore = combined.filter(r => r.gross > 0);
   const rounWithStbl  = combined.filter(r => r.stableford > 0);
-  // v1.33.011: avgStbl ahora se calcula solo con 18H reales
   const stbl18 = only18.filter(r => r.stableford > 0);
   const bestDif    = combined.length ? Math.min(...combined.map(r => r.diff)) : null;
   const avgScore   = rounWithScore.length ? (rounWithScore.reduce((s,r)=>s+r.gross,0)/rounWithScore.length).toFixed(1) : '—';
@@ -6661,7 +6483,6 @@ function renderStats() {
   const avgStbl    = stbl18.length        ? (stbl18.reduce((s,r)=>s+r.stableford,0)/stbl18.length).toFixed(1) + ' pts' : '—';
 
   // Tendencia HCP (últimas 5 rondas)
-  // v1.34.162: comparar promedio de 2 primeras vs 2 ultimas (era diff[4] - diff[0], muy sensible a anomalias).
   let tendencia = '→';
   if (combined.length >= 5) {
     const sorted = [...combined].sort((a,b) => new Date(a.fecha||a.date) - new Date(b.fecha||b.date));
@@ -6679,7 +6500,6 @@ function renderStats() {
     return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
   }).length;
 
-  // ── METRICAS NUEVAS (v1.31.048) — todas respetan el filtro ──
 
   // Rondas ordenadas por fecha (mas reciente al final / al principio segun uso)
   const sortedAsc = [...combined].sort((a,b) => new Date(a.fecha||a.date) - new Date(b.fecha||b.date));
@@ -6708,7 +6528,6 @@ function renderStats() {
     daysSinceLast = diff;
   }
 
-  // v1.33.011: Stableford medio últimas 5 — solo 18H reales (no 9H combinadas/sueltas)
   let avgStbl5 = '—';
   const sortedAsc18 = [...only18].sort((a,b) => new Date(a.fecha||a.date) - new Date(b.fecha||b.date));
   const sortedDesc18 = [...sortedAsc18].reverse();
@@ -6754,7 +6573,6 @@ function renderStats() {
     }
   }
 
-  // Helper de tarjeta con tamaño adaptativo (mixta v1.31.050):
   // Padding lateral reducido a 6px para ganar ancho util.
   // - Texto <= 8 chars  : 15px (numeros y palabras cortas: "+11.6", "32.0 pts", "84")
   // - Texto 9-12 chars  : 13px (nombres campo cortos: "IZKI GOLF", "LA GRAJERA", "PLAYA SERENA")
@@ -6774,7 +6592,6 @@ function renderStats() {
     </div>`;
   };
 
-  // v1.33.011: variante de card con nota explicativa (sobre uso de rondas 9H/18H)
   const cardNote = (desc, val, note) => {
     const sval = String(val);
     let valSize = '15px';
@@ -6862,7 +6679,6 @@ function renderStats() {
 
 // ═════════════════════════════════════════════════════════════════════
 // ═════════════════════════════════════════════════════════════════════
-// ELIMINAR CUENTA (v1.31.073)
 // doExportData: descarga JSON con todos los datos del usuario
 // onCheckEliminar: activa/desactiva el boton de eliminar
 // doDeleteAccount: llama a sb.rpc('delete_user'), muestra mensaje y redirige a login
@@ -7019,7 +6835,6 @@ async function doDeleteAccount() {
   }
 }
 
-// RENDER PRIVACIDAD (v1.31.055)
 // Politica de privacidad completa renderizada inline en ES/PT/FR.
 // Sin enlace externo: todo dentro de la app. Boton <- vuelve a Ajustes.
 // URL externa privacy.html solo para App Store Connect (no se usa aqui).
@@ -7337,7 +7152,6 @@ function renderResult() {
 }
 
 // ═════════════════════════════════════════════════════════════════════
-// HISTORIAL — Agrupacion por mes + busqueda (v1.31.051)
 // - Mes actual expandido por defecto al cargar la primera vez
 // - Resto colapsado por defecto
 // - Search filter: nombre campo (contiene) o fecha (DD, DD/MM, DD/MM/YYYY,
@@ -7361,7 +7175,6 @@ function toggleHistMonth(key) {
   renderHistory();
 }
 
-// v1.34.142: expandir/colapsar todos los meses con un solo boton
 function toggleAllHistMonths() {
   if (!state.rounds || !state.rounds.length) return;
   // Obtener todas las claves de meses presentes en el historial
@@ -7429,8 +7242,6 @@ function renderHistory() {
   if (kebabWrap) kebabWrap.style.visibility = 'visible';
 
   // ── Calcular usedSet (rondas usadas en el calculo de HCP)
-  // v1.34.137: pairMap para identificar parejas 9H combinadas
-  // v1.34.138: simplificado a Set (sin colores). La presencia indica que la ronda es 9H combinada que cuenta.
   // v1.34.156: aplicar mismo fix que getHCP: filtrar primero las 20 mas recientes por fecha de juego.
   const { combined, pending9Ids } = combineNineHoleRounds(state.rounds);
   const pending9Set = new Set(pending9Ids);
@@ -7512,11 +7323,9 @@ function renderHistory() {
   const localMonth = (M) => (monthNames[lang] || monthNames.es)[parseInt(M,10)-1];
 
   // ── Helper: renderizar una fila de ronda (idéntico al formato anterior)
-  // v1.34.187: diferencial mostrado en columna "Dif." es dinamico segun metodo activo.
   // Modo WHS (default): muestra r.diff (WHS estandar guardado en BD).
   // Modo EGA-RBA: recalcula al vuelo con calcDiffEGA() que aplica -1.0 si torneo_rfeg.
   // Fallback a r.diff si calcDiffEGA devuelve null (falta hcp_idx/par/stableford).
-  // v1.34.201: refactor a .ronda-item (replica patron Mis Campos con swipe-to-reveal).
   // Ya no es <tr> en <table>, sino div autonomo dentro del grupo de mes.
   const metodoActivo = getMetodoCalculo();
   const renderRondaItem = (r) => {
@@ -7527,8 +7336,6 @@ function renderHistory() {
     const nineTag = r.num_hoyos === 9
       ? `<span style="${isPending9?nine_style_pend:nine_style_ok}">✓</span>`
       : '';
-    // v1.34.203: barraDot eliminado de row2 (la barra de salida se ve en el toast Info y en abrirDetalleRonda).
-    // v1.34.187: diferencial dinamico segun metodo activo
     let diffMostrar = r.diff;
     if (metodoActivo === 'ega') {
       const egaDiff = calcDiffEGA(r);
@@ -7538,7 +7345,6 @@ function renderHistory() {
       ? `<span>Stbl: <span class="stat-stbl">${r.stableford}</span></span>` : '';
     const isPair = pairMap.has(r.id);
     const pairDot = isPair ? `<span style="font-size:10px;color:var(--blue-adapt)" title="9H combinada">🔗</span>` : '';
-    // v1.34.204: badge HCP✓ unificado al verde para todas las rondas que cuentan (18H y 9H combinadas).
     // El circulo azul/rojo del nineTag ya distingue las 9H; no hace falta un segundo badge azul cuadrado.
     const usedBadge = used
       ? `<span class="used-badge" title="HCP">✓</span>`
@@ -7548,7 +7354,6 @@ function renderHistory() {
       : '';
     const golpesLbl = lang==='fr' ? 'coups' : (lang==='pt' ? 'pancadas' : 'golpes');
     const difLbl = lang==='fr' ? 'Dif' : 'Dif';
-    // v1.34.203: separador "·" entre stats. Construyo array de fragmentos y los uno con sep.
     const sep = `<span class="stat-sep">·</span>`;
     const statsFrags = [
       `<span><span class="stat-strong">${r.gross}</span> ${golpesLbl}</span>`,
@@ -7564,7 +7369,6 @@ function renderHistory() {
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
         </button>
       </div>
-      <!-- v1.34.208: eliminado onclick="abrirDetalleRonda" -- la info ahora solo via swipe derecha (toast Info). -->
       <div class="ronda-item-content">
         <div style="min-width:0;flex:1">
           <div class="ronda-row1">
@@ -7603,7 +7407,6 @@ function renderHistory() {
     const isExpanded = search ? true : histState.expandedMonths.has(key);
 
     // Separador de año cambiado (muestra el año del bloque que viene a continuacion)
-    // v1.34.100: fondo --bg (color pagina) en vez de --card-bg para integrarse con la pagina
     if (lastYear !== null && lastYear !== year) {
       groupsHtml += `<div style="border-top:1px dashed var(--border);margin:14px 0 8px;text-align:center;position:relative">
         <span style="background:var(--bg);padding:0 10px;font-size:9px;letter-spacing:1.5px;color:var(--muted);font-family:'DM Mono',monospace;position:relative;top:-7px">${year}</span>
@@ -7615,8 +7418,6 @@ function renderHistory() {
       ? '<svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5"><polyline points="18 15 12 9 6 15"/></svg>'
       : '<svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5"><polyline points="6 9 12 15 18 9"/></svg>';
 
-    // v1.34.137: desplegable mes con fondo azul claro + borde azul oscuro + texto color tema
-    // v1.34.147: modo oscuro vuelve a amarillo MUY suave. Modo claro mantiene azul.
     const isLightMonth = document.documentElement.classList.contains('light');
     const headerStyle = isLightMonth
       ? `width:100%;background:rgba(0,102,204,.10);border:1px solid rgba(0,102,204,.45);border-radius:6px;padding:7px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:${isExpanded?'4px':'4px'}`
@@ -7654,8 +7455,6 @@ function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-// v1.34.193: gestos swipe-to-reveal para listado Mis Campos (estilo iOS Mail)
-// v1.34.196: cubre ambos estados (swiped izquierda y swiped-right derecha)
 function cerrarSwipeCampos() {
   document.querySelectorAll('.campo-item.swiped, .campo-item.swiped-right').forEach(el => {
     el.classList.remove('swiped');
@@ -7695,8 +7494,6 @@ function activarSwipeCampos() {
       }
       if (!isHorizontal) return;
       e.preventDefault();
-      // v1.34.197: limites ajustados a tamano nuevo botones cuadrados (40px + gap)
-      // v1.34.200: limites ampliados simetricamente a ±180 para permitir gesto largo en ambas direcciones
       //   que dispara accion principal directamente (izq->Editar, der->Info).
       // v1.34.235: subido limite izquierdo a -220 (era -180) para dar mas margen.
       //   Umbral accion directa izquierdo subio a -180 (era -120).
@@ -7715,9 +7512,6 @@ function activarSwipeCampos() {
       dragging = false;
       content.style.transition = 'transform .25s ease';
       content.style.transform = '';
-      // v1.34.196: 3 estados con threshold de apertura
-      // v1.34.199: swipe derecha LARGO (>120px) dispara Info toast directamente; corto (40-120px) solo abre boton
-      // v1.34.200: swipe izquierda LARGO (<-120px) dispara Editar directamente; corto (-95 a -50) abre botones
       // v1.34.235: umbral izquierdo directo subido a -180 (era -120).
       // v1.34.236: umbral subido a -220 para que sea aun mas dificil pasarse al directo.
       if (currentX < -220) {
@@ -7764,7 +7558,6 @@ function activarSwipeCampos() {
   });
 
   // Click fuera de un item swiped lo cierra
-  // v1.34.196: cubre swiped y swiped-right
   if (!document._swipeOutsideAttached) {
     document._swipeOutsideAttached = true;
     document.addEventListener('touchstart', (e) => {
@@ -7773,7 +7566,6 @@ function activarSwipeCampos() {
   }
 }
 
-// v1.34.201: gestos swipe-to-reveal para Listado de Rondas (replica patron Mis Campos)
 function cerrarSwipeRondas() {
   document.querySelectorAll('.ronda-item.swiped, .ronda-item.swiped-right').forEach(el => {
     el.classList.remove('swiped');
@@ -7811,7 +7603,6 @@ function activarSwipeRondas() {
       }
       if (!isHorizontal) return;
       e.preventDefault();
-      // Limites simetricos ±180 (igual que campos v1.34.200)
       // v1.34.235: limite izquierdo a -220 (mas margen para fijar sin disparar directo)
       // v1.34.236: limite a -260, umbral directo subio de -180 a -220
       if (dx < 0) {
@@ -7827,7 +7618,6 @@ function activarSwipeRondas() {
       dragging = false;
       content.style.transition = 'transform .25s ease';
       content.style.transform = '';
-      // Mismo modelo que campos v1.34.200:
       //   currentX < -120 -> swipe izquierda LARGO -> ejecuta Editar
       //   -120 a -50      -> swipe izquierda CORTO -> abre botones Editar/Borrar
       //   currentX > 120  -> swipe derecha LARGO  -> dispara Info toast
@@ -7879,16 +7669,12 @@ function activarSwipeRondas() {
   }
 }
 
-// v1.34.201: mini-toast con info detallada de una ronda (swipe derecha en Listado de Rondas)
-// v1.34.208: rediseno -> rectangulo grande centrado verticalmente, sin tiempo maximo, cierra al tocar.
-// v1.34.211: fondo AZUL MUY CLARO con TODAS las letras (cabecera y datos) en AZUL MUY OSCURO.
 //            Anadida linea final disimulada "Tocar para salir" como pista.
 function mostrarInfoRondaToast(rondaId) {
   const r = state.rounds.find(x => x.id === rondaId);
   if (!r) return;
   const BARRA_LBL = lang==='fr' ? BARRA_LABELS_FR : (lang==='pt' ? BARRA_LABELS_PT : BARRA_LABELS);
   const lbl = (es, pt, fr) => lang==='fr' ? (fr||es) : (lang==='pt' ? pt : es);
-  // v1.34.211: paleta azul oscuro sobre fondo azul muy claro (alto contraste y legibilidad).
   const TXT_MAIN = '#0d1f3a';       // azul muy oscuro casi negro (cabecera y datos)
   const TXT_LABEL = '#1a3460';      // azul oscuro (etiquetas izquierda)
   const TXT_HINT = 'rgba(13,31,58,0.45)'; // azul oscuro muy tenue para hint
@@ -7907,7 +7693,6 @@ function mostrarInfoRondaToast(rondaId) {
     : '';
   const stblTxt = r.stableford != null ? r.stableford + ' ' + lbl('pts','pts','pts') : '—';
 
-  // v1.34.211: TODAS las letras en TXT_MAIN (azul muy oscuro). Labels mismo azul pero menos peso.
   const row = (k, v) => `<div style="margin:5px 0;font-family:'DM Mono',monospace;font-size:12px;display:flex;align-items:center;gap:8px"><span style="color:${TXT_LABEL};min-width:95px;white-space:nowrap">${k}</span><span style="color:${TXT_MAIN};white-space:nowrap;font-weight:600">${v}</span></div>`;
 
   const header = `<div style="font-size:13px;font-weight:700;letter-spacing:1px;color:${TXT_MAIN};margin-bottom:10px;border-bottom:1px solid ${SEP_LINE};padding-bottom:6px;white-space:nowrap">${fmtDate(r.date)} · ${(r.name||'—')}${rfegTxt}</div>`;
@@ -7920,13 +7705,11 @@ function mostrarInfoRondaToast(rondaId) {
     + row(lbl('HCP Index','HCP Index','HCP Index'), hcpIdxTxt)
     + row(lbl('Formato','Formato','Format'), fmtLbl)
     + row('CR / Slope', (r.cr != null ? r.cr : '—') + ' / ' + (r.slope != null ? r.slope : '—'));
-  // v1.34.211: hint final disimulado "tocar para salir"
   const hintTxt = lbl('tocar para salir', 'tocar para sair', 'toucher pour sortir');
   const hint = `<div style="font-size:9px;color:${TXT_HINT};font-family:'DM Mono',monospace;letter-spacing:.5px;text-align:center;margin-top:10px;padding-top:6px;border-top:1px solid ${SEP_LINE};font-style:italic">${hintTxt}</div>`;
 
   const el = $('toast');
   el.innerHTML = header + body + hint;
-  // v1.34.211: AZUL MUY CLARO con texto azul oscuro
   el.style.padding = '18px 22px';
   el.style.maxWidth = '92vw';
   el.style.width = 'auto';
@@ -8006,7 +7789,6 @@ function renderCampos() {
       </div>
     </div>`;
   }).join('');
-  // v1.34.193: activar gestos swipe tras render
   try { activarSwipeCampos(); } catch(e) {}
 }
 
@@ -8101,7 +7883,6 @@ function calcCHCP() {
   const totalGolpes = par + chcp;
   num.textContent = chcp >= 0 ? '+' + chcp : chcp;
   num.className = 'chcp-num';
-  // v1.34.112: TOTAL GOLPES sin recuadro/fondo, color tema, -3px. v1.34.113: valor TOTAL GOLPES sin negrita.
   det.innerHTML = `HCP ${hcp} × (${slope}/113) + (${cr}−${par}) = <strong style="color:var(--text);font-weight:700">${chcp >= 0 ? '+' + chcp : chcp} ${lang==='fr'?'coups':lang==='pt'?'pancadas':'golpes'}</strong><div style="font-size:18px;line-height:1.2;color:var(--text);margin-top:4px">${lang==='fr'?'TOTAL COUPS':lang==='pt'?'TOTAL PANCADAS':'TOTAL GOLPES'}: <span style="font-size:18px;color:var(--text)">${totalGolpes}</span></div>`;
   if (name) { if (pname) { pname.textContent = name; pname.style.display = 'block'; } }
   else if (pname) pname.style.display = 'none';
@@ -8241,7 +8022,6 @@ function onBarraChange() {
   const campo = state.campos.find(c => c.id === id);
   const barra = campo?.barras?.find(b => b.color === $('f-barra').value);
   if (barra) {
-    // v1.34.024: avisar si la barra tiene CR sospechoso (podria ser CR de 9h confundido con 18h)
     if (campo && barra.cr && campo.par_total) {
       const sosp = detectarBarrasCRsospechoso([barra], campo.par_total);
       if (sosp.length > 0) {
@@ -8337,7 +8117,6 @@ function buildHoyoInputs(campo, numHoyos, vuelta) {
   for (let i = startIdx; i < endIdx; i++) {
     const h = campo.hoyos[i];
     if (!h) continue;
-    // v1.34.039: hoyos 1-9 a grid-out, 10-18 a grid-in (igual que buildEditHoyos)
     const grid = (numHoyos === 9) ? go : (h.numero <= 9 ? go : gi);
     const lastHoyo = campo.hoyos[endIdx - 1];
     const nextNum = h.numero < (lastHoyo?.numero || 18) ? h.numero + 1 : null;
@@ -8386,7 +8165,6 @@ function renderScoreSymbols(prefix, hoyos, shots, startHoyo, bolaRetirada) {
     const inputId = prefix === 'edit-' ? 'edit-gh-' + hoyo.numero : 'gh-' + hoyo.numero;
     const el = document.getElementById(inputId); if (!el) continue;
     el.classList.remove('s-eagle','s-birdie','s-par','s-bogey','s-doble','s-peor','s-retirada');
-    // v1.33.000: si el hoyo tiene bola retirada, prevalece la clase s-retirada
     if (bolaRetirada && bolaRetirada[i]) {
       el.classList.add('s-retirada');
       continue;
@@ -8436,7 +8214,6 @@ function updateTotals() {
   const vultaU = parseInt($('f-vuelta')?.value) || 1;
   const startH = (numH === 9 && vultaU === 2) ? 10 : 1;
   const endH   = (numH === 9 && vultaU === 2) ? 18 : (numH === 9 ? 9 : 18);
-  // v1.33.000: Playing HCP necesario para calcular NDB en hoyos retirados.
   // Mismo cálculo que calcNuevaChcp para coherencia con la UI.
   const hcpForNDB = parseFloat($('f-hcp-idx').value);
   let playingHCP = null;
@@ -8454,7 +8231,6 @@ function updateTotals() {
       playingHCP = Math.round(chcpRawN * fmtN / 100);
     }
   }
-  // v1.34.036: acumuladores separados ida/vuelta para subtotales en tiempo real
   let outTotal = 0, inTotal = 0;
   const outShots = [], inShots = [];
   for (let i = startH; i <= endH; i++) {
@@ -8497,7 +8273,6 @@ function updateTotals() {
   const startHoyoS = (numH === 9 && vultaU === 2) ? 10 : 1;
   if (campo) renderScoreSymbols('gh-', campo.hoyos, shots, startHoyoS, bolaRetirada);
   const startHoyoU = (numH === 9 && vultaU === 2) ? 10 : 1;
-  // v1.34.036: cálculo de subtotales stableford ida/vuelta para mostrar en tiempo real
   let outStblPts = null, inStblPts = null;
   if (campo && !isNaN(hcp)) {
     const fCR = parseFloat($('f-cr').value);
@@ -8523,7 +8298,6 @@ function updateTotals() {
     $('preview-stbl').textContent = '—';
     renderHoleDots('gh-', null, startHoyoU);
   }
-  // v1.34.036: pintar subtotales IDA / VUELTA en tiempo real
   const subOutEl = $('grid-out-subtotal');
   const subInEl  = $('grid-in-subtotal');
   if (subOutEl) {
@@ -8597,7 +8371,6 @@ function cancelarNueva() {
   $('total-golpes').textContent = '—';
   $('preview-stbl').textContent = '—';
   renderHoleDots('gh-', null);
-  // v1.34.167: reset toggle Torneo RFEG (default OFF)
   if ($('nueva-torneo-rfeg')) $('nueva-torneo-rfeg').checked = false;
   // v1.34.237: tras cancelar ir al listado de Rondas (antes iba a Inicio).
   goTo('rondas', $('nav-rondas'));
@@ -8637,7 +8410,6 @@ async function addRound() {
     shots = []; bolaRetirada = []; gross = 0; let allFilled = true;
     const saveStartAdd = (numHoyos === 9 && vuelta === 2) ? 10 : 1;
     const saveEndAdd   = (numHoyos === 9 && vuelta === 2) ? 18 : (numHoyos === 9 ? 9 : 18);
-    // v1.33.000: Playing HCP necesario para calcular NDB en hoyos retirados.
     let playingHCPSave = null;
     if (!isNaN(hcpIdx) && campo) {
       let crNS = cr || campo?.cr;
@@ -8804,7 +8576,6 @@ function abrirDetalleRonda(id) {
 }
 
 function abrirEditRonda(id) {
-  // v1.33.004: resetear modo Bola Retirada al abrir Editar Ronda
   if (typeof modoR_edit !== 'undefined' && modoR_edit) {
     modoR_edit = false;
     try { applyModoRUI('edit', false); } catch(e) {}
@@ -8819,19 +8590,15 @@ function abrirEditRonda(id) {
   const _bl = (color) => color ? (_emo[color]||'') + ' ' + (t(color) || color) : '';
   const _setDisp = (id, v) => { const el=$(id); if(el) el.textContent = v||'—'; };
   _setDisp('edit-r-nombre', r.name);
-  // v1.34.072: displays compactos sin sufijos (los labels van por separado en HTML)
   _setDisp('edit-r-cr-disp', r.cr ? r.cr+' CR' : null);
   _setDisp('edit-r-slope-disp', r.slope ? r.slope+' Slope' : null);
   _setDisp('edit-r-barra-disp', _bl(r.barra_color) || '— ' + (t('sin_barras')||'sin especificar') + ' —');
   _setDisp('edit-r-gross-disp', r.gross != null ? String(r.gross) : null);
   _setDisp('edit-r-stbl-disp', r.stableford != null ? r.stableford+' pts' : null);
-  // v1.34.072: rellenar Par (nuevo div en la fila compacta de Inicio-style)
   const _campoEdit = state.campos.find(c => c.id === r.campo_id);
   _setDisp('edit-r-par-disp', _campoEdit?.par_total != null ? String(_campoEdit.par_total) : null);
-  // v1.32.004: la fecha es ahora un input type=date editable; no hay disp aparte.
   // El input nativo formatea según locale del usuario (DD/MM/YYYY en ES).
   // Hidden inputs para guardar
-  // Formato de juego (editable, v1.31.087)
   const _fmtVal = String(r.juego_fmt || 100);
   $('edit-fmt').value = _fmtVal;
   $('edit-r-fecha').value    = r.date || '';
@@ -8841,7 +8608,6 @@ function abrirEditRonda(id) {
   $('edit-r-barra').value    = r.barra_color || '';
   $('edit-r-stbl').value     = r.stableford != null ? r.stableford : '';
   $('edit-r-hcp').value      = r.hcp_idx != null ? r.hcp_idx : '';
-  // v1.34.075: rellenar displays de HCP Index y Formato (solo lectura en Editar Ronda)
   const _hcpDisp = $('edit-r-hcp-disp');
   if (_hcpDisp) _hcpDisp.textContent = r.hcp_idx != null ? String(r.hcp_idx).replace('.', ',') : '—';
   const _fmtDisp = $('edit-r-fmt-disp');
@@ -8855,7 +8621,6 @@ function abrirEditRonda(id) {
   const editNumHoyos = r.num_hoyos || 18;
   const editVuelta   = r.vuelta || 1;
 
-  // Mostrar Hoyos y Vuelta en modal - v1.34.073: solo numero (la palabra "Hoyos" va en HTML como label)
   const nHDisp = $('edit-r-num-hoyos-disp');
   if (nHDisp) {
     nHDisp.textContent = editNumHoyos === 9
@@ -8864,7 +8629,6 @@ function abrirEditRonda(id) {
   }
   const vWrap = $('edit-vuelta-wrap');
   if (vWrap) vWrap.style.display = editNumHoyos === 9 ? '' : 'none';
-  // v1.34.073: sincronizar visibilidad del span inline nuevo
   const vWrapInline = $('edit-vuelta-wrap-inline');
   if (vWrapInline) vWrapInline.style.display = editNumHoyos === 9 ? 'inline' : 'none';
   const vDisp = $('edit-r-vuelta-disp');
@@ -8906,7 +8670,6 @@ function abrirEditRonda(id) {
     hW.style.display = 'none';
   }
   $('modal-ronda').classList.remove('hidden');
-  // v1.34.050: refrescar boton "Usar oficial" del HCP
   try { refrescarBtnsHcpOficial(); } catch(e) {}
 }
 
@@ -8925,7 +8688,6 @@ function buildEditHoyos(campo, existing, numHoyos, vuelta, bolaRetirada) {
     const h = campo.hoyos.find(h => h.numero === i);
     // shots guardados: índice relativo (0 = primer hoyo jugado)
     const shotIdx = i - startI;
-    // v1.33.000: si el hoyo fue bola retirada, mostrar "R" en vez del número (NDB).
     const isRetirada = !!bolaRetirada[shotIdx];
     const val = isRetirada ? 'R' : (existing[shotIdx] != null ? existing[shotIdx] : '');
     const initialClass = isRetirada ? 'hoyo-input s-retirada' : 'hoyo-input';
@@ -8977,7 +8739,6 @@ function recalcEditStbl() {
       if (par9 > 0) parEdit = par9;
     }
     const chcpRaw = Math.round(hcpForChcp * (slForChcp / 113) + (crForChcp - parEdit));
-    // v1.31.087: aplicar formato de juego (100/95/85%) al playing HCP
     const fmtEdit = parseInt($('edit-fmt')?.value || '100');
     const chcp = Math.round(chcpRaw * fmtEdit / 100);
     if (campo) renderRedDots('edit-', chcp, campo.hoyos);
@@ -9017,7 +8778,6 @@ function recalcEditStbl() {
       playingHCPEdit = Math.round(chcpRawE * fmtE2 / 100);
     }
   }
-  // v1.34.036: acumuladores separados ida/vuelta para subtotales en tiempo real
   let outTotal = 0, inTotal = 0;
   const outShots = [], inShots = [];
   for (let i = startI; i <= endI; i++) {
@@ -9056,9 +8816,7 @@ function recalcEditStbl() {
   if (campo) renderScoreSymbols('edit-', campo.hoyos, shots, startHoyo, bolaRetirada);
   // Dots stableford en tiempo real
   const hcp = parseFloat($('edit-r-hcp').value);
-  // v1.31.088: leer formato de juego para aplicar a Stableford y strokes rojos
   const editFmt = parseInt($('edit-fmt')?.value || '100');
-  // v1.34.036: subtotales stableford ida/vuelta
   let outStblPts = null, inStblPts = null;
   if (!isNaN(hcp)) {
     const eCR = parseFloat($('edit-r-cr').value);
@@ -9079,7 +8837,6 @@ function recalcEditStbl() {
 
   const validEditCount = shots.filter(s => s != null).length;
   $('edit-total').textContent = validEditCount > 0 ? total + (complete ? '' : '…') : '—';
-  // v1.34.036: subtotales IDA / VUELTA en tiempo real
   const subOutE = $('edit-grid-out-subtotal');
   const subInE  = $('edit-grid-in-subtotal');
   if (subOutE) {
@@ -9152,7 +8909,6 @@ async function guardarEditRonda() {
     let allFilled = true;
     const saveStartI = (saveNumHoyos === 9 && saveVuelta === 2) ? 10 : 1;
     const saveEndI   = (saveNumHoyos === 9 && saveVuelta === 2) ? 18 : (saveNumHoyos === 9 ? 9 : 18);
-    // v1.33.000: Playing HCP para NDB en hoyos retirados.
     let playingHCPSaveE = null;
     if (!isNaN(hcpIdx) && campo) {
       let crSE = cr, slSE = slope;
@@ -9248,7 +9004,6 @@ async function delRound(id) {
   } catch(e) { toast(t('t_error_eliminar'), true); }
 }
 
-// v1.34.097: kebab menu Rondas
 function toggleHistKebab(ev) {
   if (ev) { ev.stopPropagation(); }
   const menu = $('hist-kebab-menu');
@@ -9272,7 +9027,6 @@ function hideHistKebab() {
 }
 
 async function clearAll() {
-  // v1.34.098: doble confirmacion para accion destructiva irreversible
   // Paso 1: confirm informativo con numero de rondas
   const n = state.rounds.length;
   const msg1 = (t('c_borrar_rondas_n') || '¿Borrar TUS {n} RONDAS grabadas?\nEsta acción no se puede deshacer.').replace('{n}', n);
@@ -9313,7 +9067,6 @@ function buildHoyosEditor(containerId, prefix, existingHoyos = [], nHoyos = 18) 
       <td style="font-size:7px;color:var(--text);text-align:left;padding:3px 4px">#</td>`;
     for (let i = 1 + half*9; i <= 9 + half*9; i++) html += `<td style="font-size:8px;color:var(--text)">${i}</td>`;
     html += `</tr></thead><tbody>`;
-    // Fila par - v1.34.116: color var(--text) en label
     html += `<tr><td style="font-size:7px;color:var(--text);text-align:left;padding:3px 4px">${t('par_label')}</td>`;
     for (let i = 1 + half*9; i <= 9 + half*9; i++) {
       const h = existingHoyos.find(h => h.numero === i);
@@ -9322,7 +9075,6 @@ function buildHoyosEditor(containerId, prefix, existingHoyos = [], nHoyos = 18) 
         oninput="hoyoPar(this,${i},'${prefix}')"></td>`;
     }
     html += `</tr>`;
-    // Fila índice (el rango máximo es nHoyos, no 18 hardcoded) - v1.34.116: color var(--text) en label
     html += `<tr><td style="font-size:7px;color:var(--text);text-align:left;padding:3px 4px">${t('ind_label')}</td>`;
     for (let i = 1 + half*9; i <= 9 + half*9; i++) {
       const h = existingHoyos.find(h => h.numero === i);
@@ -9360,7 +9112,6 @@ function onAcNumHoyosChange() {
 function buildBarrasEditor(containerId, prefix, existingBarras = []) {
   const wrap = $(containerId);
   if (!wrap) return;
-  // v1.31.090: las 3 barras extra (violeta/naranja/negra) se muestran SI:
   //   1) idioma es FR (por defecto en campos franceses)
   //   2) ya hay barras extras guardadas en este campo (preservar al editar)
   //   3) el usuario ha activado el toggle "incluir barras adicionales"
@@ -9373,8 +9124,6 @@ function buildBarrasEditor(containerId, prefix, existingBarras = []) {
   const showExtras = (typeof lang !== 'undefined' && lang === 'fr') || hasExtraBarras || userActivated;
   const activeBARRAS = showExtras ? BARRAS_FR : BARRAS;
   const nextColor = (color) => activeBARRAS[(activeBARRAS.indexOf(color)+1)%activeBARRAS.length];
-  // v1.34.124: inputs CR/Slope/Par sin recuadro (estilo Fecha). Labels en hint 10px muted.
-  // v1.34.125: alineacion izquierda + ancho ajustado (5ch) en vez de 100% centrado.
   const iS = `background:none;border:none;border-radius:0;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:2px 0;width:5ch;-webkit-appearance:none;outline:none;text-align:left`;
   const lS = `font-size:10px;color:var(--muted);letter-spacing:.2px;font-weight:normal`;
 
@@ -9390,7 +9139,6 @@ function buildBarrasEditor(containerId, prefix, existingBarras = []) {
   // Toggles compactos sin contenedor: solo texto + switch.
   // Toggle 1 (barras adicionales) solo si NO es francés.
   // Toggle 2 (9 hoyos) siempre visible (se aplica a barras amarilla/roja).
-  // v1.34.122: lineas finas grises envolviendo el bloque de toggles
   const toggleExtraHTML = (lang !== 'fr') ? `
     <div style="display:flex;align-items:center;gap:12px;padding:6px 2px;border-top:1px solid var(--border)">
       <div style="flex:1;min-width:0;font-size:11px;color:var(--cream);font-weight:600;line-height:1.3">${t('barras_extra_label')}</div>
@@ -9399,7 +9147,6 @@ function buildBarrasEditor(containerId, prefix, existingBarras = []) {
         <span class="toggle-slider"></span>
       </label>
     </div>` : '';
-  // v1.34.123: SIEMPRE border-top en 9h (en ES/PT separa de "extras", en FR es el primer toggle)
   const toggle9hHTML = `
     <div style="display:flex;align-items:center;gap:12px;padding:6px 2px;margin-bottom:8px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
       <div style="flex:1;min-width:0;font-size:11px;color:var(--cream);font-weight:600;line-height:1.3" data-i18n="barras_9h_label">${t('barras_9h_label')}</div>
@@ -9456,7 +9203,6 @@ function buildBarrasEditor(containerId, prefix, existingBarras = []) {
   }).join('');
 }
 
-// v1.34.018: handler del toggle "barras de salida para 9 hoyos"
 // Recoge los valores actualmente introducidos en cualquier barra y reconstruye
 // el editor con/sin los inputs de 9 hoyos según el estado del toggle.
 function onToggle9h(containerId, prefix) {
@@ -9471,7 +9217,6 @@ function onToggle9h(containerId, prefix) {
   });
 }
 
-// v1.31.090: handler del toggle "incluir barras adicionales"
 // Recoge los valores actualmente introducidos en cualquier barra y reconstruye
 // el editor con/sin las 3 extras según el estado del toggle.
 function onToggleBarrasExtra(containerId, prefix) {
@@ -9562,7 +9307,6 @@ function getHoyosFromEditor(prefix) {
   return { hoyos, parTotal };
 }
 
-// v1.34.024: Detectar CR sospechoso. CR válido para 18 hoyos suele estar entre par-7 y par+5.
 // Si CR < par-7 puede ser que se haya capturado CR de 9 hoyos (típicamente la mitad)
 // o un error de transcripción. No bloquea, solo informa.
 // Devuelve un array con los nombres (singular) de las barras sospechosas, p.ej. ['naranja','azul'].
@@ -9576,7 +9320,6 @@ function detectarBarrasCRsospechoso(barras, parTotal) {
 
 function getBarrasFromEditor(prefix) {
   const barras = [];
-  // v1.31.097: SIEMPRE recorrer las 7 barras posibles, no depende del idioma.
   // Si el toggle "Mostrar Barras adicionales" está activado en ES/PT, los inputs
   // de violeta/naranja/negra existen y deben leerse. Si no están en el DOM,
   // el optional chaining (?.value) devuelve undefined → cr/slope quedan NaN → se ignoran.
@@ -9620,7 +9363,6 @@ async function guardarNuevaPwd() {
 }
 
 // =================================================================
-// v1.34.049: HCP OFICIAL DE LA FEDERACIÓN (subpágina Ajustes)
 // =================================================================
 // Helpers parse/format (acepta coma o punto, muestra según locale)
 function _hoParse(str) {
@@ -9646,7 +9388,6 @@ function _hoFormatFecha(fechaIso) {
     return `${dd}/${mm}/${yy}`;
   } catch(e) { return ''; }
 }
-// v1.34.069: fecha corta (año 2 dígitos) solo para el botón compacto
 function _hoFormatFechaCorta(fechaIso) {
   if (!fechaIso) return '';
   try {
@@ -9667,7 +9408,6 @@ function cargarHcpOficialPage() {
   const statusEl = $('ho-status');
   if (errEl) errEl.classList.remove('show');
   if (statusEl) statusEl.textContent = '';
-  // v1.34.051: valor siempre se guarda; el toggle activo controla visibilidad del boton
   const hcp = state.user?.hcp_oficial;
   const fecha = state.user?.hcp_oficial_fecha;
   const activo = !!state.user?.hcp_oficial_activo;
@@ -9764,8 +9504,6 @@ function refrescarBtnsHcpOficial() {
   const hcp = state.user?.hcp_oficial;
   const fecha = state.user?.hcp_oficial_fecha;
   const activo = !!state.user?.hcp_oficial_activo;
-  // v1.34.051: visible solo si el toggle está ON Y hay valor guardado
-  // v1.34.095: (Click) en mismo estilo que otros hints (10px muted), no como parte del texto principal
   const visible = activo && hcp != null;
   const clickHint = t('edit_click_hint')||'(Click)';
   const txt = visible
@@ -9804,7 +9542,6 @@ async function guardarNuevoCampo() {
   if (!uid)    { showErr(t('e_sin_sesion')); return; }
 
   const barras = getBarrasFromEditor('nc-');
-  // v1.31.090: aceptar cualquier barra (no solo blanca/amarilla)
   if (barras.length === 0) {
     showErr(t('e_barras_min'));
     return;
@@ -9825,7 +9562,6 @@ async function guardarNuevoCampo() {
   }
   const { hoyos, parTotal, error: hErr } = getHoyosFromEditor('nc-');
   if (hErr) { showErr(hErr); return; }
-  // v1.34.024: avisar de CR sospechoso (podria ser CR de 9h confundido con 18h)
   const sospechosasNuevo = detectarBarrasCRsospechoso(barras, parTotal);
   if (sospechosasNuevo.length > 0) {
     const labels = sospechosasNuevo.map(c => (lang==='fr'?(BARRA_LABELS_FR[c]||c):lang==='pt'?(BARRA_LABELS_PT[c]||c):(BARRA_LABELS[c]||c))).join(', ');
@@ -9935,8 +9671,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.237' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.237\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.238' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.238\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -10024,7 +9760,6 @@ async function guardarEditCampo() {
 
   // 1. Validar barras primero
   const barras = getBarrasFromEditor('edit-b-');
-  // v1.31.090: aceptar cualquier barra (no solo blanca/amarilla)
   if (barras.length === 0) {
     showErr(t('e_barras_min'));
     return;
@@ -10046,7 +9781,6 @@ async function guardarEditCampo() {
   // 3. Validar hoyos
   const { hoyos, parTotal, error: hErr } = getHoyosFromEditor('edit-c-');
   if (hErr) { showErr(hErr); return; }
-  // v1.34.024: avisar de CR sospechoso (podria ser CR de 9h confundido con 18h)
   const sospechosasEdit = detectarBarrasCRsospechoso(barras, parTotal);
   if (sospechosasEdit.length > 0) {
     const labelsE = sospechosasEdit.map(c => (lang==='fr'?(BARRA_LABELS_FR[c]||c):lang==='pt'?(BARRA_LABELS_PT[c]||c):(BARRA_LABELS[c]||c))).join(', ');
@@ -10174,7 +9908,6 @@ function goTo(id, btn) {
   if (fabRonda) {
     fabRonda.style.display = (id === 'rondas') ? 'flex' : 'none';
   }
-  // v1.34.202: barra inferior fixed de Rondas eliminada (boton "+ Nueva" devuelto al header).
   if (id === 'sobre') {
     const vEl = document.getElementById('sobre-version');
     // Find version from the version div in Inicio
@@ -10201,25 +9934,21 @@ function goTo(id, btn) {
   if (id === 'privacidad') {
     try { renderPrivacidad(); } catch(e) { console.error('renderPrivacidad:', e); }
   }
-  // v1.34.110: al entrar a Inicio, recalcular HCP de Campo con los valores actuales
   // (campo+barra+HCP siguen en los inputs pero el calculo a veces no se refresca al volver)
   if (id === 'inicio') {
     try { calcCHCP(); } catch(e) {}
   }
   if (id === 'nueva') {
-    // v1.33.004: resetear modo Bola Retirada al abrir Nueva Ronda
     if (typeof modoR_nueva !== 'undefined' && modoR_nueva) {
       modoR_nueva = false;
       try { applyModoRUI('nueva', false); } catch(e) {}
     }
-    // v1.34.050: refrescar boton "Usar oficial" del HCP
     try { refrescarBtnsHcpOficial(); } catch(e) {}
   }
   if (id === 'admin-catalogo') {
     setTimeout(() => { try { abrirAdminCatalogo(); } catch(e) { console.error('admin-catalogo:', e); } }, 30);
   }
   if (id === 'hcp-oficial') {
-    // v1.34.049: cargar valor actual del HCP oficial al entrar
     cargarHcpOficialPage();
   }
   if (id === 'eliminar-cuenta') {
@@ -10244,7 +9973,6 @@ function goTo(id, btn) {
     }
   }
   if (id === 'inicio') {
-    // v1.34.050: refrescar boton "Usar oficial" del HCP
     try { refrescarBtnsHcpOficial(); } catch(e) {}
     // Avisar si no hay campos creados
     if (state.user && !state.campos.length) {
@@ -10261,7 +9989,6 @@ function goTo(id, btn) {
   if (id === 'admin-guia') {
     try { renderAdminGuia(); } catch(e) { console.error('renderAdminGuia:', e); }
   }
-  // v1.31.094: panel de uso admin
   if (id === 'admin-uso') {
     try { renderAdminUso(); } catch(e) { console.error('renderAdminUso:', e); }
   }
@@ -10725,7 +10452,6 @@ function instalarListenersAjustes() {
 // instalarListenersAjustes() es nuevo: se llama una vez tras login.
 
 // ═════════════════════════════════════════════════════════════════════
-// CLEAR BUTTONS (v1.31.080)
 // X custom unificada para inputs marcados con data-clearable
 // Funciona en cualquier type=, independiente del navegador, consistente
 // en modo claro y oscuro. Reemplaza la X nativa de iOS Safari (inconsistente).
@@ -10795,7 +10521,6 @@ async function init() {
   try { aplicarFotoSplash(); } catch(e) {}
   // Aplicar idioma guardado
   applyLangDOM();
-  // X custom para inputs marcados con data-clearable (v1.31.080)
   attachClearButtons();
   $('f-date').value = new Date().toISOString().split('T')[0];
 
@@ -11080,7 +10805,6 @@ function renderStatsCharts() {
 }
 
 // ═════════════════════════════════════════════════════════════════════
-// ADMIN GUIA DIDACTICA (v1.31.076)
 // - Acceso oculto: 5 taps en la version + state.user.is_admin
 // - CRUD completo de guia_contenidos
 // - Uploader a Supabase Storage bucket guia-archivos
@@ -11096,7 +10820,6 @@ const adminState = {
   itemsCache: null,     // array de items del idioma activo
 };
 
-// v1.33.009: gesto secreto de 5 taps eliminado. Acceso al panel admin
 // ahora directo desde Ajustes (botón visible solo para is_admin=true).
 
 // ── Cargar items para el panel admin (todos, incluso inactivos) ──
@@ -11377,7 +11100,6 @@ function adminRenderForm() {
 
   // Scroll arriba para ver el formulario completo
   setTimeout(() => { window.scrollTo(0, 0); }, 50);
-  // Re-attach X de borrar a los inputs dinamicos (v1.31.080)
   refreshClearButtons();
 }
 
@@ -11392,7 +11114,6 @@ function adminFormChange(field, val) {
 }
 
 // Toggle iOS-style: cambia booleano y actualiza visualmente sin re-render completo
-// (v1.31.077: reemplaza checkboxes que no se veian en iOS PWA)
 function adminToggleField(field) {
   const newVal = !adminState.formData[field];
   adminState.formData[field] = newVal;
@@ -11509,7 +11230,6 @@ async function adminGuardar() {
 }
 
 // ═════════════════════════════════════════════════════════════════════
-// PANEL DE USO (v1.31.094) — Estadísticas internas de tracking
 // Solo accesible si state.user.is_admin === true
 // Lee de la tabla 'sesiones' (columna 'timestamp' guarda la hora del evento)
 // Solo idioma ES (interno admin, no traducido)
@@ -11524,7 +11244,6 @@ async function renderAdminUso() {
   $('uso-loading').style.display = 'block';
   $('uso-content').style.display = 'none';
   try {
-    // v1.31.099: cargar también rondas y campos para las nuevas 10 secciones
     const [sesiones, usuarios, rondas, campos] = await Promise.all([
       sb.from('sesiones').select('user_id,tipo,dispositivo,timestamp').order('timestamp', { ascending: false }).limit(5000),
       sb.from('profiles').select('id,nombre,is_admin,excluir_stats').limit(1000),
@@ -11541,9 +11260,7 @@ async function renderAdminUso() {
     }
 
     const allUsers  = usuarios.data || [];
-    // v1.31.098: construir set de admins a EXCLUIR de las métricas
     // Los admins (Francisco y futuros) son testers que contaminan las estadísticas
-    // v1.34.026: además de admins, excluir usuarios marcados con excluir_stats=true
     // (cuentas de prueba sin atributo admin, p.ej. test@golfhcp.com)
     const adminIds = new Set(allUsers.filter(u => u.is_admin || u.excluir_stats).map(u => u.id));
     // Filtrar eventos de admins
@@ -11829,19 +11546,15 @@ function drawUsoTrendChart(values) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// v1.31.099 — 10 NUEVAS SECCIONES PANEL ADMIN
 // Fase 1: engagement (5) + Fase 2: golf-específico (5)
 // ═══════════════════════════════════════════════════════════════════════
 
-// v1.33.009: Funciones admin para borrado de usuarios — RPC a Supabase.
 // Las funciones SQL admin_delete_user_by_email y admin_delete_all_non_admin
 // están definidas en el servidor con SECURITY DEFINER y verifican is_admin
 // del que llama, además de proteger UUID hardcodeado de Francisco.
 
-// v1.33.010: toggle del desplegable "BORRADOS ADMIN" — eliminado en v1.34.027
 // porque la sección pasó a ser una página propia (page-admin-gestion).
 
-// v1.34.027: Funciones admin de gestión interna — RPC a Supabase.
 // admin_set_user_admin_by_email y admin_set_excluir_stats_by_email están
 // definidas en el servidor con SECURITY DEFINER (Supabase Producción).
 
@@ -12068,7 +11781,6 @@ function getUserCurrentHcp(rondas) {
   return map;
 }
 
-// v1.33.008: tooltip explicativo de métricas de engagement (toast de 5s).
 function showInfoEngagement() {
   const msg = 'DAU/WAU/MAU: usuarios únicos activos en últimas 24h / 7d / 30d. STICKY: ratio de fidelidad DAU/MAU × 100 (>20% bueno, >50% excelente).';
   const el = document.getElementById('toast');
@@ -12085,7 +11797,6 @@ function renderUsoEngagement(events, users) {
   const ms24h = 24 * 60 * 60 * 1000;
   const ms7d  = 7  * ms24h;
   const ms30d = 30 * ms24h;
-  // v1.33.008: incluir todos los tipos de evento (login/visita/heartbeat/salida).
   // Cualquier evento indica que el usuario estaba activo en ese momento. Como
   // usamos Set por user_id, los heartbeats no inflan el cómputo (un usuario
   // con 100 heartbeats sigue siendo 1 usuario activo).
@@ -12978,14 +12689,12 @@ function abrirInformeMensualUltimo() {
 }
 
 // Click sobre el banner: abre el informe del mes que el banner indique
-// (Funcion eliminada en v1.31.075 — banner descartado en PWA, ver memoria #24)
 
 function marcarInformeVisto(year, month) {
   // (Mantengo la marca en localStorage por compatibilidad con futura logica Capacitor)
   try { localStorage.setItem('golf_informe_visto', year + '-' + month); } catch(e) {}
 }
 
-// checkInformeBanner eliminado en v1.31.075 — banner descartado en PWA (memoria #24)
 // En Capacitor F3-F4 se reintroduce via @capacitor/local-notifications (notificacion nativa)
 
 // Export PDF: dispara el dialogo de impresion del navegador (iOS Safari permite Guardar PDF)
