@@ -50,7 +50,7 @@
 :root.light #page-sobre,
 :root.light #page-sobre p,
 :root.light #page-sobre span,
-:root.light #page-sobre div:not(.guide-card):not(.card):not(.sobre-card):not(.legal-card):not(.priv-card),
+:root.light #page-sobre div:not(.guide-card):not(.card),
 :root.light #page-sobre h1,
 :root.light #page-sobre h2,
 :root.light #page-sobre h3,
@@ -383,7 +383,6 @@ body.splash-active #safe-area-cover {
 #player-bar{background:var(--card-bg);border-bottom:1px solid rgba(201,168,76,.3);padding:calc(env(safe-area-inset-top,0px) + 7px) 14px 7px;display:flex;align-items:center;justify-content:center;position:fixed;top:0;left:0;right:0;z-index:50}
 #player-bar{display:none!important}
 .pb-name{color:var(--gold2);font-family:'DM Mono',monospace;font-size:20px;font-style:normal}
-.pb-btn{background:none;border:1px solid rgba(201,168,76,.3);border-radius:4px;color:var(--gold);font-family:'DM Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:4px 8px;cursor:pointer}
 
 /* ── NAV ── */
 nav{position:fixed;bottom:12px;left:16px;right:16px;background:rgba(30,50,30,0.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);border-radius:28px;display:flex;z-index:100;padding:4px 6px;transition:transform .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.4)} /* v1.34.129: padding-bottom fijo 4px (sin safe-area-inset-bottom dinamico que inflaba el nav en iOS Safari) */
@@ -440,7 +439,7 @@ nav button.active svg{stroke:var(--gold2)} /* v1.34.147: modo oscuro stroke dora
 :root.light .r-stat{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.1)}
 :root.light .r-stats{display:grid}
 :root.light .target-box{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1)}
-:root.light .used-badge{background:rgba(40,120,40,.85);color:#ffffff;border-color:#287028} /* v1.34.203: cuadrado verde intenso tambien en modo claro; v1.34.204: badge unico (.used-badge-9h eliminada) */
+:root.light .used-badge{background:rgba(40,120,40,.85);color:#ffffff;border-color:#287028}
 :root.light .stbl-badge{color:var(--gold)}
 :root.light .stbl-dot{background:#f5a623}
 :root.light .barra-9h{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.2)}
@@ -655,8 +654,6 @@ input:checked+.toggle-slider:before{transform:translateX(18px)}
 
 /* ── FIELDS ── */
 .fields{display:grid;gap:12px;margin-bottom:12px}
-.f2{grid-template-columns:1fr 1fr}
-.f3{grid-template-columns:1fr 1fr 1fr}
 .field{display:flex;flex-direction:column;gap:6px}
 .field label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--green);opacity:.9}
 input,select{background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:5px;color:var(--text,#fff);font-family:'DM Mono',monospace;font-size:16px;padding:10px;outline:none;width:100%;-webkit-appearance:none}
@@ -695,7 +692,6 @@ select option{background:var(--bg)}
 .btn{background:rgba(201,168,76,.2);color:#e8c96a;border:1px solid rgba(201,168,76,.4);border-radius:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:13px 16px;cursor:pointer;margin-top:14px;width:100%}
 .btn:disabled{opacity:.5}
 .btn-sm{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.35);border-radius:8px;color:#e8c96a;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;cursor:pointer}
-.btn-outline{background:none;border:1px solid var(--border);border-radius:5px;color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:12px;cursor:pointer;margin-top:10px;width:100%}
 .btn-danger{background:rgba(224,85,85,.15);border:1px solid rgba(224,85,85,.35);border-radius:8px;color:#f08080;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:12px;cursor:pointer;margin-top:10px;width:100%}
 .btn-edit{background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);border-radius:4px;color:var(--gold);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:5px 13px;cursor:pointer}
 .del{background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.25);border-radius:4px;color:var(--red);cursor:pointer;font-size:16px;padding:3px 8px;line-height:1}
@@ -737,8 +733,6 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .r-cat{font-size:11px;color:var(--green);margin-top:2px;letter-spacing:1px}
 .r-stats{display:none;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
 .r-stat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center}
-.r-stat-n{font-size:18px;color:var(--cream)}
-.r-stat-l{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:2px}
 
 /* ── CHCP ── */
 .chcp-box{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:6px 10px;text-align:center;margin-top:6px} /* v1.34.089: padding reducido tras quitar nombre */
@@ -752,7 +746,6 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .chcp-num.empty{color:var(--muted);font-size:32px}
 .chcp-sub{font-size:19px;letter-spacing:2px;text-transform:uppercase;color:var(--blue-adapt);font-weight:600;margin-bottom:2px} /* v1.34.089: azul + negrita (era muted) */
 .chcp-detail{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5}
-.player-name{font-family:'DM Mono',monospace;font-size:21px;color:var(--text);margin-bottom:6px}
 .target-box{margin-top:4px;padding:4px 8px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:5px;font-size:11px;color:var(--cream);line-height:1.3}
 
 /* ── HISTORY ── */
@@ -974,8 +967,6 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .hidden{display:none}
 .section-title{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text);margin:16px 0 10px;text-align:center;font-weight:600} /* v1.34.115: color tema + centrado + 11px (estilo Editar Ronda) */
 
-@media(max-width:480px){.f3{grid-template-columns:1fr 1fr}}
-
 .stbl-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gold);margin:0 1px}
 
 .red-dot{display:inline-block;width:4px;height:4px;border-radius:50%;background:#e05555;margin:0 1px}
@@ -992,8 +983,6 @@ nav.nav-hidden{transform:translateY(100%)}
 
 
 /* Símbolos de resultado por hoyo */
-.score-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:32px;height:32px;margin:0 auto}
-.score-val{font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--cream);position:relative;z-index:1;line-height:1}
 /* Albatros: triángulo rojo */
 /* Estilos de score aplicados directamente al input */
 /* Score styles aplicados al input directamente */
@@ -1026,7 +1015,6 @@ nav.nav-hidden{transform:translateY(100%)}
 #nav-dropdown button{display:block;width:100%;background:none;border:none;border-bottom:1px solid var(--border);color:var(--cream);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;padding:14px 16px;text-align:left;cursor:pointer}
 #nav-dropdown button:last-child{border-bottom:none}
 #nav-dropdown button:active{background:rgba(255,255,255,.05)}
-#nav-dropdown .dd-danger{color:var(--red)}
 
 .hist-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
 .hist-table .col-fecha{position:sticky;left:0;background:var(--hist-sticky,#233723);opacity:1;z-index:2;min-width:68px;white-space:nowrap}
@@ -1054,7 +1042,6 @@ nav.nav-hidden{transform:translateY(100%)}
 .guide-card-body li{margin-bottom:4px;padding-left:4px;list-style:none}
 .guide-footer{flex-shrink:0;background:var(--bg);padding:16px 20px calc(env(safe-area-inset-bottom,0px) + 20px);text-align:center;border-top:1px solid var(--border)}
 .guide-btn{width:100%;background:rgba(0,102,204,.15);color:var(--blue-adapt);border:1px solid rgba(0,102,204,.4);border-radius:8px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:16px;cursor:pointer} /* v1.34.168: dorado -> azul adaptativo */
-.guide-skip{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:1px;text-transform:uppercase;margin-top:12px;display:block;background:none;border:none;cursor:pointer;width:100%}
 
 
 .barra-9h{margin-top:4px;padding:4px 6px;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15);border-radius:5px;margin-bottom:8px}
@@ -1530,7 +1517,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.233</div>
+    <div class="login-version">v1.34.234</div>
   </div>
 </div>
 
@@ -1779,7 +1766,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.233</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.234</div>
   </div>
 </div>
 
@@ -5035,14 +5022,6 @@ function toast(msg, err=false, ms=3000) {
 function cerrarModal(id) {
   const el = $(id);
   if (el) el.classList.add('hidden');
-}
-
-function autoNext(el, nextId, maxLen) {
-  const v = el.value.replace('.', '');
-  if (v.length >= maxLen) {
-    const next = $(nextId);
-    if (next) setTimeout(() => { next.focus(); next.select(); }, 30);
-  }
 }
 
 function fmtCR(el, nextId) {
@@ -8925,17 +8904,6 @@ function buildEditHoyos(campo, existing, numHoyos, vuelta, bolaRetirada) {
   }
 }
 
-function onEditBarra() {
-  const campoId = parseInt($('edit-r-campo-id').value) || null;
-  const campo = campoId ? state.campos.find(c => c.id === campoId) : null;
-  const barra = campo?.barras?.find(b => b.color === $('edit-r-barra').value);
-  if (barra) {
-    $('edit-r-cr').value = barra.cr;
-    $('edit-r-slope').value = barra.slope;
-    recalcEditStbl();
-  }
-}
-
 function recalcEditStbl() {
   const campoId = parseInt($('edit-r-campo-id').value) || null;
   const campo = campoId ? state.campos.find(c => c.id === campoId) : null;
@@ -9532,12 +9500,6 @@ function closeNavMenu() {
   if (btn)  btn.classList.remove('active');
 }
 
-function toggleNuevoCampo() {
-  // Compatibilidad con código existente
-  const showing = $('nuevo-campo-wrap').style.display !== 'none';
-  if (showing) cerrarNuevoCampo(); else abrirNuevoCampo();
-}
-
 function getHoyosFromEditor(prefix) {
   const hoyos = []; let parTotal = 0;
   for (let i = 1; i <= 18; i++) {
@@ -9926,8 +9888,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.233' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.233\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.234' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.234\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -9976,12 +9938,6 @@ function applyStoredTheme() {
     document.documentElement.classList.add('light');
   }
   updateThemeLabel();
-}
-
-function toggleNavMenu(btn) {
-  const menu = $('nav-dd-menu');
-  const isOpen = menu.classList.contains('open');
-  menu.classList.toggle('open', !isOpen);
 }
 
 
