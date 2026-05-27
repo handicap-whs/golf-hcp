@@ -1529,7 +1529,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.231</div>
+    <div class="login-version">v1.34.232</div>
   </div>
 </div>
 
@@ -1778,7 +1778,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.231</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.232</div>
   </div>
 </div>
 
@@ -9925,8 +9925,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.231' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.231\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.232' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.232\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -10590,34 +10590,43 @@ function instalarListenersAjustes() {
   const page = document.getElementById('page-ajustes');
   if (!page) return;
 
-  // touchstart:
+  // v1.34.232: pointer events (touch + mouse + stylus unificados).
+  //   Antes (v1.34.226-231): solo touch events -> no funcionaba en desktop con raton.
+  //   Pointer events son soportados en todos los navegadores modernos (Chrome, Edge,
+  //   Firefox, Safari iOS 13+, Safari macOS 13.1+).
+  //
+  // Comportamiento:
   //   - En modo edicion: drag directo desde cualquier punto de la seccion (excepto fijas).
-  //   - Fuera de modo edicion: si el touch es en la CABECERA (.ajustes-section-header),
-  //     si la seccion NO es fija (admin/salir): arrancar timer long-press 700ms.
-  //     Si se completa -> modo edicion. Si se suelta antes (tap corto) -> toggle plegado.
-  //   - Touch en el body (botones) fuera de modo edicion: no se hace nada especial,
-  //     dejar que el botón maneje su onclick normal.
-  // v1.34.230: admin y salir son FIJOS al final, no se pueden arrastrar ni entrar en modo edicion.
-  //   El tap en su cabecera SI funciona para toggle plegado/expandido.
+  //   - Fuera de modo edicion: si el touch/click es en la CABECERA, si la seccion NO es
+  //     fija (admin/salir): arrancar timer long-press 700ms. Si se completa -> modo edicion.
+  //     Si se suelta antes (tap/click corto) -> toggle plegado.
+  //   - Pulsar en el body (botones) fuera de modo edicion: dejar que el botón maneje su
+  //     onclick normal (no hacemos nada).
+  //   - admin y salir: FIJOS al final, no se pueden arrastrar ni entrar en modo edicion.
+  //     El tap/click en su cabecera SI funciona para toggle plegado/expandido.
   const SECCIONES_FIJAS = ['admin', 'salir'];
   let _lpEnHeader = false;
-  page.addEventListener('touchstart', (e) => {
+  let _lpPointerId = null;
+
+  page.addEventListener('pointerdown', (e) => {
+    // Solo botón izquierdo de ratón o touch/stylus (no botón derecho/medio)
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
     const sec = e.target.closest('.ajustes-section');
     if (!sec) return;
     const secId = sec.getAttribute('data-sec-id');
     const esFija = SECCIONES_FIJAS.indexOf(secId) !== -1;
     const header = e.target.closest('.ajustes-section-header');
-    const t = e.touches[0];
+    _lpPointerId = e.pointerId;
     if (document.body.classList.contains('modo-edicion-ajustes')) {
       // En modo edicion: drag directo, salvo en secciones fijas
       if (!esFija) {
-        iniciarDrag(sec, t.clientY);
+        iniciarDrag(sec, e.clientY);
         e.preventDefault();
       }
     } else if (header) {
-      // Tap o long-press en cabecera
-      _lpStartY = t.clientY;
-      _lpStartX = t.clientX;
+      // Tap/click o long-press en cabecera
+      _lpStartY = e.clientY;
+      _lpStartX = e.clientX;
       _lpSection = sec;
       _lpEnHeader = true;
       // En secciones fijas NO se arranca el timer del long-press (solo tap para toggle)
@@ -10631,34 +10640,30 @@ function instalarListenersAjustes() {
         }, AJUSTES_LONGPRESS_MS);
       }
     }
-  }, { passive: false });
+  });
 
-  page.addEventListener('touchmove', (e) => {
-    const t = e.touches[0];
+  page.addEventListener('pointermove', (e) => {
     if (_drag) {
-      actualizarDrag(t.clientY);
+      actualizarDrag(e.clientY);
       e.preventDefault();
     } else if (_lpTimer) {
-      const dx = Math.abs(t.clientX - _lpStartX);
-      const dy = Math.abs(t.clientY - _lpStartY);
+      const dx = Math.abs(e.clientX - _lpStartX);
+      const dy = Math.abs(e.clientY - _lpStartY);
       if (dx > AJUSTES_MOVE_TOLERANCE || dy > AJUSTES_MOVE_TOLERANCE) {
-        // El dedo se movio antes de completar long-press -> era scroll, cancelar
+        // El puntero se movio antes de completar long-press -> era scroll, cancelar
         cancelarLongPress();
         _lpEnHeader = false;
       }
     }
-  }, { passive: false });
+  });
 
-  page.addEventListener('touchend', () => {
-    // v1.34.231: el toggle plegado debe ejecutarse en TAPS cortos en header, incluyendo
-    // secciones fijas (admin, salir) donde el timer del long-press nunca arrancó.
-    // Antes (v1.34.229): la condicion if(_lpTimer) impedia el toggle en admin/salir
-    // porque ahi no se arranca timer.
-    // Logica correcta:
-    //   - _lpEnHeader: el touchstart fue en una cabecera (no en el body)
+  const finalizarPointer = () => {
+    // v1.34.231: el toggle plegado debe ejecutarse en TAPS/CLICKS cortos en header,
+    // incluyendo secciones fijas (admin, salir) donde el timer del long-press nunca arrancó.
+    // Logica:
+    //   - _lpEnHeader: el pointerdown fue en una cabecera (no en el body)
     //   - _lpSection: hay seccion candidata (no se cancelo por movimiento)
     //   - !_drag: no estamos en medio de un drag (long-press completado)
-    //  Si las tres son true -> fue tap en header -> toggle plegado.
     const fueTap = _lpEnHeader && _lpSection && !_drag;
     if (_lpTimer) {
       clearTimeout(_lpTimer);
@@ -10669,12 +10674,15 @@ function instalarListenersAjustes() {
     }
     _lpSection = null;
     _lpEnHeader = false;
+    _lpPointerId = null;
     if (_drag) finalizarDrag();
-  });
+  };
 
-  page.addEventListener('touchcancel', () => {
+  page.addEventListener('pointerup', finalizarPointer);
+  page.addEventListener('pointercancel', () => {
     cancelarLongPress();
     _lpEnHeader = false;
+    _lpPointerId = null;
     if (_drag) finalizarDrag();
   });
 
