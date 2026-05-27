@@ -1567,7 +1567,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.256</div>
+    <div class="login-version">v1.34.257</div>
   </div>
 </div>
 
@@ -1800,7 +1800,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.256</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.257</div>
   </div>
 </div>
 
@@ -2071,7 +2071,8 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <div class="card">
       <div class="bcp-search-wrap">
         <span class="bcp-search-icon" aria-hidden="true">🔍</span>
-        <input type="text" id="ac-search-input" class="bcp-search-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-i18n-placeholder="bcp_placeholder" placeholder="Escribe nombre del campo...">
+        <input type="text" id="ac-search-input" class="bcp-search-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-i18n-placeholder="bcp_placeholder" placeholder="Escribe nombre del campo..."
+          style="width:100%;background:#cfe2ff;border:2px solid #1e3a8a;border-radius:999px;color:#1e3a8a;font-family:'DM Mono',monospace;font-size:11px;padding:8px 36px 8px 32px;-webkit-appearance:none;appearance:none;outline:none">
         <button type="button" id="ac-clear-btn" class="bcp-clear-btn" onclick="acLimpiarBusqueda()" style="display:none" aria-label="Limpiar">✕</button>
       </div>
       <div class="bcp-count" id="ac-count" data-i18n="bcp_cargando">Cargando catálogo...</div>
@@ -9729,7 +9730,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.256\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.257\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
