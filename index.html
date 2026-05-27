@@ -301,6 +301,26 @@ body.splash-active #safe-area-cover {
   display: none;
 }
 
+/* v1.34.244: zona opaca INFERIOR debajo del nav.
+   Mismo principio que #safe-area-cover (arriba): cubre la franja inferior
+   del viewport con el color de fondo de la app, para que al hacer scroll
+   los datos no se mezclen visualmente con el nav blanco flotante.
+   Altura: cubre desde el borde inferior hasta justo encima del nav
+   (que tiene bottom:12px + height ~58px + safe-area-inset-bottom).
+   Z-index: por debajo del nav (100) pero por encima del contenido. */
+#safe-area-cover-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(70px + env(safe-area-inset-bottom, 0px));
+  background: var(--bg);
+  z-index: 99;
+  pointer-events: none;
+}
+:root.light #safe-area-cover-bottom { background: #ffffff; }
+body.splash-active #safe-area-cover-bottom { display: none; }
+
 /* ── SPLASH ── */
 /* v1.34.222: fondo splash negro (antes #1a2f1a verde) para coincidir con apple-splash.png
    y dar continuidad visual completa. Cuando la foto se carga, la foto cubre el fondo y se ve
@@ -374,7 +394,7 @@ body.splash-active #safe-area-cover {
    Antes era fondo verde oscuro semitransparente con letras gris claro y activa dorada.
    El modo claro ya estaba en estos colores; ahora unificamos para que el comportamiento
    sea identico en ambos modos. */
-nav{position:fixed;bottom:12px;left:16px;right:16px;background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(0,0,0,.08);border-radius:28px;display:flex;z-index:100;padding:4px 6px;transition:transform .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.18)} /* v1.34.129: padding-bottom fijo 4px (sin safe-area-inset-bottom dinamico que inflaba el nav en iOS Safari) */
+nav{position:fixed;bottom:12px;left:16px;right:16px;background:#ffffff;border:1px solid rgba(0,0,0,.08);border-radius:28px;display:flex;z-index:100;padding:4px 6px;transition:transform .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.18)} /* v1.34.244: blanco puro (antes rgba(.96) + blur dejaba tinte verdoso del fondo) */
 nav button{flex:1;background:none;border:none;color:#1a1a1a;padding:5px 4px 4px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'DM Mono',monospace;position:relative;border-radius:22px;transition:background .2s}
 nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 nav button.active{color:var(--blue-intenso);background:rgba(0,102,204,.10)} /* v1.34.243: activa azul (mismo esquema modo claro) */
@@ -1360,6 +1380,10 @@ nav.nav-hidden{transform:translateY(100%)}
      Color responde a modo claro/oscuro via var(--bg).
      Se oculta solo durante el splash (clase .splash-active en body). -->
 <div id="safe-area-cover"></div>
+<!-- v1.34.244: zona opaca inferior, paralela al cover superior.
+     Tapa el contenido al hacer scroll para que no se mezcle visualmente
+     con el nav blanco flotante. CSS en regla #safe-area-cover-bottom. -->
+<div id="safe-area-cover-bottom"></div>
 
 <!-- SPLASH -->
 
@@ -1538,7 +1562,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.243</div>
+    <div class="login-version">v1.34.244</div>
   </div>
 </div>
 
@@ -1771,7 +1795,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.243</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.244</div>
   </div>
 </div>
 
@@ -9700,7 +9724,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.243\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.244\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
