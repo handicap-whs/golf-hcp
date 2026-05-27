@@ -568,6 +568,63 @@ body.modo-edicion-ajustes #btn-edit-done{
   to   { opacity: 1; transform: translateY(0); }
 }
 .ajuste-sep{height:1px;background:var(--border);margin:0 16px}
+
+/* v1.34.229: Plegado de secciones de Ajustes.
+   .ajustes-section-header: cabecera (titulo de la seccion). Long-press aqui entra en modo edicion.
+   .ajustes-section-body: contenedor de los items (botones, toggles).
+   .ajustes-section-collapsible: secciones con 2+ entradas que se pueden plegar/desplegar
+     tocando la cabecera (tap corto). El long-press sigue funcionando para reordenar. */
+.ajustes-section-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:13px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--muted);
+  padding:0 4px 4px;
+}
+.ajustes-section-header > span:first-child{flex:1}
+.chevron-collapse{
+  width:14px;
+  height:14px;
+  stroke:var(--muted);
+  fill:none;
+  stroke-width:2;
+  flex-shrink:0;
+  transition:transform .25s ease;
+  margin-right:4px;
+}
+.ajustes-section-collapsible.expanded .chevron-collapse{
+  transform:rotate(90deg);
+}
+
+/* Cuerpo plegable: max-height animado.
+   Por defecto plegado (max-height:0). Cuando .expanded -> max-height grande (cubre cualquier
+   cantidad razonable de items). */
+.ajustes-section-collapsible .ajustes-section-body{
+  max-height:0;
+  overflow:hidden;
+  margin-bottom:0;
+  border-width:0;
+  transition:max-height .3s ease, margin-bottom .3s ease, border-width .3s step-end;
+}
+.ajustes-section-collapsible.expanded .ajustes-section-body{
+  max-height:600px;
+  margin-bottom:10px;
+  border-width:1px;
+  transition:max-height .3s ease, margin-bottom .3s ease, border-width .3s step-start;
+}
+/* Cabecera plegable: feedback visual */
+.ajustes-section-collapsible .ajustes-section-header{
+  cursor:pointer;
+  padding-top:8px;
+  padding-bottom:8px;
+}
+.ajustes-section-collapsible:not(.expanded) .ajustes-section-header{
+  /* Cuando esta plegada, anadir mas espacio inferior para separar de la siguiente */
+  margin-bottom:0;
+}
 /* Toggle switch */
 .toggle-switch{position:relative;display:inline-block;width:44px;height:26px;flex-shrink:0}
 .toggle-switch input{opacity:0;width:0;height:0}
@@ -1466,7 +1523,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.228</div>
+    <div class="login-version">v1.34.229</div>
   </div>
 </div>
 
@@ -1715,7 +1772,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.228</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.229</div>
   </div>
 </div>
 
@@ -2579,8 +2636,8 @@ nav.nav-hidden{transform:translateY(100%)}
 
   <!-- SECTION: Campos y Juego -->
   <div class="ajustes-section" data-sec-id="campos_juego">
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_campos_juego">Campos y Juego</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
+  <div class="ajustes-section-header"><span data-i18n="sec_campos_juego">Campos y Juego</span></div>
+  <div class="ajustes-section-body" style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <button class="ajuste-btn" onclick="goTo('campos',null)">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
       <div class="ajuste-text"><div data-i18n="gestionar_campos">Gestionar Campos</div><div class="ajuste-sub" data-i18n="sub_campos">Añade y edita tus campos de golf</div></div>
@@ -2591,8 +2648,8 @@ nav.nav-hidden{transform:translateY(100%)}
 
   <!-- SECTION: Informes (v1.31.074) -->
   <div class="ajustes-section" data-sec-id="informes">
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_informes">Informes</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
+  <div class="ajustes-section-header"><span data-i18n="sec_informes">Informes</span></div>
+  <div class="ajustes-section-body" style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <button class="ajuste-btn" onclick="abrirInformeMensualUltimo()">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
       <div class="ajuste-text"><div data-i18n="menu_informe_mensual">Informe Mensual</div><div class="ajuste-sub" data-i18n="sub_informe_mensual">Resumen de tu juego mes a mes</div></div>
@@ -2602,9 +2659,9 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 
   <!-- SECTION: Guías -->
-  <div class="ajustes-section" data-sec-id="guias">
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_guias">Guías</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
+  <div class="ajustes-section ajustes-section-collapsible" data-sec-id="guias">
+  <div class="ajustes-section-header"><span data-i18n="sec_guias">Guías</span><svg class="chevron-collapse" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+  <div class="ajustes-section-body" style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <button class="ajuste-btn" onclick="localStorage.removeItem('golf_guide_seen');openGuide()">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
       <div class="ajuste-text"><div data-i18n="menu_guia">Guía de inicio</div><div class="ajuste-sub" data-i18n="sub_guia">Aprende a usar la app</div></div>
@@ -2626,9 +2683,9 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 
   <!-- SECTION: Cuenta -->
-  <div class="ajustes-section" data-sec-id="cuenta">
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_cuenta">Cuenta</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
+  <div class="ajustes-section ajustes-section-collapsible" data-sec-id="cuenta">
+  <div class="ajustes-section-header"><span data-i18n="sec_cuenta">Cuenta</span><svg class="chevron-collapse" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+  <div class="ajustes-section-body" style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <button class="ajuste-btn" onclick="goTo('pwd',null)">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
       <div class="ajuste-text"><div data-i18n="menu_clave">Cambiar clave</div><div class="ajuste-sub" data-i18n="sub_clave">Actualiza tu contraseña</div></div>
@@ -2653,9 +2710,9 @@ nav.nav-hidden{transform:translateY(100%)}
   <!-- v1.34.218: SECTION Admin MOVIDA al final, justo antes del card Salir. -->
 
   <!-- SECTION: Estilo App -->
-  <div class="ajustes-section" data-sec-id="estilo">
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_estilo">Estilo App</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
+  <div class="ajustes-section ajustes-section-collapsible" data-sec-id="estilo">
+  <div class="ajustes-section-header"><span data-i18n="sec_estilo">Estilo App</span><svg class="chevron-collapse" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+  <div class="ajustes-section-body" style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <div class="ajuste-btn" style="cursor:default">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
       <div class="ajuste-text"><div data-i18n="menu_idioma">Idioma</div></div>
@@ -2696,9 +2753,9 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 
   <!-- SECTION: Compartir y Soporte -->
-  <div class="ajustes-section" data-sec-id="compartir">
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_compartir">Compartir y Soporte</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
+  <div class="ajustes-section ajustes-section-collapsible" data-sec-id="compartir">
+  <div class="ajustes-section-header"><span data-i18n="sec_compartir">Compartir y Soporte</span><svg class="chevron-collapse" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+  <div class="ajustes-section-body" style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <button class="ajuste-btn" onclick="compartirApp()">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
       <div class="ajuste-text"><div data-i18n="menu_compartir_app">Compartir app</div><div class="ajuste-sub" data-i18n="sub_compartir">Comparte Golf HCP con tus compañeros</div></div>
@@ -2715,8 +2772,8 @@ nav.nav-hidden{transform:translateY(100%)}
 
   <!-- SECTION: Sobre la App -->
   <div class="ajustes-section" data-sec-id="sobre">
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_sobre">Sobre Golf HCP</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
+  <div class="ajustes-section-header"><span data-i18n="sec_sobre">Sobre Golf HCP</span></div>
+  <div class="ajustes-section-body" style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <button class="ajuste-btn" onclick="goTo('sobre',null)">
       <div class="ajuste-icon" style="margin-left:4px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
       <div class="ajuste-text"><div data-i18n="sec_sobre">Sobre Golf HCP</div><div class="ajuste-sub" data-i18n="sub_sobre">Versión, créditos y más</div></div>
@@ -2726,9 +2783,9 @@ nav.nav-hidden{transform:translateY(100%)}
   </div>
 
   <!-- SECTION: Legal -->
-  <div class="ajustes-section" data-sec-id="legal">
-  <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 4px" data-i18n="sec_legal">Legal</div>
-  <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
+  <div class="ajustes-section ajustes-section-collapsible" data-sec-id="legal">
+  <div class="ajustes-section-header"><span data-i18n="sec_legal">Legal</span><svg class="chevron-collapse" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+  <div class="ajustes-section-body" style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)">
     <button class="ajuste-btn" onclick="goTo('legal',null)">
       <div class="ajuste-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
       <div class="ajuste-text"><div data-i18n="menu_legal">Info Legal</div><div class="ajuste-sub" data-i18n="sub_legal">No afiliado a R&A / USGA</div></div>
@@ -2745,9 +2802,9 @@ nav.nav-hidden{transform:translateY(100%)}
 
   <!-- SECTION: Admin (v1.31.094) — visible solo si state.user.is_admin -->
   <!-- v1.34.218: MOVIDA al final, justo antes del card Salir. v1.34.219: clase ajustes-section anadida. -->
-  <div id="admin-section-wrap" class="ajustes-section" data-sec-id="admin" style="display:none">
-    <div style="font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold2);padding:0 4px 6px">🔧 Administración</div>
-    <div style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:18px;border:1px solid var(--gold2)">
+  <div id="admin-section-wrap" class="ajustes-section ajustes-section-collapsible" data-sec-id="admin" style="display:none">
+    <div class="ajustes-section-header" style="color:var(--gold2)"><span>🔧 Administración</span><svg class="chevron-collapse" viewBox="0 0 24 24" style="stroke:var(--gold2)"><polyline points="9 18 15 12 9 6"/></svg></div>
+    <div class="ajustes-section-body" style="background:var(--card-bg);border-radius:14px;overflow:hidden;margin-bottom:18px;border:1px solid var(--gold2)">
       <button class="ajuste-btn" onclick="goTo('admin-guia',null)">
         <div class="ajuste-icon" style="color:var(--gold2)"><svg viewBox="0 0 24 24" style="stroke:currentColor;fill:none;stroke-width:2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
         <div class="ajuste-text"><div style="color:var(--gold2)">Aula Didáctica</div><div class="ajuste-sub">Gestionar contenidos del Aula</div></div>
@@ -5796,6 +5853,8 @@ async function onLogin(user) {
 
   // v1.34.219: aplicar orden personalizado de secciones de Ajustes (si el usuario lo configuro)
   try { aplicarOrdenAjustes(); } catch(e) { console.warn('aplicarOrdenAjustes:', e); }
+  // v1.34.229: aplicar estado de expansion (secciones plegables) persistente
+  try { aplicarEstadoExpansion(); } catch(e) { console.warn('aplicarEstadoExpansion:', e); }
   // v1.34.226: instalar listeners de long-press + drag (idempotente, una sola vez)
   try { instalarListenersAjustes(); } catch(e) { console.warn('instalarListenersAjustes:', e); }
 
@@ -9856,8 +9915,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.228' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.228\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.229' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.229\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -10464,6 +10523,44 @@ function finalizarDrag() {
   if (_autoScrollRaf) { cancelAnimationFrame(_autoScrollRaf); _autoScrollRaf = null; }
 }
 
+// ── v1.34.229: PLEGADO DE SECCIONES ──────────────────────────────────
+// Estado persistente en localStorage 'ajustes_expanded' (array de data-sec-id expandidas).
+// Por defecto todas plegadas (minimizar scroll).
+const AJUSTES_EXPANDED_KEY = 'ajustes_expanded';
+
+function getSeccionesExpandidas() {
+  try {
+    const raw = localStorage.getItem(AJUSTES_EXPANDED_KEY);
+    if (!raw) return new Set();
+    const arr = JSON.parse(raw);
+    return new Set(Array.isArray(arr) ? arr : []);
+  } catch(e) { return new Set(); }
+}
+
+function guardarSeccionesExpandidas() {
+  const ids = [];
+  document.querySelectorAll('#page-ajustes .ajustes-section-collapsible.expanded').forEach(s => {
+    const id = s.getAttribute('data-sec-id');
+    if (id) ids.push(id);
+  });
+  try { localStorage.setItem(AJUSTES_EXPANDED_KEY, JSON.stringify(ids)); } catch(e) {}
+}
+
+function aplicarEstadoExpansion() {
+  const expandidas = getSeccionesExpandidas();
+  document.querySelectorAll('#page-ajustes .ajustes-section-collapsible').forEach(sec => {
+    const id = sec.getAttribute('data-sec-id');
+    if (id && expandidas.has(id)) sec.classList.add('expanded');
+    else sec.classList.remove('expanded');
+  });
+}
+
+function toggleSeccionPlegado(sec) {
+  if (!sec.classList.contains('ajustes-section-collapsible')) return;
+  sec.classList.toggle('expanded');
+  guardarSeccionesExpandidas();
+}
+
 // ── EVENT LISTENERS: instalados UNA VEZ por sesion ────────────────────
 function instalarListenersAjustes() {
   if (_ajustesListenersInstalados) return;
@@ -10471,54 +10568,74 @@ function instalarListenersAjustes() {
   const page = document.getElementById('page-ajustes');
   if (!page) return;
 
-  // touchstart en una seccion -> iniciar timer long-press OR iniciar drag (si ya en modo edicion)
+  // touchstart:
+  //   - En modo edicion: drag directo desde cualquier punto de la seccion.
+  //   - Fuera de modo edicion: si el touch es en la CABECERA (.ajustes-section-header),
+  //     arrancar timer long-press 700ms. Si se completa -> modo edicion. Si se suelta
+  //     antes (tap corto) -> toggle plegado si es collapsible.
+  //   - Touch en el body (botones) fuera de modo edicion: no se hace nada especial,
+  //     dejar que el botón maneje su onclick normal.
+  let _lpEnHeader = false;
   page.addEventListener('touchstart', (e) => {
     const sec = e.target.closest('.ajustes-section');
     if (!sec) return;
+    const header = e.target.closest('.ajustes-section-header');
     const t = e.touches[0];
     if (document.body.classList.contains('modo-edicion-ajustes')) {
-      // Ya en modo edicion -> empezar drag directo
+      // Modo edicion -> drag directo
       iniciarDrag(sec, t.clientY);
       e.preventDefault();
-    } else {
-      // Iniciar timer long-press
+    } else if (header) {
+      // Tap o long-press en cabecera
       _lpStartY = t.clientY;
       _lpStartX = t.clientX;
       _lpSection = sec;
+      _lpEnHeader = true;
       _lpTimer = setTimeout(() => {
         _lpTimer = null;
         if (_lpSection) {
           entrarModoEdicionAjustes();
-          // Iniciar drag inmediatamente sobre la seccion del long-press
           iniciarDrag(_lpSection, _lpStartY);
         }
       }, AJUSTES_LONGPRESS_MS);
     }
+    // Si touchstart cae en el body fuera de modo edicion -> no hacemos nada,
+    // dejamos que los botones de items reciban su onclick normal.
   }, { passive: false });
 
   page.addEventListener('touchmove', (e) => {
     const t = e.touches[0];
     if (_drag) {
-      // Estamos arrastrando -> mover
       actualizarDrag(t.clientY);
       e.preventDefault();
     } else if (_lpTimer) {
-      // Esperando long-press -> si el dedo se mueve demasiado, cancelar (era scroll)
       const dx = Math.abs(t.clientX - _lpStartX);
       const dy = Math.abs(t.clientY - _lpStartY);
       if (dx > AJUSTES_MOVE_TOLERANCE || dy > AJUSTES_MOVE_TOLERANCE) {
+        // El dedo se movio antes de completar long-press -> era scroll, cancelar
         cancelarLongPress();
+        _lpEnHeader = false;
       }
     }
   }, { passive: false });
 
   page.addEventListener('touchend', () => {
-    cancelarLongPress();
+    // Si habia timer activo (no completo long-press) y fue tap en header -> toggle plegado
+    if (_lpTimer) {
+      clearTimeout(_lpTimer);
+      _lpTimer = null;
+      if (_lpEnHeader && _lpSection) {
+        toggleSeccionPlegado(_lpSection);
+      }
+    }
+    _lpSection = null;
+    _lpEnHeader = false;
     if (_drag) finalizarDrag();
   });
 
   page.addEventListener('touchcancel', () => {
     cancelarLongPress();
+    _lpEnHeader = false;
     if (_drag) finalizarDrag();
   });
 
