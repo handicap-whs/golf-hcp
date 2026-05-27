@@ -313,7 +313,7 @@ body.splash-active #safe-area-cover {
   bottom: 0;
   left: 0;
   right: 0;
-  height: calc(60px + env(safe-area-inset-bottom, 0px));
+  height: calc(40px + env(safe-area-inset-bottom, 0px));
   background: var(--bg);
   z-index: 99;
   pointer-events: none;
@@ -1363,10 +1363,12 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .bcp-empty-hint{font-size:7px !important;font-style:italic;color:var(--muted) !important;opacity:.85}
 .bcp-result-name mark{background:rgba(232,201,106,.20);color:var(--gold2);padding:0 1px;border-radius:2px}
 :root.light .bcp-result-name mark{background:rgba(122,90,16,.18);color:var(--gold2)}
-.btn-bcp-online{display:block;width:100%;background:rgba(201,168,76,.10);border:1px solid rgba(201,168,76,.35);border-radius:6px;color:var(--gold);font-family:'DM Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.5px;padding:9px 12px;margin-bottom:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,border-color .15s;text-align:center}
-.btn-bcp-online:hover,.btn-bcp-online:active{background:rgba(201,168,76,.18);border-color:var(--gold)}
-:root.light .btn-bcp-online{background:rgba(122,90,16,.06);border-color:rgba(122,90,16,.30)}
-:root.light .btn-bcp-online:hover,:root.light .btn-bcp-online:active{background:rgba(122,90,16,.12);border-color:var(--gold)}
+/* v1.34.247: rediseñado a pill azul claro con letras azules (antes dorado).
+   Coherente con .bcp-search-input. Cantos 999px = 180 grados. */
+.btn-bcp-online{display:block;width:100%;background:rgba(220,232,248,0.98);border:1px solid rgba(110,150,210,0.45);border-radius:999px;color:#1e3a8a;font-family:'DM Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.5px;padding:9px 16px;margin-bottom:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,border-color .15s;text-align:center}
+.btn-bcp-online:hover,.btn-bcp-online:active{background:rgba(195,215,240,1);border-color:#1e3a8a}
+:root.light .btn-bcp-online{background:rgba(220,232,248,1);border-color:rgba(110,150,210,0.55)}
+:root.light .btn-bcp-online:hover,:root.light .btn-bcp-online:active{background:rgba(195,215,240,1);border-color:#1e3a8a}
 
 </style>
 </head>
@@ -1563,7 +1565,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.246</div>
+    <div class="login-version">v1.34.247</div>
   </div>
 </div>
 
@@ -1786,17 +1788,17 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     </div>
   </div>
   <!-- v1.34.107: version-tap movido despues del card grafico para coherencia de espaciado -->
-  <div class="card" style="padding:12px 14px;display:none" id="mini-chart-wrap">
+  <div class="card" style="padding:12px 14px 4px 14px;display:none" id="mini-chart-wrap">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-size:11px;letter-spacing:1.5px;color:var(--text)" data-i18n="evolucion_hcp">EVOLUCIÓN HCP</span><span style="font-size:9px;color:var(--muted);letter-spacing:.5px" data-i18n="ultimas_20">20 últimas rondas</span></div>
     <canvas id="mini-hcp-chart" height="100" style="width:100%;display:block"></canvas>
     <div id="mini-chart-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-size:8px;color:var(--muted);font-family:'DM Mono',monospace"></div>
   </div>
-  <div style="display:flex;align-items:center;gap:8px;margin-top:2px">
-    <button onclick="goTo('campos',null)" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;touch-action:manipulation">
+  <div style="display:flex;align-items:center;gap:8px;margin-top:0">
+    <button onclick="goTo('campos',null)" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;padding:4px 10px;cursor:pointer;display:flex;align-items:center;gap:8px;touch-action:manipulation">
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.246</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.247</div>
   </div>
 </div>
 
@@ -9725,7 +9727,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.246\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.247\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
