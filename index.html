@@ -1355,15 +1355,18 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 /* v1.34.259: reglas especificas para #bcp-search-input (page-buscar-campo-rfeg).
    Pisan el focus dorado de la clase + el autofill amarillo de Safari/Chrome.
    Usamos !important porque el navegador autofill aplica estilos propios con prioridad
-   muy alta que no se pueden vencer con style inline normal. */
+   muy alta que no se pueden vencer con style inline normal.
+   v1.34.260: borde mas fino (1px azul medio #4a78c9 en vez de 2px #1e3a8a oscuro)
+   y -webkit-text-fill-color azul forzado para que el autofill no pinte el texto negro. */
 #bcp-search-input{
   background:#cfe2ff !important;
-  border:2px solid #1e3a8a !important;
+  border:1px solid #4a78c9 !important;
   color:#1e3a8a !important;
+  -webkit-text-fill-color:#1e3a8a !important;
   border-radius:999px !important;
 }
 #bcp-search-input:focus{
-  border-color:#1e3a8a !important;
+  border-color:#4a78c9 !important;
   outline:none !important;
 }
 #bcp-search-input::placeholder{
@@ -1376,7 +1379,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 #bcp-search-input:-webkit-autofill:active{
   -webkit-box-shadow:0 0 0 1000px #cfe2ff inset !important;
   -webkit-text-fill-color:#1e3a8a !important;
-  border:2px solid #1e3a8a !important;
+  border:1px solid #4a78c9 !important;
   caret-color:#1e3a8a !important;
 }
 .bcp-clear-btn{position:absolute;right:5px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:var(--muted);font-size:13px;cursor:pointer;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:background .15s,color .15s;padding:0}
@@ -1595,7 +1598,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.259</div>
+    <div class="login-version">v1.34.260</div>
   </div>
 </div>
 
@@ -1828,7 +1831,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.259</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.260</div>
   </div>
 </div>
 
@@ -2194,7 +2197,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <div class="bcp-search-wrap">
       <span class="bcp-search-icon" aria-hidden="true">🔍</span>
       <input type="text" id="bcp-search-input" class="bcp-search-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-i18n-placeholder="bcp_placeholder" placeholder="Escribe nombre del campo..."
-        style="width:100%;background:#cfe2ff;border:2px solid #1e3a8a;border-radius:999px;color:#1e3a8a;font-family:'DM Mono',monospace;font-size:11px;padding:8px 36px 8px 32px;-webkit-appearance:none;appearance:none;outline:none">
+        style="width:100%;background:#cfe2ff;border:1px solid #4a78c9;border-radius:999px;color:#1e3a8a;font-family:'DM Mono',monospace;font-size:11px;padding:8px 36px 8px 32px;-webkit-appearance:none;appearance:none;outline:none">
       <button type="button" id="bcp-clear-btn" class="bcp-clear-btn" onclick="bcpLimpiarBusqueda()" style="display:none" aria-label="Limpiar búsqueda">✕</button>
     </div>
     <div class="bcp-count" id="bcp-count" data-i18n="bcp_cargando">Cargando catálogo...</div>
@@ -9758,7 +9761,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.259\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.260\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
