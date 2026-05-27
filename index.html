@@ -1517,7 +1517,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.241</div>
+    <div class="login-version">v1.34.242</div>
   </div>
 </div>
 
@@ -1750,7 +1750,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.241</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.242</div>
   </div>
 </div>
 
@@ -1894,8 +1894,8 @@ nav.nav-hidden{transform:translateY(100%)}
       style="flex:1;background:var(--input-bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:6px 10px;-webkit-appearance:none;outline:none">
     <div id="hist-counter" style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.3px;white-space:nowrap"></div>
     <div id="hist-kebab-wrap" style="position:relative">
-      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1;padding:0;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center" aria-label="Más opciones">⋮</button>
-      <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:34px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:6px;min-width:220px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.18);font-family:'DM Mono',monospace">
+      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:rgba(220,232,248,0.98);border:1.5px solid rgba(110,150,210,0.65);border-radius:50%;color:#0d1f3a;padding:0;width:56px;height:56px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,30,90,0.12)" aria-label="Más opciones"><svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:#0d1f3a;display:block"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
+      <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:60px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:6px;min-width:220px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.18);font-family:'DM Mono',monospace">
         <!-- v1.34.237: iconos SVG line-style iOS (coherentes con Ajustes), reemplazan emojis ⇅ ⬇ 🗑 -->
         <button id="btn-toggle-all-months" type="button" onclick="hideHistKebab();toggleAllHistMonths()" style="display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.5px;padding:10px 12px;cursor:pointer;text-align:left">
           <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
@@ -4867,7 +4867,7 @@ function mostrarInfoCampoToast(campoId) {
     const lblBarra = (BARRA_LBL[b.color] || b.color);
     const cr = (b.cr != null) ? b.cr : '—';
     const slope = (b.slope != null) ? b.slope : '—';
-    return `<div style="margin:5px 0;font-family:'DM Mono',monospace;font-size:12px;display:flex;align-items:center;gap:8px;color:${TXT_LABEL}"><span style="display:inline-flex;align-items:center;min-width:110px;white-space:nowrap">${colorDot}${lblBarra}</span><span style="color:${TXT_MAIN};min-width:65px;white-space:nowrap;font-weight:600">CR ${cr}</span><span style="color:${TXT_MAIN};white-space:nowrap;font-weight:600">Slope ${slope}</span></div>`;
+    return `<div style="margin:5px 0;font-family:'DM Mono',monospace;font-size:12px;display:flex;align-items:center;gap:8px;color:${TXT_LABEL}"><span style="display:inline-flex;align-items:center;min-width:110px;white-space:nowrap">${colorDot}${lblBarra}</span><span style="color:${TXT_MAIN};min-width:65px;white-space:nowrap">CR ${cr}</span><span style="color:${TXT_MAIN};white-space:nowrap">Slope ${slope}</span></div>`;
   }).join('');
 
   const header = `<div style="font-size:13px;font-weight:700;letter-spacing:1px;color:${TXT_MAIN};margin-bottom:10px;border-bottom:1px solid ${SEP_LINE};padding-bottom:6px;white-space:nowrap">${limpiarNombreCampo(campo.nombre || '')} · Par ${campo.par_total || '—'}</div>`;
@@ -7701,7 +7701,7 @@ function mostrarInfoRondaToast(rondaId) {
     : '';
   const stblTxt = r.stableford != null ? r.stableford + ' ' + lbl('pts','pts','pts') : '—';
 
-  const row = (k, v) => `<div style="margin:5px 0;font-family:'DM Mono',monospace;font-size:12px;display:flex;align-items:center;gap:8px"><span style="color:${TXT_LABEL};min-width:95px;white-space:nowrap">${k}</span><span style="color:${TXT_MAIN};white-space:nowrap;font-weight:600">${v}</span></div>`;
+  const row = (k, v) => `<div style="margin:5px 0;font-family:'DM Mono',monospace;font-size:12px;display:flex;align-items:center;gap:8px"><span style="color:${TXT_LABEL};min-width:95px;white-space:nowrap">${k}</span><span style="color:${TXT_MAIN};white-space:nowrap">${v}</span></div>`;
 
   const header = `<div style="font-size:13px;font-weight:700;letter-spacing:1px;color:${TXT_MAIN};margin-bottom:10px;border-bottom:1px solid ${SEP_LINE};padding-bottom:6px;white-space:nowrap">${fmtDate(r.date)} · ${(r.name||'—')}${rfegTxt}</div>`;
   const body = ''
@@ -9679,7 +9679,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.241\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.242\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
