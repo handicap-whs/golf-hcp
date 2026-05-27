@@ -370,11 +370,15 @@ body.splash-active #safe-area-cover {
 .pb-name{color:var(--gold2);font-family:'DM Mono',monospace;font-size:20px;font-style:normal}
 
 /* ── NAV ── */
-nav{position:fixed;bottom:12px;left:16px;right:16px;background:rgba(30,50,30,0.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);border-radius:28px;display:flex;z-index:100;padding:4px 6px;transition:transform .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.4)} /* v1.34.129: padding-bottom fijo 4px (sin safe-area-inset-bottom dinamico que inflaba el nav en iOS Safari) */
-nav button{flex:1;background:none;border:none;color:var(--muted);padding:5px 4px 4px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'DM Mono',monospace;position:relative;border-radius:22px;transition:background .2s}
+/* v1.34.243: nav inferior con fondo blanco + letras negras y pestaña activa en azul.
+   Antes era fondo verde oscuro semitransparente con letras gris claro y activa dorada.
+   El modo claro ya estaba en estos colores; ahora unificamos para que el comportamiento
+   sea identico en ambos modos. */
+nav{position:fixed;bottom:12px;left:16px;right:16px;background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(0,0,0,.08);border-radius:28px;display:flex;z-index:100;padding:4px 6px;transition:transform .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.18)} /* v1.34.129: padding-bottom fijo 4px (sin safe-area-inset-bottom dinamico que inflaba el nav en iOS Safari) */
+nav button{flex:1;background:none;border:none;color:#1a1a1a;padding:5px 4px 4px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'DM Mono',monospace;position:relative;border-radius:22px;transition:background .2s}
 nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-nav button.active{color:var(--gold2);background:rgba(232,201,106,.08)} /* v1.34.147: modo oscuro vuelve a amarillo MUY suave */
-nav button.active svg{stroke:var(--gold2)} /* v1.34.147: modo oscuro stroke dorado claro */
+nav button.active{color:var(--blue-intenso);background:rgba(0,102,204,.10)} /* v1.34.243: activa azul (mismo esquema modo claro) */
+nav button.active svg{stroke:var(--blue-intenso)} /* v1.34.243: activa azul */
 :root.light nav{background:rgba(240,244,240,0.95);border-top:1px solid rgba(0,0,0,.1)}
 :root.light nav button{color:rgba(0,0,0,.5)}
 :root.light nav button.active{color:var(--blue-adapt);background:rgba(0,102,204,.10)} /* v1.34.144: verde -> azul adaptativo */
@@ -619,10 +623,14 @@ body.modo-edicion-ajustes #btn-edit-done{
   font-size:13px;
   letter-spacing:1.5px;
   text-transform:uppercase;
-  color:var(--muted);
+  /* v1.34.243: letrero de cada seccion en azul muy oscuro (modo claro).
+     En modo oscuro se sobreescribe a azul claro para legibilidad (regla
+     mas abajo en :root.dark / default). Coherente con paleta toasts. */
+  color:#7fb3ff;
   padding:10px 4px;
   border-bottom:1px solid var(--border);
 }
+:root.light .ajustes-section-header{color:#0d1f3a}
 .ajustes-section:first-of-type .ajustes-section-header{
   border-top:1px solid var(--border);
 }
@@ -1473,7 +1481,20 @@ nav.nav-hidden{transform:translateY(100%)}
 </div>
 
 <div id="splash">
-  <svg width="80" height="80" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#1a2f1a"/><circle cx="256" cy="300" r="72" fill="#2d5a27" stroke="#4a8c3f" stroke-width="6"/><circle cx="256" cy="300" r="18" fill="#7bc67a"/><rect x="250" y="140" width="12" height="148" fill="#c9a84c" rx="3"/><path d="M262 148 L320 175 L262 202 Z" fill="#e8c96a"/></svg>
+  <!-- v1.34.243: icono splash adaptado a la nueva paleta definitiva del icono PWA:
+       fondo azul intenso, bandera blanca line-art, elipse blanca grande y pelota amarilla.
+       Coordenadas en viewBox 512x512 escaladas desde el diseno 380x380 de los PNGs. -->
+  <svg width="80" height="80" viewBox="0 0 512 512">
+    <rect width="512" height="512" rx="112" fill="#0066cc"/>
+    <!-- Elipse grande blanca punteada -->
+    <ellipse cx="256" cy="425" rx="148" ry="24" fill="none" stroke="#ffffff" stroke-width="9" stroke-dasharray="6 8" opacity="0.78"/>
+    <!-- Poste -->
+    <line x1="213" y1="110" x2="213" y2="425" stroke="#ffffff" stroke-width="15" stroke-linecap="round"/>
+    <!-- Bandera triangulo -->
+    <path d="M213 110 L361 148 L213 186 Z" stroke="#ffffff" stroke-width="15" stroke-linejoin="round" fill="none"/>
+    <!-- Pelota amarilla -->
+    <circle cx="313" cy="412" r="19" fill="#f5c518" stroke="#ffffff" stroke-width="4"/>
+  </svg>
   <div id="splash-t">Golf <em>HCP</em></div>
   <div id="splash-s">Cargando...</div>
 </div>
@@ -1517,7 +1538,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.242</div>
+    <div class="login-version">v1.34.243</div>
   </div>
 </div>
 
@@ -1750,7 +1771,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.242</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.243</div>
   </div>
 </div>
 
@@ -1894,8 +1915,8 @@ nav.nav-hidden{transform:translateY(100%)}
       style="flex:1;background:var(--input-bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:6px 10px;-webkit-appearance:none;outline:none">
     <div id="hist-counter" style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.3px;white-space:nowrap"></div>
     <div id="hist-kebab-wrap" style="position:relative">
-      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:rgba(220,232,248,0.98);border:1.5px solid rgba(110,150,210,0.65);border-radius:50%;color:#0d1f3a;padding:0;width:56px;height:56px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,30,90,0.12)" aria-label="Más opciones"><svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:#0d1f3a;display:block"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
-      <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:60px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:6px;min-width:220px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.18);font-family:'DM Mono',monospace">
+      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:var(--blue-adapt);border:none;border-radius:50%;color:#ffffff;padding:0;width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,30,90,0.18)" aria-label="Más opciones"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#ffffff;display:block"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
+      <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:44px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:6px;min-width:220px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.18);font-family:'DM Mono',monospace">
         <!-- v1.34.237: iconos SVG line-style iOS (coherentes con Ajustes), reemplazan emojis ⇅ ⬇ 🗑 -->
         <button id="btn-toggle-all-months" type="button" onclick="hideHistKebab();toggleAllHistMonths()" style="display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.5px;padding:10px 12px;cursor:pointer;text-align:left">
           <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
@@ -9679,7 +9700,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.242\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.243\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
