@@ -1551,7 +1551,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.236</div>
+    <div class="login-version">v1.34.237</div>
   </div>
 </div>
 
@@ -1800,7 +1800,7 @@ nav.nav-hidden{transform:translateY(100%)}
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.236</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.237</div>
   </div>
 </div>
 
@@ -1947,35 +1947,36 @@ nav.nav-hidden{transform:translateY(100%)}
   <!-- v1.34.202: boton "+ Nueva" devuelto al header (la barra fixed tapaba informacion). -->
   <!-- v1.34.203: boton "+ NUEVA RONDA" mas ancho (flex:1) + Expandir/Colapsar meses movido al kebab. -->
   <!-- v1.34.235: + NUEVA RONDA reemplazado por FAB circular azul fijo abajo-derecha. -->
-  <!-- v1.34.236: revertido titulo a centrado. Kebab vuelve a su posicion anterior (derecha). -->
+  <!-- v1.34.236: revertido titulo a centrado. Kebab vuelve a su posicion anterior. -->
+  <!-- v1.34.237: kebab integrado en la linea del input de busqueda. Iconos planos SVG iOS,
+       coherentes con los iconos de Ajustes. Fuente y tamano del menu igualados. -->
   <div class="modal-title" style="margin:0 0 12px 0;text-align:center;font-size:14px;color:var(--text)" data-i18n="historial">Historial de Rondas</div>
   <!-- v1.34.201: hint estilo Mis Campos -->
   <div style="text-align:center;font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.5px;margin-bottom:8px;opacity:.75" data-i18n="rondas_swipe_hint">‹‹ ── Deslizar para opciones de la ronda ── ››</div>
-  <!-- v1.34.236: kebab solo (sin boton Nueva Ronda, ahora es FAB) en su posicion derecha original -->
-  <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-bottom:8px">
-    <div id="hist-kebab-wrap" style="position:relative">
-      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1;padding:0;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center" aria-label="Más opciones">⋮</button>
-      <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:34px;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:4px;min-width:200px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.15);font-family:'DM Mono',monospace">
-        <!-- v1.34.203: Expandir/Colapsar meses integrado en el menu kebab -->
-        <button id="btn-toggle-all-months" type="button" onclick="hideHistKebab();toggleAllHistMonths()" style="display:flex;align-items:center;gap:8px;width:100%;background:none;border:none;border-radius:4px;color:var(--text);font-family:inherit;font-size:11px;padding:8px 10px;cursor:pointer;text-align:left">
-          <span style="font-size:13px">⇅</span>
-          <span id="btn-toggle-all-months-label" data-i18n="hist_expandir_todos">Expandir meses</span>
-        </button>
-        <button id="btn-hist-exportar" type="button" onclick="hideHistKebab();doExportData()" style="display:flex;align-items:center;gap:8px;width:100%;background:none;border:none;border-radius:4px;color:var(--text);font-family:inherit;font-size:11px;padding:8px 10px;cursor:pointer;text-align:left">
-          <span style="font-size:13px">⬇</span>
-          <span data-i18n="hist_exportar_csv">Exportar Rondas a CSV</span>
-        </button>
-        <button id="btn-borrar-todo" type="button" onclick="hideHistKebab();clearAll()" style="display:flex;align-items:center;gap:8px;width:100%;background:none;border:none;border-radius:4px;color:var(--red);font-family:inherit;font-size:11px;padding:8px 10px;cursor:pointer;text-align:left">
-          <span style="font-size:13px">🗑</span>
-          <span data-i18n="borrar_todo">Borrar todas</span>
-        </button>
-      </div>
-    </div>
-  </div>
+  <!-- v1.34.237: input + contador + kebab en una sola fila -->
   <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
     <input type="text" data-clearable id="hist-search" placeholder="🔍 campo, mes/año (11/2025), día (25/04)…" oninput="onHistSearch(this.value)"
       style="flex:1;background:var(--input-bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:6px 10px;-webkit-appearance:none;outline:none">
     <div id="hist-counter" style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.3px;white-space:nowrap"></div>
+    <div id="hist-kebab-wrap" style="position:relative">
+      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1;padding:0;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center" aria-label="Más opciones">⋮</button>
+      <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:34px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:6px;min-width:220px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.18);font-family:'DM Mono',monospace">
+        <!-- v1.34.203: Expandir/Colapsar meses integrado en el menu kebab -->
+        <!-- v1.34.237: iconos SVG line-style iOS (coherentes con Ajustes), reemplazan emojis ⇅ ⬇ 🗑 -->
+        <button id="btn-toggle-all-months" type="button" onclick="hideHistKebab();toggleAllHistMonths()" style="display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.5px;padding:10px 12px;cursor:pointer;text-align:left">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
+          <span id="btn-toggle-all-months-label" data-i18n="hist_expandir_todos">Expandir meses</span>
+        </button>
+        <button id="btn-hist-exportar" type="button" onclick="hideHistKebab();doExportData()" style="display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.5px;padding:10px 12px;cursor:pointer;text-align:left">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span data-i18n="hist_exportar_csv">Exportar Rondas a CSV</span>
+        </button>
+        <button id="btn-borrar-todo" type="button" onclick="hideHistKebab();clearAll()" style="display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;border-radius:6px;color:var(--red);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.5px;padding:10px 12px;cursor:pointer;text-align:left">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          <span data-i18n="borrar_todo">Borrar todas</span>
+        </button>
+      </div>
+    </div>
   </div>
   <!-- v1.34.138: eliminado el <div class="card"> envolvente -->
   <!-- v1.34.202: margin-bottom 70px -> 12px (ya no hay barra fixed que tape el ultimo item) -->
@@ -8598,7 +8599,8 @@ function cancelarNueva() {
   renderHoleDots('gh-', null);
   // v1.34.167: reset toggle Torneo RFEG (default OFF)
   if ($('nueva-torneo-rfeg')) $('nueva-torneo-rfeg').checked = false;
-  goTo('inicio', $('nav-inicio'));
+  // v1.34.237: tras cancelar ir al listado de Rondas (antes iba a Inicio).
+  goTo('rondas', $('nav-rondas'));
 }
 
 async function addRound() {
@@ -9933,8 +9935,8 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const appVer = document.title.includes('HCP') ? 'v1.34.236' : 'Golf HCP';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.236\n' + sys);
+  const appVer = document.title.includes('HCP') ? 'v1.34.237' : 'Golf HCP';
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.237\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
