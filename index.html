@@ -773,6 +773,69 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
    Util para formularios largos como Editar Ronda donde el modal estandar deja medio pantalla en blanco arriba.
    Los botones Guardar/Cancelar siguen al final del contenido (con scroll), no fixed abajo. */
 .modal-overlay-tall{align-items:flex-start !important}
+/* v1.34.261: variante EDITOR (Editar Ronda / Editar Campo). A diferencia del modal
+   normal, deja el nav inferior visible y clicable (z-index por debajo del nav=100,
+   sin fondo oscuro que lo tape). El contenido reserva espacio abajo para no quedar
+   bajo el nav, y los botones Guardar/Cancelar van como circulos fijos encima del nav.
+   Asi el editor se comporta como una pagina: puedes navegar y volver. */
+.modal-overlay.modal-editor{
+  background:var(--bg) !important;       /* opaco como una pagina, no overlay oscuro */
+  z-index:90 !important;                  /* por debajo del nav (100) */
+}
+:root.light .modal-overlay.modal-editor{background:#ffffff !important}
+.modal-editor .modal-tall{
+  padding-bottom:calc(150px + env(safe-area-inset-bottom,0px)) !important; /* espacio para botones circulares + nav */
+}
+/* Contenedor de los botones circulares Guardar/Cancelar: fijo, centrado, encima del nav */
+.modal-editor .modal-actions{
+  position:fixed;
+  left:0; right:0;
+  bottom:calc(64px + env(safe-area-inset-bottom,0px)); /* v1.34.263: mas cerca del nav (antes 84px). Nav: bottom 12 + alto ~64 = borde sup ~76; 64px deja los botones justo encima sin solapar */
+  display:flex !important;
+  grid-template-columns:none !important;
+  gap:48px;
+  justify-content:center;
+  align-items:center;
+  margin:0 !important;
+  z-index:101;                             /* v1.34.261: sobre cover-bottom (99) y nav (100). No solapa fisicamente con el nav (botones en bottom:84px, nav en bottom:12px), asi que compartir/superar el z del nav no lo tapa. */
+  pointer-events:none;                     /* el contenedor no captura; solo los botones */
+}
+.modal-editor .modal-actions > button{
+  pointer-events:auto;
+  width:56px; height:56px;
+  border-radius:50% !important;
+  padding:0 !important;
+  margin:0 !important;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0 !important;                  /* oculta el texto "Guardar"/"Cancelar"; usamos icono SVG */
+  box-shadow:0 4px 16px rgba(0,0,0,.25);
+  border:none !important;
+}
+/* Guardar = circulo azul, check blanco */
+.modal-editor .modal-actions > button.btn{
+  background:var(--blue-adapt) !important;
+}
+.modal-editor .modal-actions > button.btn::after{
+  content:""; width:22px; height:22px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  background-size:contain; background-repeat:no-repeat; background-position:center;
+}
+/* Cancelar = circulo gris claro, X negra */
+.modal-editor .modal-actions > button.btn-danger{
+  background:#d1d5db !important;
+}
+.modal-editor .modal-actions > button.btn-danger::after{
+  content:""; width:22px; height:22px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111111' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E");
+  background-size:contain; background-repeat:no-repeat; background-position:center;
+}
+/* v1.34.261: en modo claro, titulos de Estadisticas en negro (antes dorado var(--gold2)).
+   Cubre el titulo principal "Estadisticas" y los subtitulos de cada grafico
+   (Golpes/Diferenciales/Stableford por ronda, y secciones Rondas/Stableford/Actividad).
+   El selector ataca cualquier color dorado dentro de page-stats sin tocar el JS. */
+:root.light #page-stats [data-i18n="estadisticas"]{color:#111111 !important}
+:root.light #page-stats #stats-content span[style*="--gold2"],
+:root.light #page-stats #stats-content div[style*="--gold2"]{color:#111111 !important}
 .modal-tall{
   max-height:100vh !important;
   height:100vh;
@@ -1598,7 +1661,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.260 · DEV</div>
+    <div class="login-version">v1.34.263</div>
   </div>
 </div>
 
@@ -1645,7 +1708,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 <!-- MODAL: EDITAR RONDA -->
 <!-- v1.34.211: clase 'modal-tall' para que el modal arranque desde arriba (max-height 100vh)
      en lugar de desde la mitad. Mas espacio util sin mover los botones Guardar/Cancelar. -->
-<div class="modal-overlay hidden modal-overlay-tall" id="modal-ronda">
+<div class="modal-overlay hidden modal-overlay-tall modal-editor" id="modal-ronda">
   <div class="modal modal-tall">
     <div class="modal-title" style="margin-bottom:14px;text-align:center;font-size:14px;color:var(--text)" data-i18n="editar_ronda">Editar Ronda</div>
     <input type="hidden" id="edit-r-id">
@@ -1733,7 +1796,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 <!-- MODAL: EDITAR CAMPO -->
 <!-- v1.34.212: clases 'modal-overlay-tall' + 'modal-tall' (igual que Editar Ronda)
      para que el modal arranque desde arriba y ocupe toda la altura disponible. -->
-<div class="modal-overlay hidden modal-overlay-tall" id="modal-campo">
+<div class="modal-overlay hidden modal-overlay-tall modal-editor" id="modal-campo">
   <div class="modal modal-tall">
     <div class="modal-title" style="margin-bottom:14px;text-align:center;font-size:14px;color:var(--text)">Editar Campo</div>
     <input type="hidden" id="edit-c-id">
@@ -1831,7 +1894,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.260</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.263</div>
   </div>
 </div>
 
@@ -1975,7 +2038,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       style="flex:1;background:var(--input-bg);border:1px solid var(--border);border-radius:999px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:8px 14px;-webkit-appearance:none;outline:none">
     <div id="hist-counter" style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.3px;white-space:nowrap"></div>
     <div id="hist-kebab-wrap" style="position:relative">
-      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:var(--blue-adapt);border:none;border-radius:50%;color:#ffffff;padding:0;width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,30,90,0.18)" aria-label="Más opciones"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#ffffff;display:block"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
+      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:var(--blue-adapt);border:none;border-radius:50%;color:#ffffff;padding:0;width:38px;height:38px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,30,90,0.18)" aria-label="Más opciones"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#ffffff;display:block"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
       <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:44px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:6px;min-width:220px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.18);font-family:'DM Mono',monospace">
         <!-- v1.34.237: iconos SVG line-style iOS (coherentes con Ajustes), reemplazan emojis ⇅ ⬇ 🗑 -->
         <button id="btn-toggle-all-months" type="button" onclick="hideHistKebab();toggleAllHistMonths()" style="display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.5px;padding:10px 12px;cursor:pointer;text-align:left">
@@ -2003,7 +2066,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   <div style="font-size:20px;letter-spacing:2px;text-transform:uppercase;color:var(--gold2);padding:4px 2px 16px;font-family:'DM Mono',monospace;text-align:center" data-i18n="estadisticas">Estadísticas</div>
   <div id="stats-hcp-comparison" style="display:none"></div>
   <div id="stats-filters-container"></div>
-  <div id="stats-content"><div class="empty">Cargando…</div></div>
+  <div id="stats-content" style="margin-bottom:70px"><div class="empty">Cargando…</div></div>
 </div>
 
 <!-- PAGE: CAMPOS -->
@@ -3428,13 +3491,8 @@ function setLang(l) {
 // ═══════════════════════════════════════════════════════════════════════
 
 // ── CONSTANTES ──────────────────────────────────────────────────────────
-// ⚠️ ENTORNO DEV — apunta al Supabase Dev (vykfqhpjkvcdulcbpahy), NO a producción.
-// NO copiar estas 2 líneas a producción (producción usa su propio ref distinto).
-// v1.34.260-dev: publishable key nueva (sb_publishable_...) en vez de anon legacy eyJ...
-// La anon legacy daba error PGRST301 "No suitable key" en PostgREST porque el proyecto
-// Dev usa el sistema nuevo de JWT signing keys (asimétrico).
-const SB_URL = 'https://vykfqhpjkvcdulcbpahy.supabase.co';
-const SB_KEY = 'sb_publishable_eRqmazTwL7fGMrH9jJijbQ_NoVErOIt';
+const SB_URL = 'https://buuphupprlvtngkcyyur.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1dXBodXBwcmx2dG5na2N5eXVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5MDA3NTcsImV4cCI6MjA5MDQ3Njc1N30.sHi-UnaStyz1G-S1wSYrZYZA0TReClvlZvYdAbuejaI';
 const WHS = [[1,-2],[1,-2],[1,-2],[1,-1],[1,0],[2,-1],[2,0],[2,0],[3,0],[3,0],[3,0],[4,0],[4,0],[4,0],[5,0],[5,0],[6,0],[6,0],[7,0],[8,0]];
 const BARRAS = ['blanca','amarilla','azul','roja'];
 const BARRAS_FR = ['blanca','amarilla','azul','roja','violeta','naranja','negra'];
@@ -5030,6 +5088,31 @@ function toast(msg, err=false, ms=3000) {
 function cerrarModal(id) {
   const el = $(id);
   if (el) el.classList.add('hidden');
+  // v1.34.262: al cerrar un editor (modal-ronda/modal-campo), restaurar visibilidad
+  // de los FAB + segun la pagina activa. Los editores ocultan los FAB al abrirse
+  // (asomaban por encima del editor); aqui se devuelven a su estado normal.
+  if (id === 'modal-ronda' || id === 'modal-campo') {
+    try { actualizarFabsVisibilidad(); } catch(e) {}
+  }
+}
+
+// v1.34.262: centraliza la visibilidad de los FAB + (Nueva Ronda / Nuevo Campo)
+// segun la pagina activa. Se llama desde goTo (cambio de pagina) y desde cerrarModal
+// (al cerrar un editor). Si hay un editor abierto, ambos FAB se ocultan.
+function actualizarFabsVisibilidad() {
+  const editorAbierto =
+    ($('modal-ronda') && !$('modal-ronda').classList.contains('hidden')) ||
+    ($('modal-campo') && !$('modal-campo').classList.contains('hidden'));
+  const paginaActiva = document.querySelector('.page.active')?.id || '';
+  const fabCampo = $('fab-nuevo-campo');
+  if (fabCampo) {
+    const formCampoAbierto = $('nuevo-campo-wrap') && $('nuevo-campo-wrap').style.display !== 'none';
+    fabCampo.style.display = (!editorAbierto && paginaActiva === 'page-campos' && !formCampoAbierto) ? 'flex' : 'none';
+  }
+  const fabRonda = $('fab-nueva-ronda');
+  if (fabRonda) {
+    fabRonda.style.display = (!editorAbierto && paginaActiva === 'page-rondas') ? 'flex' : 'none';
+  }
 }
 
 function fmtCR(el, nextId) {
@@ -8765,6 +8848,7 @@ function abrirEditRonda(id) {
     hW.style.display = 'none';
   }
   $('modal-ronda').classList.remove('hidden');
+  try { actualizarFabsVisibilidad(); } catch(e) {} /* v1.34.262: ocultar FAB + al abrir editor */
   try { refrescarBtnsHcpOficial(); } catch(e) {}
 }
 
@@ -9766,7 +9850,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.260\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.263\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -9839,6 +9923,7 @@ function abrirEditCampo(id) {
   const bw = $('edit-barras-wrap');
   if (bw) { bw.innerHTML = ''; buildBarrasEditor('edit-barras-wrap', 'edit-b-', campo.barras || []); }
   $('modal-campo').classList.remove('hidden');
+  try { actualizarFabsVisibilidad(); } catch(e) {} /* v1.34.262: ocultar FAB + al abrir editor */
   setTimeout(() => calcParTotal('edit-c-'), 100);
 }
 
@@ -9987,6 +10072,12 @@ async function delCampo(id) {
 // ── NAV ───────────────────────────────────────────────────────────────────
 function goTo(id, btn) {
   closeNavMenu();
+  // v1.34.261: si hay un editor abierto (Editar Ronda / Editar Campo, que ahora dejan
+  // ver el nav), cerrarlo al navegar con el nav. El editor es modal-overlay; basta
+  // ocultarlo. Los datos no guardados se descartan (es navegacion explicita del usuario).
+  const _mr = $('modal-ronda'), _mc = $('modal-campo');
+  if (_mr && !_mr.classList.contains('hidden')) _mr.classList.add('hidden');
+  if (_mc && !_mc.classList.contains('hidden')) _mc.classList.add('hidden');
   if (id === 'guia-didactica') { setTimeout(loadGuiaDidactica, 30); }
   // v1.34.235: control visibilidad FAB Nuevo Campo (solo en page-campos con form cerrado)
   //   y FAB Nueva Ronda (solo en page-rondas que es el historial).
@@ -10857,7 +10948,9 @@ function renderStatsCharts() {
   const golpesData = last20.filter(r => r.gross > 0 && !pending9Ids.includes(r.id));
   if (golpesData.length >= 2) {
     const gVals = golpesData.map(r => r.gross);
-    drawStatsChart('stats-hcp-chart','stats-hcp-labels', golpesData, '#e8c96a',
+    // v1.34.261: linea negra en modo claro (#111), dorada en oscuro (#e8c96a)
+    const _golpesColor = document.documentElement.classList.contains('light') ? '#111111' : '#e8c96a';
+    drawStatsChart('stats-hcp-chart','stats-hcp-labels', golpesData, _golpesColor,
       Math.floor(Math.min(...gVals) - 2), Math.ceil(Math.max(...gVals) + 2),
       fmt, r => r.gross, false);
   }
