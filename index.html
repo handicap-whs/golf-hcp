@@ -271,7 +271,7 @@ input::-moz-placeholder,textarea::-moz-placeholder{color:var(--gold);opacity:0.2
 :root.light .info,
 :root.light .empty { color: #000000 !important; }
 :root.light .barra-9h-title { color: #1a4a8a !important; }
-:root.light nav button.active { color: var(--blue-adapt) !important; } /* v1.34.144: verde -> azul adaptativo */
+:root.light nav button.active { color: var(--blue-intenso) !important; font-weight:700 !important; } /* v1.34.266: azul intenso + negrita */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--bg);color:var(--cream);font-family:'DM Mono',monospace;overflow-x:hidden}
 body{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:env(safe-area-inset-top,0px)}
@@ -397,12 +397,12 @@ body.splash-active #safe-area-cover-bottom { display: none; }
 nav{position:fixed;bottom:12px;left:16px;right:16px;background:#ffffff;border:1px solid rgba(0,0,0,.08);border-radius:28px;display:flex;z-index:100;padding:4px 6px;transition:transform .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.18)} /* v1.34.244: blanco puro (antes rgba(.96) + blur dejaba tinte verdoso del fondo) */
 nav button{flex:1;background:none;border:none;color:#1a1a1a;padding:5px 4px 4px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'DM Mono',monospace;position:relative;border-radius:22px;transition:background .2s}
 nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-nav button.active{color:var(--blue-intenso);background:rgba(0,102,204,.10)} /* v1.34.243: activa azul (mismo esquema modo claro) */
-nav button.active svg{stroke:var(--blue-intenso)} /* v1.34.243: activa azul */
+nav button.active{color:var(--blue-intenso);background:#ffffff;font-weight:700} /* v1.34.266: activa azul intenso + negrita + fondo blanco */
+nav button.active svg{stroke:var(--blue-intenso)} /* v1.34.266: activa azul intenso */
 :root.light nav{border-top:1px solid rgba(0,0,0,.1)} /* v1.34.246: eliminado background verdoso rgba(240,244,240,.95); ahora hereda el #ffffff de la regla general */
 :root.light nav button{color:rgba(0,0,0,.5)}
-:root.light nav button.active{color:var(--blue-adapt);background:rgba(0,102,204,.10)} /* v1.34.144: verde -> azul adaptativo */
-:root.light nav button.active svg{stroke:var(--blue-adapt)} /* v1.34.144: verde -> azul adaptativo */
+:root.light nav button.active{color:var(--blue-intenso);background:#ffffff;font-weight:700} /* v1.34.266: azul intenso + negrita + fondo blanco */
+:root.light nav button.active svg{stroke:var(--blue-intenso)} /* v1.34.266 */
 /* ── PAGES ── */
 .page{display:none;padding:16px 14px calc(110px + env(safe-area-inset-bottom,0px));max-width:700px;margin:0 auto;width:100%;min-height:100dvh;box-sizing:border-box} /* v1.34.254: padding-bottom 70px -> 110px. Desde v246 el nav ya no se oculta al hacer scroll, asi que el ultimo elemento de la pagina necesita mas margen para no quedar oculto bajo nav+cover-bottom. Calc: nav(bottom:12 + altura~64) + cover-bottom(40) + respiracion(~10) = ~126px aproximado redondeado a 110+safe. */
 .page.active{display:block}
@@ -787,10 +787,12 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   padding-bottom:calc(150px + env(safe-area-inset-bottom,0px)) !important; /* espacio para botones circulares + nav */
 }
 /* Contenedor de los botones circulares Guardar/Cancelar: fijo, centrado, encima del nav */
-.modal-editor .modal-actions{
+/* v1.34.266: .fab-actions replica este comportamiento en paginas (Nueva Ronda / Nuevo Campo),
+   no solo en los modales editor. Mismo posicion/tamaño/alineacion. */
+.modal-editor .modal-actions, .fab-actions{
   position:fixed;
   left:0; right:0;
-  bottom:calc(64px + env(safe-area-inset-bottom,0px)); /* v1.34.263: mas cerca del nav (antes 84px). Nav: bottom 12 + alto ~64 = borde sup ~76; 64px deja los botones justo encima sin solapar */
+  bottom:calc(64px + env(safe-area-inset-bottom,0px)); /* v1.34.263: mas cerca del nav */
   display:flex !important;
   grid-template-columns:none !important;
   gap:0;
@@ -799,34 +801,34 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   box-sizing:border-box;
   align-items:center;
   margin:0 !important;
-  z-index:101;                             /* v1.34.261: sobre cover-bottom (99) y nav (100). No solapa fisicamente con el nav (botones en bottom:84px, nav en bottom:12px), asi que compartir/superar el z del nav no lo tapa. */
-  pointer-events:none;                     /* el contenedor no captura; solo los botones */
+  z-index:101;
+  pointer-events:none;
 }
-.modal-editor .modal-actions > button{
+.modal-editor .modal-actions > button, .fab-actions > button{
   pointer-events:auto;
   width:56px; height:56px;
   border-radius:50% !important;
   padding:0 !important;
   margin:0 !important;
   display:flex; align-items:center; justify-content:center;
-  font-size:0 !important;                  /* oculta el texto "Guardar"/"Cancelar"; usamos icono SVG */
+  font-size:0 !important;
   box-shadow:0 4px 16px rgba(0,0,0,.25);
   border:none !important;
 }
 /* Guardar = circulo azul, check blanco */
-.modal-editor .modal-actions > button.btn{
+.modal-editor .modal-actions > button.btn, .fab-actions > button.btn{
   background:var(--blue-adapt) !important;
 }
-.modal-editor .modal-actions > button.btn::after{
+.modal-editor .modal-actions > button.btn::after, .fab-actions > button.btn::after{
   content:""; width:22px; height:22px;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
   background-size:contain; background-repeat:no-repeat; background-position:center;
 }
 /* Cancelar = circulo gris claro, X negra */
-.modal-editor .modal-actions > button.btn-danger{
+.modal-editor .modal-actions > button.btn-danger, .fab-actions > button.btn-danger{
   background:#d1d5db !important;
 }
-.modal-editor .modal-actions > button.btn-danger::after{
+.modal-editor .modal-actions > button.btn-danger::after, .fab-actions > button.btn-danger::after{
   content:""; width:22px; height:22px;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111111' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E");
   background-size:contain; background-repeat:no-repeat; background-position:center;
@@ -1663,7 +1665,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.265</div>
+    <div class="login-version">v1.34.266</div>
   </div>
 </div>
 
@@ -1896,7 +1898,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.265</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.266</div>
   </div>
 </div>
 
@@ -2018,9 +2020,9 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       </label>
     </div>
 
-    <div style="display:flex;gap:10px">
-      <button class="btn" id="btn-add" type="button" style="flex:2;margin-top:0" data-i18n="registrar_ronda">+ Registrar Ronda</button>
-      <button class="btn-danger" onclick="cancelarNuevaRondaInteligente()" style="flex:1;margin-top:0" data-i18n="cancelar">Cancelar</button>
+    <div class="fab-actions">
+      <button class="btn" id="btn-add" type="button" data-i18n="registrar_ronda">+ Registrar Ronda</button>
+      <button class="btn-danger" onclick="cancelarNuevaRondaInteligente()" data-i18n="cancelar">Cancelar</button>
     </div>
     <div class="info" data-i18n="fi_dif_formula">Diferencial = (Golpes − CR) × 113 / Slope</div>
   </div>
@@ -2094,9 +2096,9 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       </div>
       <div id="nc-hoyos-wrap"></div>
       <div class="modal-err" id="nc-err" style="margin-top:10px"></div>
-      <div style="display:flex;gap:10px;margin-top:12px">
-        <button class="btn" id="btn-guardar-nc" style="flex:1;margin-top:0;padding:13px 16px" data-i18n="guardar_campo">Guardar Campo</button>
-        <button class="btn-danger" onclick="cancelarNuevoCampo()" style="flex:1;margin-top:0;padding:13px 16px;letter-spacing:2px" data-i18n="cancelar">Cancelar</button>
+      <div class="fab-actions">
+        <button class="btn" id="btn-guardar-nc" data-i18n="guardar_campo">Guardar Campo</button>
+        <button class="btn-danger" onclick="cancelarNuevoCampo()" data-i18n="cancelar">Cancelar</button>
       </div>
     </div>
   </div>
@@ -8562,11 +8564,12 @@ function calcNuevaChcp() {
 }
 
 // v1.34.265: cancelar Nueva Ronda saltando confirmacion si no hay datos introducidos.
+// v1.34.266: NO se cuenta f-hcp-idx porque se pre-rellena automaticamente con el HCP
+// del jugador al abrir (no es dato tecleado por el usuario). Solo cuentan campo y golpes.
 function cancelarNuevaRondaInteligente() {
   const campoSel = $('f-campo')?.value;
   const tieneGolpes = Array.from({length:18}, (_,i) => $('gh-'+(i+1))?.value).some(v => v && v !== '');
-  const hcpIdx = $('f-hcp-idx')?.value;
-  if (!campoSel && !tieneGolpes && !hcpIdx) { cancelarNueva(); return; } // nada tecleado -> salir directo
+  if (!campoSel && !tieneGolpes) { cancelarNueva(); return; } // nada tecleado -> salir directo
   if (confirm(t('c_cancelar_nueva_ronda'))) cancelarNueva();
 }
 function cancelarNueva() {
@@ -9890,7 +9893,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.265\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.266\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -11008,8 +11011,8 @@ function renderStatsCharts() {
   const stblData = last20.filter(r => r.stableford > 0 && !pending9Ids.includes(r.id));
   if (stblData.length) {
     const stblVals = stblData.map(r=>r.stableford);
-    // v1.34.265: azul muy oscuro en modo claro, azul claro en oscuro
-    const _stblColor = document.documentElement.classList.contains('light') ? '#1e3a8a' : '#3b82f6';
+    // v1.34.266: mismo color que Diferenciales (gris #444 en claro, verde en oscuro)
+    const _stblColor = document.documentElement.classList.contains('light') ? '#444444' : '#7bc67a';
     drawStatsChart('stats-stbl-chart','stats-stbl-labels', stblData, _stblColor,
       Math.max(0,Math.min(...stblVals)-3), Math.ceil(Math.max(...stblVals)+2),
       fmt, r=>r.stableford, true);
