@@ -1665,7 +1665,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.273</div>
+    <div class="login-version">v1.34.274</div>
   </div>
 </div>
 
@@ -1898,7 +1898,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.273</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.274</div>
   </div>
 </div>
 
@@ -2103,8 +2103,9 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
         <button class="btn-danger" onclick="cancelarNuevoCampo()" data-i18n="cancelar">Cancelar</button>
       </div>
       <!-- v1.34.267: espaciador para que los hoyos 1-18 no queden tapados por los botones
-           circulares flotantes (position:fixed). v1.34.273: 290px (260 aun era poco). -->
-      <div style="height:290px" aria-hidden="true"></div>
+           circulares flotantes (position:fixed). v1.34.274: 170px (igual que Nueva Ronda
+           que queda bien). Combinado con bajar botones a bottom:50 en v273. -->
+      <div style="height:170px" aria-hidden="true"></div>
     </div>
   </div>
   <!-- Lista de campos — se oculta cuando el formulario está abierto -->
@@ -9898,7 +9899,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.273\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.274\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
