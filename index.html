@@ -399,8 +399,7 @@ nav button{flex:1;background:none;border:none;color:#1a1a1a;padding:5px 4px 4px;
 nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 nav button.active{color:var(--blue-intenso);background:#ffffff;font-weight:700} /* v1.34.266: activa azul intenso + negrita + fondo blanco */
 nav button.active svg{stroke:var(--blue-intenso);fill:var(--blue-intenso)} /* v1.34.267: icono activo relleno de azul + contorno azul */
-nav button.active svg .nav-icon-inner{fill:#ffffff;stroke:#ffffff} /* v1.34.267: detalles internos (reloj Inicio, centro engranaje Ajustes) en blanco sobre el relleno azul */
-nav button.active svg line{stroke-width:3.5} /* v1.34.268: barras del icono Stats mas gruesas al activarse (son lineas, el fill no las afecta) */
+nav button.active svg .nav-icon-inner{fill:#ffffff;stroke:#ffffff} /* v1.34.267: detalles internos (reloj Inicio, centro engranaje Ajustes, linea tendencia Stats) en blanco sobre el relleno azul */
 :root.light nav{border-top:1px solid rgba(0,0,0,.1)} /* v1.34.246: eliminado background verdoso rgba(240,244,240,.95); ahora hereda el #ffffff de la regla general */
 :root.light nav button{color:rgba(0,0,0,.5)}
 :root.light nav button.active{color:var(--blue-intenso);background:#ffffff;font-weight:700} /* v1.34.266: azul intenso + negrita + fondo blanco */
@@ -1610,19 +1609,18 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 </div>
 
 <div id="splash">
-  <!-- v1.34.267: icono del splash (sobre fotos de campos) en BLANCO Y NEGRO.
-       El azul no combinaba con las fotos. Fondo blanco, dibujo negro line-art.
-       Las letras "Golf HCP" no se tocan. -->
+  <!-- v1.34.269: splash con fondo amarillo-bronce, bandera blanca, elipse verde
+       oscuro y pelota blanca. Las letras "Golf HCP" no se tocan. -->
   <svg width="80" height="80" viewBox="0 0 512 512">
-    <rect width="512" height="512" rx="112" fill="#ffffff"/>
-    <!-- Elipse grande punteada negra -->
-    <ellipse cx="256" cy="425" rx="148" ry="24" fill="none" stroke="#111111" stroke-width="9" stroke-dasharray="6 8" opacity="0.85"/>
-    <!-- Poste -->
-    <line x1="213" y1="110" x2="213" y2="425" stroke="#111111" stroke-width="15" stroke-linecap="round"/>
-    <!-- Bandera triangulo -->
-    <path d="M213 110 L361 148 L213 186 Z" stroke="#111111" stroke-width="15" stroke-linejoin="round" fill="none"/>
-    <!-- Pelota (contorno negro, relleno blanco) -->
-    <circle cx="313" cy="412" r="19" fill="#ffffff" stroke="#111111" stroke-width="6"/>
+    <rect width="512" height="512" rx="112" fill="#c9a84c"/>
+    <!-- Elipse grande punteada verde oscuro -->
+    <ellipse cx="256" cy="425" rx="148" ry="24" fill="none" stroke="#2d5a27" stroke-width="9" stroke-dasharray="6 8" opacity="0.9"/>
+    <!-- Poste blanco -->
+    <line x1="213" y1="110" x2="213" y2="425" stroke="#ffffff" stroke-width="15" stroke-linecap="round"/>
+    <!-- Bandera triangulo blanca -->
+    <path d="M213 110 L361 148 L213 186 Z" stroke="#ffffff" stroke-width="15" stroke-linejoin="round" fill="none"/>
+    <!-- Pelota blanca (contorno verde oscuro) -->
+    <circle cx="313" cy="412" r="19" fill="#ffffff" stroke="#2d5a27" stroke-width="5"/>
   </svg>
   <div id="splash-t">Golf <em>HCP</em></div>
   <div id="splash-s">Cargando...</div>
@@ -1667,7 +1665,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.268</div>
+    <div class="login-version">v1.34.269</div>
   </div>
 </div>
 
@@ -1900,7 +1898,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.268</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.269</div>
   </div>
 </div>
 
@@ -3128,7 +3126,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <span data-i18n="nav_rondas">Rondas</span>
   </button>
   <button onclick="closeNavMenu();goTo('stats',this)" id="nav-stats">
-    <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><polyline points="6 15 10 11 13 13 18 7" fill="none" class="nav-icon-inner"/></svg>
     <span data-i18n="nav_stats">Estadísticas</span>
   </button>
   <button onclick="closeNavMenu();goTo('ajustes',this)" id="nav-ajustes">
@@ -9900,7 +9898,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.268\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.269\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
