@@ -793,8 +793,10 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   bottom:calc(64px + env(safe-area-inset-bottom,0px)); /* v1.34.263: mas cerca del nav (antes 84px). Nav: bottom 12 + alto ~64 = borde sup ~76; 64px deja los botones justo encima sin solapar */
   display:flex !important;
   grid-template-columns:none !important;
-  gap:48px;
-  justify-content:center;
+  gap:0;
+  justify-content:space-between;
+  padding:0 32px;
+  box-sizing:border-box;
   align-items:center;
   margin:0 !important;
   z-index:101;                             /* v1.34.261: sobre cover-bottom (99) y nav (100). No solapa fisicamente con el nav (botones en bottom:84px, nav en bottom:12px), asi que compartir/superar el z del nav no lo tapa. */
@@ -817,7 +819,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 }
 .modal-editor .modal-actions > button.btn::after{
   content:""; width:22px; height:22px;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
   background-size:contain; background-repeat:no-repeat; background-position:center;
 }
 /* Cancelar = circulo gris claro, X negra */
@@ -826,7 +828,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 }
 .modal-editor .modal-actions > button.btn-danger::after{
   content:""; width:22px; height:22px;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111111' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E");
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111111' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E");
   background-size:contain; background-repeat:no-repeat; background-position:center;
 }
 /* v1.34.261: en modo claro, titulos de Estadisticas en negro (antes dorado var(--gold2)).
@@ -1661,7 +1663,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.263</div>
+    <div class="login-version">v1.34.265</div>
   </div>
 </div>
 
@@ -1788,7 +1790,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     </div>
     <div class="modal-actions">
       <button class="btn" style="margin-top:0" id="btn-guardar-ronda" onclick="guardarEditRonda()" data-i18n="guardar">Guardar</button>
-      <button class="btn-danger" style="margin-top:0" onclick="if(confirm(t('c_cancelar_edit_ronda')))cerrarModal('modal-ronda')" data-i18n="cancelar">Cancelar</button>
+      <button class="btn-danger" style="margin-top:0" onclick="cancelarEditorRonda()" data-i18n="cancelar">Cancelar</button>
     </div>
   </div>
 </div>
@@ -1894,7 +1896,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.263</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.265</div>
   </div>
 </div>
 
@@ -2018,7 +2020,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 
     <div style="display:flex;gap:10px">
       <button class="btn" id="btn-add" type="button" style="flex:2;margin-top:0" data-i18n="registrar_ronda">+ Registrar Ronda</button>
-      <button class="btn-danger" onclick="if(confirm(t('c_cancelar_nueva_ronda')))cancelarNueva()" style="flex:1;margin-top:0" data-i18n="cancelar">Cancelar</button>
+      <button class="btn-danger" onclick="cancelarNuevaRondaInteligente()" style="flex:1;margin-top:0" data-i18n="cancelar">Cancelar</button>
     </div>
     <div class="info" data-i18n="fi_dif_formula">Diferencial = (Golpes − CR) × 113 / Slope</div>
   </div>
@@ -2248,9 +2250,8 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 <!-- PAGE: BUSCAR CAMPO RFEG -->
 <div class="page" id="page-buscar-campo-rfeg">
   <div style="margin-bottom:6px">
-    <button onclick="goTo('campos',$('nav-ajustes'))" style="background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:14px;cursor:pointer;padding:0;display:flex;align-items:center;gap:5px">
-      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><polyline points="15 18 9 12 15 6"/></svg>
-      <span data-i18n="bcp_volver_campos">Mis Campos</span>
+    <button onclick="goTo('campos',$('nav-ajustes'))" style="background:var(--blue-adapt);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,30,90,0.18)" aria-label="Volver a Mis Campos">
+      <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#ffffff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
   </div>
   <div class="card">
@@ -5089,11 +5090,41 @@ function cerrarModal(id) {
   const el = $(id);
   if (el) el.classList.add('hidden');
   // v1.34.262: al cerrar un editor (modal-ronda/modal-campo), restaurar visibilidad
-  // de los FAB + segun la pagina activa. Los editores ocultan los FAB al abrirse
-  // (asomaban por encima del editor); aqui se devuelven a su estado normal.
+  // de los FAB + segun la pagina activa.
   if (id === 'modal-ronda' || id === 'modal-campo') {
     try { actualizarFabsVisibilidad(); } catch(e) {}
   }
+}
+
+// v1.34.265: snapshot de los valores del formulario de un editor (modal).
+// Serializa todos los <input>/<select>/<textarea> dentro del modal para detectar
+// si el usuario ha cambiado algo. Se usa para saltar la confirmacion al cancelar
+// cuando no hay cambios.
+const _editorSnapshots = {};
+function _snapshotEditor(modalId) {
+  const m = $(modalId);
+  if (!m) return '';
+  const campos = m.querySelectorAll('input, select, textarea');
+  const vals = [];
+  campos.forEach(c => {
+    if (c.type === 'checkbox' || c.type === 'radio') vals.push(c.checked ? '1' : '0');
+    else vals.push(c.value || '');
+  });
+  return vals.join('|');
+}
+function _guardarSnapshot(modalId) {
+  // Se llama tras rellenar el formulario al abrir el editor.
+  _editorSnapshots[modalId] = _snapshotEditor(modalId);
+}
+function _editorSinCambios(modalId) {
+  // true si el formulario esta igual que al abrirlo.
+  return _editorSnapshots[modalId] !== undefined &&
+         _editorSnapshots[modalId] === _snapshotEditor(modalId);
+}
+// Cancelar editor: si no hay cambios, cierra directo; si los hay, pide confirmacion.
+function cancelarEditorRonda() {
+  if (_editorSinCambios('modal-ronda')) { cerrarModal('modal-ronda'); return; }
+  if (confirm(t('c_cancelar_edit_ronda'))) cerrarModal('modal-ronda');
 }
 
 // v1.34.262: centraliza la visibilidad de los FAB + (Nueva Ronda / Nuevo Campo)
@@ -6786,7 +6817,7 @@ function renderStats() {
 
   // Cabecera de seccion (gold separator)
   const section = (titulo) => `
-    <div style="grid-column:1/-1;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold2);margin:6px 0 -2px 2px;font-family:'DM Mono',monospace">${titulo}</div>`;
+    <div style="grid-column:1/-1;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold2);margin:6px 0 -2px 2px;font-family:'DM Mono',monospace">${titulo}</div>`;
 
   // Las graficas requieren minimo 2 rondas para trazar lineas.
   // Con < 2 mostramos un placeholder compacto en su lugar (las cards/tarjetas
@@ -6801,7 +6832,7 @@ function renderStats() {
     ${showCharts ? `
     <div style="margin-bottom:16px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
-        <span style="font-size:11px;letter-spacing:1px;color:var(--gold2)">${lbl('GOLPES POR RONDA','PANCADAS POR VOLTA','COUPS PAR PARTIE')}</span>
+        <span style="font-size:12px;letter-spacing:1px;color:var(--gold2)">${lbl('GOLPES POR RONDA','PANCADAS POR VOLTA','COUPS PAR PARTIE')}</span>
         <span style="font-size:9px;letter-spacing:.3px;color:var(--muted)">${combined.length > 20 ? lbl('últimas 20 del filtro','últimas 20 do filtro','20 dernières du filtre') : lbl('últimas 20 rondas','últimas 20 voltas','20 dernières parties')}</span>
       </div>
       <div style="font-size:9px;letter-spacing:.3px;color:var(--muted);margin-bottom:6px">${lbl('18 hoyos / combinadas 9H','18 buracos / combinadas 9B','18 trous / combinées 9T')}</div>
@@ -6810,7 +6841,7 @@ function renderStats() {
     </div>
     <div style="margin-bottom:16px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
-        <span style="font-size:11px;letter-spacing:1px;color:var(--gold2)">${lbl('DIFERENCIALES POR RONDA','DIFERENCIAIS POR VOLTA','DIFFÉRENTIELS PAR PARTIE')}</span>
+        <span style="font-size:12px;letter-spacing:1px;color:var(--gold2)">${lbl('DIFERENCIALES POR RONDA','DIFERENCIAIS POR VOLTA','DIFFÉRENTIELS PAR PARTIE')}</span>
       </div>
       <div style="font-size:9px;letter-spacing:.3px;color:var(--muted);margin-bottom:6px">${lbl('18 hoyos / combinadas 9H','18 buracos / combinadas 9B','18 trous / combinées 9T')}</div>
       <canvas id="stats-dif-chart" height="110" style="width:100%;display:block"></canvas>
@@ -6818,7 +6849,7 @@ function renderStats() {
     </div>
     <div style="margin-bottom:16px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
-        <span style="font-size:11px;letter-spacing:1px;color:var(--gold2)">${lbl('STABLEFORD POR RONDA','STABLEFORD POR VOLTA','STABLEFORD PAR PARTIE')}</span>
+        <span style="font-size:12px;letter-spacing:1px;color:var(--gold2)">${lbl('STABLEFORD POR RONDA','STABLEFORD POR VOLTA','STABLEFORD PAR PARTIE')}</span>
       </div>
       <div style="font-size:9px;letter-spacing:.3px;color:var(--muted);margin-bottom:6px">${lbl('18 hoyos / combinadas 9H','18 buracos / combinadas 9B','18 trous / combinées 9T')}</div>
       <canvas id="stats-stbl-chart" height="110" style="width:100%;display:block"></canvas>
@@ -8530,6 +8561,14 @@ function calcNuevaChcp() {
   if (campo) renderRedDots('gh-', playing, campo.hoyos);
 }
 
+// v1.34.265: cancelar Nueva Ronda saltando confirmacion si no hay datos introducidos.
+function cancelarNuevaRondaInteligente() {
+  const campoSel = $('f-campo')?.value;
+  const tieneGolpes = Array.from({length:18}, (_,i) => $('gh-'+(i+1))?.value).some(v => v && v !== '');
+  const hcpIdx = $('f-hcp-idx')?.value;
+  if (!campoSel && !tieneGolpes && !hcpIdx) { cancelarNueva(); return; } // nada tecleado -> salir directo
+  if (confirm(t('c_cancelar_nueva_ronda'))) cancelarNueva();
+}
 function cancelarNueva() {
   $('f-campo').value = ''; $('f-cr').value = ''; $('f-slope').value = '';
   $('f-par-total').value = ''; $('f-hcp-idx').value = '';
@@ -8850,6 +8889,7 @@ function abrirEditRonda(id) {
   $('modal-ronda').classList.remove('hidden');
   try { actualizarFabsVisibilidad(); } catch(e) {} /* v1.34.262: ocultar FAB + al abrir editor */
   try { refrescarBtnsHcpOficial(); } catch(e) {}
+  setTimeout(() => { try { _guardarSnapshot('modal-ronda'); } catch(e) {} }, 150); /* v1.34.265: snapshot para detectar cambios al cancelar */
 }
 
 function buildEditHoyos(campo, existing, numHoyos, vuelta, bolaRetirada) {
@@ -9850,7 +9890,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.263\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.265\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -9903,12 +9943,9 @@ function applyStoredTheme() {
 
 
 function cancelarEditCampo() {
-  const nombre = $('edit-c-nombre')?.value?.trim();
-  const barras = getBarrasFromEditor('edit-b-');
-  const tieneBarras = barras.length > 0;
-  if (nombre || tieneBarras) {
-    if (!confirm(t('c_cancelar_edit_campo'))) return;
-  }
+  // v1.34.265: si el formulario no cambio respecto a como se abrio, cerrar sin confirmar.
+  if (_editorSinCambios('modal-campo')) { cerrarModal('modal-campo'); return; }
+  if (!confirm(t('c_cancelar_edit_campo'))) return;
   cerrarModal('modal-campo');
 }
 
@@ -9924,7 +9961,7 @@ function abrirEditCampo(id) {
   if (bw) { bw.innerHTML = ''; buildBarrasEditor('edit-barras-wrap', 'edit-b-', campo.barras || []); }
   $('modal-campo').classList.remove('hidden');
   try { actualizarFabsVisibilidad(); } catch(e) {} /* v1.34.262: ocultar FAB + al abrir editor */
-  setTimeout(() => calcParTotal('edit-c-'), 100);
+  setTimeout(() => { calcParTotal('edit-c-'); try { _guardarSnapshot('modal-campo'); } catch(e) {} }, 150); /* v1.34.265: snapshot tras construir barras y hoyos */
 }
 
 async function guardarEditCampo() {
@@ -10914,7 +10951,8 @@ function drawStatsChart(canvasId, labelsId, data, color, minVal, maxVal, labelFn
   }
 
   // Date labels at bottom of canvas - aligned with data points
-  ctx.fillStyle = document.documentElement.classList.contains('light') ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.45)';
+  // v1.34.265: en modo claro negro solido (#111) en vez de gris translucido
+  ctx.fillStyle = document.documentElement.classList.contains('light') ? '#111111' : 'rgba(255,255,255,0.45)';
   ctx.font = '7px DM Mono,monospace';
   const step = n <= 6 ? 1 : n <= 12 ? 2 : 3;
   data.forEach((d, i) => {
@@ -10959,7 +10997,9 @@ function renderStatsCharts() {
   const difData = last20.filter(r => !pending9Ids.includes(r.id));
   const difVals = difData.map(r=>r.diff);
   if (difData.length) {
-    drawStatsChart('stats-dif-chart','stats-dif-labels', difData, '#7bc67a',
+    // v1.34.265: gris oscuro en modo claro, verde en oscuro
+    const _difColor = document.documentElement.classList.contains('light') ? '#444444' : '#7bc67a';
+    drawStatsChart('stats-dif-chart','stats-dif-labels', difData, _difColor,
       Math.floor(Math.min(...difVals)-1), Math.ceil(Math.max(...difVals)+1),
       fmt, r=>r.diff, true);
   }
@@ -10968,7 +11008,9 @@ function renderStatsCharts() {
   const stblData = last20.filter(r => r.stableford > 0 && !pending9Ids.includes(r.id));
   if (stblData.length) {
     const stblVals = stblData.map(r=>r.stableford);
-    drawStatsChart('stats-stbl-chart','stats-stbl-labels', stblData, '#3b82f6',
+    // v1.34.265: azul muy oscuro en modo claro, azul claro en oscuro
+    const _stblColor = document.documentElement.classList.contains('light') ? '#1e3a8a' : '#3b82f6';
+    drawStatsChart('stats-stbl-chart','stats-stbl-labels', stblData, _stblColor,
       Math.max(0,Math.min(...stblVals)-3), Math.ceil(Math.max(...stblVals)+2),
       fmt, r=>r.stableford, true);
   }
