@@ -1666,7 +1666,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.278</div>
+    <div class="login-version">v1.34.275</div>
   </div>
 </div>
 
@@ -1899,7 +1899,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.278</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.275</div>
   </div>
 </div>
 
@@ -2495,7 +2495,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   <div id="uso-loading" style="text-align:center;padding:30px;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px">Cargando datos...</div>
 
   <!-- Contenido (relleno por JS) -->
-  <div id="uso-content" style="visibility:hidden;height:0;overflow:hidden">
+  <div id="uso-content" style="display:none">
 
     <!-- SECCIÓN 1: Tarjetas resumen -->
     <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 6px;font-family:'DM Mono',monospace">USUARIOS ACTIVOS</div>
@@ -11464,9 +11464,7 @@ async function renderAdminUso() {
   }
   // Mostrar loading, ocultar contenido
   $('uso-loading').style.display = 'block';
-  $('uso-content').style.visibility = 'hidden';
-  $('uso-content').style.height = '0';
-  $('uso-content').style.overflow = 'hidden';
+  $('uso-content').style.display = 'none';
   try {
     const [sesiones, usuarios, rondas, campos] = await Promise.all([
       sb.from('sesiones').select('user_id,tipo,dispositivo,timestamp').order('timestamp', { ascending: false }).limit(5000),
@@ -11522,9 +11520,7 @@ async function renderAdminUso() {
     renderUsoHcpEvol(realRondas, realUsers);
 
     $('uso-loading').style.display = 'none';
-    $('uso-content').style.visibility = 'visible';
-    $('uso-content').style.height = 'auto';
-    $('uso-content').style.overflow = '';
+    $('uso-content').style.display = 'block';
   } catch(e) {
     console.error('renderAdminUso:', e);
     $('uso-loading').textContent = (t('e_cargar_datos')||'Error al cargar datos: ') + (e.message || t('desconocido')||'desconocido');
