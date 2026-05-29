@@ -408,6 +408,10 @@ nav button.active svg .nav-icon-inner{fill:#ffffff;stroke:#ffffff} /* v1.34.267:
 /* ── PAGES ── */
 .page{display:none;padding:16px 14px calc(110px + env(safe-area-inset-bottom,0px));max-width:700px;margin:0 auto;width:100%;min-height:100dvh;box-sizing:border-box} /* v1.34.254: padding-bottom 70px -> 110px. Desde v246 el nav ya no se oculta al hacer scroll, asi que el ultimo elemento de la pagina necesita mas margen para no quedar oculto bajo nav+cover-bottom. Calc: nav(bottom:12 + altura~64) + cover-bottom(40) + respiracion(~10) = ~126px aproximado redondeado a 110+safe. */
 .page.active{display:block}
+/* v1.34.276: page-admin-uso tiene contenido dinámico (display:none -> block) que iOS/PWA
+   no detecta como overflow del body. Solución: scroll container propio position:fixed. */
+#page-admin-uso{display:none;position:fixed;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:calc(env(safe-area-inset-top,0px) + 16px) 14px calc(80px + env(safe-area-inset-bottom,0px));box-sizing:border-box;min-height:unset}
+#page-admin-uso.active{display:block}
 
 /* v1.34.235: Floating Action Button (FAB) estilo WhatsApp.
    Circulo azul fijo abajo-derecha. Reemplaza los botones "+ Nueva Ronda" y
@@ -1666,7 +1670,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.276</div>
+    <div class="login-version">v1.34.277</div>
   </div>
 </div>
 
@@ -1899,7 +1903,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.276</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.277</div>
   </div>
 </div>
 
@@ -11521,13 +11525,6 @@ async function renderAdminUso() {
 
     $('uso-loading').style.display = 'none';
     $('uso-content').style.display = 'block';
-    // v1.34.276: forzar reflow en iOS/PWA para que el body recalcule la altura
-    // scrollable tras mostrar uso-content (que estaba display:none).
-    // Sin esto, iOS no detecta el nuevo contenido y el scroll queda bloqueado.
-    requestAnimationFrame(() => {
-      document.body.style.overflowY = 'hidden';
-      requestAnimationFrame(() => { document.body.style.overflowY = ''; });
-    });
   } catch(e) {
     console.error('renderAdminUso:', e);
     $('uso-loading').textContent = (t('e_cargar_datos')||'Error al cargar datos: ') + (e.message || t('desconocido')||'desconocido');
