@@ -2545,7 +2545,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 
     <!-- SECCIÓN 4: Actividad reciente -->
     <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 6px;font-family:'DM Mono',monospace">ACTIVIDAD RECIENTE (100 ÚLT.)</div>
-    <div id="uso-actividad" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:8px;margin-bottom:18px;font-family:'DM Mono',monospace;font-size:10px"></div>
+    <div id="uso-actividad" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:8px;margin-bottom:18px;max-height:300px;overflow-y:auto;font-family:'DM Mono',monospace;font-size:10px"></div>
 
     <!-- SECCIÓN 5: Tendencias -->
     <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 4px 6px;font-family:'DM Mono',monospace">TENDENCIAS · 30 DÍAS</div>
@@ -11521,6 +11521,13 @@ async function renderAdminUso() {
 
     $('uso-loading').style.display = 'none';
     $('uso-content').style.display = 'block';
+    // v1.34.276: forzar reflow en iOS/PWA para que el body recalcule la altura
+    // scrollable tras mostrar uso-content (que estaba display:none).
+    // Sin esto, iOS no detecta el nuevo contenido y el scroll queda bloqueado.
+    requestAnimationFrame(() => {
+      document.body.style.overflowY = 'hidden';
+      requestAnimationFrame(() => { document.body.style.overflowY = ''; });
+    });
   } catch(e) {
     console.error('renderAdminUso:', e);
     $('uso-loading').textContent = (t('e_cargar_datos')||'Error al cargar datos: ') + (e.message || t('desconocido')||'desconocido');
