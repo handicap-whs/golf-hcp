@@ -11456,6 +11456,23 @@ async function adminGuardar() {
 // Lee de la tabla 'sesiones' (columna 'timestamp' guarda la hora del evento)
 // Solo idioma ES (interno admin, no traducido)
 // ═════════════════════════════════════════════════════════════════════
+async function fetchAllSesiones() {
+  const pageSize = 1000;
+  let all = [];
+  let from = 0;
+  while (true) {
+    const { data, error } = await sb
+      .from('sesiones')
+      .select('user_id,tipo,dispositivo,timestamp')
+      .order('timestamp', { ascending: false })
+      .range(from, from + pageSize - 1);
+    if (error) throw error;
+    all = all.concat(data || []);
+    if (!data || data.length < pageSize) break;
+    from += pageSize;
+  }
+  return { data: all, error: null };
+}
 async function renderAdminUso() {
   if (!state.user?.is_admin) {
     toast('Sin permisos', true);
@@ -11467,7 +11484,7 @@ async function renderAdminUso() {
   $('uso-content').style.display = 'none';
   try {
     const [sesiones, usuarios, rondas, campos] = await Promise.all([
-      sb.from('sesiones').select('user_id,tipo,dispositivo,timestamp').order('timestamp', { ascending: false }).limit(5000),
+      fetchAllSesiones(),
       sb.from('profiles').select('id,nombre,is_admin,excluir_stats').limit(1000),
       sb.from('rondas').select('user_id,fecha,diferencial,stableford,hcp_idx,campo_id,nombre_campo,barra_color,num_hoyos,gross,created_at').order('fecha', { ascending: false }).limit(5000),
       sb.from('campos').select('id,nombre,user_id').limit(2000)
