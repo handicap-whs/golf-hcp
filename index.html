@@ -1666,7 +1666,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.277</div>
+    <div class="login-version">v1.34.278</div>
   </div>
 </div>
 
@@ -1899,7 +1899,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.277</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.278</div>
   </div>
 </div>
 
@@ -5369,8 +5369,19 @@ function getHCPRaw(rounds) {
   const recent20 = sortedByDate.slice(0, 20);
   const n = recent20.length;
   if (!n) return null;
-  const sorted = recent20.map(r => r.diff).sort((a, b) => a - b);
-  const [nb, adj] = WHS[Math.min(n, 20) - 1];
+  // v1.34.278: filtrar diferenciales nulos o NaN antes de calcular
+  const validRounds = recent20.filter(r => r.diff != null && !isNaN(Number(r.diff)));
+  const nValid = validRounds.length;
+  if (!nValid) return null;
+  if (nValid !== n) {
+    console.warn('[HCP] ' + (n - nValid) + ' rondas descartadas por diff nulo/NaN de ' + n + ' en recent20');
+    recent20.forEach((r, i) => {
+      if (r.diff == null || isNaN(Number(r.diff)))
+        console.warn('[HCP] Ronda inválida idx=' + i + ' id=' + r.id + ' fecha=' + (r.date||r.fecha) + ' diff=' + r.diff + ' hoyos=' + r.num_hoyos);
+    });
+  }
+  const sorted = validRounds.map(r => Number(r.diff)).sort((a, b) => a - b);
+  const [nb, adj] = WHS[Math.min(nValid, 20) - 1];
   const avg = sorted.slice(0, nb).reduce((s, v) => s + v, 0) / nb;
   return { hcp: Math.round(Math.min(avg + adj, 54) * 10) / 10, numBest: nb };
 }
@@ -7502,8 +7513,10 @@ function renderHistory() {
     const recent20 = [...combined]
       .sort((a, b) => (b.date || b.fecha || '').localeCompare(a.date || a.fecha || ''))
       .slice(0, 20);
-    // Luego ordenar las 20 recientes por diff y tomar las 8 (o n) mejores
-    const sortedC = [...recent20].sort((a, b) => a.diff - b.diff);
+    // v1.34.278: filtrar diffs nulos/NaN igual que getHCPRaw para que usedSet coincida exactamente
+    const recent20Valid = recent20.filter(r => r.diff != null && !isNaN(Number(r.diff)));
+    // Luego ordenar las válidas por diff y tomar las nb mejores
+    const sortedC = [...recent20Valid].sort((a, b) => Number(a.diff) - Number(b.diff));
     sortedC.slice(0, res.numBest).forEach(r => {
       if (r._combined9) {
         r._combined9.forEach(id => {
@@ -9936,7 +9949,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.277\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.278\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
