@@ -1666,7 +1666,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.275</div>
+    <div class="login-version">v1.34.276</div>
   </div>
 </div>
 
@@ -1899,7 +1899,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.275</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.276</div>
   </div>
 </div>
 
@@ -2013,12 +2013,26 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <div class="prompt-inicio" style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
       <div style="display:flex;flex-direction:column;gap:2px">
         <span style="color:var(--text);font-weight:600" data-i18n="torneo_rfeg_label">Torneo R.F.E.G.</span>
-        <span style="color:var(--muted);font-size:9px;letter-spacing:.2px" data-i18n="torneo_rfeg_sub">Ajuste Extraordinario −1.0 (solo método EGA)</span>
+        <span style="color:var(--muted);font-size:9px;letter-spacing:.2px" data-i18n="torneo_rfeg_sub">Ajuste Extraordinario −2.0 (solo método EGA)</span>
       </div>
       <label class="toggle-switch" style="margin:0" onclick="event.stopPropagation()">
-        <input type="checkbox" id="nueva-torneo-rfeg">
+        <input type="checkbox" id="nueva-torneo-rfeg" onchange="toggleAscSelector()">
         <span class="toggle-slider"></span>
       </label>
+    </div>
+    <!-- v1.34.276: selector ASC, visible solo cuando torneo RFEG está activo -->
+    <div id="asc-selector-row" style="display:none;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <span style="color:var(--text);font-weight:600">ASC</span>
+        <span style="color:var(--muted);font-size:9px;letter-spacing:.2px">Ajuste Condiciones Competición</span>
+      </div>
+      <select id="nueva-asc-value" style="background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:13px;font-family:'DM Mono',monospace;min-width:70px;text-align:center">
+        <option value="-1">−1</option>
+        <option value="0" selected>0</option>
+        <option value="1">+1</option>
+        <option value="2">+2</option>
+        <option value="3">+3</option>
+      </select>
     </div>
 
     <div class="fab-actions">
@@ -5233,13 +5247,15 @@ function calcParTotal(prefix) {
 }
 
 // ── WHS / STABLEFORD ─────────────────────────────────────────────────────
-function calcDiff(gross, cr, slope, numHoyos, crIs9H) {
+function calcDiff(gross, cr, slope, numHoyos, crIs9H, ascValue) {
   // crIs9H = true si cr ya es el valor específico de 9H (no el de 18H)
+  // ascValue = ajuste ASC de competición (solo torneos, 0 por defecto)
+  const asc = ascValue || 0;
   if (numHoyos === 9 && !crIs9H) {
     // Fallback: cr es el de 18H, dividir entre 2
-    return Math.round(((gross - cr / 2) * 113 / slope) * 10) / 10;
+    return Math.round(((gross - cr / 2 - asc) * 113 / slope) * 10) / 10;
   }
-  return Math.round(((gross - cr) * 113 / slope) * 10) / 10;
+  return Math.round(((gross - cr - asc) * 113 / slope) * 10) / 10;
 }
 
 
@@ -5269,9 +5285,23 @@ function calcDiffEGA(round) {
   const factor = is9H ? 0.5 : 1.0;
   const courseHcp = Math.round(factor * hcpIdx * slope / 113 + (cr - par));
   const rba = par + courseHcp + stblBase - stbl;
-  let nivel = (rba - cr) * 113 / slope;
-  if (round.torneo_rfeg) nivel -= 1.0;
+  const asc = round.asc_value || 0; // v1.34.276: ASC de competición
+  let nivel = (rba - cr - asc) * 113 / slope;
+  if (round.torneo_rfeg) nivel -= 2.0; // v1.34.276: Ajuste Extraordinario cambiado de -1.0 a -2.0
   return Math.round(nivel * 10) / 10;
+}
+
+// v1.34.276: muestra/oculta el selector ASC según el estado del toggle torneo
+function toggleAscSelector() {
+  const checked = !!($('nueva-torneo-rfeg')?.checked);
+  const row = $('asc-selector-row');
+  if (row) {
+    row.style.display = checked ? 'flex' : 'none';
+    if (!checked) {
+      const sel = $('nueva-asc-value');
+      if (sel) sel.value = '0'; // reset al ocultar
+    }
+  }
 }
 
 function toggleMetodoCalculo() {
@@ -5980,6 +6010,7 @@ async function loadData() {
     hcp_idx: r.hcp_idx != null ? Number(r.hcp_idx) : null,
     par: r.par != null ? Number(r.par) : null,  // v1.34.164: si la BD tiene par (futuras rondas), usarlo
     torneo_rfeg: !!r.torneo_rfeg,  // v1.34.167: rondas marcadas como torneo federado RFEG (aplica ajuste -1.0 en EGA)
+    asc_value: r.asc_value != null ? parseInt(r.asc_value) : 0, // v1.34.276: ASC competición
     shots: (() => {
       if (!r.shots) return null;
       if (Array.isArray(r.shots)) return r.shots;
@@ -8599,6 +8630,7 @@ function cancelarNueva() {
   $('preview-stbl').textContent = '—';
   renderHoleDots('gh-', null);
   if ($('nueva-torneo-rfeg')) $('nueva-torneo-rfeg').checked = false;
+  toggleAscSelector(); // v1.34.276: ocultar y resetear selector ASC
   // v1.34.237: tras cancelar ir al listado de Rondas (antes iba a Inicio).
   goTo('rondas', $('nav-rondas'));
 }
@@ -8697,7 +8729,8 @@ async function addRound() {
   const has9HCR = numHoyos === 9 && barra9H && (
     (vuelta === 1 && barra9H.cr_out) || (vuelta === 2 && barra9H.cr_in)
   );
-  const diff = calcDiff(gross, usedCR, usedSlope, numHoyos, has9HCR);
+  const diff = calcDiff(gross, usedCR, usedSlope, numHoyos, has9HCR,
+    !!($('nueva-torneo-rfeg')?.checked) ? (parseInt($('nueva-asc-value')?.value) || 0) : 0); // v1.34.276: ASC solo si torneo
 
   const btn = $('btn-add');
   btn.textContent = t('guardando')||'Guardando…'; btn.disabled = true;
@@ -8713,7 +8746,8 @@ async function addRound() {
       juego_fmt: parseInt($('nueva-fmt')?.value || '100'),
       num_hoyos: numHoyos,
       vuelta: numHoyos === 9 ? vuelta : null,
-      torneo_rfeg: !!($('nueva-torneo-rfeg')?.checked) // v1.34.167: marcar torneo R.F.E.G.
+      torneo_rfeg: !!($('nueva-torneo-rfeg')?.checked), // v1.34.167: marcar torneo R.F.E.G.
+      asc_value: !!($('nueva-torneo-rfeg')?.checked) ? (parseInt($('nueva-asc-value')?.value) || 0) : 0 // v1.34.276: ASC competición
     };
     const { data, error } = await sb.from('rondas').insert(body).select();
     if (error) {
@@ -8730,6 +8764,7 @@ async function addRound() {
     // El INSERT a Supabase sí lo guardaba (linea body.torneo_rfeg arriba), pero el push local
     // no lo incluia, asi que el render no encontraba r.torneo_rfeg hasta el siguiente reload.
     const torneoRfegFlag = !!($('nueva-torneo-rfeg')?.checked);
+    const ascValueFlag = torneoRfegFlag ? (parseInt($('nueva-asc-value')?.value) || 0) : 0; // v1.34.276
     state.rounds.push({
       id: r.id, gross, cr: usedCR, slope: usedSlope, name, date, diff,
       stableford, campo_id: campoId,
@@ -8739,7 +8774,8 @@ async function addRound() {
       juego_fmt: parseInt($('nueva-fmt')?.value || '100'),
       num_hoyos: numHoyos,
       vuelta: vuelta,
-      torneo_rfeg: torneoRfegFlag
+      torneo_rfeg: torneoRfegFlag,
+      asc_value: ascValueFlag // v1.34.276
     });
     cancelarNueva();
     renderAll();
@@ -9900,7 +9936,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.274\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.276\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
