@@ -1666,7 +1666,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.280</div>
+    <div class="login-version">v1.34.281</div>
   </div>
 </div>
 
@@ -1899,7 +1899,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.280</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.281</div>
   </div>
 </div>
 
@@ -5315,6 +5315,12 @@ function toggleMetodoCalculo() {
 }
 
 function combineNineHoleRounds(rounds) {
+  // v1.34.281: norma WHS 5.1b — cada ronda de 9H genera su propio diferencial de 18H
+  // combinando el diferencial jugado con el "resultado esperado" del jugador para los
+  // otros 9 hoyos. La app aproxima el resultado esperado duplicando el diferencial de 9H
+  // (diff9H × 2), lo que equivale a asumir que el jugador jugaría los otros 9 hoyos
+  // al mismo nivel que los primeros. Cada ronda de 9H ocupa una posición independiente
+  // en la ficha de actividad — NO se emparejan dos rondas entre sí.
   const metodo = getMetodoCalculo();
   const procesarDiff = (r) => {
     if (metodo === 'ega') {
@@ -5323,41 +5329,16 @@ function combineNineHoleRounds(rounds) {
     }
     return r;
   };
-  // Separar rondas de 9 y 18 hoyos, ordenar por fecha
   const r18 = rounds.filter(r => (r.num_hoyos || 18) === 18).map(procesarDiff);
-  const r9  = [...rounds.filter(r => r.num_hoyos === 9)]
-                .sort((a, b) => (a.date||'').localeCompare(b.date||''))
-                .map(procesarDiff);
-  const combined = [...r18];
-  // Emparejar rondas de 9 hoyos consecutivas
-  const pending9 = [];
-  for (let i = 0; i < r9.length; i++) {
-    if (i + 1 < r9.length) {
-      // Combinar dos rondas de 9H en un diferencial de 18H
-      const combinedDiff = Math.round((r9[i].diff + r9[i+1].diff) * 10) / 10;
-      // v1.34.157: tambien sumar CR + par y promediar Slope para que muestren los valores correctos del 18H equivalente
-      const combinedCR = Math.round(((r9[i].cr || 0) + (r9[i+1].cr || 0)) * 10) / 10;
-      const combinedSlope = Math.round(((r9[i].slope || 0) + (r9[i+1].slope || 0)) / 2);
-      const combinedPar = (r9[i].par || 0) + (r9[i+1].par || 0);
-      combined.push({
-        ...r9[i],
-        diff: combinedDiff,
-        gross: (r9[i].gross || 0) + (r9[i+1].gross || 0),
-        stableford: (r9[i].stableford || 0) + (r9[i+1].stableford || 0),
-        cr: combinedCR,
-        slope: combinedSlope,
-        par: combinedPar,
-        fecha: r9[i+1].fecha || r9[i+1].date || r9[i].fecha || r9[i].date,
-        date: r9[i+1].date || r9[i+1].fecha || r9[i].date || r9[i].fecha,
-        _combined9: [r9[i].id, r9[i+1].id],
-        _is9combined: true
-      });
-      i++; // saltar la siguiente (ya usada)
-    } else {
-      pending9.push(r9[i]); // queda sola, pendiente
-    }
-  }
-  return { combined, pending9Ids: pending9.map(r => r.id) };
+  const r9  = rounds.filter(r => r.num_hoyos === 9).map(procesarDiff);
+  // Convertir cada ronda de 9H en diferencial de 18H equivalente (diff × 2)
+  const r9converted = r9.map(r => ({
+    ...r,
+    diff: r.diff != null && !isNaN(Number(r.diff)) ? Math.round(Number(r.diff) * 2 * 10) / 10 : r.diff,
+    _is9converted: true  // marca para UI (mostrar badge 9H en historial)
+  }));
+  const combined = [...r18, ...r9converted];
+  return { combined, pending9Ids: [] }; // ya no hay rondas pendientes sin procesar
 }
 
 // getHCPRaw = calculo base sin caps (lo que era getHCP antes).
@@ -7498,31 +7479,18 @@ function renderHistory() {
   if (kebabWrap) kebabWrap.style.visibility = 'visible';
 
   // ── Calcular usedSet (rondas usadas en el calculo de HCP)
-  // v1.34.156: aplicar mismo fix que getHCP: filtrar primero las 20 mas recientes por fecha de juego.
-  const { combined, pending9Ids } = combineNineHoleRounds(state.rounds);
-  const pending9Set = new Set(pending9Ids);
+  // v1.34.281: norma WHS 5.1b — cada ronda de 9H ya tiene su diferencial 18H equivalente (×2).
+  // usedSet mapea id de ronda original → está entre las nb mejores.
+  const { combined } = combineNineHoleRounds(state.rounds);
   const res = getHCP(state.rounds);
   const usedSet = new Set();
-  const pairMap = new Set(); // ids de rondas 9H combinadas que cuentan para el HCP
   if (res) {
-    // Primero ordenar por fecha de juego DESC y tomar las 20 mas recientes
     const recent20 = [...combined]
       .sort((a, b) => (b.date || b.fecha || '').localeCompare(a.date || a.fecha || ''))
       .slice(0, 20);
-    // v1.34.278: filtrar diffs nulos/NaN igual que getHCPRaw para que usedSet coincida exactamente
     const recent20Valid = recent20.filter(r => r.diff != null && !isNaN(Number(r.diff)));
-    // Luego ordenar las válidas por diff y tomar las nb mejores
     const sortedC = [...recent20Valid].sort((a, b) => Number(a.diff) - Number(b.diff));
-    sortedC.slice(0, res.numBest).forEach(r => {
-      if (r._combined9) {
-        r._combined9.forEach(id => {
-          usedSet.add(id);
-          pairMap.add(id);
-        });
-      } else {
-        usedSet.add(r.id);
-      }
-    });
+    sortedC.slice(0, res.numBest).forEach(r => usedSet.add(r.id));
   }
 
   const totalRounds = state.rounds.length;
@@ -7588,11 +7556,9 @@ function renderHistory() {
   const metodoActivo = getMetodoCalculo();
   const renderRondaItem = (r) => {
     const used = usedSet.has(r.id);
-    const isPending9 = pending9Set.has(r.id);
-    const nine_style_ok  = 'background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.4);color:#3b82f6;font-size:7px;padding:2px 4px;border-radius:50%;margin-left:4px;vertical-align:middle;display:inline-block;width:14px;height:14px;text-align:center;line-height:12px';
-    const nine_style_pend = 'background:rgba(224,85,85,.15);border:1px solid rgba(224,85,85,.4);color:#e05555;font-size:7px;padding:2px 4px;border-radius:50%;margin-left:4px;vertical-align:middle;display:inline-block;width:14px;height:14px;text-align:center;line-height:12px';
+    const nine_style = 'background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.4);color:#3b82f6;font-size:7px;padding:2px 4px;border-radius:50%;margin-left:4px;vertical-align:middle;display:inline-block;width:14px;height:14px;text-align:center;line-height:12px';
     const nineTag = r.num_hoyos === 9
-      ? `<span style="${isPending9?nine_style_pend:nine_style_ok}">✓</span>`
+      ? `<span style="${nine_style}" title="9 hoyos · dif. ×2">9</span>`
       : '';
     let diffMostrar = r.diff;
     if (metodoActivo === 'ega') {
@@ -7601,9 +7567,7 @@ function renderHistory() {
     }
     const stblTxt = r.stableford != null
       ? `<span>Stbl: <span class="stat-stbl">${r.stableford}</span></span>` : '';
-    const isPair = pairMap.has(r.id);
-    const pairDot = isPair ? `<span style="font-size:10px;color:var(--blue-adapt)" title="9H combinada">🔗</span>` : '';
-    // El circulo azul/rojo del nineTag ya distingue las 9H; no hace falta un segundo badge azul cuadrado.
+    // v1.34.281: pairDot eliminado — las 9H ya no se emparejan, cada una tiene dif. propio
     const usedBadge = used
       ? `<span class="used-badge" title="HCP">✓</span>`
       : '';
@@ -9945,7 +9909,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.280\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.281\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -11031,7 +10995,8 @@ function renderStatsCharts() {
   const filteredRaw = (typeof getFilteredRawRounds === 'function')
     ? getFilteredRawRounds()
     : state.rounds;
-  const { combined, pending9Ids } = combineNineHoleRounds(filteredRaw);
+  const { combined } = combineNineHoleRounds(filteredRaw);
+  const pending9Ids = []; // v1.34.281: ya no hay 9H pendientes sin procesar
   if (!combined || combined.length < 2) return;
   const sorted = [...combined].sort((a,b) => new Date(a.fecha||a.date)-new Date(b.fecha||b.date));
   const last20 = sorted.slice(-20);
