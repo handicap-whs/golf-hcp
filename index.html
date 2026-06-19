@@ -1666,7 +1666,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.286</div>
+    <div class="login-version">v1.34.288</div>
   </div>
 </div>
 
@@ -1923,7 +1923,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.286</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.288</div>
   </div>
 </div>
 
@@ -6900,7 +6900,7 @@ function renderStats() {
         <span style="font-size:12px;letter-spacing:1px;color:var(--gold2)">${lbl('GOLPES POR RONDA','PANCADAS POR VOLTA','COUPS PAR PARTIE')}</span>
         <span style="font-size:9px;letter-spacing:.3px;color:var(--muted)">${combined.length > 20 ? lbl('últimas 20 del filtro','últimas 20 do filtro','20 dernières du filtre') : lbl('últimas 20 rondas','últimas 20 voltas','20 dernières parties')}</span>
       </div>
-      <div style="font-size:9px;letter-spacing:.3px;color:var(--muted);margin-bottom:6px">${lbl('18 hoyos / combinadas 9H','18 buracos / combinadas 9B','18 trous / combinées 9T')}</div>
+      <div style="font-size:9px;letter-spacing:.3px;color:var(--muted);margin-bottom:6px">${lbl('Solo 18 hoyos','Apenas 18 buracos','18 trous seulement')}</div>
       <canvas id="stats-hcp-chart" height="140" style="width:100%;display:block"></canvas>
       <div id="stats-hcp-labels"></div>
     </div>
@@ -6908,7 +6908,7 @@ function renderStats() {
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
         <span style="font-size:12px;letter-spacing:1px;color:var(--gold2)">${lbl('DIFERENCIALES POR RONDA','DIFERENCIAIS POR VOLTA','DIFFÉRENTIELS PAR PARTIE')}</span>
       </div>
-      <div style="font-size:9px;letter-spacing:.3px;color:var(--muted);margin-bottom:6px">${lbl('18 hoyos / combinadas 9H','18 buracos / combinadas 9B','18 trous / combinées 9T')}</div>
+      <div style="font-size:9px;letter-spacing:.3px;color:var(--muted);margin-bottom:6px">${lbl('Solo 18 hoyos','Apenas 18 buracos','18 trous seulement')}</div>
       <canvas id="stats-dif-chart" height="110" style="width:100%;display:block"></canvas>
       <div id="stats-dif-labels"></div>
     </div>
@@ -6916,7 +6916,7 @@ function renderStats() {
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
         <span style="font-size:12px;letter-spacing:1px;color:var(--gold2)">${lbl('STABLEFORD POR RONDA','STABLEFORD POR VOLTA','STABLEFORD PAR PARTIE')}</span>
       </div>
-      <div style="font-size:9px;letter-spacing:.3px;color:var(--muted);margin-bottom:6px">${lbl('18 hoyos / combinadas 9H','18 buracos / combinadas 9B','18 trous / combinées 9T')}</div>
+      <div style="font-size:9px;letter-spacing:.3px;color:var(--muted);margin-bottom:6px">${lbl('Solo 18 hoyos','Apenas 18 buracos','18 trous seulement')}</div>
       <canvas id="stats-stbl-chart" height="110" style="width:100%;display:block"></canvas>
       <div id="stats-stbl-labels"></div>
     </div>` : `
@@ -6937,7 +6937,7 @@ function renderStats() {
     ${cardNote(lbl('Media últ. 5','Média últ. 5','Moyenne 5 dern.'), avgStbl5, lbl('solo 18H','só 18B','seul. 18T'))}
     ${section(lbl('Actividad','Atividade','Activité'))}
     ${card(lbl('Rondas mes actual','Voltas mês atual','Parties mois en cours'), thisMon)}
-    ${cardNote(lbl('Promedio rondas/mes','Média voltas/mês','Moyenne parties/mois'), avgRoundsPerMonth, lbl('2×9H = 1','2×9B = 1','2×9T = 1'))}
+    ${cardNote(lbl('Promedio rondas/mes','Média voltas/mês','Moyenne parties/mois'), avgRoundsPerMonth, lbl('incluye 9 y 18 hoyos','inclui 9 e 18 buracos','inclut 9 et 18 trous'))}
     ${card(lbl('Días sin jugar','Dias sem jogar','Jours sans jouer'), daysSinceLast)}
     ${card(lbl('Campo favorito','Campo favorito','Parcours favori'), favCampo)}
     ${card(lbl('Racha mejorando','Sequência a melhorar','Série en amélioration'), streakImproving)}
@@ -9967,7 +9967,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.286\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.288\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -11054,14 +11054,16 @@ function renderStatsCharts() {
     ? getFilteredRawRounds()
     : state.rounds;
   const { combined } = combineNineHoleRounds(filteredRaw);
-  const pending9Ids = []; // v1.34.281: ya no hay 9H pendientes sin procesar
   if (!combined || combined.length < 2) return;
-  const sorted = [...combined].sort((a,b) => new Date(a.fecha||a.date)-new Date(b.fecha||b.date));
+  // v1.34.287: excluir rondas de 9 hoyos reales de los gráficos (golpes/Stbl no son comparables
+  // 1:1 con 18H, y el diferencial ×2 desvirtúa la escala) — solo rondas de 18H en estos 3 gráficos
+  const only18Charts = combined.filter(r => (r.num_hoyos || 18) === 18);
+  const sorted = [...only18Charts].sort((a,b) => new Date(a.fecha||a.date)-new Date(b.fecha||b.date));
   const last20 = sorted.slice(-20);
   const fmt = r => { const dt=new Date(r.fecha||r.date); return dt.getDate()+'/'+(dt.getMonth()+1); };
 
-  // Chart 1: Golpes por ronda (18H + combinadas 9H, sin pendientes)
-  const golpesData = last20.filter(r => r.gross > 0 && !pending9Ids.includes(r.id));
+  // Chart 1: Golpes por ronda (solo 18H)
+  const golpesData = last20.filter(r => r.gross > 0);
   if (golpesData.length >= 2) {
     const gVals = golpesData.map(r => r.gross);
     // v1.34.261: linea negra en modo claro (#111), dorada en oscuro (#e8c96a)
@@ -11071,8 +11073,8 @@ function renderStatsCharts() {
       fmt, r => r.gross, false);
   }
 
-  // Chart 2: Diferenciales (18H + combinadas 9H)
-  const difData = last20.filter(r => !pending9Ids.includes(r.id));
+  // Chart 2: Diferenciales (solo 18H)
+  const difData = last20;
   const difVals = difData.map(r=>r.diff);
   if (difData.length) {
     // v1.34.265: gris oscuro en modo claro, verde en oscuro
@@ -11082,8 +11084,8 @@ function renderStatsCharts() {
       fmt, r=>r.diff, true);
   }
 
-  // Chart 3: Stableford
-  const stblData = last20.filter(r => r.stableford > 0 && !pending9Ids.includes(r.id));
+  // Chart 3: Stableford (solo 18H)
+  const stblData = last20.filter(r => r.stableford > 0);
   if (stblData.length) {
     const stblVals = stblData.map(r=>r.stableford);
     // v1.34.266: mismo color que Diferenciales (gris #444 en claro, verde en oscuro)
