@@ -1666,7 +1666,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.285</div>
+    <div class="login-version">v1.34.286</div>
   </div>
 </div>
 
@@ -1791,6 +1791,30 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="hoyo-section"><div class="hoyo-label" id="edit-grid-in-label" data-i18n="vuelta_1018">Vuelta 10–18</div><div class="hoyo-grid" id="edit-grid-in"></div></div>
       <div id="edit-grid-in-subtotal" style="display:none;text-align:right;font-size:11px;color:var(--text);margin:2px 2px 0 0;font-family:'DM Mono',monospace;letter-spacing:.3px"></div>
     </div>
+    <!-- v1.34.286: toggle Torneo R.F.E.G. + selector ASC, igual que en Nueva Ronda -->
+    <div class="prompt-inicio" style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <span style="color:var(--text);font-weight:600" data-i18n="torneo_rfeg_label">Torneo R.F.E.G.</span>
+        <span style="color:var(--muted);font-size:9px;letter-spacing:.2px" data-i18n="torneo_rfeg_sub">Ajuste Extraordinario −2.0 (solo método EGA)</span>
+      </div>
+      <label class="toggle-switch" style="margin:0" onclick="event.stopPropagation()">
+        <input type="checkbox" id="edit-r-torneo-rfeg" onchange="toggleAscSelectorEdit()">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    <div id="edit-asc-selector-row" style="display:none;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <span style="color:var(--text);font-weight:600">ASC</span>
+        <span style="color:var(--muted);font-size:9px;letter-spacing:.2px" data-i18n="fi_asc_desc">Ajuste de Condiciones de Competición: −1, 0, +1, +2, +3. Solo en torneos R.F.E.G.</span>
+      </div>
+      <select id="edit-r-asc-value" style="background:var(--card);color:var(--text);border:none;border-radius:8px;padding:6px 4px;font-size:13px;font-family:'DM Mono',monospace;width:52px;text-align:center;-webkit-appearance:none;appearance:none;text-align-last:center">
+        <option value="-1">−1</option>
+        <option value="0" selected>0</option>
+        <option value="1">+1</option>
+        <option value="2">+2</option>
+        <option value="3">+3</option>
+      </select>
+    </div>
     <div class="modal-actions">
       <button class="btn" style="margin-top:0" id="btn-guardar-ronda" onclick="guardarEditRonda()" data-i18n="guardar">Guardar</button>
       <button class="btn-danger" style="margin-top:0" onclick="cancelarEditorRonda()" data-i18n="cancelar">Cancelar</button>
@@ -1899,7 +1923,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.285</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.286</div>
   </div>
 </div>
 
@@ -5300,6 +5324,19 @@ function toggleAscSelector() {
     if (!checked) {
       const sel = $('nueva-asc-value');
       if (sel) sel.value = '0'; // reset al ocultar
+    }
+  }
+}
+
+// v1.34.286: misma lógica para el modal Editar Ronda
+function toggleAscSelectorEdit() {
+  const checked = !!($('edit-r-torneo-rfeg')?.checked);
+  const row = $('edit-asc-selector-row');
+  if (row) {
+    row.style.display = checked ? 'flex' : 'none';
+    if (!checked) {
+      const sel = $('edit-r-asc-value');
+      if (sel) sel.value = '0';
     }
   }
 }
@@ -8857,6 +8894,13 @@ function abrirEditRonda(id) {
   }
   $('edit-r-err').classList.remove('show');
 
+  // v1.34.286: inicializar toggle Torneo R.F.E.G. y selector ASC con los valores actuales de la ronda
+  const _torneoEl = $('edit-r-torneo-rfeg');
+  if (_torneoEl) _torneoEl.checked = !!r.torneo_rfeg;
+  const _ascEl = $('edit-r-asc-value');
+  if (_ascEl) _ascEl.value = String(r.asc_value || 0);
+  toggleAscSelectorEdit();
+
   const campo = r.campo_id ? state.campos.find(c => c.id === r.campo_id) : null;
   const editNumHoyos = r.num_hoyos || 18;
   const editVuelta   = r.vuelta || 1;
@@ -9184,9 +9228,14 @@ async function guardarEditRonda() {
     }
   }
 
+  // v1.34.286: leer toggle Torneo R.F.E.G. y selector ASC
+  const editTorneoRfeg = !!($('edit-r-torneo-rfeg')?.checked);
+  const editAscValue = editTorneoRfeg ? (parseInt($('edit-r-asc-value')?.value) || 0) : 0;
+
   // v1.34.285: fix — cr ya es el CR específico de 9H (viene de edit-r-cr), por eso crIs9H=true.
   // Sin esto, calcDiff dividía cr/2 de más, duplicando el ajuste y disparando el diferencial.
-  const diff = calcDiff(gross, cr, slope, saveNumHoyos, true);
+  // v1.34.286: ahora también se aplica el ASC si la ronda está marcada como torneo.
+  const diff = calcDiff(gross, cr, slope, saveNumHoyos, true, editAscValue);
   const btn = $('btn-guardar-ronda');
   try {
     btn.textContent = t('guardando')||'Guardando…'; btn.disabled = true;
@@ -9199,7 +9248,9 @@ async function guardarEditRonda() {
       barra_color: barra,
       num_hoyos: saveNumHoyos,
       vuelta: saveNumHoyos === 9 ? saveVuelta : null,
-      juego_fmt: parseInt($('edit-fmt')?.value || '100')
+      juego_fmt: parseInt($('edit-fmt')?.value || '100'),
+      torneo_rfeg: editTorneoRfeg, // v1.34.286
+      asc_value: editAscValue // v1.34.286
     };
     const { error } = await sb.from('rondas').update(body).eq('id', id);
     if (error) throw error;
@@ -9212,7 +9263,8 @@ async function guardarEditRonda() {
         hcp_idx: isNaN(hcpIdx) ? null : hcpIdx,
         shots, bola_retirada: body.bola_retirada,
         barra_color: barra, num_hoyos: saveNumHoyos, vuelta: saveNumHoyos === 9 ? saveVuelta : null,
-        juego_fmt: body.juego_fmt
+        juego_fmt: body.juego_fmt,
+        torneo_rfeg: editTorneoRfeg, asc_value: editAscValue // v1.34.286
       };
     }
     cerrarModal('modal-ronda');
@@ -9915,7 +9967,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.285\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.286\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
