@@ -1666,7 +1666,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.296</div>
+    <div class="login-version">v1.34.297</div>
   </div>
 </div>
 
@@ -1923,7 +1923,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.296</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.297</div>
   </div>
 </div>
 
@@ -6747,7 +6747,10 @@ function renderStats() {
 
   // Calcular métricas
   const stbl18 = only18.filter(r => r.stableford > 0);
-  const bestDif    = combined.length ? Math.min(...combined.map(r => r.diff)) : null;
+  // v1.34.297: Mejor diferencial limitado a 18H (diferencial ×2 de 9H no es comparable 1:1).
+  // Se filtra "combined" (no only18) porque combined ya tiene el diff recalculado por EGA si aplica.
+  const combined18 = combined.filter(r => (r.num_hoyos || 18) === 18);
+  const bestDif    = combined18.length ? Math.min(...combined18.map(r => r.diff)) : null;
   // v1.34.295: Media golpes, Mejor y Peor resultado limitados a 18H (gross de 9H no es comparable 1:1)
   const rounWithScore18 = only18.filter(r => r.gross > 0);
   const avgScore   = rounWithScore18.length ? (rounWithScore18.reduce((s,r)=>s+r.gross,0)/rounWithScore18.length).toFixed(1) : '—';
@@ -6986,7 +6989,7 @@ function renderStats() {
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
     ${section(lbl('Rondas','Voltas','Parties'))}
     ${cardNote(lbl('Rondas jugadas','Voltas jogadas','Parties jouées'), real18Count + ' / ' + real9Count, lbl('18H / 9H','18B / 9B','18T / 9T'))}
-    ${card(lbl('Mejor diferencial','Melhor diferencial','Meilleur différentiel'), bestDif !== null ? fmtD(bestDif) : '—')}
+    ${cardNote(lbl('Mejor diferencial','Melhor diferencial','Meilleur différentiel'), bestDif !== null ? fmtD(bestDif) : '—', lbl('solo 18H','só 18B','seul. 18T'))}
     ${cardTitleTop(lbl('Hoyo más difícil · últ. 3 meses','Buraco mais difícil · últ. 3 meses','Trou le plus difficile · 3 derniers mois'), hoyoProblemaCampo, hoyoProblema)}
     ${cardNote(lbl('Media golpes','Média pancadas','Moyenne coups'), avgScore, lbl('solo 18H','só 18B','seul. 18T'))}
     ${cardNote(lbl('Mejor resultado','Melhor resultado','Meilleur résultat'), bestScore18, lbl('solo 18H','só 18B','seul. 18T'))}
@@ -10027,7 +10030,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.296\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.297\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
