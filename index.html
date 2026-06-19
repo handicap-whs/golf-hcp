@@ -1666,7 +1666,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.288</div>
+    <div class="login-version">v1.34.289</div>
   </div>
 </div>
 
@@ -1923,7 +1923,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.288</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.289</div>
   </div>
 </div>
 
@@ -6756,15 +6756,38 @@ function renderStats() {
   const bestStbl   = rounWithStbl.length  ? Math.max(...rounWithStbl.map(r=>r.stableford)) + ' pts' : '—';
   const avgStbl    = stbl18.length        ? (stbl18.reduce((s,r)=>s+r.stableford,0)/stbl18.length).toFixed(1) + ' pts' : '—';
 
-  // Tendencia HCP (últimas 5 rondas)
-  let tendencia = '→';
-  if (combined.length >= 5) {
-    const sorted = [...combined].sort((a,b) => new Date(a.fecha||a.date) - new Date(b.fecha||b.date));
-    const last5 = sorted.slice(-5).map(r => r.diff);
-    const inicio = (last5[0] + last5[1]) / 2;   // promedio 2 mas antiguas
-    const final = (last5[3] + last5[4]) / 2;    // promedio 2 mas recientes
-    const trend = final - inicio;
-    tendencia = trend < -0.5 ? '↘ ' + lbl('Mejorando','A melhorar') : trend > 0.5 ? '↗ ' + lbl('Subiendo','A subir') : '→ ' + lbl('Estable','Estável','Stable');
+  // v1.34.289: Hoyo más problemático — hoyo con mayor exceso medio sobre par,
+  // usando los golpes guardados hoyo a hoyo (r.shots) y el par real de cada hoyo del campo.
+  let hoyoProblema = '—';
+  {
+    const excesos = {}; // { numeroHoyo: { suma, n } }
+    combined.forEach(r => {
+      if (!r.shots || !r.campo_id) return;
+      const campo = state.campos.find(c => c.id === r.campo_id);
+      if (!campo || !campo.hoyos || !campo.hoyos.length) return;
+      const isVuelta2 = (r.num_hoyos === 9 && r.vuelta === 2);
+      const allHoyosOrdenados = [...campo.hoyos].sort((a,b) => a.numero - b.numero);
+      const startIdx = isVuelta2 ? 9 : 0;
+      const hoyosDeEstaRonda = allHoyosOrdenados.slice(startIdx, startIdx + r.shots.length);
+      r.shots.forEach((golpes, i) => {
+        const hoyo = hoyosDeEstaRonda[i];
+        if (!hoyo || hoyo.par == null || golpes == null) return;
+        const exceso = golpes - hoyo.par;
+        const key = String(hoyo.numero);
+        if (!excesos[key]) excesos[key] = { suma: 0, n: 0 };
+        excesos[key].suma += exceso;
+        excesos[key].n += 1;
+      });
+    });
+    let peorHoyo = null, peorMedia = -Infinity;
+    Object.keys(excesos).forEach(k => {
+      if (excesos[k].n < 2) return; // requiere al menos 2 datos para ser representativo
+      const media = excesos[k].suma / excesos[k].n;
+      if (media > peorMedia) { peorMedia = media; peorHoyo = k; }
+    });
+    if (peorHoyo !== null) {
+      hoyoProblema = lbl('Hoyo ','Buraco ','Trou ') + peorHoyo + ' (+' + peorMedia.toFixed(1) + ')';
+    }
   }
 
   // Rondas mes actual
@@ -6824,26 +6847,20 @@ function renderStats() {
     streakImproving = streak >= 2 ? streak : '—';
   }
 
-  // Campo favorito: moda del campo_id en las rondas filtradas
-  let favCampo = '—';
-  if (combined.length > 0 && state.campos && state.campos.length > 0) {
-    const counts = {};
-    combined.forEach(r => {
-      // En "combined" las rondas combinadas 9H pueden no tener campo_id; usamos el de la
-      // primera mitad si existe. Si no, saltar.
-      const cid = r.campo_id;
-      if (cid != null) {
-        const k = String(cid);
-        counts[k] = (counts[k] || 0) + 1;
-      }
-    });
-    let bestId = null, bestCount = 0;
-    Object.keys(counts).forEach(k => {
-      if (counts[k] > bestCount) { bestCount = counts[k]; bestId = k; }
-    });
-    if (bestId !== null) {
-      const campo = state.campos.find(c => String(c.id) === bestId);
-      if (campo && campo.nombre) favCampo = campo.nombre;
+  // v1.34.289: % Rondas netas buenas — % de rondas de 18H donde gross - CourseHCP <= par
+  // (resultado neto par o mejor). Requiere par del campo y hcp_idx guardado en la ronda.
+  let pctNetasBuenas = '—';
+  {
+    const rounds18conDatos = combined.filter(r =>
+      (r.num_hoyos || 18) === 18 && r.par != null && r.hcp_idx != null && r.cr != null && r.slope != null && r.gross != null
+    );
+    if (rounds18conDatos.length > 0) {
+      let buenas = 0;
+      rounds18conDatos.forEach(r => {
+        const courseHcp = Math.round(r.hcp_idx * (r.slope / 113) + (r.cr - r.par));
+        if ((r.gross - courseHcp) <= r.par) buenas++;
+      });
+      pctNetasBuenas = Math.round((buenas / rounds18conDatos.length) * 100) + '%';
     }
   }
 
@@ -6927,7 +6944,7 @@ function renderStats() {
     ${section(lbl('Rondas','Voltas','Parties'))}
     ${cardNote(lbl('Rondas jugadas','Voltas jogadas','Parties jouées'), real18Count + ' / ' + real9Count, lbl('18H / 9H','18B / 9B','18T / 9T'))}
     ${card(lbl('Mejor diferencial','Melhor diferencial','Meilleur différentiel'), bestDif !== null ? fmtD(bestDif) : '—')}
-    ${card(lbl('Tendencia HCP','Tendência HCP','Tendance HCP'), tendencia)}
+    ${cardNote(lbl('Hoyo más difícil','Buraco mais difícil','Trou le plus difficile'), hoyoProblema, lbl('exceso medio sobre par','excesso médio sobre par','excès moyen sur le par'))}
     ${card(lbl('Media golpes','Média pancadas','Moyenne coups'), avgScore)}
     ${card(lbl('Mejor resultado','Melhor resultado','Meilleur résultat'), bestScore)}
     ${card(lbl('Peor resultado','Pior resultado','Pire résultat'), worstScore)}
@@ -6939,7 +6956,7 @@ function renderStats() {
     ${card(lbl('Rondas mes actual','Voltas mês atual','Parties mois en cours'), thisMon)}
     ${cardNote(lbl('Promedio rondas/mes','Média voltas/mês','Moyenne parties/mois'), avgRoundsPerMonth, lbl('incluye 9 y 18 hoyos','inclui 9 e 18 buracos','inclut 9 et 18 trous'))}
     ${card(lbl('Días sin jugar','Dias sem jogar','Jours sans jouer'), daysSinceLast)}
-    ${card(lbl('Campo favorito','Campo favorito','Parcours favori'), favCampo)}
+    ${cardNote(lbl('Rondas netas buenas','Voltas netas boas','Parties nettes bonnes'), pctNetasBuenas, lbl('neto par o mejor · 18H','neto par ou melhor · 18B','net par ou mieux · 18T'))}
     ${card(lbl('Racha mejorando','Sequência a melhorar','Série en amélioration'), streakImproving)}
     ${cardNote(lbl('Usadas en HCP','Usadas no HCP','Utilisées HCP'), res ? res.numBest : '—', lbl('de '+combined.length+' dif. efectivos','de '+combined.length+' dif. efetivos','sur '+combined.length+' dif. effectifs'))}
   </div>`;
@@ -9967,7 +9984,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.288\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.289\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
