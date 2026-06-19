@@ -1666,7 +1666,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.293</div>
+    <div class="login-version">v1.34.296</div>
   </div>
 </div>
 
@@ -1923,7 +1923,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.293</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.296</div>
   </div>
 </div>
 
@@ -6746,14 +6746,15 @@ function renderStats() {
   const real9Count  = (filteredRaw || []).filter(r => r.num_hoyos === 9).length;
 
   // Calcular métricas
-  const rounWithScore = combined.filter(r => r.gross > 0);
-  const rounWithStbl  = combined.filter(r => r.stableford > 0);
   const stbl18 = only18.filter(r => r.stableford > 0);
   const bestDif    = combined.length ? Math.min(...combined.map(r => r.diff)) : null;
-  const avgScore   = rounWithScore.length ? (rounWithScore.reduce((s,r)=>s+r.gross,0)/rounWithScore.length).toFixed(1) : '—';
-  const bestScore  = rounWithScore.length ? Math.min(...rounWithScore.map(r=>r.gross)) : '—';
-  const worstScore = rounWithScore.length ? Math.max(...rounWithScore.map(r=>r.gross)) : '—';
-  const bestStbl   = rounWithStbl.length  ? Math.max(...rounWithStbl.map(r=>r.stableford)) + ' pts' : '—';
+  // v1.34.295: Media golpes, Mejor y Peor resultado limitados a 18H (gross de 9H no es comparable 1:1)
+  const rounWithScore18 = only18.filter(r => r.gross > 0);
+  const avgScore   = rounWithScore18.length ? (rounWithScore18.reduce((s,r)=>s+r.gross,0)/rounWithScore18.length).toFixed(1) : '—';
+  const bestScore18 = rounWithScore18.length ? Math.min(...rounWithScore18.map(r=>r.gross)) : '—';
+  const worstScore = rounWithScore18.length ? Math.max(...rounWithScore18.map(r=>r.gross)) : '—';
+  // v1.34.296: Mejor Stableford limitado a 18H (stableford de 9H no es comparable 1:1)
+  const bestStbl   = stbl18.length ? Math.max(...stbl18.map(r=>r.stableford)) + ' pts' : '—';
   const avgStbl    = stbl18.length        ? (stbl18.reduce((s,r)=>s+r.stableford,0)/stbl18.length).toFixed(1) + ' pts' : '—';
 
   // v1.34.293: Hoyo más problemático del campo más jugado, ÚLTIMOS 3 MESES (mes en
@@ -6987,11 +6988,11 @@ function renderStats() {
     ${cardNote(lbl('Rondas jugadas','Voltas jogadas','Parties jouées'), real18Count + ' / ' + real9Count, lbl('18H / 9H','18B / 9B','18T / 9T'))}
     ${card(lbl('Mejor diferencial','Melhor diferencial','Meilleur différentiel'), bestDif !== null ? fmtD(bestDif) : '—')}
     ${cardTitleTop(lbl('Hoyo más difícil · últ. 3 meses','Buraco mais difícil · últ. 3 meses','Trou le plus difficile · 3 derniers mois'), hoyoProblemaCampo, hoyoProblema)}
-    ${card(lbl('Media golpes','Média pancadas','Moyenne coups'), avgScore)}
-    ${card(lbl('Mejor resultado','Melhor resultado','Meilleur résultat'), bestScore)}
-    ${card(lbl('Peor resultado','Pior resultado','Pire résultat'), worstScore)}
+    ${cardNote(lbl('Media golpes','Média pancadas','Moyenne coups'), avgScore, lbl('solo 18H','só 18B','seul. 18T'))}
+    ${cardNote(lbl('Mejor resultado','Melhor resultado','Meilleur résultat'), bestScore18, lbl('solo 18H','só 18B','seul. 18T'))}
+    ${cardNote(lbl('Peor resultado','Pior resultado','Pire résultat'), worstScore, lbl('solo 18H','só 18B','seul. 18T'))}
     ${section(lbl('Stableford','Stableford','Stableford'))}
-    ${card(lbl('Mejor Stableford','Melhor Stableford','Meilleur Stableford'), bestStbl)}
+    ${cardNote(lbl('Mejor Stableford','Melhor Stableford','Meilleur Stableford'), bestStbl, lbl('solo 18H','só 18B','seul. 18T'))}
     ${cardNote(lbl('Media Stableford','Média Stableford','Moyenne Stableford'), avgStbl, lbl('solo 18H','só 18B','seul. 18T'))}
     ${cardNote(lbl('Media últ. 5','Média últ. 5','Moyenne 5 dern.'), avgStbl5, lbl('solo 18H','só 18B','seul. 18T'))}
     ${section(lbl('Actividad','Atividade','Activité'))}
@@ -10026,7 +10027,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.293\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.296\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
