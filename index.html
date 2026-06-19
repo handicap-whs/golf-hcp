@@ -1666,7 +1666,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.291</div>
+    <div class="login-version">v1.34.293</div>
   </div>
 </div>
 
@@ -1923,7 +1923,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.291</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.293</div>
   </div>
 </div>
 
@@ -6756,15 +6756,22 @@ function renderStats() {
   const bestStbl   = rounWithStbl.length  ? Math.max(...rounWithStbl.map(r=>r.stableford)) + ' pts' : '—';
   const avgStbl    = stbl18.length        ? (stbl18.reduce((s,r)=>s+r.stableford,0)/stbl18.length).toFixed(1) + ' pts' : '—';
 
-  // v1.34.290: Hoyo más problemático del campo más jugado. Primero se identifica el campo
-  // con más rondas registradas, y solo dentro de ese campo se busca el hoyo con mayor
-  // exceso medio sobre par (usando los golpes guardados hoyo a hoyo en r.shots).
+  // v1.34.293: Hoyo más problemático del campo más jugado, ÚLTIMOS 3 MESES (mes en
+  // curso + 2 anteriores). Primero se filtran las rondas a ese rango, luego se identifica
+  // el campo más jugado dentro de ese filtro, y por último el hoyo con mayor exceso medio
+  // sobre par (usando los golpes guardados hoyo a hoyo en r.shots).
   let hoyoProblema = '—';
   let hoyoProblemaCampo = '—';
   {
-    // 1. Campo más jugado (moda de campo_id)
+    const nowHP = new Date();
+    const limiteHP = new Date(nowHP.getFullYear(), nowHP.getMonth() - 2, 1); // primer día, hace 2 meses
+    const combinedMes = combined.filter(r => {
+      const d = new Date(r.fecha || r.date);
+      return d >= limiteHP;
+    });
+    // 1. Campo más jugado del mes (moda de campo_id)
     const countsCampo = {};
-    combined.forEach(r => {
+    combinedMes.forEach(r => {
       if (r.campo_id == null) return;
       const k = String(r.campo_id);
       countsCampo[k] = (countsCampo[k] || 0) + 1;
@@ -6779,7 +6786,7 @@ function renderStats() {
       if (campo && campo.hoyos && campo.hoyos.length) {
         const excesos = {}; // { numeroHoyo: { suma, n } }
         const allHoyosOrdenados = [...campo.hoyos].sort((a,b) => a.numero - b.numero);
-        combined.forEach(r => {
+        combinedMes.forEach(r => {
           if (!r.shots || String(r.campo_id) !== campoMasJugadoId) return;
           const isVuelta2 = (r.num_hoyos === 9 && r.vuelta === 2);
           const startIdx = isVuelta2 ? 9 : 0;
@@ -6916,6 +6923,22 @@ function renderStats() {
     </div>`;
   };
 
+  // v1.34.292: variante con título (desc) arriba en mayúsculas, campo en medio, dato abajo.
+  // Usada solo en "Hoyo más difícil" — el resto de cards mantienen cardNote sin cambios.
+  const cardTitleTop = (desc, campo, val) => {
+    const sval = String(val);
+    let valSize = '15px';
+    if (sval.length > 15) valSize = '11px';
+    else if (sval.length > 12) valSize = '12px';
+    else if (sval.length > 8)  valSize = '13px';
+    return `
+    <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:62px;justify-content:center">
+      <div style="font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);text-align:center;line-height:1.2">${desc}</div>
+      <div style="font-size:9px;letter-spacing:.3px;color:var(--gold2);text-align:center;line-height:1.1;font-style:italic;opacity:.85;overflow-wrap:break-word">${campo}</div>
+      <div style="font-size:${valSize};color:var(--cream);font-family:'DM Mono',monospace;text-align:center;line-height:1.1;overflow-wrap:break-word;hyphens:none">${val}</div>
+    </div>`;
+  };
+
   // Cabecera de seccion (gold separator)
   const section = (titulo) => `
     <div style="grid-column:1/-1;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold2);margin:6px 0 -2px 2px;font-family:'DM Mono',monospace">${titulo}</div>`;
@@ -6963,7 +6986,7 @@ function renderStats() {
     ${section(lbl('Rondas','Voltas','Parties'))}
     ${cardNote(lbl('Rondas jugadas','Voltas jogadas','Parties jouées'), real18Count + ' / ' + real9Count, lbl('18H / 9H','18B / 9B','18T / 9T'))}
     ${card(lbl('Mejor diferencial','Melhor diferencial','Meilleur différentiel'), bestDif !== null ? fmtD(bestDif) : '—')}
-    ${cardNote(lbl('Hoyo más difícil','Buraco mais difícil','Trou le plus difficile'), hoyoProblema, hoyoProblemaCampo)}
+    ${cardTitleTop(lbl('Hoyo más difícil · últ. 3 meses','Buraco mais difícil · últ. 3 meses','Trou le plus difficile · 3 derniers mois'), hoyoProblemaCampo, hoyoProblema)}
     ${card(lbl('Media golpes','Média pancadas','Moyenne coups'), avgScore)}
     ${card(lbl('Mejor resultado','Melhor resultado','Meilleur résultat'), bestScore)}
     ${card(lbl('Peor resultado','Pior resultado','Pire résultat'), worstScore)}
@@ -10003,7 +10026,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.291\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.293\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
