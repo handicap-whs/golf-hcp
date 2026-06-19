@@ -1666,7 +1666,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.297</div>
+    <div class="login-version">v1.34.299</div>
   </div>
 </div>
 
@@ -1923,7 +1923,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.297</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.299</div>
   </div>
 </div>
 
@@ -6760,22 +6760,16 @@ function renderStats() {
   const bestStbl   = stbl18.length ? Math.max(...stbl18.map(r=>r.stableford)) + ' pts' : '—';
   const avgStbl    = stbl18.length        ? (stbl18.reduce((s,r)=>s+r.stableford,0)/stbl18.length).toFixed(1) + ' pts' : '—';
 
-  // v1.34.293: Hoyo más problemático del campo más jugado, ÚLTIMOS 3 MESES (mes en
-  // curso + 2 anteriores). Primero se filtran las rondas a ese rango, luego se identifica
-  // el campo más jugado dentro de ese filtro, y por último el hoyo con mayor exceso medio
-  // sobre par (usando los golpes guardados hoyo a hoyo en r.shots).
+  // v1.34.298: Hoyo más problemático del campo más jugado, TODO EL HISTÓRICO (respeta el
+  // filtro de fechas que el usuario active desde Estadísticas → Filtrar). Se identifica el
+  // campo más jugado dentro de "combined", y luego el hoyo con mayor exceso medio sobre par
+  // (usando los golpes guardados hoyo a hoyo en r.shots).
   let hoyoProblema = '—';
   let hoyoProblemaCampo = '—';
   {
-    const nowHP = new Date();
-    const limiteHP = new Date(nowHP.getFullYear(), nowHP.getMonth() - 2, 1); // primer día, hace 2 meses
-    const combinedMes = combined.filter(r => {
-      const d = new Date(r.fecha || r.date);
-      return d >= limiteHP;
-    });
-    // 1. Campo más jugado del mes (moda de campo_id)
+    // 1. Campo más jugado (moda de campo_id)
     const countsCampo = {};
-    combinedMes.forEach(r => {
+    combined.forEach(r => {
       if (r.campo_id == null) return;
       const k = String(r.campo_id);
       countsCampo[k] = (countsCampo[k] || 0) + 1;
@@ -6790,7 +6784,7 @@ function renderStats() {
       if (campo && campo.hoyos && campo.hoyos.length) {
         const excesos = {}; // { numeroHoyo: { suma, n } }
         const allHoyosOrdenados = [...campo.hoyos].sort((a,b) => a.numero - b.numero);
-        combinedMes.forEach(r => {
+        combined.forEach(r => {
           if (!r.shots || String(r.campo_id) !== campoMasJugadoId) return;
           const isVuelta2 = (r.num_hoyos === 9 && r.vuelta === 2);
           const startIdx = isVuelta2 ? 9 : 0;
@@ -6812,9 +6806,8 @@ function renderStats() {
           if (media > peorMedia) { peorMedia = media; peorHoyo = k; }
         });
         if (peorHoyo !== null) {
-          const nombreCorto = (campo.nombre || '').length > 14 ? campo.nombre.substring(0,14) : campo.nombre;
           hoyoProblema = lbl('Hoyo ','Buraco ','Trou ') + peorHoyo + ' (+' + peorMedia.toFixed(1) + ')';
-          hoyoProblemaCampo = nombreCorto || '—';
+          hoyoProblemaCampo = campo.nombre || '—';
         }
       }
     }
@@ -6990,7 +6983,7 @@ function renderStats() {
     ${section(lbl('Rondas','Voltas','Parties'))}
     ${cardNote(lbl('Rondas jugadas','Voltas jogadas','Parties jouées'), real18Count + ' / ' + real9Count, lbl('18H / 9H','18B / 9B','18T / 9T'))}
     ${cardNote(lbl('Mejor diferencial','Melhor diferencial','Meilleur différentiel'), bestDif !== null ? fmtD(bestDif) : '—', lbl('solo 18H','só 18B','seul. 18T'))}
-    ${cardTitleTop(lbl('Hoyo más difícil · últ. 3 meses','Buraco mais difícil · últ. 3 meses','Trou le plus difficile · 3 derniers mois'), hoyoProblemaCampo, hoyoProblema)}
+    ${cardTitleTop(lbl('Hoyo más difícil','Buraco mais difícil','Trou le plus difficile'), hoyoProblemaCampo, hoyoProblema)}
     ${cardNote(lbl('Media golpes','Média pancadas','Moyenne coups'), avgScore, lbl('solo 18H','só 18B','seul. 18T'))}
     ${cardNote(lbl('Mejor resultado','Melhor resultado','Meilleur résultat'), bestScore18, lbl('solo 18H','só 18B','seul. 18T'))}
     ${cardNote(lbl('Peor resultado','Pior resultado','Pire résultat'), worstScore, lbl('solo 18H','só 18B','seul. 18T'))}
@@ -10030,7 +10023,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.297\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.299\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
