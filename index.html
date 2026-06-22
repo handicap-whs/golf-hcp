@@ -1666,7 +1666,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.301</div>
+    <div class="login-version">v1.34.302</div>
   </div>
 </div>
 
@@ -1923,7 +1923,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.301</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.302</div>
   </div>
 </div>
 
@@ -6472,7 +6472,7 @@ function renderStatsFilters() {
   let html = '<div style="margin-bottom:12px">';
 
   // Boton toggle
-  html += '<button onclick="toggleStatsFilters()" style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--cream);font-family:\'DM Mono\',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">';
+  html += '<button onclick="toggleStatsFilters()" style="width:100%;background:' + (active ? 'rgba(224,85,85,.10)' : 'rgba(255,255,255,.04)') + ';border:1px solid ' + (active ? 'rgba(224,85,85,.4)' : 'var(--border)') + ';border-radius:8px;padding:8px 12px;color:var(--cream);font-family:\'DM Mono\',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">';
   html += '<span>' + lbl('Filtros','Filtros','Filtres') + '</span>' + badge + '<span style="margin-left:auto;display:inline-flex;align-items:center">' + chevron + '</span>';
   html += '</button>';
 
@@ -6719,6 +6719,9 @@ function renderStats() {
   const lbl = (es, pt, fr) => lang==='fr' ? (fr||es) : lang==='pt' ? pt : es;
   // v1.34.301: titulo "Golpes por ronda" en verde clarito SOLO en modo claro (modo oscuro sin cambios, sigue en --gold2)
   const _golpesTituloColor = document.documentElement.classList.contains('light') ? '#66bb6a' : 'var(--gold2)';
+  // v1.34.302: titulo "Diferenciales por ronda" en azul clarito SOLO en modo claro; "Stableford por ronda" en naranja clarito SOLO en modo claro (modo oscuro sin cambios)
+  const _difTituloColor = document.documentElement.classList.contains('light') ? '#4da3ff' : 'var(--gold2)';
+  const _stblTituloColor = document.documentElement.classList.contains('light') ? '#ffb74d' : 'var(--gold2)';
 
   // Aplicar filtros sobre state.rounds raw, luego combinar 9H
   const filteredRaw = getFilteredRawRounds();
@@ -6965,7 +6968,7 @@ function renderStats() {
     </div>
     <div style="margin-bottom:16px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
-        <span style="font-size:12px;letter-spacing:1px;color:var(--gold2)">${lbl('DIFERENCIALES POR RONDA','DIFERENCIAIS POR VOLTA','DIFFÉRENTIELS PAR PARTIE')}</span>
+        <span style="font-size:12px;letter-spacing:1px;color:${_difTituloColor}">${lbl('DIFERENCIALES POR RONDA','DIFERENCIAIS POR VOLTA','DIFFÉRENTIELS PAR PARTIE')}</span>
       </div>
       <div style="font-size:9px;letter-spacing:.3px;color:var(--muted);margin-bottom:6px">${lbl('Solo 18 hoyos','Apenas 18 buracos','18 trous seulement')}</div>
       <canvas id="stats-dif-chart" height="110" style="width:100%;display:block"></canvas>
@@ -6973,7 +6976,7 @@ function renderStats() {
     </div>
     <div style="margin-bottom:16px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
-        <span style="font-size:12px;letter-spacing:1px;color:var(--gold2)">${lbl('STABLEFORD POR RONDA','STABLEFORD POR VOLTA','STABLEFORD PAR PARTIE')}</span>
+        <span style="font-size:12px;letter-spacing:1px;color:${_stblTituloColor}">${lbl('STABLEFORD POR RONDA','STABLEFORD POR VOLTA','STABLEFORD PAR PARTIE')}</span>
       </div>
       <div style="font-size:9px;letter-spacing:.3px;color:var(--muted);margin-bottom:6px">${lbl('Solo 18 hoyos','Apenas 18 buracos','18 trous seulement')}</div>
       <canvas id="stats-stbl-chart" height="110" style="width:100%;display:block"></canvas>
@@ -10026,7 +10029,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.301\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.302\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -11137,7 +11140,7 @@ function renderStatsCharts() {
   const difVals = difData.map(r=>r.diff);
   if (difData.length) {
     // v1.34.265: gris oscuro en modo claro, verde en oscuro
-    const _difColor = document.documentElement.classList.contains('light') ? '#444444' : '#7bc67a';
+    const _difColor = document.documentElement.classList.contains('light') ? '#4da3ff' : '#7bc67a';
     drawStatsChart('stats-dif-chart','stats-dif-labels', difData, _difColor,
       Math.floor(Math.min(...difVals)-1), Math.ceil(Math.max(...difVals)+1),
       fmt, r=>r.diff, true);
@@ -11148,7 +11151,7 @@ function renderStatsCharts() {
   if (stblData.length) {
     const stblVals = stblData.map(r=>r.stableford);
     // v1.34.266: mismo color que Diferenciales (gris #444 en claro, verde en oscuro)
-    const _stblColor = document.documentElement.classList.contains('light') ? '#444444' : '#7bc67a';
+    const _stblColor = document.documentElement.classList.contains('light') ? '#ffb74d' : '#7bc67a';
     drawStatsChart('stats-stbl-chart','stats-stbl-labels', stblData, _stblColor,
       Math.max(0,Math.min(...stblVals)-3), Math.ceil(Math.max(...stblVals)+2),
       fmt, r=>r.stableford, true);
