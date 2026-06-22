@@ -395,11 +395,11 @@ body.splash-active #safe-area-cover-bottom { display: none; }
    Antes era fondo verde oscuro semitransparente con letras gris claro y activa dorada.
    El modo claro ya estaba en estos colores; ahora unificamos para que el comportamiento
    sea identico en ambos modos. */
-nav{position:fixed;bottom:12px;left:16px;right:16px;background:#1c1c1e;border:1px solid rgba(255,255,255,.08);border-radius:28px;display:flex;z-index:100;padding:4px 6px;transition:transform .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.18)} /* v1.34.303: modo oscuro = gris oscuro propio (antes blanco fijo igual que claro); modo claro preservado via :root.light nav mas abajo */
+nav{position:fixed;bottom:12px;left:16px;right:16px;background:#1f4a28;border:1px solid rgba(201,168,76,.2);border-radius:28px;display:flex;z-index:100;padding:4px 6px;transition:transform .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.18)} /* v1.34.304: modo oscuro = verde oscuro propio (destaca del --bg #1a2f1a) + borde con tinte dorado; modo claro preservado via :root.light nav mas abajo */
 nav button{flex:1;background:none;border:none;color:rgba(255,255,255,.55);padding:5px 4px 4px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'DM Mono',monospace;position:relative;border-radius:22px;transition:background .2s} /* v1.34.303: texto inactivo claro en modo oscuro (antes #1a1a1a, pensado para fondo blanco) */
 nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-nav button.active{color:var(--blue-adapt);background:#1c1c1e;font-weight:700} /* v1.34.303: modo oscuro = --blue-adapt (azul mas claro/visible sobre fondo gris); modo claro sigue en --blue-intenso via reglas !important existentes (sin cambios) */
-nav button.active svg{stroke:var(--blue-adapt);fill:var(--blue-adapt)} /* v1.34.303: modo oscuro = --blue-adapt; modo claro sigue en --blue-intenso via :root.light nav button.active svg (sin cambios) */
+nav button.active{color:var(--gold2);background:#1f4a28;font-weight:700} /* v1.34.304: modo oscuro = --gold2 (dorado, a juego con el resto de la app); modo claro sigue en --blue-intenso via reglas !important existentes (sin cambios) */
+nav button.active svg{stroke:var(--gold2);fill:var(--gold2)} /* v1.34.304: modo oscuro = --gold2; modo claro sigue en --blue-intenso via :root.light nav button.active svg (sin cambios) */
 nav button.active svg .nav-icon-inner{fill:#ffffff;stroke:#ffffff} /* v1.34.267: detalles internos (reloj Inicio, centro engranaje Ajustes, linea tendencia Stats) en blanco sobre el relleno azul */
 :root.light nav{background:#ffffff;border:1px solid rgba(0,0,0,.08);border-top:1px solid rgba(0,0,0,.1)} /* v1.34.303: background y border explicitos para que modo claro no herede los nuevos valores oscuros de la regla base "nav{}" */
 :root.light nav button{color:rgba(0,0,0,.5)}
@@ -1666,7 +1666,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.303</div>
+    <div class="login-version">v1.34.304</div>
   </div>
 </div>
 
@@ -1923,7 +1923,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.303</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.304</div>
   </div>
 </div>
 
@@ -6719,7 +6719,7 @@ function renderStats() {
   const lbl = (es, pt, fr) => lang==='fr' ? (fr||es) : lang==='pt' ? pt : es;
   // v1.34.301: titulo "Golpes por ronda" en verde clarito SOLO en modo claro (modo oscuro sin cambios, sigue en --gold2)
   const _golpesTituloColor = document.documentElement.classList.contains('light') ? '#66bb6a' : 'var(--gold2)';
-  // v1.34.303: titulo "Diferenciales por ronda" en azul clarito SOLO en modo claro; "Stableford por ronda" en naranja clarito SOLO en modo claro (modo oscuro sin cambios)
+  // v1.34.304: titulo "Diferenciales por ronda" en azul clarito SOLO en modo claro; "Stableford por ronda" en naranja clarito SOLO en modo claro (modo oscuro sin cambios)
   const _difTituloColor = document.documentElement.classList.contains('light') ? '#4da3ff' : 'var(--gold2)';
   const _stblTituloColor = document.documentElement.classList.contains('light') ? '#ffb74d' : 'var(--gold2)';
 
@@ -10029,7 +10029,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.303\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.304\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
