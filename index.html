@@ -442,6 +442,12 @@ nav button.active svg .nav-icon-inner{fill:#ffffff;stroke:#ffffff} /* v1.34.267:
   transform:scale(0.94);
   box-shadow:0 3px 8px rgba(0,0,0,0.3);
 }
+/* v1.34.305: Rondas en modo oscuro -> boton + (FAB) y boton tres puntos (kebab) en dorado oscuro + texto blanco.
+   Selectores especificos por ID para NO afectar al FAB "+ Nuevo Campo" (comparte clase .fab-btn) ni al modo claro. */
+#fab-nueva-ronda{background:var(--gold);color:#ffffff}
+:root.light #fab-nueva-ronda{background:var(--blue-adapt);color:#ffffff}
+#hist-kebab-btn{background:var(--gold) !important}
+:root.light #hist-kebab-btn{background:var(--blue-adapt) !important}
 
 
 :root.light input, :root.light select, :root.light textarea {
@@ -1666,7 +1672,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.304</div>
+    <div class="login-version">v1.34.305</div>
   </div>
 </div>
 
@@ -1923,7 +1929,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.304</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.305</div>
   </div>
 </div>
 
@@ -6719,7 +6725,7 @@ function renderStats() {
   const lbl = (es, pt, fr) => lang==='fr' ? (fr||es) : lang==='pt' ? pt : es;
   // v1.34.301: titulo "Golpes por ronda" en verde clarito SOLO en modo claro (modo oscuro sin cambios, sigue en --gold2)
   const _golpesTituloColor = document.documentElement.classList.contains('light') ? '#66bb6a' : 'var(--gold2)';
-  // v1.34.304: titulo "Diferenciales por ronda" en azul clarito SOLO en modo claro; "Stableford por ronda" en naranja clarito SOLO en modo claro (modo oscuro sin cambios)
+  // v1.34.302: titulo "Diferenciales por ronda" en azul clarito SOLO en modo claro; "Stableford por ronda" en naranja clarito SOLO en modo claro (modo oscuro sin cambios)
   const _difTituloColor = document.documentElement.classList.contains('light') ? '#4da3ff' : 'var(--gold2)';
   const _stblTituloColor = document.documentElement.classList.contains('light') ? '#ffb74d' : 'var(--gold2)';
 
@@ -10029,7 +10035,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.304\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.305\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
