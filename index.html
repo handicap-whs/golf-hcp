@@ -1705,7 +1705,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.319</div>
+    <div class="login-version">v1.34.320</div>
   </div>
 </div>
 
@@ -1962,7 +1962,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.319</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.320</div>
   </div>
 </div>
 
@@ -1989,19 +1989,19 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <input type="hidden" id="f-par-total">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
       <span class="lbl-azul-w" style="font-weight:600" data-i18n="fecha">Fecha</span>:
-      <input id="f-date" type="date" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
+      <input id="f-date" type="date" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;padding:5px 8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
       
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
       <span class="lbl-azul-w" style="font-weight:600" data-i18n="campo">Campo</span>:
-      <select id="f-campo" onchange="onCampoChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
+      <select id="f-campo" onchange="onCampoChange()" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;padding:5px 8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
         <option value="">— Selecciona campo —</option>
       </select>
       
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
       <span class="lbl-azul-w" style="font-weight:600" data-i18n="hoyos">Hoyos</span>:
-      <select id="f-num-hoyos" onchange="onNumHoyosChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
+      <select id="f-num-hoyos" onchange="onNumHoyosChange()" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;padding:5px 8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
         <option value="" id="opt-hoyos-ph">— Hoyos —</option>
         <option value="18" data-i18n-opt="hoyos_18">18 hoyos</option>
         <option value="9" data-i18n-opt="hoyos_9">9 hoyos</option>
@@ -2010,7 +2010,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <!-- v1.34.095: Vuelta inline en l&iacute;nea de Hoyos cuando 9H -->
       <span id="f-vuelta-wrap" style="display:none;align-items:center;gap:8px">
         <span class="lbl-azul-w" style="font-weight:600" data-i18n="vuelta">Vuelta</span>:
-        <select id="f-vuelta" onchange="onVueltaChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
+        <select id="f-vuelta" onchange="onVueltaChange()" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;padding:5px 8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
           <option value="1" data-i18n="ida">Ida (1–9)</option>
           <option value="2" data-i18n="vuelta2">Vuelta (10–18)</option>
         </select>
@@ -2019,7 +2019,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <div id="barra-selector" style="display:none;margin-bottom:6px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
         <span class="lbl-azul-w" style="font-weight:600" data-i18n="barra_salida">Barra de salida</span>:
-        <select id="f-barra" onchange="onBarraChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
+        <select id="f-barra" onchange="onBarraChange()" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;padding:5px 8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
           <option value="">— Selecciona barra —</option>
         </select>
         
@@ -2037,7 +2037,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
       <span class="lbl-azul-w" style="font-weight:600" data-i18n="hcp_jugador">HCP Jugador</span>:
       <input id="f-hcp-idx" type="number" placeholder="18.4" step="0.1" inputmode="decimal"
-        style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:50px"
+        style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;padding:5px 6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:50px;text-align:center"
         oninput="calcNuevaChcp()">
       <button type="button" id="f-hcp-idx-usar-oficial" onclick="usarHcpOficial('f-hcp-idx','calcNuevaChcp')" class="hcp-oficial-btn" style="display:none;margin-top:0;min-width:0;overflow:hidden;text-overflow:ellipsis"></button>
     </div>
@@ -2045,7 +2045,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:0 0 6px 0;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
         <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
           <span class="lbl-azul-w" style="font-weight:600" data-i18n="formato">Formato de juego</span>:
-          <select id="nueva-fmt" style="background:none;border:none;padding:2px 0;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto" onchange="calcNuevaChcp(); updateTotals();">
+          <select id="nueva-fmt" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;padding:5px 8px;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto" onchange="calcNuevaChcp(); updateTotals();">
             <option value="100">100% — Informal</option>
             <option value="95">95% — Medal / Stblf</option>
             <option value="85">85% — Four Ball</option>
@@ -10069,7 +10069,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.319\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.320\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
