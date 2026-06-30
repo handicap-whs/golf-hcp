@@ -326,12 +326,12 @@ body.splash-active #safe-area-cover-bottom { display: none; }
 /* v1.34.222: fondo splash negro (antes #1a2f1a verde) para coincidir con apple-splash.png
    y dar continuidad visual completa. Cuando la foto se carga, la foto cubre el fondo y se ve
    con su color natural. El splash-bg variable mantiene #1a2f1a para otras posibles referencias. */
-#splash{position:fixed;inset:0;background:#000000;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .5s;overflow:hidden}
+#splash{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .9s ease;overflow:hidden} /* v1.34.344: fondo #000000 -> var(--bg), mismo tono exacto que la app, asi no se nota ningun cambio de color al desaparecer el splash */
 /* Pseudo-elemento ::before -- capa de foto (se asigna via JS por --splash-foto). Empieza invisible y aparece con fade. */
 #splash::before{content:'';position:absolute;inset:0;background-image:var(--splash-foto,none);background-size:cover;background-position:center center;background-repeat:no-repeat;opacity:0;transition:opacity .4s ease;z-index:0}
 #splash.foto-cargada::before{opacity:1}
 /* Pseudo-elemento ::after -- overlay oscuro encima de la foto para asegurar legibilidad del texto en ambos modos */
-#splash::after{content:'';position:absolute;inset:0;background:rgba(10,20,15,0.62);opacity:0;transition:opacity .4s ease;z-index:1;pointer-events:none}
+#splash::after{content:'';position:absolute;inset:0;background:rgba(13,13,13,0.7);opacity:0;transition:opacity .4s ease;z-index:1;pointer-events:none} /* v1.34.344: overlay gris-negro -> rgba(13,13,13,.7), tono fijo que coincide con el nuevo --bg #0d0d0d (no var(--bg) dinamico, ya que el splash debe ser siempre oscuro independientemente del modo claro/oscuro de la app) */
 #splash.foto-cargada::after{opacity:1}
 /* Los hijos directos del splash (titulo + subtitulo) por encima de la foto y del overlay */
 #splash > *{position:relative;z-index:2}
@@ -1709,7 +1709,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.342</div>
+    <div class="login-version">v1.34.344</div>
   </div>
 </div>
 
@@ -1966,7 +1966,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.342</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.344</div>
   </div>
 </div>
 
@@ -10073,7 +10073,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.342\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.344\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
