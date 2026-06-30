@@ -727,9 +727,9 @@ input:checked+.toggle-slider:before{transform:translateX(18px)}
 /* ── FIELDS ── */
 .fields{display:grid;gap:12px;margin-bottom:12px}
 .field{display:flex;flex-direction:column;gap:6px}
-.field label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--green);opacity:.9}
-/* v1.34.331: rotulo "Nombre del campo" en Nuevo Campo -> blanco en modo oscuro. Especifico por ID #nc-nombre-label para NO afectar al resto de labels .field (compartida por toda la app). Modo claro sin cambios. */
-:root:not(.light) #nc-nombre-label{color:#ffffff}
+.field label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#ffffff;opacity:.9} /* v1.34.332: verde -> blanco en modo oscuro, unificado con Nombre del campo (antes solo aislado por ID). Modo claro preservado via :root.light mas abajo */
+:root.light .field label{color:var(--green)}
+#page-admin-catalogo .field label{color:var(--green)} /* v1.34.332: excluido Panel de Administracion de Campos, sin cambios (no se toca segun instruccion previa) */
 input,select{background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:5px;color:var(--text,#fff);font-family:'DM Mono',monospace;font-size:16px;padding:10px;outline:none;width:100%;-webkit-appearance:none}
 input:focus,select:focus{border-color:var(--gold);background:rgba(201,168,76,.09)}
 :root.light input,
@@ -1708,7 +1708,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.331</div>
+    <div class="login-version">v1.34.333</div>
   </div>
 </div>
 
@@ -1965,7 +1965,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.331</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.333</div>
   </div>
 </div>
 
@@ -2163,7 +2163,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   <div id="nuevo-campo-wrap" style="display:none">
     <div class="card">
       <div class="card-row" style="margin-bottom:10px">
-        <div class="card-title" style="margin-bottom:0" data-i18n="nuevo_campo_title">Nuevo Campo</div>
+        <div class="card-title" style="margin-bottom:14px;text-align:center;font-size:14px;color:var(--text)" data-i18n="nuevo_campo_title">Nuevo Campo</div> <!-- v1.34.333: posicion/tamaño/color igualados al titulo "Editar Campo" (modal-title con inline override) -->
       </div>
       <button class="btn-bcp-online" type="button" onclick="abrirBuscadorDesdeNuevoCampo()" data-i18n="bcp_btn_buscar_online">🔍 Buscar Campo OnLine</button>
       <div class="field" style="gap:3px;margin-bottom:8px">
@@ -10072,7 +10072,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.331\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.333\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
