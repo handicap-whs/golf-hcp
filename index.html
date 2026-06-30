@@ -891,7 +891,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 :root.light .chcp-sub{color:var(--blue-adapt)}
 /* v1.34.310: boton "Compartir mi HCP" (texto+icono via currentColor) a blanco en modo oscuro; modo claro preservado */
 #btn-compartir-hcp{color:#ffffff !important}
-:root.light #btn-compartir-hcp{color:var(--blue-adapt) !important;background:linear-gradient(135deg,rgba(0,102,204,.18),rgba(0,102,204,.06)) !important;border-color:rgba(0,102,204,.4) !important} /* v1.34.335: fondo azul plano -> degradado azul */
+:root.light #btn-compartir-hcp{color:var(--blue-adapt) !important;background:linear-gradient(180deg,rgba(0,102,204,.18),rgba(0,102,204,.06)) !important;border-color:rgba(0,102,204,.4) !important} /* v1.34.336: degradado 135deg (diagonal) -> 180deg (vertical arriba-abajo) */
 /* v1.34.310: separadores "/" del bloque 100%/95%/85% a blanco en modo oscuro; modo claro preservado */
 /* v1.34.314: rotulos de campos (Fecha, Hoyos, Vuelta, HCP Campo, HCP Index, Formato, Nombre, Par total, Campo, Barra de salida, HCP Jugador, Total, Stableford) en pantallas Nueva Ronda/Editar Ronda/Editar Campo -> blanco en modo oscuro (antes var(--blue-adapt)). Modo claro preservado: --blue-adapt vale #0066cc en claro, igual que antes. */
 .lbl-azul-w{color:var(--blue-adapt)}
@@ -1708,7 +1708,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.335</div>
+    <div class="login-version">v1.34.336</div>
   </div>
 </div>
 
@@ -1899,7 +1899,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <div class="r-hcp" id="r-hcp">—</div>
     <div class="r-cat" id="r-cat">Añade rondas para calcular</div>
     <div id="r-fecha-hcp" style="font-size:9px;color:var(--muted);margin-top:4px;letter-spacing:.5px"></div>
-    <button id="btn-compartir-hcp" onclick="compartirHCP()" style="display:none;margin-top:10px;background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.4);border-radius:8px;color:var(--blue-adapt);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;padding:8px 16px;cursor:pointer;display:flex;align-items:center;gap:8px;touch-action:manipulation;margin-left:auto;margin-right:auto"> <!-- v1.34.331: fondo azul + borde azul -> fondo degradado blanco + borde blanco (color de texto ya blanco desde v1.34.310 via #btn-compartir-hcp en CSS) -->
+    <button id="btn-compartir-hcp" onclick="compartirHCP()" style="display:none;margin-top:10px;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.4);border-radius:8px;color:var(--blue-adapt);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;padding:8px 16px;cursor:pointer;display:flex;align-items:center;gap:8px;touch-action:manipulation;margin-left:auto;margin-right:auto"> <!-- v1.34.336: degradado 135deg (diagonal) -> 180deg (vertical arriba-abajo) -->
       <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
       <span data-i18n="compartir_hcp">Compartir mi HCP</span>
     </button>
@@ -1965,7 +1965,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.335</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.336</div>
   </div>
 </div>
 
@@ -2125,8 +2125,8 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       style="flex:1;background:var(--input-bg);border:1px solid var(--border);border-radius:999px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:8px 14px;-webkit-appearance:none;outline:none">
     <div id="hist-counter" style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.3px;white-space:nowrap"></div>
     <div id="hist-kebab-wrap" style="position:relative">
-      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:var(--blue-adapt);border:none;border-radius:50%;color:#ffffff;padding:0;width:38px;height:38px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,30,90,0.18)" aria-label="Más opciones"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#ffffff;display:block"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
-      <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:44px;background:#2a2a2a;border:1px solid var(--border);border-radius:8px;padding:6px;min-width:220px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.18);font-family:'DM Mono',monospace"> <!-- v1.34.331: fondo var(--card-bg) (casi transparente) -> #2a2a2a (opaco gris) en modo oscuro -->
+      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:var(--blue-adapt);border:none;border-radius:50%;color:#ffffff;padding:0;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,30,90,0.18)" aria-label="Más opciones"><svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:#ffffff;display:block"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button> <!-- v1.34.336: diametro 38px -> 30px (altura aprox. del input de busqueda -1px) -->
+      <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:36px;background:#2a2a2a;border:1px solid var(--border);border-radius:8px;padding:6px;min-width:220px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.18);font-family:'DM Mono',monospace"> <!-- v1.34.336: top 44px -> 36px, ajustado al nuevo boton mas pequeño (30px) -->
         <!-- v1.34.237: iconos SVG line-style iOS (coherentes con Ajustes), reemplazan emojis ⇅ ⬇ 🗑 -->
         <button id="btn-toggle-all-months" type="button" onclick="hideHistKebab();toggleAllHistMonths()" style="display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.5px;padding:10px 12px;cursor:pointer;text-align:left">
           <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
@@ -10072,7 +10072,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.335\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.336\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
