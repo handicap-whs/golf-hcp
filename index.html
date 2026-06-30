@@ -712,7 +712,7 @@ body.modo-edicion-ajustes #btn-edit-done{
 :root.light .toggle-slider{background:rgba(0,0,0,.25)}
 .toggle-slider:before{position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
 input:checked+.toggle-slider{background:#d8d8d8} /* v1.34.330: verde #2e7d32 -> gris muy claro en modo oscuro (modo claro sin cambios, ver :root.light mas abajo) */
-:root.light input:checked+.toggle-slider{background:#1b5e20}
+:root.light input:checked+.toggle-slider{background:var(--blue-intenso)} /* v1.34.335: verde #1b5e20 -> azul de la app (--blue-intenso #0066cc) */
 input:checked+.toggle-slider:before{transform:translateX(18px)}
 
 .hcp-oficial-btn{margin-top:4px;background:none;border:none;padding:2px 0;font-family:'DM Mono',monospace;font-size:13px;color:var(--text);cursor:pointer;text-align:left;width:auto;letter-spacing:.2px;white-space:nowrap;transition:opacity .15s}
@@ -891,7 +891,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 :root.light .chcp-sub{color:var(--blue-adapt)}
 /* v1.34.310: boton "Compartir mi HCP" (texto+icono via currentColor) a blanco en modo oscuro; modo claro preservado */
 #btn-compartir-hcp{color:#ffffff !important}
-:root.light #btn-compartir-hcp{color:var(--blue-adapt) !important;background:rgba(0,102,204,.12) !important;border-color:rgba(0,102,204,.4) !important}
+:root.light #btn-compartir-hcp{color:var(--blue-adapt) !important;background:linear-gradient(135deg,rgba(0,102,204,.18),rgba(0,102,204,.06)) !important;border-color:rgba(0,102,204,.4) !important} /* v1.34.335: fondo azul plano -> degradado azul */
 /* v1.34.310: separadores "/" del bloque 100%/95%/85% a blanco en modo oscuro; modo claro preservado */
 /* v1.34.314: rotulos de campos (Fecha, Hoyos, Vuelta, HCP Campo, HCP Index, Formato, Nombre, Par total, Campo, Barra de salida, HCP Jugador, Total, Stableford) en pantallas Nueva Ronda/Editar Ronda/Editar Campo -> blanco en modo oscuro (antes var(--blue-adapt)). Modo claro preservado: --blue-adapt vale #0066cc en claro, igual que antes. */
 .lbl-azul-w{color:var(--blue-adapt)}
@@ -1708,7 +1708,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.333</div>
+    <div class="login-version">v1.34.335</div>
   </div>
 </div>
 
@@ -1965,7 +1965,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.333</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.335</div>
   </div>
 </div>
 
@@ -2163,7 +2163,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   <div id="nuevo-campo-wrap" style="display:none">
     <div class="card">
       <div class="card-row" style="margin-bottom:10px">
-        <div class="card-title" style="margin-bottom:14px;text-align:center;font-size:14px;color:var(--text)" data-i18n="nuevo_campo_title">Nuevo Campo</div> <!-- v1.34.333: posicion/tamaño/color igualados al titulo "Editar Campo" (modal-title con inline override) -->
+        <div class="card-title" style="margin-bottom:14px;text-align:center;font-size:14px;color:var(--text);width:100%" data-i18n="nuevo_campo_title">Nuevo Campo</div> <!-- v1.34.334: añadido width:100% (el contenedor .card-row es flex, sin esto el text-align:center no centraba realmente, solo quedaba pegado a la izquierda) -->
       </div>
       <button class="btn-bcp-online" type="button" onclick="abrirBuscadorDesdeNuevoCampo()" data-i18n="bcp_btn_buscar_online">🔍 Buscar Campo OnLine</button>
       <div class="field" style="gap:3px;margin-bottom:8px">
@@ -10072,7 +10072,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.333\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.335\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
