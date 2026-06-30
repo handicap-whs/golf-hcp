@@ -6,7 +6,7 @@
 <meta name="format-detection" content="telephone=no,date=no,email=no,address=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#1c1c1e">
+<meta name="theme-color" content="#161616">
 <title>Golf HCP</title>
 <link rel="manifest" href="./manifest.json">
 <link rel="apple-touch-icon" href="./icon-192.png">
@@ -33,7 +33,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--hist-sticky:#233723;--bg:#1c1c1e;--bg2:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.09);--gold:#c9a84c;--gold2:#e8c96a;--green:#4caf50;--cream:#f5f0e8;--muted:rgba(255,255,255,0.35);--red:#e05555;--red-intenso:#cc0000;--blue-intenso:#0066cc;--blue-adapt:#4da3ff;--text:#ffffff;--text2:rgba(255,255,255,0.65);--card-bg:rgba(255,255,255,0.04);--nav-bg:#0f1a0f;--input-bg:rgba(255,255,255,0.07);--splash-bg:#1a2f1a} /* v1.34.323 PRUEBA: --bg verde #1a2f1a -> gris oscuro #1c1c1e (resto de variables sin tocar) */
+:root{--hist-sticky:#233723;--bg:#161616;--bg2:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.09);--gold:#c9a84c;--gold2:#e8c96a;--green:#4caf50;--cream:#f5f0e8;--muted:rgba(255,255,255,0.35);--red:#e05555;--red-intenso:#cc0000;--blue-intenso:#0066cc;--blue-adapt:#4da3ff;--text:#ffffff;--text2:rgba(255,255,255,0.65);--card-bg:rgba(255,255,255,0.04);--nav-bg:#0f1a0f;--input-bg:rgba(255,255,255,0.07);--splash-bg:#1a2f1a} /* v1.34.325 PRUEBA: --bg verde #1a2f1a -> gris oscuro #161616 (v1.34.323 probó #1c1c1e, v1.34.325 lo oscurece mas) */
 :root.light{--hist-sticky:#ffffff;--bg:#f0f4f0;--text:#000000;--cream:#1a2f1a;--bg2:rgba(0,0,0,0.03);--border:rgba(0,0,0,0.12);--gold:#7a5a10;--gold2:#8a6a18;--green:#1a4a1a;--cream:#2a1a00;--muted:rgba(0,0,0,0.5);--red:#b01010;--red-intenso:#cc0000;--blue-intenso:#0066cc;--blue-adapt:#0066cc;--text:#000000;--text2:rgba(0,0,0,0.75);--card-bg:rgba(255,255,255,0.9);--nav-bg:#e0ebe0;--input-bg:#ffffff;--splash-bg:#f0f4f0} /* v1.34.142: --hist-sticky #e8f0e8 -> #ffffff (modo claro: columnas bloqueadas en blanco) */
 :root.light #page-rondas{background:#ffffff;border-radius:8px;padding:8px} /* v1.34.142: fondo blanco solo en pagina historial, modo claro */
 :root.light #page-inicio{background:#ffffff;border-radius:8px;padding:8px} /* v1.34.143: fondo blanco Inicio modo claro (contenedores intactos) */
@@ -395,12 +395,12 @@ body.splash-active #safe-area-cover-bottom { display: none; }
    Antes era fondo verde oscuro semitransparente con letras gris claro y activa dorada.
    El modo claro ya estaba en estos colores; ahora unificamos para que el comportamiento
    sea identico en ambos modos. */
-nav{position:fixed;bottom:12px;left:16px;right:16px;background:#15331c;border:1px solid rgba(201,168,76,.2);border-radius:28px;display:flex;z-index:100;padding:4px 6px;transition:transform .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.18)} /* v1.34.324: verde #1f4a28 -> verde mas oscuro #15331c, a juego con el nuevo --bg gris (#1c1c1e); modo claro preservado via :root.light nav mas abajo */
+nav{position:fixed;bottom:12px;left:16px;right:16px;background:#102014;border:1px solid rgba(201,168,76,.2);border-radius:28px;display:flex;z-index:100;padding:4px 6px;transition:transform .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.18)} /* v1.34.325: gris --bg #1c1c1e -> #161616 (un pelin mas oscuro); verde nav #15331c -> #102014 (mas oscuro) */
 nav button{flex:1;background:none;border:none;color:rgba(255,255,255,.55);padding:5px 4px 4px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'DM Mono',monospace;position:relative;border-radius:22px;transition:background .2s} /* v1.34.303: texto inactivo claro en modo oscuro (antes #1a1a1a, pensado para fondo blanco) */
 nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-nav button.active{color:#ffffff;background:#15331c;font-weight:700} /* v1.34.324: fondo actualizado al mismo verde mas oscuro que el nav (#15331c, antes #1f4a28) */
+nav button.active{color:#ffffff;background:#102014;font-weight:700} /* v1.34.325: fondo actualizado al mismo verde mas oscuro que el nav (#102014, antes #15331c) */
 nav button.active svg{stroke:#ffffff;fill:#ffffff} /* v1.34.313: modo oscuro = blanco; modo claro sigue en --blue-intenso via :root.light nav button.active svg (sin cambios) */
-nav button.active svg .nav-icon-inner{fill:#15331c;stroke:#15331c} /* v1.34.324: actualizado al mismo verde mas oscuro que el nav (#15331c, antes #1f4a28) */
+nav button.active svg .nav-icon-inner{fill:#102014;stroke:#102014} /* v1.34.325: actualizado al mismo verde mas oscuro que el nav (#102014, antes #15331c) */
 :root.light nav{background:#ffffff;border:1px solid rgba(0,0,0,.08);border-top:1px solid rgba(0,0,0,.1)} /* v1.34.303: background y border explicitos para que modo claro no herede los nuevos valores oscuros de la regla base "nav{}" */
 :root.light nav button{color:rgba(0,0,0,.5)}
 :root.light nav button.active{color:var(--blue-intenso);background:#ffffff;font-weight:700} /* v1.34.266: azul intenso + negrita + fondo blanco */
@@ -1705,7 +1705,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.324</div>
+    <div class="login-version">v1.34.325</div>
   </div>
 </div>
 
@@ -1962,7 +1962,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.324</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.325</div>
   </div>
 </div>
 
@@ -10069,7 +10069,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.324\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.325\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
