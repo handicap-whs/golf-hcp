@@ -451,8 +451,9 @@ nav button.active svg .nav-icon-inner{fill:#1f4a28;stroke:#1f4a28} /* v1.34.313:
 /* v1.34.307: FAB Nuevo Campo igual que FAB Nueva Ronda en modo oscuro (fondo blanco/texto negro); modo claro intacto */
 #fab-nuevo-campo{background:#ffffff;color:#000000}
 :root.light #fab-nuevo-campo{background:var(--blue-adapt);color:#ffffff}
-#hist-kebab-btn{background:#ffffff !important}
-#hist-kebab-btn svg{fill:#000000 !important}
+/* v1.34.314: kebab Historial -> fondo verde claro + puntos blancos (antes fondo blanco/puntos negros en v1.34.306) */
+#hist-kebab-btn{background:#5fae5f !important}
+#hist-kebab-btn svg{fill:#ffffff !important}
 :root.light #hist-kebab-btn{background:var(--blue-adapt) !important}
 :root.light #hist-kebab-btn svg{fill:#ffffff !important}
 
@@ -658,10 +659,9 @@ body.modo-edicion-ajustes #btn-edit-done{
   font-size:13px;
   letter-spacing:1.5px;
   text-transform:uppercase;
-  /* v1.34.243: letrero de cada seccion en azul muy oscuro (modo claro).
-     En modo oscuro se sobreescribe a azul claro para legibilidad (regla
-     mas abajo en :root.dark / default). Coherente con paleta toasts. */
-  color:#7fb3ff;
+  /* v1.34.314: letrero de cada seccion en azul claro (#7fb3ff) -> blanco en modo oscuro.
+     Modo claro sigue en #1e3a8a via :root.light .ajustes-section-header (sin cambios). */
+  color:#ffffff;
   padding:10px 4px;
   border-bottom:1px solid var(--border);
 }
@@ -890,6 +890,9 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 #btn-compartir-hcp{color:#ffffff !important}
 :root.light #btn-compartir-hcp{color:var(--blue-adapt) !important}
 /* v1.34.310: separadores "/" del bloque 100%/95%/85% a blanco en modo oscuro; modo claro preservado */
+/* v1.34.314: rotulos de campos (Fecha, Hoyos, Vuelta, HCP Campo, HCP Index, Formato, Nombre, Par total, Campo, Barra de salida, HCP Jugador, Total, Stableford) en pantallas Nueva Ronda/Editar Ronda/Editar Campo -> blanco en modo oscuro (antes var(--blue-adapt)). Modo claro preservado: --blue-adapt vale #0066cc en claro, igual que antes. */
+.lbl-azul-w{color:var(--blue-adapt)}
+:root:not(.light) .lbl-azul-w{color:#ffffff}
 .php-sep{color:#ffffff !important}
 :root.light .php-sep{color:var(--blue-adapt) !important}
 .chcp-detail{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5}
@@ -1483,6 +1486,14 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .bcp-result-item:hover,.bcp-result-item:active{border-color:var(--gold)}
 :root.light .bcp-result-item:hover,:root.light .bcp-result-item:active{background:var(--bg2)}
 .bcp-result-name{color:#1e3a8a;font-weight:600;font-size:8px;margin-bottom:2px;line-height:1.3;font-family:'DM Mono',monospace} /* v1.34.250: dorado -> azul oscuro #1e3a8a coherente con paleta */
+/* v1.34.315: nombres de campo en "Buscar campo online" -> blanco. Especifico por ID #bcp-results (no afecta a Administracion de Campos en este momento). */
+/* v1.34.316: ahora tambien Administracion de Campos (#ac-results / #ac-borrar-results) -> blanco, mismo criterio */
+#ac-results .bcp-result-name,
+#ac-borrar-results .bcp-result-name{color:#ffffff}
+#ac-results .bcp-result-name mark,
+#ac-borrar-results .bcp-result-name mark{color:#ffffff}
+#bcp-results .bcp-result-name{color:#ffffff}
+#bcp-results .bcp-result-name mark{color:#ffffff}
 .bcp-result-meta{color:var(--muted);font-size:8px;font-family:'DM Mono',monospace}
 .bcp-empty{text-align:center;padding:24px 14px}
 .bcp-empty p{margin:0 0 5px;font-size:8px;color:var(--text);font-family:'DM Mono',monospace}
@@ -1690,7 +1701,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.313</div>
+    <div class="login-version">v1.34.316</div>
   </div>
 </div>
 
@@ -1770,17 +1781,17 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       </div>
       <!-- Hoyos en su linea + Vuelta inline si aplica -->
       <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
-        <span><span style="color:var(--blue-adapt);font-weight:600" data-i18n="hoyos">Hoyos</span>: <span id="edit-r-num-hoyos-disp" style="color:var(--text)">18</span></span>
-        <span id="edit-vuelta-wrap-inline" style="display:none"><span style="color:var(--blue-adapt);font-weight:600" data-i18n="vuelta">Vuelta</span>: <span id="edit-r-vuelta-disp" style="color:var(--text)">—</span></span>
+        <span><span class="lbl-azul-w" style="font-weight:600" data-i18n="hoyos">Hoyos</span>: <span id="edit-r-num-hoyos-disp" style="color:var(--text)">18</span></span>
+        <span id="edit-vuelta-wrap-inline" style="display:none"><span class="lbl-azul-w" style="font-weight:600" data-i18n="vuelta">Vuelta</span>: <span id="edit-r-vuelta-disp" style="color:var(--text)">—</span></span>
       </div>
       <div>
-        <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hcp_campo">HCP de Campo</span>: <span id="edit-chcp-val" style="color:var(--text)">—</span>
+        <span class="lbl-azul-w" style="font-weight:600" data-i18n="hcp_campo">HCP de Campo</span>: <span id="edit-chcp-val" style="color:var(--text)">—</span>
       </div>
       <div>
-        <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hcp_idx">HCP Index</span>: <span id="edit-r-hcp-disp" style="color:var(--text)">—</span>
+        <span class="lbl-azul-w" style="font-weight:600" data-i18n="hcp_idx">HCP Index</span>: <span id="edit-r-hcp-disp" style="color:var(--text)">—</span>
       </div>
       <div>
-        <span style="color:var(--blue-adapt);font-weight:600" data-i18n="formato">Formato de juego</span>: <span id="edit-r-fmt-disp" style="color:var(--text)">—</span>
+        <span class="lbl-azul-w" style="font-weight:600" data-i18n="formato">Formato de juego</span>: <span id="edit-r-fmt-disp" style="color:var(--text)">—</span>
       </div>
     </div>
 
@@ -1790,7 +1801,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <!-- ZONA EDITABLE: solo Fecha (sin recuadro, igual estilo que el resto) - v1.34.079: label "Fecha" en color tema. v1.34.152: recuadro fino igual a Inicio.
          v1.34.180: indicador "(editar)" alineado a la derecha con formato leyenda Stableford. -->
     <div class="prompt-inicio" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-      <span style="color:var(--blue-adapt);font-weight:600" data-i18n="fecha">Fecha</span>:
+      <span class="lbl-azul-w" style="font-weight:600" data-i18n="fecha">Fecha</span>:
       <input type="date" id="edit-r-fecha" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
       <span style="margin-left:auto;font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.3px;display:inline-flex;align-items:center;gap:4px">
         <span class="stbl-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold2);vertical-align:middle"></span>
@@ -1855,13 +1866,13 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <input type="hidden" id="edit-c-id">
     <div class="modal-err" id="edit-c-err"></div>
     <div style="display:flex;align-items:center;justify-content:flex-start;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-      <span style="color:var(--blue-adapt);font-weight:600" data-i18n="nombre_campo">Nombre</span>
+      <span class="lbl-azul-w" style="font-weight:600" data-i18n="nombre_campo">Nombre</span>
       <input id="edit-c-nombre" type="text" data-clearable placeholder="CLUB DE GOLF" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;text-transform:uppercase;touch-action:manipulation;text-align:left;flex:1;min-width:0" oninput="this.value=this.value.toUpperCase()">
     </div>
     <div class="section-title" data-i18n="barras_salida">Barras de Salida</div>
     <div id="edit-barras-wrap"></div>
     <div id="edit-c-par-total" style="display:none;padding:8px 0;font-size:18px;color:var(--text);margin:16px 0 4px 0;font-family:'DM Mono',monospace;letter-spacing:.3px;text-align:center;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
-      <span style="color:var(--blue-adapt);font-weight:600">Par total</span>: <strong id="edit-c-par-num" style="color:var(--text);font-size:18px;font-weight:700">—</strong>
+      <span class="lbl-azul-w" style="font-weight:600">Par total</span>: <strong id="edit-c-par-num" style="color:var(--text);font-size:18px;font-weight:700">—</strong>
     </div>
     <div class="section-title" data-i18n="par_indice" style="text-align:left;font-weight:normal;font-size:8px;margin:0 0 8px 0">Par y Hándicap por Hoyo</div>
     <div id="edit-hoyos-campo"></div>
@@ -1947,7 +1958,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.313</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.316</div>
   </div>
 </div>
 
@@ -1973,19 +1984,19 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <div class="modal-title" style="margin:0 0 14px 0;text-align:center;font-size:14px;color:var(--text)" data-i18n="nueva_ronda">Nueva Ronda</div>
     <input type="hidden" id="f-par-total">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-      <span style="color:var(--blue-adapt);font-weight:600" data-i18n="fecha">Fecha</span>:
+      <span class="lbl-azul-w" style="font-weight:600" data-i18n="fecha">Fecha</span>:
       <input id="f-date" type="date" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
       
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-      <span style="color:var(--blue-adapt);font-weight:600" data-i18n="campo">Campo</span>:
+      <span class="lbl-azul-w" style="font-weight:600" data-i18n="campo">Campo</span>:
       <select id="f-campo" onchange="onCampoChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
         <option value="">— Selecciona campo —</option>
       </select>
       
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-      <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hoyos">Hoyos</span>:
+      <span class="lbl-azul-w" style="font-weight:600" data-i18n="hoyos">Hoyos</span>:
       <select id="f-num-hoyos" onchange="onNumHoyosChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
         <option value="" id="opt-hoyos-ph">— Hoyos —</option>
         <option value="18" data-i18n-opt="hoyos_18">18 hoyos</option>
@@ -1994,7 +2005,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       
       <!-- v1.34.095: Vuelta inline en l&iacute;nea de Hoyos cuando 9H -->
       <span id="f-vuelta-wrap" style="display:none;align-items:center;gap:8px">
-        <span style="color:var(--blue-adapt);font-weight:600" data-i18n="vuelta">Vuelta</span>:
+        <span class="lbl-azul-w" style="font-weight:600" data-i18n="vuelta">Vuelta</span>:
         <select id="f-vuelta" onchange="onVueltaChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
           <option value="1" data-i18n="ida">Ida (1–9)</option>
           <option value="2" data-i18n="vuelta2">Vuelta (10–18)</option>
@@ -2003,7 +2014,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     </div>
     <div id="barra-selector" style="display:none;margin-bottom:6px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-        <span style="color:var(--blue-adapt);font-weight:600" data-i18n="barra_salida">Barra de salida</span>:
+        <span class="lbl-azul-w" style="font-weight:600" data-i18n="barra_salida">Barra de salida</span>:
         <select id="f-barra" onchange="onBarraChange()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto">
           <option value="">— Selecciona barra —</option>
         </select>
@@ -2020,7 +2031,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <div id="manual-fields" style="display:none">
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
-      <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hcp_jugador">HCP Jugador</span>:
+      <span class="lbl-azul-w" style="font-weight:600" data-i18n="hcp_jugador">HCP Jugador</span>:
       <input id="f-hcp-idx" type="number" placeholder="18.4" step="0.1" inputmode="decimal"
         style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:50px"
         oninput="calcNuevaChcp()">
@@ -2029,7 +2040,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <div id="nueva-chcp-wrap" style="display:none;margin-bottom:12px">
       <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:0 0 6px 0;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
         <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <span style="color:var(--blue-adapt);font-weight:600" data-i18n="formato">Formato de juego</span>:
+          <span class="lbl-azul-w" style="font-weight:600" data-i18n="formato">Formato de juego</span>:
           <select id="nueva-fmt" style="background:none;border:none;padding:2px 0;font-size:13px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:auto" onchange="calcNuevaChcp(); updateTotals();">
             <option value="100">100% — Informal</option>
             <option value="95">95% — Medal / Stblf</option>
@@ -2038,12 +2049,12 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
         </span>
       </div>
       <div style="font-size:13px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px">
-        <span style="color:var(--blue-adapt);font-weight:600" data-i18n="hcp_campo">HCP de Campo</span>: <span id="nueva-chcp-val" style="color:var(--text)">—</span>
+        <span class="lbl-azul-w" style="font-weight:600" data-i18n="hcp_campo">HCP de Campo</span>: <span id="nueva-chcp-val" style="color:var(--text)">—</span>
       </div>
     </div>
     <div id="hoyos-wrap" style="display:none;margin-bottom:12px">
       <hr style="border:none;border-top:1px solid var(--border);opacity:.35;margin:10px 0 8px">
-      <div style="font-size:11px;color:var(--text);margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:.3px"><span style="color:var(--blue-adapt);font-weight:600">Total</span>: <strong id="total-golpes" style="color:var(--text);font-weight:700">—</strong> · <span style="color:var(--blue-adapt);font-weight:600">Stableford</span>: <strong id="preview-stbl" style="color:var(--text);font-weight:700">—</strong></div>
+      <div style="font-size:11px;color:var(--text);margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:.3px"><span class="lbl-azul-w" style="font-weight:600">Total</span>: <strong id="total-golpes" style="color:var(--text);font-weight:700">—</strong> · <span class="lbl-azul-w" style="font-weight:600">Stableford</span>: <strong id="preview-stbl" style="color:var(--text);font-weight:700">—</strong></div>
       <div style="display:flex;gap:14px;margin-top:6px;font-size:9px;color:var(--muted);flex-wrap:wrap">
         <span><span class="red-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#e05555;margin-right:4px;vertical-align:middle"></span><span data-i18n="golpe_ventaja">Golpe de ventaja (HCP campo)</span></span>
         <span><span class="stbl-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:middle"></span><span data-i18n="punto_stbl">Punto Stableford</span></span>
@@ -2321,8 +2332,8 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 <!-- PAGE: BUSCAR CAMPO RFEG -->
 <div class="page" id="page-buscar-campo-rfeg">
   <div style="margin-bottom:6px">
-    <button onclick="goTo('campos',$('nav-ajustes'))" style="background:var(--blue-adapt);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,30,90,0.18)" aria-label="Volver a Mis Campos">
-      <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#ffffff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><polyline points="15 18 9 12 15 6"/></svg>
+    <button onclick="goTo('campos',$('nav-ajustes'))" style="background:#ffffff;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,30,90,0.18)" aria-label="Volver a Mis Campos">
+      <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#000000;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
   </div>
   <div class="card">
@@ -10053,7 +10064,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.313\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.316\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
