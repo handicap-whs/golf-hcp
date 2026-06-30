@@ -452,10 +452,10 @@ nav button.active svg .nav-icon-inner{fill:var(--bg);stroke:var(--bg)} /* v1.34.
 #fab-nuevo-campo{background:#ffffff;color:#000000}
 :root.light #fab-nuevo-campo{background:var(--blue-adapt);color:#ffffff}
 /* v1.34.314: kebab Historial -> fondo verde claro + puntos blancos (antes fondo blanco/puntos negros en v1.34.306) */
-#hist-kebab-btn{background:#c4c4c4 !important} /* v1.34.331: verde #5fae5f -> gris claro */
-#hist-kebab-btn svg{fill:#1a1a1a !important} /* v1.34.331: blanco -> gris oscuro, mejor contraste sobre el nuevo fondo gris claro */
-:root.light #hist-kebab-btn{background:var(--blue-adapt) !important}
-:root.light #hist-kebab-btn svg{fill:#ffffff !important}
+#hist-kebab-btn{background:#2a2a2a !important;border:1.5px solid #ffffff !important} /* v1.34.337: modo oscuro = fondo gris oscuro + borde blanco */
+#hist-kebab-btn svg{fill:#ffffff !important} /* v1.34.337: modo oscuro = puntos blancos */
+:root.light #hist-kebab-btn{background:#ffffff !important;border:1.5px solid var(--blue-intenso) !important} /* v1.34.337: modo claro = fondo blanco + borde azul */
+:root.light #hist-kebab-btn svg{fill:var(--blue-intenso) !important} /* v1.34.337: modo claro = puntos azules */
 :root.light #hist-kebab-menu{background:rgba(255,255,255,.9) !important}
 
 
@@ -1708,7 +1708,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.336</div>
+    <div class="login-version">v1.34.337</div>
   </div>
 </div>
 
@@ -1965,7 +1965,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.336</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.337</div>
   </div>
 </div>
 
@@ -2125,8 +2125,8 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       style="flex:1;background:var(--input-bg);border:1px solid var(--border);border-radius:999px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:8px 14px;-webkit-appearance:none;outline:none">
     <div id="hist-counter" style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.3px;white-space:nowrap"></div>
     <div id="hist-kebab-wrap" style="position:relative">
-      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:var(--blue-adapt);border:none;border-radius:50%;color:#ffffff;padding:0;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,30,90,0.18)" aria-label="Más opciones"><svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:#ffffff;display:block"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button> <!-- v1.34.336: diametro 38px -> 30px (altura aprox. del input de busqueda -1px) -->
-      <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:36px;background:#2a2a2a;border:1px solid var(--border);border-radius:8px;padding:6px;min-width:220px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.18);font-family:'DM Mono',monospace"> <!-- v1.34.336: top 44px -> 36px, ajustado al nuevo boton mas pequeño (30px) -->
+      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:#2a2a2a;border:1.5px solid #ffffff;border-radius:50%;color:#ffffff;padding:0;width:26px;height:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,30,90,0.18)" aria-label="Más opciones"><svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:#ffffff;display:block"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button> <!-- v1.34.337: diametro 30px -> 26px; nuevo esquema de color por modo (ver overrides CSS) -->
+      <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:32px;background:#2a2a2a;border:1px solid var(--border);border-radius:8px;padding:6px;min-width:220px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.18);font-family:'DM Mono',monospace"> <!-- v1.34.337: top 36px -> 32px, ajustado al nuevo boton mas pequeño (26px) -->
         <!-- v1.34.237: iconos SVG line-style iOS (coherentes con Ajustes), reemplazan emojis ⇅ ⬇ 🗑 -->
         <button id="btn-toggle-all-months" type="button" onclick="hideHistKebab();toggleAllHistMonths()" style="display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.5px;padding:10px 12px;cursor:pointer;text-align:left">
           <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
@@ -10072,7 +10072,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.336\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.337\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
