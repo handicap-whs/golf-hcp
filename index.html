@@ -452,7 +452,7 @@ nav button.active svg .nav-icon-inner{fill:var(--bg);stroke:var(--bg)} /* v1.34.
 #fab-nuevo-campo{background:#ffffff;color:#000000}
 :root.light #fab-nuevo-campo{background:var(--blue-adapt);color:#ffffff}
 /* v1.34.314: kebab Historial -> fondo verde claro + puntos blancos (antes fondo blanco/puntos negros en v1.34.306) */
-#hist-kebab-btn{background:var(--bg) !important;border:none !important} /* v1.34.340: #3a3a3c (mas claro que el fondo) -> var(--bg), mismo tono exacto que el fondo de la app */
+#hist-kebab-btn{background:var(--bg) !important;border:0.5px solid rgba(255,255,255,.25) !important} /* v1.34.347: fondo de vuelta a var(--bg) (igual que la app) + borde muy fino claro estilo iOS para que el circulo sea visible */
 #hist-kebab-btn svg{fill:#ffffff !important} /* v1.34.339: modo oscuro = puntos blancos */
 :root.light #hist-kebab-btn{background:#ffffff !important;border:1px solid rgba(0,0,0,.15) !important} /* v1.34.339: modo claro = circulo blanco con borde sutil gris (necesario para que se distinga del fondo claro) */
 :root.light #hist-kebab-btn svg{fill:#1a1a1a !important} /* v1.34.339: modo claro = puntos oscuros */
@@ -877,7 +877,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .r-stat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center}
 
 /* ── CHCP ── */
-.chcp-box{background:var(--bg2);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:6px 10px;text-align:center;margin-top:6px} /* v1.34.342: mismo fondo que .card (var(--bg2)); borde mas claro que var(--border) para diferenciarse sutilmente del contenedor padre (modo oscuro). Modo claro preservado por regla preexistente :root.light .chcp-box (linea ~499, sin tocar) */
+.chcp-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;text-align:center;margin-top:6px} /* v1.34.345: borde rgba(255,255,255,.18) -> var(--border), ahora exactamente igual (fondo+borde) que su contenedor padre .card, sin diferenciacion */
 .chcp-num{font-family:'DM Mono',monospace;font-size:40px;font-weight:500;color:var(--cream);line-height:1} /* v1.34.089: 48px -> 40px */
 /* v1.34.312: "Handicap de Campo" + "HCP Jugador" (Inicio) -> blanco en modo oscuro (antes dorado). Modo claro sin cambios (sin override previo para esta clase). */
 :root:not(.light) .hcp-label-dorado{color:#ffffff !important}
@@ -1709,7 +1709,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.344</div>
+    <div class="login-version">v1.34.347</div>
   </div>
 </div>
 
@@ -1966,7 +1966,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.344</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.347</div>
   </div>
 </div>
 
@@ -2126,7 +2126,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       style="flex:1;background:var(--input-bg);border:1px solid var(--border);border-radius:999px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:8px 14px;-webkit-appearance:none;outline:none">
     <div id="hist-counter" style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.3px;white-space:nowrap"></div>
     <div id="hist-kebab-wrap" style="position:relative">
-      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:var(--bg);border:none;border-radius:50%;color:#ffffff;padding:0;width:26px;height:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.25)" aria-label="Más opciones"><svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:#ffffff;display:block"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button> <!-- v1.34.340: fondo #3a3a3c -> var(--bg), mismo tono exacto que el fondo de la app -->
+      <button id="hist-kebab-btn" type="button" onclick="toggleHistKebab(event)" style="background:var(--bg);border:0.5px solid rgba(255,255,255,.25);border-radius:50%;color:#ffffff;padding:0;width:26px;height:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.25)" aria-label="Más opciones"><svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:#ffffff;display:block"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button> <!-- v1.34.347: fondo de vuelta a var(--bg) + borde fino claro estilo iOS -->
       <div id="hist-kebab-menu" style="display:none;position:absolute;right:0;top:32px;background:#2a2a2a;border:1px solid var(--border);border-radius:8px;padding:6px;min-width:220px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.18);font-family:'DM Mono',monospace"> <!-- v1.34.337: top 36px -> 32px, ajustado al nuevo boton mas pequeño (26px) -->
         <!-- v1.34.237: iconos SVG line-style iOS (coherentes con Ajustes), reemplazan emojis ⇅ ⬇ 🗑 -->
         <button id="btn-toggle-all-months" type="button" onclick="hideHistKebab();toggleAllHistMonths()" style="display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.5px;padding:10px 12px;cursor:pointer;text-align:left">
@@ -10073,7 +10073,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.344\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.347\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
