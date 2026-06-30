@@ -1705,7 +1705,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.328</div>
+    <div class="login-version">v1.34.329</div>
   </div>
 </div>
 
@@ -1913,7 +1913,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <div id="p-barra-wrap" style="display:none;margin-bottom:6px">
       <div class="prompt-inicio" style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
         <span style="color:var(--text);font-weight:600" data-i18n="barra_salida">Barra de salida</span>:
-        <select id="p-barra" onchange="onBarraAntes()" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;padding:5px 8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:15ch"> <!-- v1.34.328: plano -> fondo+borde resaltado, igual que HCP Jugador -->
+        <select id="p-barra" onchange="onBarraAntes()" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;padding:5px 8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:17ch"> <!-- v1.34.329: ancho 15ch -> 17ch, para que no tape texto como "Amarillas 9h" -->
           <option value="">— Selecciona barra —</option>
         </select>
       </div>
@@ -1962,7 +1962,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.328</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.329</div>
   </div>
 </div>
 
@@ -10069,7 +10069,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.328\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.329\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
