@@ -1058,13 +1058,17 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 .ronda-item-actions-left .swipe-info{background:#2a9d4a}
 .ronda-item-actions-left .swipe-info:active{background:#207a38}
 .ronda-row1{font-size:12px;color:var(--cream);margin-bottom:5px;line-height:1.3;display:flex;align-items:center;flex-wrap:wrap;gap:6px} /* v1.34.203: +1px (11->12) y mas gap (4->6) */
-.ronda-row1 .ronda-date{font-family:'DM Mono',monospace;color:var(--muted);font-size:11px} /* v1.34.203: +1px (10->11) */
+.ronda-row1 .ronda-date{font-family:'DM Mono',monospace;color:#ffffff;font-size:11px} /* v1.34.319: muted -> blanco en modo oscuro; modo claro preservado via :root.light mas abajo */
 .ronda-row1 .ronda-name{color:var(--cream);max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} /* v1.34.203: quitada negrita (font-weight:600), tipografia normal */
 .ronda-row1 .ronda-sep{color:var(--muted);opacity:.6;margin:0 2px} /* v1.34.203: separador "·" entre fecha y nombre */
-.ronda-row2{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;display:flex;align-items:center;flex-wrap:wrap;gap:8px} /* v1.34.203: +1px (10->11) y mas gap (6->8) */
+.ronda-row2{font-size:11px;color:#ffffff;font-family:'DM Mono',monospace;display:flex;align-items:center;flex-wrap:wrap;gap:8px} /* v1.34.319: muted -> blanco en modo oscuro (cubre rotulos "golpes" y "Dif:" sin clase propia); modo claro preservado via :root.light mas abajo */
 .ronda-row2 .stat-strong{color:var(--text)} /* v1.34.203: sin negrita */
 .ronda-row2 .stat-diff{color:var(--gold2)} /* v1.34.203: sin negrita */
-.ronda-row2 .stat-stbl{color:var(--blue-adapt)}
+.ronda-row2 .stat-stbl{color:#ffffff} /* v1.34.319: azul -> blanco en modo oscuro; modo claro preservado via :root.light mas abajo */
+/* v1.34.319: overrides modo claro para ronda-date/ronda-row2/stat-stbl (quedan exactamente igual que antes) */
+:root.light .ronda-row1 .ronda-date{color:var(--muted)}
+:root.light .ronda-row2{color:var(--muted)}
+:root.light .ronda-row2 .stat-stbl{color:var(--blue-adapt)}
 .ronda-row2 .stat-sep{color:var(--muted);opacity:.45} /* v1.34.203: separadores "·" entre stats */
 
 /* ── HOYOS ── */
@@ -1701,7 +1705,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.317</div>
+    <div class="login-version">v1.34.319</div>
   </div>
 </div>
 
@@ -1867,7 +1871,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <div class="modal-err" id="edit-c-err"></div>
     <div style="display:flex;align-items:center;justify-content:flex-start;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
       <span class="lbl-azul-w" style="font-weight:600" data-i18n="nombre_campo">Nombre</span>
-      <input id="edit-c-nombre" type="text" data-clearable placeholder="CLUB DE GOLF" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;text-transform:uppercase;touch-action:manipulation;text-align:left;flex:1;min-width:0" oninput="this.value=this.value.toUpperCase()">
+      <input id="edit-c-nombre" type="text" data-clearable placeholder="CLUB DE GOLF" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;padding:6px 10px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;text-transform:uppercase;touch-action:manipulation;text-align:left;flex:1;min-width:0" oninput="this.value=this.value.toUpperCase()"> <!-- v1.34.318: plano (sin fondo/borde) -> mismo fondo+borde que .hoyo-input -->
     </div>
     <div class="section-title" data-i18n="barras_salida">Barras de Salida</div>
     <div id="edit-barras-wrap"></div>
@@ -1958,7 +1962,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.317</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.319</div>
   </div>
 </div>
 
@@ -2162,7 +2166,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="field" style="gap:3px;margin-bottom:8px">
         <label data-i18n="nombre_campo">Nombre del campo</label>
         <input id="nc-nombre" type="text" data-clearable placeholder="CLUB DE GOLF"
-          style="background:var(--input-bg);border:1px solid var(--border);border-radius:999px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:7px 14px;width:100%;-webkit-appearance:none;outline:none;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+          style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:7px 14px;width:100%;-webkit-appearance:none;outline:none;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"> <!-- v1.34.318: border-radius 999px (pildora) -> 4px, igual que .hoyo-input -->
       </div>
       <div class="section-title" data-i18n="barras_salida">Barras de Salida</div>
       <div id="nc-barras-wrap"></div>
@@ -10065,7 +10069,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.317\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.319\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
