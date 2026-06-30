@@ -395,12 +395,12 @@ body.splash-active #safe-area-cover-bottom { display: none; }
    Antes era fondo verde oscuro semitransparente con letras gris claro y activa dorada.
    El modo claro ya estaba en estos colores; ahora unificamos para que el comportamiento
    sea identico en ambos modos. */
-nav{position:fixed;bottom:12px;left:16px;right:16px;background:#102014;border:1px solid rgba(201,168,76,.2);border-radius:28px;display:flex;z-index:100;padding:4px 6px;transition:transform .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.18)} /* v1.34.325: gris --bg #1c1c1e -> #161616 (un pelin mas oscuro); verde nav #15331c -> #102014 (mas oscuro) */
+nav{position:fixed;bottom:12px;left:16px;right:16px;background:var(--bg);border:1px solid rgba(201,168,76,.2);border-radius:28px;display:flex;z-index:100;padding:4px 6px;transition:transform .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.18)} /* v1.34.326: verde #102014 -> var(--bg) (mismo gris de fondo de la app), borde dorado sin tocar */
 nav button{flex:1;background:none;border:none;color:rgba(255,255,255,.55);padding:5px 4px 4px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'DM Mono',monospace;position:relative;border-radius:22px;transition:background .2s} /* v1.34.303: texto inactivo claro en modo oscuro (antes #1a1a1a, pensado para fondo blanco) */
 nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-nav button.active{color:#ffffff;background:#102014;font-weight:700} /* v1.34.325: fondo actualizado al mismo verde mas oscuro que el nav (#102014, antes #15331c) */
+nav button.active{color:#ffffff;background:var(--bg);font-weight:700} /* v1.34.326: fondo actualizado a var(--bg), igual que el nav (antes #102014) */
 nav button.active svg{stroke:#ffffff;fill:#ffffff} /* v1.34.313: modo oscuro = blanco; modo claro sigue en --blue-intenso via :root.light nav button.active svg (sin cambios) */
-nav button.active svg .nav-icon-inner{fill:#102014;stroke:#102014} /* v1.34.325: actualizado al mismo verde mas oscuro que el nav (#102014, antes #15331c) */
+nav button.active svg .nav-icon-inner{fill:var(--bg);stroke:var(--bg)} /* v1.34.326: actualizado a var(--bg), igual que el nav (antes #102014) */
 :root.light nav{background:#ffffff;border:1px solid rgba(0,0,0,.08);border-top:1px solid rgba(0,0,0,.1)} /* v1.34.303: background y border explicitos para que modo claro no herede los nuevos valores oscuros de la regla base "nav{}" */
 :root.light nav button{color:rgba(0,0,0,.5)}
 :root.light nav button.active{color:var(--blue-intenso);background:#ffffff;font-weight:700} /* v1.34.266: azul intenso + negrita + fondo blanco */
@@ -1705,7 +1705,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.325</div>
+    <div class="login-version">v1.34.328</div>
   </div>
 </div>
 
@@ -1906,14 +1906,14 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <div class="card-title hcp-label-dorado" style="font-size:17px;text-align:center" data-i18n="hcp_campo_title">Hándicap de Campo</div>
     <div class="prompt-inicio" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
       <span style="color:var(--text);font-weight:600" data-i18n="campo">Campo</span>:
-      <select id="p-campo" onchange="onCampoAntes()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;flex:1;min-width:0">
+      <select id="p-campo" onchange="onCampoAntes()" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;padding:5px 8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;flex:1;min-width:0"> <!-- v1.34.328: plano -> fondo+borde resaltado, igual que HCP Jugador -->
         <option value="">— Selecciona un campo —</option>
       </select>
     </div>
     <div id="p-barra-wrap" style="display:none;margin-bottom:6px">
       <div class="prompt-inicio" style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
         <span style="color:var(--text);font-weight:600" data-i18n="barra_salida">Barra de salida</span>:
-        <select id="p-barra" onchange="onBarraAntes()" style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:15ch">
+        <select id="p-barra" onchange="onBarraAntes()" style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;padding:5px 8px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:15ch"> <!-- v1.34.328: plano -> fondo+borde resaltado, igual que HCP Jugador -->
           <option value="">— Selecciona barra —</option>
         </select>
       </div>
@@ -1922,8 +1922,8 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
     <div class="prompt-inicio" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;letter-spacing:.3px;flex-wrap:wrap">
       <span class="hcp-label-dorado" style="color:var(--text);font-weight:600" data-i18n="hcp_jugador">HCP Jugador</span>:
       <input id="p-hcp" type="number" placeholder="18.4" step="0.1" inputmode="decimal"
-        style="background:none;border:none;padding:2px 0;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:50px"
-        oninput="calcCHCP()">
+        style="background:var(--input-bg);border:1px solid var(--border);border-radius:4px;padding:5px 6px;font-size:12px;color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;outline:none;cursor:pointer;width:50px;text-align:center"
+        oninput="calcCHCP()"> <!-- v1.34.327: plano (sin fondo/borde) -> fondo+borde resaltado, igual que el resto de campos editables de la app -->
       <button type="button" id="p-hcp-usar-oficial" onclick="usarHcpOficial('p-hcp','calcCHCP')" class="hcp-oficial-btn" style="display:none;margin-top:0;min-width:0;overflow:hidden;text-overflow:ellipsis"></button>
     </div>
     <input type="hidden" id="p-par">
@@ -1962,7 +1962,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.325</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.328</div>
   </div>
 </div>
 
@@ -10069,7 +10069,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.325\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.328\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
