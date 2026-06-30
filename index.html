@@ -456,6 +456,7 @@ nav button.active svg .nav-icon-inner{fill:var(--bg);stroke:var(--bg)} /* v1.34.
 #hist-kebab-btn svg{fill:#ffffff !important} /* v1.34.337: modo oscuro = puntos blancos */
 :root.light #hist-kebab-btn{background:#ffffff !important;border:1.5px solid var(--blue-intenso) !important} /* v1.34.337: modo claro = fondo blanco + borde azul */
 :root.light #hist-kebab-btn svg{fill:var(--blue-intenso) !important} /* v1.34.337: modo claro = puntos azules */
+:root.light #rondas-swipe-hint{color:#000000 !important} /* v1.34.338: modo claro = texto negro (modo oscuro = blanco, ya en el inline style) */
 :root.light #hist-kebab-menu{background:rgba(255,255,255,.9) !important}
 
 
@@ -1708,7 +1709,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.337</div>
+    <div class="login-version">v1.34.338</div>
   </div>
 </div>
 
@@ -1965,7 +1966,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.337</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.338</div>
   </div>
 </div>
 
@@ -2118,7 +2119,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   <!-- v1.34.237: kebab integrado en la linea del input de busqueda. Iconos planos SVG iOS,
        coherentes con los iconos de Ajustes. Fuente y tamano del menu igualados. -->
   <div class="modal-title" style="margin:0 0 12px 0;text-align:center;font-size:14px;color:var(--text)" data-i18n="historial">Historial de Rondas</div>
-  <div style="text-align:center;font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.5px;margin-bottom:8px;opacity:.75" data-i18n="rondas_swipe_hint">‹‹ ── Deslizar para opciones de la ronda ── ››</div>
+  <div id="rondas-swipe-hint" style="text-align:center;font-size:9px;color:#ffffff;font-family:'DM Mono',monospace;letter-spacing:.5px;margin-bottom:8px;opacity:.75" data-i18n="rondas_swipe_hint"><< -- Deslizar Ronda para Opciones -- >></div>
   <!-- v1.34.237: input + contador + kebab en una sola fila -->
   <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
     <input type="text" data-clearable id="hist-search" placeholder="🔍 campo, mes/año (11/2025), día (25/04)…" oninput="onHistSearch(this.value)"
@@ -3244,7 +3245,7 @@ const i18n = {
     'historial':'Historial de Rondas','toca_ronda':'Toca una ronda para más detalles<br>Desliza ← una ronda → para más opciones','fecha_col':'Fecha','campo_col':'Campo','golpes_col':'Golpes','dif_col':'Dif.','barra_col':'Barra','stbl_col':'Stbl',
     'borrar_todo':'Borrar todas las rondas','hist_expandir_todos':'Expandir meses','hist_colapsar_todos':'Colapsar meses','hist_exportar_csv':'Exportar Rondas a CSV',
     'mis_campos':'Mis Campos','campos_swipe_hint':'‹‹ ── Deslizar para opciones del campo ── ››','nuevo_campo':'+ Nuevo','nuevo_campo_btn':'+ NUEVO CAMPO','nuevo_campo_title':'Nuevo Campo',
-    'rondas_swipe_hint':'‹‹ ── Deslizar para opciones de la ronda ── ››','nueva_ronda_btn_fixed':'+ NUEVA RONDA',
+    'rondas_swipe_hint':'<< -- Deslizar Ronda para Opciones -- >>','nueva_ronda_btn_fixed':'+ NUEVA RONDA',
     'nombre_campo':'Nombre del campo','max15':'(máx. 20 caracteres)','barras_salida':'Barras de Salida',
     'blanca':'Blanca','amarilla':'Amarilla','azul':'Azul','roja':'Roja','violeta':'Violeta','naranja':'Naranja','negra':'Negra',
     'par_indice':'Par y Hándicap por Hoyo',
@@ -10072,7 +10073,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.337\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.338\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
