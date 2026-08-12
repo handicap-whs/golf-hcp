@@ -1501,7 +1501,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
 #ac-results .bcp-result-name mark,
 #ac-borrar-results .bcp-result-name mark{color:#ffffff}
 :root.light #ac-results .bcp-result-name,
-:root.light #ac-borrar-results .bcp-result-name{color:#000000} /* v1.34.358: Administracion de Campos -> nombre de campo en negro en modo claro, mismo criterio que Buscar campo online (modo oscuro sigue en blanco) */
+:root.light #ac-borrar-results .bcp-result-name{color:#000000} /* v1.34.359: Administracion de Campos -> nombre de campo en negro en modo claro, mismo criterio que Buscar campo online (modo oscuro sigue en blanco) */
 #bcp-results .bcp-result-name{color:#ffffff}
 #bcp-results .bcp-result-name mark{color:#ffffff}
 :root.light #bcp-results .bcp-result-name{color:#000000} /* v1.34.357: Buscar campo online -> nombre de campo en negro en modo claro (modo oscuro sigue en blanco) */
@@ -1716,7 +1716,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.358</div>
+    <div class="login-version">v1.34.359</div>
   </div>
 </div>
 
@@ -1973,7 +1973,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.358</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.359</div>
   </div>
 </div>
 
@@ -3590,8 +3590,8 @@ function setLang(l) {
 
 // ── CONSTANTES ──────────────────────────────────────────────────────────
 // v1.34.352: Capacitor F4 — apunta a Supabase "Golf HCP iOS" para F4-F6. Cambiar a Producción en F7.
-const SB_URL = 'https://cfssyupueouwkejlgezw.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmc3N5dXB1ZW91d2tlamxnZXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxMTMxMjcsImV4cCI6MjA5NDY4OTEyN30.bVXGWQtHpIs1GdSjt23wBLhJ_1VZuL0oXLclkuu52qY';
+const SB_URL = 'https://buuphupprlvtngkcyyur.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1dXBodXBwcmx2dG5na2N5eXVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5MDA3NTcsImV4cCI6MjA5MDQ3Njc1N30.sHi-UnaStyz1G-S1wSYrZYZA0TReClvlZvYdAbuejaI';
 const WHS = [[1,-2],[1,-2],[1,-2],[1,-1],[1,0],[2,-1],[2,0],[2,0],[3,0],[3,0],[3,0],[4,0],[4,0],[4,0],[5,0],[5,0],[6,0],[6,0],[7,0],[8,0]];
 const BARRAS = ['blanca','amarilla','azul','roja'];
 const BARRAS_FR = ['blanca','amarilla','azul','roja','violeta','naranja','negra'];
@@ -10101,7 +10101,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.358\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.359\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
