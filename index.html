@@ -1748,7 +1748,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.34.378</div>
+    <div class="login-version">v1.34.381</div>
   </div>
 </div>
 
@@ -2005,7 +2005,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.378</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.34.381</div>
   </div>
 </div>
 
@@ -10219,7 +10219,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.378\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.34.381\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -11147,16 +11147,45 @@ async function init() {
   // Volver/Guardar y los primeros hoyos de la cuadricula. Solucion: ocultar #main-nav mientras
   // el teclado este abierto (se restaura al cerrarse), y recalcular el area visible real sin
   // asumir que el menu ya no ocupa espacio.
+  // v1.34.379: fix — el scroll automatico nunca se ejecutaba. Causa: el evento nativo
+  // keyboardWillShow podia llegar ANTES de que el evento focusin del navegador terminara de
+  // actualizar la variable _activeInput, dejandola en null en el momento del calculo (carrera
+  // de tiempos). Solucion: leer document.activeElement DENTRO del setTimeout, en el momento
+  // exacto del calculo (100ms despues), cuando el foco ya esta asentado sin ambiguedad.
+  // v1.34.380: REVERTIDO el intento de ocultar .fab-actions/.modal-actions (probado en v1.34.379).
+  // Motivo: se descubrio que en "Crear Ronda" el teclado puede quedar abierto de forma continua
+  // mientras el usuario rellena varios hoyos seguidos, sin que 'keyboardDidHide' llegue a
+  // dispararse nunca — los botones ocultos NUNCA volvian a aparecer, bloqueando por completo
+  // el poder guardar la ronda. Es un riesgo funcional real, no solo estetico, asi que se
+  // descarta esa via. En su lugar: solo se amplia el margen de scroll (de 20 a 120px) para que
+  // el campo activo quede claramente por encima de donde estan los botones flotantes (que miden
+  // 56px y se posicionan a bottom:50px, ocupando ~106px desde el borde inferior), reduciendo el
+  // solape visual sin arriesgar ningun bloqueo funcional.
+  // v1.34.381: fix — en iPhone fisico real (a diferencia del Simulator), el calculo basado en
+  // "window.innerHeight - info.keyboardHeight" no reflejaba el area realmente visible: puede
+  // haber diferencias por la barra de sugerencias de texto predictivo u otras variaciones del
+  // teclado fisico no capturadas por el plugin. Se sustituye por window.visualViewport.height,
+  // la API estandar del navegador que SIEMPRE refleja el area visible real tras el teclado, sin
+  // depender de que el plugin reporte la altura exacta correctamente.
   if (window.Capacitor?.isNativePlatform?.()) {
-    let _activeInput = null;
     let _navWasVisible = false;
-    document.addEventListener('focusin', function(e) {
-      const el = e.target;
-      if (el && (el.classList.contains('hoyo-input') || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) {
-        _activeInput = el;
+
+    function ajustarScrollTeclado() {
+      const el = document.activeElement;
+      const esCampoValido = el && (el.classList?.contains('hoyo-input') || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA');
+      if (!esCampoValido) return;
+      const rect = el.getBoundingClientRect();
+      const vv = window.visualViewport;
+      // Margen de seguridad: los botones flotantes ocupan ~106px (56px alto + 50px offset)
+      // desde el borde inferior del area visible, mas colchon extra.
+      const margen = 130;
+      const visibleArea = vv ? (vv.height - margen) : (window.innerHeight - margen);
+      if (rect.bottom > visibleArea) {
+        const scrollable = document.querySelector('.page.active') || document.documentElement;
+        scrollable.scrollBy({ top: rect.bottom - visibleArea + 20, behavior: 'smooth' });
       }
-    }, true);
-    document.addEventListener('focusout', function() { _activeInput = null; }, true);
+    }
+
     try {
       window.Capacitor.Plugins.Keyboard.addListener('keyboardWillShow', function(info) {
         const nav = $('main-nav');
@@ -11164,18 +11193,7 @@ async function init() {
           _navWasVisible = true;
           nav.style.display = 'none';
         }
-        const kbHeight = info.keyboardHeight || 300;
-        setTimeout(() => {
-          if (!_activeInput) return;
-          const rect = _activeInput.getBoundingClientRect();
-          // v1.34.373: ya sin el nav de por medio (oculto arriba), el area visible es
-          // simplemente la ventana menos el teclado, con un margen de seguridad.
-          const visibleArea = window.innerHeight - kbHeight - 20;
-          if (rect.bottom > visibleArea) {
-            const scrollable = document.querySelector('.page.active') || document.documentElement;
-            scrollable.scrollBy({ top: rect.bottom - visibleArea + 20, behavior: 'smooth' });
-          }
-        }, 100);
+        setTimeout(ajustarScrollTeclado, 100);
       });
       window.Capacitor.Plugins.Keyboard.addListener('keyboardDidHide', function() {
         const nav = $('main-nav');
@@ -11184,6 +11202,13 @@ async function init() {
           _navWasVisible = false;
         }
       });
+      // v1.34.381: listener adicional sobre visualViewport, por si el evento nativo del plugin
+      // llega con timing distinto en hardware real. Actua como respaldo/refuerzo del calculo.
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', function() {
+          setTimeout(ajustarScrollTeclado, 50);
+        });
+      }
     } catch(e) {}
   }
 
