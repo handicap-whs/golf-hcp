@@ -1759,7 +1759,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.40.010</div>
+    <div class="login-version">v1.40.011</div>
   </div>
 </div>
 
@@ -2028,7 +2028,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.40.010</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.40.011</div>
   </div>
 </div>
 
@@ -2418,7 +2418,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
   </div>
   <div class="card">
     <div class="card-row" style="margin-bottom:10px">
-      <div class="card-title" style="margin-bottom:0;font-size:10px;text-transform:none;line-height:1.4" data-i18n="bcp_titulo">Buscar campo online (Fase 2) ... próximamente Fase 3</div>
+      <div class="card-title" style="margin-bottom:0;font-size:10px;text-transform:none;line-height:1.4" data-i18n="bcp_titulo">Buscar campo online</div>
     </div>
     <div class="bcp-search-wrap">
       <span class="bcp-search-icon" aria-hidden="true">🔍</span>
@@ -10369,7 +10369,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.40.010\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.40.011\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -10438,13 +10438,25 @@ function syncStatusBarTheme() {
     // NOTA (solo Android por ahora): esta app sigue usando @capacitor/status-bar en iOS/build ya
     // enviada a Apple -- de ahi el chequeo con encadenado opcional (?.) para no romper nada si
     // el plugin SafeArea no esta disponible en esa build.
-    const SafeArea = window.Capacitor?.Plugins?.SafeArea;
-    if (!SafeArea) return;
     const isLight = document.documentElement.classList.contains('light');
-    // v1.40.002: la nomenclatura DARK/LIGHT de este plugin es la CONTRARIA a la del antiguo
-    // @capacitor/status-bar -- 'LIGHT' = iconos oscuros para fondo claro, 'DARK' = iconos claros
-    // para fondo oscuro. Estaba al reves (bug reportado por Francisco: colores invertidos).
-    SafeArea.setSystemBarsStyle({ style: isLight ? 'LIGHT' : 'DARK' });
+    const SafeArea = window.Capacitor?.Plugins?.SafeArea;
+    if (SafeArea) {
+      // v1.40.002: la nomenclatura DARK/LIGHT de este plugin es la CONTRARIA a la del antiguo
+      // @capacitor/status-bar -- 'LIGHT' = iconos oscuros para fondo claro, 'DARK' = iconos claros
+      // para fondo oscuro. Estaba al reves (bug reportado por Francisco: colores invertidos).
+      SafeArea.setSystemBarsStyle({ style: isLight ? 'LIGHT' : 'DARK' });
+      return;
+    }
+    // v1.40.011: fix — el fallback de iOS con @capacitor/status-bar se habia eliminado sin
+    // querer al migrar Android a SafeArea, dejando iOS SIN NINGUN control de la barra de
+    // estado (regresion del bug ya arreglado en v1.34.363: iconos invisibles sobre fondo
+    // oscuro). El plugin SafeArea aun no esta instalado en el proyecto iOS enviado a Apple,
+    // asi que se restaura este fallback especifico. Con el antiguo StatusBar, el nombre es
+    // el correcto de siempre: 'LIGHT' = iconos claros (blancos) para fondo oscuro.
+    const StatusBar = window.Capacitor?.Plugins?.StatusBar;
+    if (StatusBar) {
+      StatusBar.setStyle({ style: isLight ? 'DARK' : 'LIGHT' });
+    }
   } catch(e) {}
 }
 
