@@ -424,7 +424,7 @@ body.splash-active #safe-area-cover-bottom { display: none; }
    Antes era fondo verde oscuro semitransparente con letras gris claro y activa dorada.
    El modo claro ya estaba en estos colores; ahora unificamos para que el comportamiento
    sea identico en ambos modos. */
-nav{position:fixed;bottom:calc(12px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom,0px)));left:16px;right:16px;background:var(--bg);border:1px solid rgba(201,168,76,.2);border-radius:28px;display:flex;z-index:100;padding:4px 6px;transition:transform .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.18)} /* v1.34.326: verde #102014 -> var(--bg) (mismo gris de fondo de la app), borde dorado sin tocar. v1.40.003: esta regla NUNCA habia tenido en cuenta safe-area-inset-bottom (a diferencia de ~20 otros usos en el resto del CSS) -- por eso el menu se quedaba pegado al borde fisico de la pantalla y quedaba tapado/interceptado por la barra de navegacion real de Android en cuanto esta dejo de estar oculta (ver v1.40.002, splashImmersive:false). Con el plugin safe-area ya activo, este valor ahora deberia ser correcto. */
+nav{position:fixed;bottom:12px;left:16px;right:16px;background:var(--bg);border:1px solid rgba(201,168,76,.2);border-radius:28px;display:flex;z-index:100;padding:4px 6px;transition:transform .25s ease;box-shadow:0 4px 24px rgba(0,0,0,.18)} /* v1.34.326: verde #102014 -> var(--bg) (mismo gris de fondo de la app), borde dorado sin tocar. */
 nav button{flex:1;background:none;border:none;color:rgba(255,255,255,.55);padding:5px 4px 4px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'DM Mono',monospace;position:relative;border-radius:22px;transition:background .2s} /* v1.34.303: texto inactivo claro en modo oscuro (antes #1a1a1a, pensado para fondo blanco) */
 nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 nav button.active{color:#ffffff;background:var(--bg);font-weight:700} /* v1.34.326: fondo actualizado a var(--bg), igual que el nav (antes #102014) */
@@ -1759,7 +1759,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <div class="auth-link"><span data-i18n="sin_cuenta">¿Sin cuenta?</span> <span onclick="showAuth('register')" data-i18n="registrate">Regístrate</span></div>
     </div>
 
-    <div class="login-version">v1.40.011</div>
+    <div class="login-version">v1.40.014</div>
   </div>
 </div>
 
@@ -2028,7 +2028,7 @@ html.light .toast.err{background:rgba(255,235,235,.97);border-color:rgba(180,50,
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span data-i18n="gestionar_campos">Gestionar Campos</span>
     </button>
-    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.40.011</div>
+    <div id="version-tap" style="margin-left:auto;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace" class="version-label">v1.40.014</div>
   </div>
 </div>
 
@@ -6109,7 +6109,7 @@ async function loginWithApple() {
   // #login-err vive dentro de #login-state-fields (oculto en la pantalla inicial, donde
   // esta el boton Apple). El mensaje se escribia pero nunca se veia.
   if (state.loading) return;
-  if (window.Capacitor?.getPlatform?.() !== 'ios') return; // v1.35: Sign in with Apple no soportado en Android (plugin es un stub sin implementacion nativa)
+  if (!window.Capacitor?.isNativePlatform?.()) return;
   const plugin = window.Capacitor?.Plugins?.SignInWithApple;
   if (!plugin) return; // v1.34.362: sin mensaje — plugin aun no instalado (pendiente activacion Apple Developer), situacion temporal
   const btn = $('btn-login-apple');
@@ -7540,8 +7540,7 @@ function renderPrivacidad() {
           dataBlock(
             dataRow('Supabase', 'BD PostgreSQL y autenticación — AWS eu-west-1 (Irlanda, UE)'),
             dataRow('GitHub Pages', 'Alojamiento web estático — no almacena datos de usuario'),
-            dataRow('App Store', 'Distribución iOS (previsto) — política propia de Apple'),
-            dataRow('Google Play', 'Distribución Android (previsto) — política propia de Google')
+            dataRow('App Store', 'Distribución iOS — política propia de Apple')
           ) +
           note('Los datos <strong>no se transfieren fuera del Espacio Económico Europeo</strong>. Supabase usa AWS eu-west-1 (Irlanda).')
         ],
@@ -7614,8 +7613,7 @@ function renderPrivacidad() {
           dataBlock(
             dataRow('Supabase', 'BD PostgreSQL e autenticação — AWS eu-west-1 (Irlanda, UE)'),
             dataRow('GitHub Pages', 'Alojamento web estático — não armazena dados do utilizador'),
-            dataRow('App Store', 'Distribuição iOS (previsto) — política própria da Apple'),
-            dataRow('Google Play', 'Distribuição Android (previsto) — política própria da Google')
+            dataRow('App Store', 'Distribuição iOS — política própria da Apple')
           ) +
           note('Os dados <strong>não são transferidos para fora do Espaço Económico Europeu</strong>. A Supabase utiliza AWS eu-west-1 (Irlanda).')
         ],
@@ -7688,8 +7686,7 @@ function renderPrivacidad() {
           dataBlock(
             dataRow('Supabase', 'BD PostgreSQL et authentification — AWS eu-west-1 (Irlande, UE)'),
             dataRow('GitHub Pages', 'Hébergement web statique — ne stocke pas de données utilisateur'),
-            dataRow('App Store', 'Distribution iOS (prévu) — politique propre d\'Apple'),
-            dataRow('Google Play', 'Distribution Android (prévu) — politique propre de Google')
+            dataRow('App Store', 'Distribution iOS — politique propre d\'Apple')
           ) +
           note('Les données <strong>ne sont pas transférées hors de l\'EEE</strong>. Supabase utilise AWS eu-west-1 (Irlande).')
         ],
@@ -10322,19 +10319,6 @@ async function compartirHCP() {
     ? `O meu Handicap Index WHS é ${hcp} (${cat}) — calculado com Golf HCP`
     : `Mi Handicap Index WHS es ${hcp} (${cat}) — calculado con Golf HCP`;
   const url = 'https://handicap-whs.github.io/golf-hcp';
-  // v1.36: el WebView de Android no abre el panel nativo con navigator.share() en todos los
-  // dispositivos (confirmado en Moto G7 Power, cae al fallback de portapapeles) -> en Android
-  // usamos el plugin nativo @capacitor/share, que dispara el Intent.ACTION_SEND del sistema.
-  // iOS no se toca: sigue usando navigator.share() exactamente igual que antes.
-  if (window.Capacitor?.getPlatform?.() === 'android') {
-    try {
-      await window.Capacitor.Plugins.Share.share({
-        title: 'Golf HCP', text, url,
-        dialogTitle: lang==='pt' ? 'Compartilhar' : 'Compartir'
-      });
-    } catch(e) {} // usuario cancela el panel nativo -> no es un error
-    return;
-  }
   if (navigator.share) {
     navigator.share({ title: 'Golf HCP', text, url }).catch(() => {});
   } else {
@@ -10346,16 +10330,6 @@ async function compartirHCP() {
 async function compartirApp() {
   const url = 'https://handicap-whs.github.io/golf-hcp';
   const text = lang==='pt' ? 'Calculadora de Handicap WHS 2020' : 'Calculadora de Hándicap WHS 2020';
-  // v1.36: ver nota en compartirHCP() — mismo fix, panel nativo en Android vía @capacitor/share.
-  if (window.Capacitor?.getPlatform?.() === 'android') {
-    try {
-      await window.Capacitor.Plugins.Share.share({
-        title: 'Golf HCP', text, url,
-        dialogTitle: lang==='pt' ? 'Compartilhar' : 'Compartir'
-      });
-    } catch(e) {}
-    return;
-  }
   if (navigator.share) {
     navigator.share({ title: 'Golf HCP', text, url });
   } else {
@@ -10369,7 +10343,7 @@ function contactarGolfHCP() {
   const sys = /iPhone|iPad|iPod/.test(ua) ? 'iOS'
             : /Android/.test(ua) ? 'Android'
             : 'Web';
-  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.40.011\n' + sys);
+  const body = encodeURIComponent('Hola,\n\n[Escribe tu consulta aqui]\n\n\n-- \nGolf HCP v1.40.014\n' + sys);
   window.open('mailto:golf.hcp.webmaster@gmail.com?subject=Golf%20HCP%20App&body=' + body, '_blank');
 }
 
@@ -10428,31 +10402,9 @@ function applyStoredTheme() {
 // tema activo cada vez que se aplica al arrancar o se cambia manualmente.
 function syncStatusBarTheme() {
   try {
-    // v1.38: arreglo real del bug de barra de estado en Android (sustituye los 3 intentos
-    // fallidos de v1.36/v1.37 basados en @capacitor/status-bar + colores forzados). Se migra a
-    // @capacitor-community/safe-area, que activa edge-to-edge nativo real: la barra de estado
-    // pasa a ser transparente y el fondo real de la app se ve a traves de ella (en vez de un
-    // color de fondo aparte que no se aplicaba bien en el WebView de Android). Con eso, solo
-    // hace falta elegir el estilo de icono (oscuro/claro) segun el tema activo -- el contraste
-    // lo da el propio fondo de la app, no un color forzado en la barra.
-    // NOTA (solo Android por ahora): esta app sigue usando @capacitor/status-bar en iOS/build ya
-    // enviada a Apple -- de ahi el chequeo con encadenado opcional (?.) para no romper nada si
-    // el plugin SafeArea no esta disponible en esa build.
+    // v1.36: antes fijaba siempre 'LIGHT' (iconos blancos), ahora se sincroniza con el tema
+    // activo para que también funcione bien en modo claro.
     const isLight = document.documentElement.classList.contains('light');
-    const SafeArea = window.Capacitor?.Plugins?.SafeArea;
-    if (SafeArea) {
-      // v1.40.002: la nomenclatura DARK/LIGHT de este plugin es la CONTRARIA a la del antiguo
-      // @capacitor/status-bar -- 'LIGHT' = iconos oscuros para fondo claro, 'DARK' = iconos claros
-      // para fondo oscuro. Estaba al reves (bug reportado por Francisco: colores invertidos).
-      SafeArea.setSystemBarsStyle({ style: isLight ? 'LIGHT' : 'DARK' });
-      return;
-    }
-    // v1.40.011: fix — el fallback de iOS con @capacitor/status-bar se habia eliminado sin
-    // querer al migrar Android a SafeArea, dejando iOS SIN NINGUN control de la barra de
-    // estado (regresion del bug ya arreglado en v1.34.363: iconos invisibles sobre fondo
-    // oscuro). El plugin SafeArea aun no esta instalado en el proyecto iOS enviado a Apple,
-    // asi que se restaura este fallback especifico. Con el antiguo StatusBar, el nombre es
-    // el correcto de siempre: 'LIGHT' = iconos claros (blancos) para fondo oscuro.
     const StatusBar = window.Capacitor?.Plugins?.StatusBar;
     if (StatusBar) {
       StatusBar.setStyle({ style: isLight ? 'DARK' : 'LIGHT' });
@@ -11333,13 +11285,10 @@ async function init() {
     // v1.36: antes fijaba siempre 'LIGHT' (iconos blancos), ahora se sincroniza con el tema
     // activo (ver syncStatusBarTheme) para que también funcione bien en modo claro.
     syncStatusBarTheme();
-    // v1.34.360: Capacitor F4 — mostrar boton "Continuar con Apple" solo en app nativa iOS
-    // v1.35: antes comprobaba isNativePlatform() (true tambien en Android) — ahora exige iOS.
+    // v1.34.360: Capacitor F4 — mostrar boton "Continuar con Apple" en app nativa iOS
     try {
-      if (window.Capacitor?.getPlatform?.() === 'ios') {
-        const btnApple = $('btn-login-apple');
-        if (btnApple) btnApple.classList.remove('hidden');
-      }
+      const btnApple = $('btn-login-apple');
+      if (btnApple) btnApple.classList.remove('hidden');
     } catch(e) {}
     try {
       const { Network } = window.Capacitor.Plugins;
